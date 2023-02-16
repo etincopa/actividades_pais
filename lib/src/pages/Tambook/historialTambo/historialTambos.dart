@@ -14,7 +14,7 @@ class HistorialTambos extends StatefulWidget {
 }
 
 int currenIndex = 0;
-var titulo = "";
+var titulo = "INTERVENCIONES";
 
 class _HistorialTambosState extends State<HistorialTambos> {
   @override
@@ -55,6 +55,7 @@ class _HistorialTambosState extends State<HistorialTambos> {
               case 2:
                 titulo = "INTERVENCIONES";
                 break;
+                default:  titulo = "INTERVENCIONES";
             }
           });
         },
@@ -70,7 +71,7 @@ class _HistorialTambosState extends State<HistorialTambos> {
           BottomNavyBarItem(
               icon: Icon(Icons.map),
               title: Text(
-                "Actividades",
+                "MAPA",
                 style: TextStyle(color: Colors.white, fontSize: 9),
               ),
               activeColor: Colors.white,

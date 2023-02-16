@@ -4,14 +4,22 @@ import 'package:actividades_pais/util/app-config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class FichaIntervencion extends StatelessWidget {
+class FichaIntervencion extends StatefulWidget {
   int idIntervencion = 0;
-  var file = File('');
 
   FichaIntervencion(this.idIntervencion);
+
+  @override
+  State<FichaIntervencion> createState() => _FichaIntervencionState();
+}
+
+class _FichaIntervencionState extends State<FichaIntervencion> {
+  var file = File('');
+  String porcentaje = "";
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +29,29 @@ class FichaIntervencion extends StatelessWidget {
             title: Text("REPORTE DE ACTIVIDADES"),
             actions: [
               InkWell(
-                child: Icon(Icons.download),
+                child: Row(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Icon(Icons.download), Text(porcentaje)],
+                    ),
+                    SizedBox(
+                      width: 10,
+                    )
+                  ],
+                ),
                 onTap: () async {
                   const downloadsFolderPath = '/storage/emulated/0/Download/';
                   Directory dir = Directory(downloadsFolderPath);
-                  file = File('${dir.path}/$idIntervencion');
+                  DateTime now = DateTime.now();
+                  //       print(macAddress);
+                  //       print(login[0].id.toString());
+                  //       print(DateFormat('yyyy-MM-dd kk:mm:ss').format(now)
+                  var fecha = DateFormat('yyyy-MM-dd kk:mm:ss').format(now);
+                  file = File('${dir.path}/${widget.idIntervencion}.pdf');
+                  if (file.existsSync()) {
+                    await file.delete();
+                  }
                   var status = await Permission.storage.status;
                   if (status != PermissionStatus.granted) {
                     status = await Permission.storage.request();
@@ -33,17 +59,22 @@ class FichaIntervencion extends StatelessWidget {
                   if (status.isGranted) {
                     try {
                       await Dio().download(
-                          'https://www.pais.gob.pe/backendsismonitor/public/reportesintervenciones/exportar-ficha-pdf?data=$idIntervencion',
-                          '/storage/emulated/0/Download/$idIntervencion.pdf',
-                          onReceiveProgress: (received, total) {
+                          'https://www.pais.gob.pe/backendsismonitor/public/reportesintervenciones/exportar-ficha-pdf?data=${widget.idIntervencion}',
+                          file.path, onReceiveProgress: (received, total) {
                         if (total != -1) {
+                          porcentaje =
+                              (received / total * 100).toStringAsFixed(0) + "%";
+                          setState(() {});
                           print((received / total * 100).toStringAsFixed(0) +
                               "%");
+
                           //you can build progressbar feature too
                         }
                       });
                       print("File is saved to download folder.");
                     } on DioError catch (e) {
+                      print("e.message");
+                      print(e.message);
                       print(e.message);
                     }
                   }
@@ -66,9 +97,9 @@ class FichaIntervencion extends StatelessWidget {
                                      }*/
         body: Center(
             child: PDF(
-              preventLinkNavigation: true,
+          preventLinkNavigation: true,
           fitEachPage: true,
-           pageSnap: true,
+          pageSnap: true,
           enableSwipe: true,
           autoSpacing: false,
           pageFling: false,
@@ -83,7 +114,7 @@ class FichaIntervencion extends StatelessWidget {
             print(uri);
           },
         ).cachedFromUrl(
-          'https://www.pais.gob.pe/backendsismonitor/public/reportesintervenciones/exportar-ficha-pdf?data=$idIntervencion',
+          'https://www.pais.gob.pe/backendsismonitor/public/reportesintervenciones/exportar-ficha-pdf?data=${widget.idIntervencion}',
           maxAgeCacheObject: Duration(days: 30), //duration of cache
           placeholder: (progress) => Center(child: Text('$progress %')),
           errorWidget: (error) => Center(child: Text(error.toString())),

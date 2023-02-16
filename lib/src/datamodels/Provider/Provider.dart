@@ -32,6 +32,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:mac_address/mac_address.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -332,11 +333,13 @@ class ProviderDatos {
       var abc = await DatabasePr.db.getAllTasksConfigInicio();
       var login = await DatabasePr.db.loginUser();
       String macAddress = await GetMac.macAddress;
-
+      DateTime now = DateTime.now();
+      String formattedDate =
+          DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000';
       var intentosRegistrosFallecidos = IntentosRegistrosFallecidos(
           ipmaqReg: macAddress,
           idUsuarioReg: login[0].id.toString(),
-          fechaReg: await DateTime.now().toString(),
+          fechaReg:formattedDate,
           dni: dni,
           idProgramacion: idProgramacion,
           idPlataforma: abc[0].idTambo);
@@ -423,16 +426,20 @@ class ProviderDatos {
       var abc = await DatabasePr.db.getAllTasksConfigInicio();
       var login = await DatabasePr.db.loginUser();
       String macAddress = await GetMac.macAddress;
+      DateTime now = DateTime.now();
       print(macAddress);
       print(login[0].id.toString());
-      print(await DateTime.now().toString());
+      print(DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000');
       print(dni);
       print(idProgramacion);
       print(abc[0].idTambo);
+      //DateTime now = DateTime.now();
+      String formattedDate =
+          DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000';
       var intentosRegistrosFallecidos = IntentosRegistrosFallecidos(
           ipmaqReg: macAddress,
           idUsuarioReg: login[0].id.toString(),
-          fechaReg: await DateTime.now().toString(),
+          fechaReg: formattedDate,
           dni: dni,
           idProgramacion: idProgramacion,
           idPlataforma: abc[0].idTambo);
@@ -1201,22 +1208,25 @@ class ProviderDatos {
 
     return List.empty();
   }
-  Future subirIntentosFallecidos(IntentosRegistrosFallecidos intentosRegistrosFallecidos) async{
 
+  Future subirIntentosFallecidos() async {
     var logUser = await DatabasePr.db.loginUser();
     var headers = {
       'Authorization': 'Bearer ${logUser[0].token}',
       'Content-Type': 'application/json'
     };
-    http.Response response = await http.post(
-        Uri.parse(
-            AppConfig.backendsismonitor + '/programacionjut/guardarIntentosFallecidos'),
-        headers: headers,
-        body: json.encode(intentosRegistrosFallecidos));
-    if(response.statusCode==200){
-      print("OK");
+    var lista = await DatabasePr.db.ListarIntentosRegistrosFallecidos();
+    for (var i = 0; i < lista.length; i++) {
+      http.Response response = await http.post(
+          Uri.parse(AppConfig.backendsismonitor +
+              '/programaciongit/guardarIntentosFallecidos'),
+          headers: headers,
+          body: json.encode(lista[i]));
+      if (response.statusCode == 200) {
+        await DatabasePr.db.eliminarIntentoFallecido(lista[i].id);
+      }
     }
-    //GuardarIntentosFallecidos
-
   }
+
+//GuardarIntentosFallecidos
 }

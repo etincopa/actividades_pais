@@ -6,18 +6,63 @@ import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervenc
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class intervencionesHistoria extends StatelessWidget {
+class intervencionesHistoria extends StatefulWidget {
   const intervencionesHistoria({Key? key}) : super(key: key);
 
-  get isLoading => null;
+  @override
+  State<intervencionesHistoria> createState() => _intervencionesHistoriaState();
+}
+
+class _intervencionesHistoriaState extends State<intervencionesHistoria> {
+  final controller = ScrollController();
+  bool isLoading = false;
+  var pageIndexQ = 1;
+  var pageSizeQ = 2;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.addListener(_onlistener);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.removeListener(_onlistener);
+    super.dispose();
+  }
+
+  _onlistener() async {
+    print(controller.position.maxScrollExtent);
+
+    if ((controller.offset >= controller.position.maxScrollExtent)) {
+      isLoading = true;
+      setState(() {
+        pageSizeQ = pageSizeQ + 2;
+      });
+      await traerPaguinado(10);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<Null> traerPaguinado(pageSize) async {
+    // await Future.delayed(const Duration(seconds: 1));
+    //  pageIndexQ = pageIndex;
+    await ProviderTambok()
+        .listaTamboServicioIntervencionesGeneral(pag: 1,sizePag: pageSize);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     Listas listas = Listas();
-    final controller = ScrollController();
     return Scaffold(
       body: FutureBuilder<List<TamboServicioIntervencionesGeneral>>(
-        future: ProviderTambok().listaTamboServicioIntervencionesGeneral(1, 10),
+        future: ProviderTambok()
+            .listaTamboServicioIntervencionesGeneral(pag: 1,sizePag: pageSizeQ),
         builder: (BuildContext context,
             AsyncSnapshot<List<TamboServicioIntervencionesGeneral>> snapshot) {
           if (snapshot.hasData) {
@@ -38,33 +83,25 @@ class intervencionesHistoria extends StatelessWidget {
                 return Column(
                   children: [
                     Expanded(
-                        child: Container(
-                      child: RefreshIndicator(
-                          onRefresh: resetlista,
-                          child: ListView.builder(
-                            controller: controller,
-                            itemCount: listaPersonalAux.length,
-                            itemBuilder: (context, i) =>
-                                listas.cardHistrialTambosInter(
-                              listaPersonalAux[i],
-                              () async {
-                                print("aquu");
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            FichaIntervencion(listaPersonalAux[i].idProgramacion!)));
-                                /* await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          DetalleEquipoInformatico(
-                                              listaPersonalAux[i]),
-                                    ));*/
-                              },
-                            ),
-                          )),
-                    )),
+                        child: RefreshIndicator(
+                            onRefresh: resetlista,
+                            child: ListView.builder(
+                              controller: controller,
+                              itemCount: listaPersonalAux.length,
+                              itemBuilder: (context, i) =>
+                                  listas.cardHistrialTambosInter(
+                                listaPersonalAux[i],
+                                () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FichaIntervencion(
+                                                  listaPersonalAux[i]
+                                                      .idProgramacion!)));
+                                },
+                              ),
+                            ))),
                     if (isLoading == true)
                       new Center(
                         child: const CircularProgressIndicator(),
@@ -117,6 +154,13 @@ class intervencionesHistoria extends StatelessWidget {
       ));
 
   Future resetlista() async {
+    // await ProviderTambok().listaTamboServicioIntervencionesGeneral(1, 10);
+    pageIndexQ = 1;
+    pageSizeQ = 2;
+    await ProviderTambok()
+        .listaTamboServicioIntervencionesGeneral(pag: pageIndexQ,sizePag: pageSizeQ);
+
+    setState(() {});
     /*   seleccionarMarca = "Seleccionar Marca";
     seleccionarModelo = "Seleccionar Modelo";
     seleccionarUbicacion = "Seleccionar Ubicacion";

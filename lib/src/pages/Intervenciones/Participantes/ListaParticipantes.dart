@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';

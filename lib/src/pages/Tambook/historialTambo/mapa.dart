@@ -14,21 +14,21 @@ class _MapaTambookState extends State<MapaTambook> {
     return Scaffold(
       body: Center(
         child: Container(
-          child: Text("Hello"),
+          child: WebView(
+            initialUrl: 'https://www.pais.gob.pe/mapaoperatividad/mapa.html',
+            javascriptMode: JavascriptMode.unrestricted,
+            onWebViewCreated: (webViewController) {
+              this._controller = webViewController;
+              print(webViewController.toString());
+            },
+            onPageStarted: (url) {
+              print(
+                "jola__ $url",
+              );
+            },
+          ),
         ),
-        /*WebView(
-          initialUrl: 'https://www.pais.gob.pe/mapaoperatividad/mapa.html',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (webViewController) {
-            this._controller = webViewController;
-            print(webViewController.toString());
-          },
-          onPageStarted: (url) {
-            print(
-              "jola__ $url",
-            );
-          },
-        ),*/
+
       ),
     );
   }
