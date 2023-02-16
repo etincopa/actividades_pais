@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
+import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
@@ -20,6 +21,7 @@ class PnPaisApi {
   final String basePathApp = "/api-pnpais/app/";
   final String basePathApp2 = "/api-pnpais/monitoreo/app/";
   final String basePathApp3 = "/api-pnpais/tambook/app/";
+  final String basePathApp4 = "/api-pnpais/mapa/app/";
 
   static String username = "username";
   static String password = "password";
@@ -254,6 +256,19 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return RespBase64FileDto.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<List<TambosMapaModel>>> getTambosParaMapa() async {
+    return await _http.request<List<TambosMapaModel>>(
+      '${basePathApp4}listadarBandejaTambosInternet',
+      method: "GET",
+      parser: (data) {
+        return (data[0] as List)
+            .map((e) => TambosMapaModel.fromJson(e))
+            .toList();
+        //return TambosMapaModel.fromJson(data);
       },
     );
   }

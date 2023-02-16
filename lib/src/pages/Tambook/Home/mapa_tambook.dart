@@ -1,3 +1,5 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -25,6 +27,10 @@ class _MapTambookState extends State<MapTambook>
   bool grid = false;
   int panBuffer = 0;
 
+  MainController mainCtr = MainController();
+  late List<TambosMapaModel> oTambo = [];
+  late List<LatLng> mapPoints = [];
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -37,16 +43,114 @@ class _MapTambookState extends State<MapTambook>
 
     super.initState();
     setState(() {});
+    tambosParaMapa();
+    //buildMarkers();
+  }
 
-    buildMarkers();
+  Future<void> tambosParaMapa() async {
+    oTambo = await mainCtr.getTamboParaMapa();
+
+    //print(mapPoints);
+    setState(() {
+      for (var point in oTambo) {
+        //mapPoints.add(LatLng(point.latitud!, point.longitud!));
+        LatLng latlng = LatLng(point.latitud!, point.longitud!);
+
+        setState(() {
+          allMarkers.add(
+            Marker(
+              width: 80.0,
+              height: 80.0,
+              point: latlng,
+              builder: (ctx) => GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => buildSuccessDialog(
+                      context,
+                      title: 'TAMBO SOLEDAD',
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: const TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Icon(
+                                        Icons.brightness_medium_outlined,
+                                        size: 15),
+                                  ),
+                                  TextSpan(
+                                    text: " CLIMA: ",
+                                    style: TextStyle(
+                                      color: color_01,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: "CALIDO",
+                                    style: TextStyle(
+                                      color: color_01,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                WidgetSpan(
+                                  child: Icon(Icons.map_outlined, size: 15),
+                                ),
+                                TextSpan(
+                                  text: " COMO LLEGAR: ",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      "PASAR POR CHOSICA, MATUCANA, SAN MATEO, ...",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+
+                  /*ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+                content: Text('TEXT'),
+              ));*/
+                },
+                child: const Icon(
+                  Icons.location_on,
+                  size: 30,
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+          );
+        });
+      }
+    });
   }
 
   void buildMarkers() {
-    final List<LatLng> mapPoints = [
-      LatLng(-5.46956247418, -78.4377694873),
-      LatLng(-10.2993301033, -77.1508496114),
-      LatLng(-14.3910996075, -72.8284609821)
-    ];
     for (var point in mapPoints) {
       allMarkers.add(
         Marker(

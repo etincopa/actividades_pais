@@ -2,6 +2,7 @@ import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
+import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
@@ -382,5 +383,16 @@ class MainRepo {
 
   Future deleteAllMonitorByEstadoENV() async {
     return _dbPnPais.deleteMonitorByEstadoENV();
+  }
+
+  Future<List<TambosMapaModel>> tambosParaMapa() async {
+    List<TambosMapaModel> aResp = [];
+    final response = await _pnPaisApi.getTambosParaMapa();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
   }
 }

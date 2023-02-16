@@ -5,6 +5,7 @@ import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
+import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
@@ -874,6 +875,12 @@ class MainController extends GetxController {
 
   Future<TamboModel> getTamboDatoGeneral(String tambo) async {
     TamboModel oResp = await Get.find<MainService>().tamboDatoGeneral(tambo);
+    return oResp;
+  }
+
+  Future<List<TambosMapaModel>> getTamboParaMapa() async {
+    List<TambosMapaModel> oResp =
+        await Get.find<MainService>().tambosParaMapa();
     return oResp;
   }
 
