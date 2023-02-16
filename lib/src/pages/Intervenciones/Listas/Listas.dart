@@ -613,9 +613,12 @@ class Listas {
                 SizedBox(
                   width: 10,
                 ),
-                Text('${band.tambo} \n${band.idProgramacion}',
-                    style:
-                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                Container(
+                  width: 240,
+                  child: Text('${band.tambo} \n${band.idProgramacion}',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                ),
               ],
             ),
             subtitle: Column(

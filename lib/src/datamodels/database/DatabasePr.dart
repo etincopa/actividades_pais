@@ -163,7 +163,7 @@ class DatabasePr {
         db.execute(
             "CREATE TABLE centros_poblados (centro_poblado_ubigeo, centro_poblado_descripcion)");
         db.execute(
-            "CREATE TABLE intentos_registros_fallecidos (id_intento_registro_fallecido, id_plataforma, id_programacion, dni, id_usuario_reg, fecha_reg, ipmaq_reg, id_usuario_act, fecha_act, ipmaq_act, id_usuario_del, fecha_del, ipmaq_del)");
+            "CREATE TABLE intentos_registros_fallecidos (id INTEGER PRIMARY KEY, id_plataforma, id_programacion, dni, id_usuario_reg, fecha_reg, ipmaq_reg, id_usuario_act, fecha_act, ipmaq_act, id_usuario_del, fecha_del, ipmaq_del)");
       },
     );
   }
@@ -324,6 +324,28 @@ class DatabasePr {
     return list;
   }
 
+  Future<List<IntentosRegistrosFallecidos>> ListarIntentosRegistrosFallecidos(
+     ) async {
+    await DatabasePr.db.initDB();
+    final res = await _db?.rawQuery(
+        "SELECT * from intentos_registros_fallecidos");
+    List<IntentosRegistrosFallecidos> list = res!.isNotEmpty
+        ? res.map((e) => IntentosRegistrosFallecidos.fromMap(e)).toList()
+        : [];
+    return list;
+  }
+  Future eliminarIntentoFallecido(id) async {
+    _log.i(id);
+    await DatabasePr.db.initDB();
+    final res = await _db?.rawQuery("DELETE FROM intentos_registros_fallecidos where id = $id");
+    return res;
+  }
+
+  Future eliminarIntentoFallecidos() async {
+    await DatabasePr.db.initDB();
+    final res = await _db?.rawQuery("DELETE FROM intentos_registros_fallecidos");
+    return res;
+  }
   Future eliminarTodoParticipanteEjecucion() async {
     await DatabasePr.db.initDB();
     final res = await _db?.rawQuery("DELETE FROM participanteEjecucion");

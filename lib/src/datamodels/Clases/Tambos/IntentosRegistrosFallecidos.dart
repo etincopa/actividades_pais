@@ -20,6 +20,16 @@ class IntentosRegistrosFallecidos {
 
       });
 
+  factory IntentosRegistrosFallecidos.fromMap(Map<String, dynamic> json) =>
+      IntentosRegistrosFallecidos(
+        id: json['id'],
+        idPlataforma: json['id_plataforma'],
+        idProgramacion: json['id_programacion'],
+        dni: json['dni'],
+        idUsuarioReg: json['id_usuario_reg'],
+        fechaReg: json['fecha_reg'],
+        ipmaqReg: json['ipmaq_reg'],
+      );
   Map<String, dynamic> toMap() {
     return {
       "id_plataforma": idPlataforma,
@@ -30,5 +40,17 @@ class IntentosRegistrosFallecidos {
       "ipmaq_reg": ipmaqReg,
 
     };
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['idPlataforma'] = this.idPlataforma;
+    data['idProgramacion'] = this.idProgramacion;
+    data['dni'] = this.dni;
+    data['idUsuarioReg'] = this.idUsuarioReg;
+    data['fechaReg'] = this.fechaReg;
+    data['ipmaqReg'] = this.ipmaqReg;
+
+
+    return data;
   }
 }

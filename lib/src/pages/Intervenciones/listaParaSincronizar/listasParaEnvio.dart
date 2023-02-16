@@ -283,10 +283,11 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
           listaParticipantes[0].codigoIntervencion);
       await DatabasePr.db.eliminarTPorcentajesEnvioPorid(
           listaParticipantes[0].codigoIntervencion);
+      await ProviderDatos().subirIntentosFallecidos();
 
       _isloading = false;
 
-      Navigator.of(context).pushReplacement(
+      await  Navigator.of(context).pushReplacement(
         MaterialPageRoute(
             builder: (context) =>
                 PendienteSincronizar()),
