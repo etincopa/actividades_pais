@@ -265,7 +265,11 @@ class PnPaisApi {
       '${basePathApp4}listadarBandejaTambosInternet',
       method: "GET",
       parser: (data) {
-        return (data[0] as List)
+        var tambosOperativos = (data[0] as List)
+            .where((o) => o['estado'] == 'PRESTA SERVICIO')
+            .toList();
+
+        return (tambosOperativos as List)
             .map((e) => TambosMapaModel.fromJson(e))
             .toList();
         //return TambosMapaModel.fromJson(data);

@@ -1,7 +1,6 @@
 import 'package:actividades_pais/src/Utils/add_home_icons.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/intervemcionesHistora.dart';
-import 'package:actividades_pais/src/pages/Tambook/historialTambo/mapa.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ class _HistorialTambosState extends State<HistorialTambos> {
   Widget build(BuildContext context) {
     List listPages = [
       intervencionesHistoria(),
-      MapaTambook(),
       Container(),
     ];
     return Scaffold(
@@ -55,7 +53,8 @@ class _HistorialTambosState extends State<HistorialTambos> {
               case 2:
                 titulo = "INTERVENCIONES";
                 break;
-                default:  titulo = "INTERVENCIONES";
+              default:
+                titulo = "INTERVENCIONES";
             }
           });
         },

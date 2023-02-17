@@ -30,6 +30,7 @@ class _MapTambookState extends State<MapTambook>
   MainController mainCtr = MainController();
   late List<TambosMapaModel> oTambo = [];
   late List<LatLng> mapPoints = [];
+  late Future<List<Marker>> marcadores;
 
   @override
   void initState() {
@@ -43,127 +44,27 @@ class _MapTambookState extends State<MapTambook>
 
     super.initState();
     setState(() {});
-    tambosParaMapa();
     //buildMarkers();
+    marcadores = tambosParaMapa();
   }
 
-  Future<void> tambosParaMapa() async {
-    oTambo = await mainCtr.getTamboParaMapa();
-
-    //print(mapPoints);
-    setState(() {
-      for (var point in oTambo) {
-        //mapPoints.add(LatLng(point.latitud!, point.longitud!));
-        LatLng latlng = LatLng(point.latitud!, point.longitud!);
-
-        setState(() {
-          allMarkers.add(
-            Marker(
-              width: 80.0,
-              height: 80.0,
-              point: latlng,
-              builder: (ctx) => GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => buildSuccessDialog(
-                      context,
-                      title: 'TAMBO SOLEDAD',
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RichText(
-                              text: const TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                    child: Icon(
-                                        Icons.brightness_medium_outlined,
-                                        size: 15),
-                                  ),
-                                  TextSpan(
-                                    text: " CLIMA: ",
-                                    style: TextStyle(
-                                      color: color_01,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "CALIDO",
-                                    style: TextStyle(
-                                      color: color_01,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          RichText(
-                            text: const TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  child: Icon(Icons.map_outlined, size: 15),
-                                ),
-                                TextSpan(
-                                  text: " COMO LLEGAR: ",
-                                  style: TextStyle(
-                                    color: color_01,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      "PASAR POR CHOSICA, MATUCANA, SAN MATEO, ...",
-                                  style: TextStyle(
-                                    color: color_01,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-
-                  /*ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
-                content: Text('TEXT'),
-              ));*/
-                },
-                child: const Icon(
-                  Icons.location_on,
-                  size: 30,
-                  color: Colors.redAccent,
-                ),
-              ),
-            ),
-          );
-        });
-      }
-    });
-  }
-
-  void buildMarkers() {
-    for (var point in mapPoints) {
+  Future<List<Marker>> tambosParaMapa() async {
+    List<TambosMapaModel> tambos = await mainCtr.getTamboParaMapa();
+    List<Marker> allMarkers = [];
+    for (var point in tambos) {
+      LatLng latlng = LatLng(point.latitud!, point.longitud!);
       allMarkers.add(
         Marker(
           width: 80.0,
           height: 80.0,
-          point: point,
+          point: latlng,
           builder: (ctx) => GestureDetector(
             onTap: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) => buildSuccessDialog(
                   context,
-                  title: 'TAMBO SOLEDAD',
+                  title: point.tambo!,
                   child: Column(
                     children: [
                       Align(
@@ -226,21 +127,18 @@ class _MapTambookState extends State<MapTambook>
                   ),
                 ),
               );
-
-              /*ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
-                content: Text('TEXT'),
-              ));*/
             },
             child: const Icon(
               Icons.location_on,
               size: 30,
-              color: Colors.redAccent,
+              color: Colors.blueAccent,
             ),
           ),
         ),
       );
     }
     setState(() {});
+    return allMarkers;
   }
 
   void _zoomMas() {
@@ -259,30 +157,35 @@ class _MapTambookState extends State<MapTambook>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: color_10o15,
-      body: Stack(
-        children: <Widget>[
-          FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              center: LatLng(-8.840959270481326, -74.82263875411157),
-              zoom: currentZoom,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                tileBuilder: tileBuilder,
-                tilesContainerBuilder:
-                    darkMode ? darkModeTilesContainerBuilder : null,
-                panBuffer: panBuffer,
-              ),
-              MarkerLayer(
-                markers: allMarkers,
-              ),
-            ],
-          ),
-        ],
-      ),
+      body: FutureBuilder<List<Marker>>(
+          future: tambosParaMapa(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return FlutterMap(
+                mapController: mapController,
+                options: MapOptions(
+                  center: LatLng(-8.840959270481326, -74.82263875411157),
+                  zoom: currentZoom,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                    tileBuilder: tileBuilder,
+                    tilesContainerBuilder:
+                        darkMode ? darkModeTilesContainerBuilder : null,
+                    panBuffer: panBuffer,
+                  ),
+                  MarkerLayer(
+                    markers: snapshot.data!,
+                  ),
+                ],
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -328,60 +231,6 @@ class _MapTambookState extends State<MapTambook>
             onPressed: () => Navigator.of(context).pop(),
           ),
           const SizedBox(height: 80),
-          /*
-          const SizedBox(height: 8),
-          FloatingActionButton.extended(
-            heroTag: 'grid',
-            label: Text(
-              grid ? 'Hide grid' : 'Show grid',
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(grid ? Icons.grid_off : Icons.grid_on),
-            onPressed: () => setState(() => grid = !grid),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton.extended(
-            heroTag: 'coords',
-            label: Text(
-              showCoords ? 'Hide coords' : 'Show coords',
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(showCoords ? Icons.unarchive : Icons.bug_report),
-            onPressed: () => setState(() => showCoords = !showCoords),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton.extended(
-            heroTag: 'ms',
-            label: Text(
-              loadingTime ? 'Hide loading time' : 'Show loading time',
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(loadingTime ? Icons.timer_off : Icons.timer),
-            onPressed: () => setState(() => loadingTime = !loadingTime),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton.extended(
-            heroTag: 'dark-light',
-            label: Text(
-              darkMode ? 'Light mode' : 'Dark mode',
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(darkMode ? Icons.brightness_high : Icons.brightness_2),
-            onPressed: () => setState(() => darkMode = !darkMode),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton.extended(
-            heroTag: 'panBuffer',
-            label: Text(
-              panBuffer == 0 ? 'panBuffer off' : 'panBuffer on',
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(grid ? Icons.grid_off : Icons.grid_on),
-            onPressed: () => setState(() {
-              panBuffer = panBuffer == 0 ? 1 : 0;
-            }),
-          ),
-          */
         ],
       ),
     );

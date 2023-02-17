@@ -1,8 +1,11 @@
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -15,6 +18,10 @@ class _HomeTambookState extends State<HomeTambook>
     with TickerProviderStateMixin<HomeTambook> {
   Animation<double>? _animation;
   AnimationController? _controller;
+  MainController mainCtr = MainController();
+  bool isLoading = true;
+
+  late String numTambos = "";
 
   List<ChartData> chartData = [
     ChartData('PRESTA SERVICIO', 0, colorI),
@@ -43,6 +50,16 @@ class _HomeTambookState extends State<HomeTambook>
     super.initState();
     buildData();
     setState(() {});
+    tambosParaMapa();
+  }
+
+  Future<void> tambosParaMapa() async {
+    List<TambosMapaModel> tambos = await mainCtr.getTamboParaMapa();
+    await Future.delayed(Duration(seconds: 2));
+    numTambos = tambos.length.toString();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -66,8 +83,8 @@ class _HomeTambookState extends State<HomeTambook>
         children: [
           cardHeader(),
           const SizedBox(height: 20),
+          tambosOperativos(),
           cardAtenciones(),
-          cardIntervenciones(),
           cardBeneficiarios(),
           avanceMetas(),
           cardEstadoTambo(),
@@ -110,19 +127,6 @@ class _HomeTambookState extends State<HomeTambook>
               color: color_01,
             ),
           ),
-          /*
-          Column(
-            children: const [
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: Text(
-                  'NUESTRAS PLATAFORMAS CUENTAN CON PERSONAL CAPACITADO Y EQUIPAMIENTO MODERNO, QUE BRINDAN SERVICIOS EN MÁS DE 14 400 CENTROS POBLADOS, EN 22 REGIONES, BENEFICIANDO A MÁS DE 1 MILLÓN DE HABITANTES.',
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-            ],
-          ),
-          */
         ],
       ),
     );
@@ -133,6 +137,62 @@ class _HomeTambookState extends State<HomeTambook>
 *             CHARTS
 *-------------------------------------------------
 */
+
+  Container tambosOperativos() {
+    return Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: const Offset(0, 2), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Card(
+            margin: const EdgeInsets.all(7),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: isLoading ? 1 : 1,
+                    itemBuilder: (context, index) {
+                      if (isLoading) {
+                        return ShinyWidget();
+                      } else {
+                        return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: SizedBox(
+                                  height: 70.0,
+                                  width: 70.0, // fixed width and height
+                                  child: Image.asset(
+                                    'assets/icono_tambos.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                title: Center(
+                                    child: Text(
+                                  numTambos ?? '',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 45),
+                                )),
+                                subtitle: const Center(
+                                    child: Text(
+                                  'Tambos prestando servicio',
+                                  style: TextStyle(fontSize: 17),
+                                )),
+                              )
+                            ]);
+                      }
+                    })
+              ],
+            )));
+  }
 
   Padding cardAtenciones() {
     var heading = 'ATENCIONES 2023';
@@ -261,135 +321,6 @@ class _HomeTambookState extends State<HomeTambook>
     );
   }
 
-  Padding cardIntervenciones() {
-    var heading = 'INTERVENCIONES 2023';
-
-    late ValueNotifier<double> valueNotifier = ValueNotifier(20);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: colorI,
-          ),
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 5), // changes position of shadow
-            ),
-          ],
-        ),
-        child: ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            visualDensity: const VisualDensity(vertical: -4),
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: color_01,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          children: <Widget>[
-            const Divider(color: colorI),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: SimpleCircularProgressBar(
-                      size: 150,
-                      maxValue: 100,
-                      valueNotifier: valueNotifier,
-                      backColor: Colors.black.withOpacity(0.4),
-                      progressStrokeWidth: 20,
-                      backStrokeWidth: 20,
-                      mergeMode: true,
-                      progressColors: const [
-                        Colors.yellow,
-                        Colors.yellowAccent
-                      ],
-                      onGetText: (double value) {
-                        return Text(
-                          '${value.toInt()}%',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 35),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Table(
-                          children: const [
-                            TableRow(children: [
-                              Text(
-                                "Meta :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                "12,000",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Text(
-                                "Avance :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                "1,560",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Text(
-                                "Brecha :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                "10,440",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Padding cardBeneficiarios() {
     var heading = 'BENEFICIARIOS 2023';
     late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
@@ -446,7 +377,7 @@ class _HomeTambookState extends State<HomeTambook>
                       onGetText: (double value) {
                         return Text(
                           '${value.toInt()}%',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         );
                       },
@@ -1922,4 +1853,71 @@ class AvancesData {
   final String mes;
   final double avanceAtenciones;
   final double avanceUsuarios;
+}
+
+class ShinyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade400,
+      highlightColor: Colors.grey.shade200,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                // Container 1
+                Container(
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            // Container 2
+                            child: Container(
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(90),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            // Container 3
+                            child: Container(
+                              height: 10,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(90),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 30),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

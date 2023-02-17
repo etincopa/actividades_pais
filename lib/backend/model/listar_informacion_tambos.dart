@@ -1,22 +1,45 @@
 class TambosMapaField {
-  static int num_snip = 0;
-  static double longitud = 0;
-  static double latitud = 0;
+  static String snip = "num_snip";
+  static String longitud = "longitud";
+  static String latitud = "latitud";
+  static String tambo = "nom_tambo";
+  static String departamento = "departamento";
+  static String provincia = "provincia";
+  static String distrito = "distrito";
+  static String localidad = "localidad";
 }
 
 class TambosMapaModel {
-  int? num_snip;
+  int? snip;
   double? longitud;
   double? latitud;
+  String? tambo;
+  String? departamento;
+  String? provincia;
+  String? distrito;
+  String? localidad;
 
   TambosMapaModel.empty() {}
 
-  TambosMapaModel({this.num_snip, this.longitud, this.latitud});
+  TambosMapaModel(
+      {this.snip,
+      this.longitud,
+      this.latitud,
+      this.tambo,
+      this.departamento,
+      this.provincia,
+      this.distrito,
+      this.localidad});
 
   factory TambosMapaModel.fromJson(Map<String, dynamic> json) {
     return TambosMapaModel(
-        num_snip: json[TambosMapaField.num_snip],
+        snip: json[TambosMapaField.snip],
         longitud: json[TambosMapaField.longitud],
-        latitud: json[TambosMapaField.latitud]);
+        latitud: json[TambosMapaField.latitud],
+        tambo: json[TambosMapaField.tambo],
+        departamento: json[TambosMapaField.departamento],
+        provincia: json[TambosMapaField.provincia],
+        distrito: json[TambosMapaField.distrito],
+        localidad: json[TambosMapaField.localidad]);
   }
 }

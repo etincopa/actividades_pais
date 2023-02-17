@@ -192,16 +192,6 @@ class _HomePagePais extends State<HomePagePais> {
           ),
         );
 
-        aHomeOptions.add(
-          HomeOptions(
-            code: 'OPT1010',
-            name: 'HISTORIAL TAMBOS'.tr,
-            types: const ['Ver'],
-            image: icon6,
-            color: const Color(0xFF78b8cd),
-          ),
-        );
-
         String sImagePias = modalidad == '1'
             ? icon2
             : modalidad == '2'
