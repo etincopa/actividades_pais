@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/pages/widgets/WebViewTest.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -11,24 +12,9 @@ class _MapaTambookState extends State<MapaTambook> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
-        child: Container(
-          child: WebView(
-            initialUrl: 'https://www.pais.gob.pe/mapaoperatividad/mapa.html',
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (webViewController) {
-              this._controller = webViewController;
-              print(webViewController.toString());
-            },
-            onPageStarted: (url) {
-              print(
-                "jola__ $url",
-              );
-            },
-          ),
-        ),
-
+        child: WebViewExample(),
       ),
     );
   }

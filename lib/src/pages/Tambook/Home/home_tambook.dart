@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -55,7 +56,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> tambosParaMapa() async {
     List<TambosMapaModel> tambos = await mainCtr.getTamboParaMapa();
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     numTambos = tambos.length.toString();
     setState(() {
       isLoading = false;
@@ -83,7 +84,8 @@ class _HomeTambookState extends State<HomeTambook>
         children: [
           cardHeader(),
           const SizedBox(height: 20),
-          tambosOperativos(),
+          AtencionesListView(),
+          //tambosOperativos(),
           cardAtenciones(),
           cardBeneficiarios(),
           avanceMetas(),

@@ -16,6 +16,7 @@ import 'package:actividades_pais/util/app-config.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/image_util.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -751,7 +752,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         BubbleTimeline(
                           bubbleSize: 70,
                           // List of Timeline Bubble Items
@@ -1686,7 +1687,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   padding: const EdgeInsets.all(10),
                   child: KdGaugeView(
                     minSpeed: 0,
-                    maxSpeed: 100,
+                    maxSpeed: 10,
                     minMaxTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 10,
@@ -1698,8 +1699,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                       fontWeight: FontWeight.bold,
                     ),
                     animate: true,
-                    alertSpeedArray: [0, 60, 90],
-                    alertColorArray: [colorP, colorI, colorS],
+                    alertSpeedArray: const [0, 5, 10],
+                    alertColorArray: const [colorP, colorI, colorS],
                     duration: const Duration(seconds: 6),
                     unitOfMeasurement:
                         "Mbps", //getText(oSrvInter.veloBaja ?? "Mbps"),
@@ -1741,8 +1742,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                       fontWeight: FontWeight.bold,
                     ),
                     animate: true,
-                    alertSpeedArray: [0, 60, 90],
-                    alertColorArray: [colorP, colorI, colorS],
+                    alertSpeedArray: const [0, 60, 90],
+                    alertColorArray: const [colorP, colorI, colorS],
                     duration: const Duration(seconds: 6),
                     unitOfMeasurement:
                         "Mbps", //getText(oSrvInter.veloSube ?? "Mbps"),
@@ -1967,6 +1968,18 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ),
                 ),
                 const SizedBox(height: 10),
+                /*
+                FancyShimmerImage(
+                  imageUrl: oActividad.actividadPathImage!,
+                  errorWidget: Image.network(
+                      'https://i0.wp.com/www.dobitaobyte.com.br/wp-content/uploads/2016/02/no_image.png?ssl=1'),
+                  width: 200,
+                  height: 200,
+                  shimmerBaseColor: Color.fromARGB(255, 226, 226, 226),
+                  shimmerHighlightColor: Colors.white,
+                  shimmerBackColor: Colors.white,
+                ),
+                */
                 ImageUtil.ImageAssetNetwork(
                   oActividad.actividadPathImage!,
                   width: 200,

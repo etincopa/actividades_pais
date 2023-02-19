@@ -28,13 +28,8 @@ class AtencionesModel {
   static List<AtencionesModel> categoryList = <AtencionesModel>[
     AtencionesModel(
       imagePath: '',
-      title: 'Atenciones a nivel nacional',
-      total: 17393388,
-    ),
-    AtencionesModel(
-      imagePath: '',
-      title: 'Atenciones 2022',
-      total: 2577847,
+      title: 'Tambos prestando servicio',
+      total: 486,
     ),
   ];
 }

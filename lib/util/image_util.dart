@@ -93,7 +93,7 @@ class ImageUtil {
   }) =>
       FadeInImage.assetNetwork(
         image: sUrl,
-        placeholder: 'assets/loaderios.gif',
+        placeholder: 'assets/shimmer.gif',
         height: height ?? 100.0,
         width: width ?? 100.0,
         fit: fit ?? BoxFit.cover,

@@ -74,7 +74,7 @@ dependencies:
   file_picker:
   flutter_speed_dial:
   mac_address: ^1.0.0
-  webview_flutter: ^0.3.3
+  webview_flutter: ^4.0.4
   permission_handler: ^10.2.0
 
   latlong2: ^0.8.1
@@ -82,6 +82,7 @@ dependencies:
   simple_circular_progress_bar: ^1.0.2
   kdgaugeview: ^1.0.4
   shimmer: ^2.0.0
+  fancy_shimmer_image: ^2.0.2
 
   lecle_bubble_timeline: ^0.0.1+1
   timelines: ^0.1.0
@@ -176,6 +177,7 @@ flutter:
     - assets/loading_icon.gif
     - assets/unidad.json
     - assets/loaderios.gif
+    - assets/shimmer.gif
    
 
 
