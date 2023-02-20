@@ -43,19 +43,20 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
                 onTap: () async {
                   const downloadsFolderPath = '/storage/emulated/0/Download/';
                   Directory dir = Directory(downloadsFolderPath);
-                  DateTime now = DateTime.now();
-                  //       print(macAddress);
-                  //       print(login[0].id.toString());
-                  //       print(DateFormat('yyyy-MM-dd kk:mm:ss').format(now)
-                  var fecha = DateFormat('yyyy-MM-dd kk:mm:ss').format(now);
-                  file = File('${dir.path}/${widget.idIntervencion}.pdf');
-                  if (file.existsSync()) {
-                    await file.delete();
-                  }
+
                   var status = await Permission.storage.status;
                   if (status != PermissionStatus.granted) {
                     status = await Permission.storage.request();
                   }
+
+                  file = File('${dir.path}/${widget.idIntervencion}.pdf');
+                  if (file.existsSync()) {
+                    await file.delete();
+                    setState(() {
+
+                    });
+                  }
+
                   if (status.isGranted) {
                     try {
                       await Dio().download(

@@ -16,9 +16,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
   @override
   void initState() {
     animationController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
+        duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
   }
 
@@ -37,7 +35,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: SizedBox(
+      child: Container(
         height: 134,
         width: double.infinity,
         child: FutureBuilder<bool>(
@@ -126,18 +124,21 @@ class AtencionesView extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const SizedBox(width: 48),
+                        const SizedBox(
+                          width: 48,
+                        ),
                         Expanded(
                           child: Container(
                             decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(16.0),
-                              ),
+                              color: Color.fromARGB(255, 237, 237, 241),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
                             ),
                             child: Row(
                               children: [
-                                const SizedBox(width: 70),
+                                const SizedBox(
+                                  width: 70,
+                                ),
                                 Expanded(
                                   child: Column(
                                     children: <Widget>[
@@ -160,10 +161,7 @@ class AtencionesView extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                          top: 10,
-                                          bottom: 16,
-                                          right: 16,
-                                        ),
+                                            top: 10, bottom: 16, right: 16),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -206,7 +204,7 @@ class AtencionesView extends StatelessWidget {
                             child: AspectRatio(
                               aspectRatio: 1.0,
                               child: Image.asset(
-                                'assets/icono_tambos.png',
+                                'assets/design_course/user-gobierno_central.png',
                                 fit: BoxFit.fill,
                               ),
                             ),

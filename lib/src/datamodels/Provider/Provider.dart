@@ -736,12 +736,14 @@ class ProviderDatos {
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
     });
-
+    print(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL');
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
 
+print(response.statusCode);
     if (response.statusCode == 200) {
       if (fileExists) {
         print("File exists");

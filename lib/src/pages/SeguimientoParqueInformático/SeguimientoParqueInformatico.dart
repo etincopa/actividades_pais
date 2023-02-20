@@ -10,6 +10,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/CrudPaqueInformatico/EditarParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/DetalleEquipoInformatico.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -69,6 +70,7 @@ class _SeguimientoParqueInformaticoState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true,
+        backgroundColor: AppConfig.primaryColor,
         title: Text(
           titulo,
           style: const TextStyle(fontSize: 17),
@@ -316,6 +318,7 @@ class _SeguimientoParqueInformaticoState
                         filtroParqueInformatico.denominacion = value;
                       },
                     ),
+
                     Container(
                       margin: const EdgeInsets.only(),
                       child: FutureBuilder<List<Marca>>(
@@ -323,16 +326,10 @@ class _SeguimientoParqueInformaticoState
                             .listaMarcas(),
                         builder: (BuildContext context,
                             AsyncSnapshot<List<Marca>> snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          final preguntas = snapshot.data;
-                          if (preguntas!.isEmpty) {
-                            return const Center(
-                              child: Text("sin dato"),
-                            );
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                          } else if (snapshot.hasError) {
+                            return Text('Error al cargar las opciones');
                           } else {
                             return Row(
                               children: [
@@ -345,7 +342,7 @@ class _SeguimientoParqueInformaticoState
                                   child: Container(
                                     child: StatefulBuilder(builder:
                                         (BuildContext context,
-                                            StateSetter dropDownState) {
+                                        StateSetter dropDownState) {
                                       return DropdownButtonFormField<Marca>(
                                         isExpanded: true,
                                         items: snapshot.data?.map((user) {
@@ -354,14 +351,14 @@ class _SeguimientoParqueInformaticoState
                                             child: new Text(
                                               user.descripcionMarca!,
                                               style:
-                                                  const TextStyle(fontSize: 10),
+                                              const TextStyle(fontSize: 10),
                                             ),
                                           );
                                         }).toList(),
                                         onChanged: (Marca? value) {
                                           dropDownState(() {
                                             seleccionarMarca =
-                                                value!.descripcionMarca!;
+                                            value!.descripcionMarca!;
                                             filtroParqueInformatico.idMarca =
                                                 value.idMarca.toString();
                                           });

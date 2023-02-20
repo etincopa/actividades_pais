@@ -1,17 +1,19 @@
-
 class ListarTamboServicioIntervencionesGeneral {
   List<TamboServicioIntervencionesGeneral> items = [];
 
   ListarTamboServicioIntervencionesGeneral();
 
-  ListarTamboServicioIntervencionesGeneral.fromJsonList(List<dynamic> jsonList) {
+  ListarTamboServicioIntervencionesGeneral.fromJsonList(
+      List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new TamboServicioIntervencionesGeneral.fromJson(item);
-    items.add(_listarTrabajador);
-  }
+      final _listarTrabajador =
+          new TamboServicioIntervencionesGeneral.fromJson(item);
+      items.add(_listarTrabajador);
+    }
   }
 }
+
 class TamboServicioIntervencionesGeneral {
   int? idProgramacion;
   int? idTambo;
@@ -31,22 +33,22 @@ class TamboServicioIntervencionesGeneral {
 
   TamboServicioIntervencionesGeneral(
       {this.idProgramacion,
-        this.idTambo,
-        this.tambo,
-        this.tipoUsuario,
-        this.sector,
-        this.idPrograma,
-        this.programa,
-        this.descripcion,
-        this.tipoEvento,
-        this.fecha,
-        this.imagen,
-        this.pathImagen,
-        this.fechaImagen,
-        this.tipo,
-        this.departamento});
+      this.idTambo,
+      this.tambo,
+      this.tipoUsuario,
+      this.sector,
+      this.idPrograma,
+      this.programa,
+      this.descripcion,
+      this.tipoEvento,
+      this.fecha,
+      this.imagen,
+      this.pathImagen,
+      this.fechaImagen,
+      this.tipo,
+      this.departamento});
 
-  TamboServicioIntervencionesGeneral.fromJson(Map<String, dynamic> json) {
+/*  TamboServicioIntervencionesGeneral.fromJson(Map<String, dynamic> json) {
     idProgramacion = json['idProgramacion'] ?? 0;
     idTambo = json['idTambo']?? 0;
     tambo = json['tambo']?? 0;
@@ -62,6 +64,28 @@ class TamboServicioIntervencionesGeneral {
     fechaImagen = json['fechaImagen']?? 0;
     tipo = json['tipo']?? 0;
     departamento = json['departamento']?? 0;
+  }*/
+
+  factory TamboServicioIntervencionesGeneral.fromJson(
+      Map<String, dynamic> json) {
+    //print("object ${ json['idProgramacion']}");
+    return TamboServicioIntervencionesGeneral(
+      idProgramacion: json['idProgramacion'] ?? 0,
+      idTambo: json['idTambo'] ?? 0,
+      tambo: json['tambo'] ?? 0,
+      tipoUsuario: json['tipoUsuario'] ?? 0,
+      sector: json['sector'] ?? 0,
+      idPrograma: json['idPrograma'] ?? 0,
+      programa: json['programa'] ?? 0,
+      descripcion: json['descripcion'] ?? 0,
+      tipoEvento: json['tipoEvento'] ?? 0,
+      fecha: json['fecha'] ?? 0,
+      imagen: json['imagen'] ?? 0,
+      pathImagen: json['pathImagen'] ?? 0,
+      fechaImagen: json['fechaImagen'] ?? 0,
+      tipo: json['tipo'] ?? 0,
+      departamento: json['departamento'] ?? 0,
+    );
   }
 
   Map<String, dynamic> toJson() {

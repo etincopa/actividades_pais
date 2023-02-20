@@ -90,17 +90,17 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                               itemCount: listaPersonalAux.length,
                               itemBuilder: (context, i) =>
                                   listas.cardHistrialTambosInter(
-                                listaPersonalAux[i],
-                                () async {
-                                  await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              FichaIntervencion(
-                                                  listaPersonalAux[i]
-                                                      .idProgramacion!)));
-                                },
-                              ),
+                                    listaPersonalAux[i],
+                                        () async {
+                                      await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FichaIntervencion(
+                                                      listaPersonalAux[i]
+                                                          .idProgramacion!)));
+                                    },
+                                  ),
                             ))),
                     if (isLoading == true)
                       new Center(

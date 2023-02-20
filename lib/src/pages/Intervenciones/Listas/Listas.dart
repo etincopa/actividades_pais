@@ -11,7 +11,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Pias/reportesPias.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/actividadesPias.dart';
 import 'package:intl/intl.dart';
-
+import 'package:toggle_switch/toggle_switch.dart';
 import '../../../datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 
 class Listas {
@@ -515,6 +515,7 @@ class Listas {
   }
 
   Card cardParqueInformatico(ListaEquipoInformatico band, callback) {
+    bool light0 = true;
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: EdgeInsets.all(10),
@@ -522,43 +523,141 @@ class Listas {
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: (band.estado == 'INACTIVO')
-                ? Icon(
-                    Icons.computer,
-                    color: Colors.black,
-                    size: 40,
-                  )
-                : Icon(
-                    Icons.computer,
-                    color: Colors.black,
-                    size: 40,
-                  ),
+            leading: Container(
+              child: Row(
+                children: [
+                  (band.estado == 'INACTIVO')
+                      ? Icon(
+                          Icons.computer,
+                          color: Colors.black,
+                          size: 35,
+                        )
+                      : Icon(
+                          Icons.computer,
+                          color: Colors.black,
+                          size: 35,
+                        ),
+                  //  SizedBox(height: 5),
+                  SizedBox(width: 12),
+                  Container(
+                      width: 2.0,
+                      height: 50.0,
+                      padding: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(color: Colors.grey))
+                ],
+              ),
+              width: 49,
+            ),
             contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
-            title: Text('${band.descripcionEquipoInformatico}',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            subtitle: new Text('${band.descripcionMarca}',
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${band.descripcionEquipoInformatico}',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 5,
+                )
+              ],
+            ),
+            subtitle: new Text(
+                '${band.descripcionMarca} - ${band.color} \nSERIE - ${band.serie}\n${band.descripcionModelo}\n',
                 style: TextStyle(fontSize: 10)),
             trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  width: 70,
-                  child: Text(
-                    ' ${band.fecFinGarantiaProveedor}',
-                    style: TextStyle(fontSize: 10),
+                //  DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000';
+                Text(
+                  ' ${band.codigoPatrimonial}',
+                  style: TextStyle(
+                    fontSize: 10,
                   ),
+                  textAlign: TextAlign.end,
                 ),
+                SizedBox(height: 5),
+                // Text(band.fecFinGarantiaProveedor!),
+                if (band.fecFinGarantiaProveedor != '') ...[
+                  Text(
+                    ' ${DateFormat('dd/MM/yy').format(DateTime.parse(band.fecFinGarantiaProveedor.toString()))}',
+                    style: TextStyle(
+                      fontSize: 10,
+                    ),
+                    textAlign: TextAlign.end,
+                  )
+                ],
+
+                ///   band.fecFinGarantiaProveedor!='' || band.fecFinGarantiaProveedor!=null?   :new Container(),
+                SizedBox(height: 10),
+
                 Container(
-                  width: 70,
-                  child: Text(
-                    ' ',
-                    style: TextStyle(fontSize: 10),
-                  ),
+                  child: band.estado == "ACTIVO"
+                      ? ToggleSwitch(
+                          minWidth: 55.0,
+                          minHeight: 15,
+                          initialLabelIndex: 1,
+                          cornerRadius: 10.0,
+                          activeFgColor: Colors.white,
+                          inactiveBgColor: Colors.grey,
+                          inactiveFgColor: Colors.white,
+                          activeBgColor: [Colors.green],
+                          changeOnTap: false,
+                          fontSize: 7.5,
+                          labels: ['INACTIVO', 'ACTIVO'],
+                          //     icons: Icon(Icons.abc),
+                          onToggle: (index) {
+                            print('switched to: $index');
+                          },
+                        )
+                      : ToggleSwitch(
+                          minWidth: 55.0,
+                          minHeight: 15,
+                          initialLabelIndex: 0,
+                          cornerRadius: 10.0,
+                          activeFgColor: Colors.white,
+                          inactiveBgColor: Colors.grey,
+                          inactiveFgColor: Colors.white,
+                          activeBgColor: [Colors.red],
+                          changeOnTap: false,
+                          fontSize: 7.5,
+
+                          labels: ['INACTIVO', 'ACTIVO'],
+
+                          //     icons: Icon(Icons.abc),
+                          onToggle: (index) {
+                            print('switched to: $index');
+                          },
+                        ),
+                )
+                /*   Container(
+                  child: band.estado == "ACTIVO"
+                      ? Text(
+                          '${band.estado}',
+                          style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end,
+                        )
+                      : Text(
+                          ' ${band.estado}',
+                          style: TextStyle(fontSize: 10, color: Colors.red, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end,
+                        ),
+                )*/
+                /*   Text(
+                  ' ${band.codigoPatrimonial}',
+                  style: TextStyle(fontSize: 10,),textAlign: TextAlign.end,
                 ),
+
+                Text(
+                  ' ${band.fecFinGarantiaProveedor}',
+                  style: TextStyle(fontSize: 10),textAlign: TextAlign.end
+                ),
+                SizedBox(height: 5,),
+
                 Text(
                   ' ${band.estado}',
                   style: TextStyle(fontSize: 10),
-                ),
+                ),*/
               ],
             ),
             onTap: callback,
@@ -597,8 +696,8 @@ class Listas {
             title: Row(
               children: [
                 SizedBox(
-                  width: 70.0,
-                  height: 70.0,
+                  width: 60.0,
+                  height: 60.0,
                   child: CircleAvatar(
                     backgroundColor: Colors.white.withOpacity(0.1),
                     child: ClipRRect(
@@ -611,11 +710,11 @@ class Listas {
                   ),
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 1,
                 ),
                 Container(
                   width: 240,
-                  child: Text('${band.tambo} \n${band.idProgramacion}',
+                  child: Text('${band.tambo}\n${band.idProgramacion}',
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
@@ -635,11 +734,10 @@ class Listas {
                 Image.network('${band.pathImagen}'),
                 SizedBox(height: 8),
                 InkWell(
-                  onTap:      callback,
+                  onTap: callback,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         child: Icon(Icons.download, color: Colors.black),
@@ -649,7 +747,6 @@ class Listas {
                 )
               ],
             ),
-
           )
         ],
       ),
