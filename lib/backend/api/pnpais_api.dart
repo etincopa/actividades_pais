@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -286,7 +287,23 @@ class PnPaisApi {
         return (tambosOperativos as List)
             .map((e) => TambosMapaModel.fromJson(e))
             .toList();
-        //return TambosMapaModel.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<List<IncidentesInternetModel>>>
+      getIncidenciasInternet() async {
+    return await _http.request<List<IncidentesInternetModel>>(
+      '${basePathApp4}listadarBandejaTambosInternet',
+      method: "GET",
+      parser: (data) {
+        var incidencias = (data[2] as List)
+            .where((o) => o['estado'] == 'FINALIZADO')
+            .toList();
+
+        return (incidencias as List)
+            .map((e) => IncidentesInternetModel.fromJson(e))
+            .toList();
       },
     );
   }

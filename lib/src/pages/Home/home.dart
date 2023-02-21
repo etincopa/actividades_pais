@@ -5,7 +5,6 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_a
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/historialTambo/historialTambos.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -503,14 +502,7 @@ class _HomePagePais extends State<HomePagePais> {
                               ),
                             );
                             break;
-                          case 'OPT1010':
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HistorialTambos(),
-                              ),
-                            );
-                            break;
+
                           case 'OPT1004':
                             Navigator.push(
                               context,

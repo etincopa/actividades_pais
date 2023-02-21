@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
@@ -909,6 +910,12 @@ class MainService {
 
   Future<List<TambosMapaModel>> tambosParaMapa() async {
     List<TambosMapaModel> aFind = await Get.find<MainRepo>().tambosParaMapa();
+    return aFind;
+  }
+
+  Future<List<IncidentesInternetModel>> incidenciasInternetTambo() async {
+    List<IncidentesInternetModel> aFind =
+        await Get.find<MainRepo>().indicenciasInternetTambo();
     return aFind;
   }
 }

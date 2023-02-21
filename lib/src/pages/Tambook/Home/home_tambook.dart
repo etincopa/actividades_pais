@@ -181,7 +181,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   numTambos ?? '',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 45),
+                                      fontSize: 65),
                                 )),
                                 subtitle: const Center(
                                     child: Text(

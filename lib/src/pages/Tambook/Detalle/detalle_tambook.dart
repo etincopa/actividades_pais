@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
@@ -8,6 +9,7 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/mapa_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
@@ -51,6 +53,9 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aInterAmbDir = [];
   late List<TamboActividadModel> aInterSopEnt = [];
   late List<TamboActividadModel> aCoordinacio = [];
+
+  late List<IncidentesInternetModel> incidencias = [];
+  bool isLoading = true;
 
   int statusLoadActividad = 0;
   bool loading = true;
@@ -97,6 +102,7 @@ class _DetalleTambookState extends State<DetalleTambook>
      */
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
+    incidenciasInternet();
   }
 
   void handleNext() {
@@ -130,6 +136,14 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
 
     setState(() {});
+  }
+
+  Future<void> incidenciasInternet() async {
+    incidencias = await mainCtr.getIncidenciasInternet();
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> TamboIntervencionAtencionIncidencia() async {
@@ -1672,7 +1686,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 //DOWNLOAD Mbps
                 const ListTile(
                   title: Text(
-                    'DOWNLOAD Mbps',
+                    'Velocidad de bajada Mbps',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -1715,7 +1729,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
                 const ListTile(
                   title: Text(
-                    'UPLOAD Mbps',
+                    'Velocidad de subida Mbps',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -1787,7 +1801,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Padding cardIncidencia() {
-    var heading = 'INCIDENCIAS';
+    var heading = 'INCIDENCIAS REPORTADAS';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -1810,6 +1824,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -1822,26 +1837,54 @@ class _DetalleTambookState extends State<DetalleTambook>
               ),
               children: <Widget>[
                 const Divider(color: colorI),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        ListTile(
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('SIN INTERNET'),
-                          subtitle: Text('Caida de internet'),
-                        ),
-                        ListTile(
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('INTERNET LENTO'),
-                          subtitle: Text('Mucho trafico de internet'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: isLoading ? 4 : incidencias.length,
+                    itemBuilder: (context, index) {
+                      if (isLoading) {
+                        return ShinyWidget();
+                      } else {
+                        return Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(children: [
+                              Text(
+                                incidencias[index].tipoAveria.toString(),
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w500,
+                                ), //Textstyle
+                              ), //Text
+                              const SizedBox(
+                                height: 10,
+                              ), //SizedBox
+                              Text(
+                                incidencias[index].observacion.toString(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                ), //Textstyle
+                              ), //Text
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Chip(
+                                  label: Text(
+                                    'Fecha de averia : ${incidencias[index].fechaAveria ?? ''}',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  padding: EdgeInsets.all(0),
+                                  backgroundColor: Colors.blue),
+
+                              Chip(
+                                  label: Text(
+                                    'Ticket : ${incidencias[index].ticket ?? ''}',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  padding: EdgeInsets.all(0),
+                                  backgroundColor: Colors.blue),
+                              const Divider(color: colorI), //SizedBox
+                            ]));
+                      }
+                    })
               ],
             ),
           ],
