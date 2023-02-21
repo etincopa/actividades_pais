@@ -9,6 +9,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
@@ -168,11 +169,16 @@ class MainService {
 
         if (isOnlines) {
           try {
-            final oResp = await Get.find<MainRepo>().insertarMonitoreo(oMonit);
+            final oResp =
+                await Get.find<MainRepo>().insertarMonitoreoApi(oMonit);
             if (oResp.idMonitoreo != "") {
               /// (2)...
               TramaMonitoreoModel? oSend = oResp;
               oSend.id = oMonit.id;
+
+              // Estado al enviar ENVIADO
+              oSend.idEstadoMonitoreo = TramaMonitoreoModel.sIdEstadoENV;
+              oSend.estadoMonitoreo = TramaMonitoreoModel.sEstadoENV;
 
               await Get.find<MainRepo>().insertMonitorDb(oSend);
 
@@ -289,6 +295,16 @@ class MainService {
     ///Obtiene los registros de la DB Local
     List<TramaMonitoreoModel> aFind =
         await Get.find<MainRepo>().getMonitoreoByTypePartida(o, sTypePartida);
+    return aFind;
+  }
+
+  Future<List<UltimoAvancePartidaModel>> getUltimoAvanceByProyectoAndPartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    ///Obtiene los registros de la DB Local
+    List<UltimoAvancePartidaModel> aFind = await Get.find<MainRepo>()
+        .getUltimoAvanceByProyectoAndPartida(o, sTypePartida);
     return aFind;
   }
 
@@ -411,6 +427,13 @@ class MainService {
       oTempEMONI2.descripcion = TramaMonitoreoModel.sEstadoXEN;
       aApi3.add(oTempEMONI2);
 
+      ComboItemModel oTempEMONI3 = ComboItemModel.empty();
+      oTempEMONI3.idTypeItem = 'ESTADO_MONITOREO';
+      oTempEMONI3.codigo1 = TramaMonitoreoModel.sIdEstadoENV.toString();
+      oTempEMONI3.codigo2 = TramaMonitoreoModel.sIdEstadoENV.toString();
+      oTempEMONI3.descripcion = TramaMonitoreoModel.sEstadoENV;
+      aApi3.add(oTempEMONI3);
+
       aApi.addAll(aApi3);
       aApi.addAll(aApi4);
       aApi.addAll(aApi5);
@@ -447,6 +470,59 @@ class MainService {
         }
       }
       _log.i('Nuevos Maestros cargados: ${aNewMonitoreo.length}');
+    }
+
+    return aNewMonitoreo;
+  }
+
+  /**
+   * Obtener Avance de Partidas
+   */
+  Future<List<UltimoAvancePartidaModel>> loadAllAvancePartida(
+    int? limit,
+    int? offset,
+  ) async {
+    List<UltimoAvancePartidaModel> aNewMonitoreo = [];
+    if (await isOnline()) {
+      List<UltimoAvancePartidaModel> aDb =
+          await Get.find<MainRepo>().getAllAvancePartidaDb(limit, offset);
+      List<UltimoAvancePartidaModel> aApi =
+          await Get.find<MainRepo>().obtenerUltimoAvancePartida();
+
+      for (UltimoAvancePartidaModel oApi in aApi) {
+        if (aDb.isNotEmpty) {
+          UltimoAvancePartidaModel? oDataFind;
+          try {
+            oDataFind = aDb.firstWhere(
+                (o) => (o.numSnip == oApi.numSnip &&
+                    o.idAvanceFisicoPartida == oApi.idAvanceFisicoPartida),
+                orElse: () => UltimoAvancePartidaModel.empty());
+          } catch (oError) {
+            _log.e(oError);
+          }
+          if (oDataFind != null || oDataFind!.id == 0) {
+            if (oDataFind.avanceFisicoPartida != oApi.avanceFisicoPartida) {
+              /*
+                Si el avance fisico de partida en la nube es diferente a la data local, 
+                se actualiza el registro local.
+               */
+              oApi.id = oDataFind.id;
+              oApi.isEdit = 0;
+              await Get.find<MainRepo>().insertUltimoAvancePartidaDb(oApi);
+            }
+            continue;
+          }
+        }
+
+        UltimoAvancePartidaModel? response =
+            await Get.find<MainRepo>().insertUltimoAvancePartidaDb(oApi);
+        if (response != null) {
+          aNewMonitoreo.add(response);
+        } else {
+          _log.e('Error al ingresar monitoreo a la Base de Datos');
+        }
+      }
+      _log.i('Nuevos monitoreos cargados: ${aNewMonitoreo.length}');
     }
 
     return aNewMonitoreo;
@@ -562,6 +638,12 @@ class MainService {
         .getAllMonitoreoByIdProyectoDb(o, limit, offset);
 
     return aFind;
+  }
+
+  Future<List<UltimoAvancePartidaModel>> getUltimoAvancePartida() async {
+    List<UltimoAvancePartidaModel> aResp =
+        await Get.find<MainRepo>().obtenerUltimoAvancePartida();
+    return aResp;
   }
 
   Future<List<TramaMonitoreoModel>> getTramaMonitoreo(

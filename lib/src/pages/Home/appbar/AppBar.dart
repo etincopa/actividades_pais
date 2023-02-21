@@ -56,7 +56,7 @@ class _AppBarPaisState extends State<AppBarPais> {
                         SizedBox(
                           width: 200,
                           child: Text(
-                            "UT : ${widget.datoUt} sdsdd",
+                            "UT : ${widget.datoUt}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: const TextStyle(
@@ -69,7 +69,7 @@ class _AppBarPaisState extends State<AppBarPais> {
                         SizedBox(
                           width: 200,
                           child: Text(
-                            "PLATAFORMA : ${widget.plataforma} sdsdsd",
+                            "PLATAFORMA : ${widget.plataforma}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: const TextStyle(

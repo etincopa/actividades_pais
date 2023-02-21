@@ -10,6 +10,7 @@ import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
@@ -73,6 +74,19 @@ class PnPaisApi {
       parser: (data) {
         return (data as List)
             .map((e) => TramaMonitoreoModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<UltimoAvancePartidaModel>>>
+      obtenerUltimoAvancePartida() async {
+    return await _http.request<List<UltimoAvancePartidaModel>>(
+      '${basePathApp}obtenerUltimoAvancePartida',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => UltimoAvancePartidaModel.fromJson(e))
             .toList();
       },
     );

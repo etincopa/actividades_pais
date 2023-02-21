@@ -226,6 +226,9 @@ class TramaMonitoreoModel {
   static const sIdEstadoXEN = 10002;
   static const sEstadoXEN = 'POR ENVIAR';
 
+  static const sIdEstadoENV = 10003;
+  static const sEstadoENV = 'ENVIADO';
+
   static final List<String> aEstadoMonitoreo = [
     '43 - APROBADO - ENVIADO',
     '44 - RECHAZADO',

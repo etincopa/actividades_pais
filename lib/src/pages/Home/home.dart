@@ -192,7 +192,7 @@ class _HomePagePais extends State<HomePagePais> {
           ),
         );
 
-        aHomeOptions.add(
+        /*aHomeOptions.add(
           HomeOptions(
             code: 'OPT1010',
             name: 'HISTORIAL TAMBOS'.tr,
@@ -200,7 +200,7 @@ class _HomePagePais extends State<HomePagePais> {
             image: icon6,
             color: const Color(0xFF78b8cd),
           ),
-        );
+        );*/
 
         String sImagePias = modalidad == '1'
             ? icon2
@@ -375,12 +375,6 @@ class _HomePagePais extends State<HomePagePais> {
 
     List listPages = [
       Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/paislogo.png"),
-            fit: BoxFit.contain,
-          ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

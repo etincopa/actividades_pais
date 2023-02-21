@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -69,6 +70,18 @@ class DatabasePnPais {
       ${UserFields.clave} $textType,
       ${UserFields.username} $textType,
       ${UserFields.password} $textType
+      )
+    ''');
+
+    await db.execute('''
+    $createTable $tableNameUltimoAvancePartida ( 
+      $constFields,
+
+      ${UltimoAvancePartidaFld.numSnip} $textType $notNull,
+      ${UltimoAvancePartidaFld.idTambo} $textType $notNull,
+      ${UltimoAvancePartidaFld.idMonitoreo} $textType $notNull,
+      ${UltimoAvancePartidaFld.idAvanceFisicoPartida} $textType $notNull,
+      ${UltimoAvancePartidaFld.avanceFisicoPartida} $textType
       )
     ''');
 
@@ -260,7 +273,7 @@ class DatabasePnPais {
   Future deleteMonitorByEstadoENV() async {
     final db = await instance.database;
     db.execute(
-        "DELETE FROM $tableNameTramaMonitoreos WHERE ( ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoAPR}' OR ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoPEN}' )");
+        "DELETE FROM $tableNameTramaMonitoreos WHERE ( ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoAPR}' OR ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoPEN}' OR ${MonitorFields.estadoMonitoreo} = '${TramaMonitoreoModel.sEstadoENV}' )");
   }
 
   Future _upgradeDB(
@@ -515,6 +528,29 @@ class DatabasePnPais {
         .toList();
   }
 
+  Future<List<UltimoAvancePartidaModel>> readUltimoAvanceByProyectoAndPartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    final db = await instance.database;
+
+    final orderBy = '${UltimoAvancePartidaFld.numSnip} ASC';
+
+    dynamic result = await db.query(
+      tableNameUltimoAvancePartida,
+      where:
+          '${UltimoAvancePartidaFld.numSnip} = ? AND ${UltimoAvancePartidaFld.idAvanceFisicoPartida} = ?',
+      whereArgs: [o.numSnip, sTypePartida],
+      orderBy: orderBy,
+    );
+
+    if (result.length == 0) return List.empty();
+    return result
+        .map<UltimoAvancePartidaModel>(
+            (json) => UltimoAvancePartidaModel.fromJson(json))
+        .toList();
+  }
+
   Future<List<TramaMonitoreoModel>> readMonitoreoByTypePartida(
     TramaProyectoModel o,
     String sTypePartida,
@@ -635,6 +671,35 @@ class DatabasePnPais {
         .toList();
   }
 
+  Future<List<UltimoAvancePartidaModel>> readAllAvancePartida(
+    int? limit,
+    int? offset,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${UltimoAvancePartidaFld.numSnip} ASC';
+
+    dynamic result;
+    if (limit! > 0) {
+      result = await db.query(
+        tableNameUltimoAvancePartida,
+        orderBy: orderBy,
+        limit: limit,
+        offset: offset,
+      );
+    } else {
+      result = await db.query(
+        tableNameUltimoAvancePartida,
+        orderBy: orderBy,
+      );
+    }
+
+    if (result.length == 0) return [];
+    return result
+        .map<UltimoAvancePartidaModel>(
+            (json) => UltimoAvancePartidaModel.fromJson(json))
+        .toList();
+  }
+
   Future<List<TramaMonitoreoModel>> readAllOtherMonitoreo(
     UserModel o,
     int? limit,
@@ -737,6 +802,35 @@ class DatabasePnPais {
       tableNameComboItem,
       o.toJson(),
       where: '${ComboItemFields.id} = ?',
+      whereArgs: [o.id],
+    );
+  }
+
+  Future<UltimoAvancePartidaModel> insertUltimoAvancePartida(
+    UltimoAvancePartidaModel o,
+  ) async {
+    final db = await instance.database;
+    if (o.id != null && o.id! > 0) {
+      await updateUltimoAvancePartida(o);
+      return o.copy(id: o.id);
+    } else {
+      final id = await db.insert(
+        tableNameUltimoAvancePartida,
+        o.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return o.copy(id: id);
+    }
+  }
+
+  Future<int> updateUltimoAvancePartida(
+    UltimoAvancePartidaModel o,
+  ) async {
+    final db = await instance.database;
+    return db.update(
+      tableNameUltimoAvancePartida,
+      o.toJson(),
+      where: '${UltimoAvancePartidaFld.id} = ?',
       whereArgs: [o.id],
     );
   }

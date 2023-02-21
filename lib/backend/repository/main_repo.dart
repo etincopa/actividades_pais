@@ -9,6 +9,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:logger/logger.dart';
@@ -96,6 +97,13 @@ class MainRepo {
     return _dbPnPais.readMonitoreoByTypePartida(o, sTypePartida);
   }
 
+  Future<List<UltimoAvancePartidaModel>> getUltimoAvanceByProyectoAndPartida(
+    TramaProyectoModel o,
+    String sTypePartida,
+  ) async {
+    return _dbPnPais.readUltimoAvanceByProyectoAndPartida(o, sTypePartida);
+  }
+
   Future<List<TramaMonitoreoModel>> getMonitoreoByIdMonitor(
     String idMonitoreo,
   ) async {
@@ -125,6 +133,16 @@ class MainRepo {
     int? offset,
   ) async {
     return _dbPnPais.readAllMonitoreo(
+      limit,
+      offset,
+    );
+  }
+
+  Future<List<UltimoAvancePartidaModel>> getAllAvancePartidaDb(
+    int? limit,
+    int? offset,
+  ) async {
+    return _dbPnPais.readAllAvancePartida(
       limit,
       offset,
     );
@@ -166,6 +184,17 @@ class MainRepo {
     return aResp;
   }
 
+  Future<List<UltimoAvancePartidaModel>> obtenerUltimoAvancePartida() async {
+    List<UltimoAvancePartidaModel> aResp = [];
+    final response = await _pnPaisApi.obtenerUltimoAvancePartida();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
   Future<List<TramaMonitoreoModel>> getTramaMonitoreo(
     TramaMonitoreoModel o,
   ) async {
@@ -177,6 +206,12 @@ class MainRepo {
       _log.e(response.error.message);
     }
     return aResp;
+  }
+
+  Future<UltimoAvancePartidaModel> insertUltimoAvancePartidaDb(
+    UltimoAvancePartidaModel o,
+  ) async {
+    return await _dbPnPais.insertUltimoAvancePartida(o);
   }
 
   Future<TramaMonitoreoModel> insertMonitorDb(
@@ -294,7 +329,7 @@ class MainRepo {
     return await _dbPnPais.insertRegistroEntidadActividadMasive(a);
   }
 
-  Future<TramaMonitoreoModel> insertarMonitoreo(
+  Future<TramaMonitoreoModel> insertarMonitoreoApi(
     TramaMonitoreoModel o,
   ) async {
     final response = await _pnPaisApi.insertarMonitoreoP1(oBody: o);

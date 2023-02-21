@@ -10,6 +10,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
@@ -27,7 +28,9 @@ class MainController extends GetxController {
 
   final loading = false.obs;
   final users = <UserModel>[].obs;
-  final moniteos = <TramaMonitoreoModel>[].obs;
+  //final moniteos = <TramaMonitoreoModel>[].obs;
+  final ultimoAvancePartida = <UltimoAvancePartidaModel>[].obs;
+
   final proyectos = <TramaProyectoModel>[].obs;
   final maestra = <ComboItemModel>[].obs;
 
@@ -44,7 +47,8 @@ class MainController extends GetxController {
     loading.value = true;
     users.value = await Get.find<MainService>().loadAllUser(0, 0);
     proyectos.value = await Get.find<MainService>().loadAllProyecto(0, 0);
-    moniteos.value = await Get.find<MainService>().loadAllMonitoreo(0, 0);
+    ultimoAvancePartida.value =
+        await Get.find<MainService>().loadAllAvancePartida(0, 0);
     maestra.value = await Get.find<MainService>().loadAllMaestra(0, 0);
     loading.value = false;
   }
@@ -218,6 +222,15 @@ class MainController extends GetxController {
   }
 
   /*
+    Obtiene la lista de los ultimos avance de partida de los proyectos
+   */
+  Future<List<UltimoAvancePartidaModel>> getUltimoAvancePartida() async {
+    List<UltimoAvancePartidaModel> aResp =
+        await Get.find<MainService>().getUltimoAvancePartida();
+    return aResp;
+  }
+
+  /*
     Obtiene la lista de Monitoreos segun el Proyecto seleccionado (online)
    @TramaProyectoModel o
    */
@@ -251,12 +264,12 @@ class MainController extends GetxController {
         .getMonitoreoByTypePartida(o, sTypePartida);
   }
 
-  Future<TramaMonitoreoModel> getMonitoreoLastTypePartida(
+  Future<UltimoAvancePartidaModel> getUltimoAvanceByProyectoAndPartida(
     TramaProyectoModel o,
     String sTypePartida,
   ) async {
-    List<TramaMonitoreoModel> aMonitoreo =
-        await getAllMonitoreoByTypePartida(o, sTypePartida);
+    List<UltimoAvancePartidaModel> aMonitoreo = await Get.find<MainService>()
+        .getUltimoAvanceByProyectoAndPartida(o, sTypePartida);
 
     return aMonitoreo.last;
   }

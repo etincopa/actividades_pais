@@ -5,6 +5,7 @@ import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search_otro.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/src/image_controller.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/src/image_multiple.dart';
@@ -699,14 +700,15 @@ class _MonitoringDetailNewEditPageState
                         TramaProyectoModel oProyect =
                             TramaProyectoModel.empty();
                         oProyect.numSnip = _snip;
-                        TramaMonitoreoModel oLastMonitor =
-                            await mainCtr.getMonitoreoLastTypePartida(
+
+                        UltimoAvancePartidaModel oLastAvance =
+                            await mainCtr.getUltimoAvanceByProyectoAndPartida(
                           oProyect,
                           _valuePartidaEje!,
                         );
 
                         _advanceFEP.text =
-                            ((oLastMonitor.avanceFisicoPartida! * 100)
+                            ((oLastAvance.avanceFisicoPartida! * 100)
                                     .toStringAsFixed(2))
                                 .toString();
                       } catch (e) {

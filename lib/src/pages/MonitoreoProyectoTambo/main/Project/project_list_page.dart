@@ -255,7 +255,7 @@ class _ProjectListPageState extends State<ProjectListPage>
               );
             },
           ),
-          FabItem(
+          /*FabItem(
             "Reporte",
             Icons.document_scanner_rounded,
             onPress: () async {
@@ -283,7 +283,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                 });
               }
             },
-          ),
+          ),*/
           FabItem(
             "Sincronizar",
             Icons.cloud_sync_rounded,
