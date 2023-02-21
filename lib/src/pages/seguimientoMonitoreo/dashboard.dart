@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
+import 'package:actividades_pais/src/pages/seguimientoMonitoreo/search/project_search.dart';
 import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/detalleProyecto.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -27,6 +28,7 @@ class _DashboardState extends State<Dashboard> {
 
   List<TramaProyectoModel> aProyecto = [];
   ScrollController scrollController = ScrollController();
+  //final _txtSearch = TextEditingController();
 
   @override
   void initState() {
@@ -145,6 +147,38 @@ class _DashboardState extends State<Dashboard> {
           await buildData();
           BusyIndicator.hide(context);
         },
+        /*bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: Container(
+            height: 48,
+            margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: colorGB,
+              border: Border.all(color: colorI),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: TextField(
+              controller: _txtSearch,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.search),
+                suffixIcon: _txtSearch.text.isNotEmpty
+                    ? GestureDetector(
+                        child: const Icon(Icons.close),
+                        onTap: () {
+                          _txtSearch.clear();
+                          searhProyectos("");
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                      )
+                    : null,
+                hintText: 'Buscar Tambo',
+                border: InputBorder.none,
+              ),
+              onChanged: searhProyectos,
+            ),
+          ),
+        ),*/
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -238,16 +272,51 @@ class _DashboardState extends State<Dashboard> {
                        * DATA
                        */
                       const SizedBox(height: 10),
-                      const Center(
-                        child: Text(
-                          "PROYECTOS TAMBOS",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: color_07,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            fontFamily: 'Roboto-Bold',
-                          ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(""),
+                            const Text(
+                              "PROYECTOS TAMBOS",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: color_07,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: 'Roboto-Bold',
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                showSearch(
+                                  context: context,
+                                  delegate: ProjectSMSearchDelegate(
+                                    aProyecto: aProyectoAll,
+                                  ),
+                                );
+                              },
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    const CircleBorder()),
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.all(10)),
+                                backgroundColor: MaterialStateProperty.all(
+                                    color_10o15), // <-- Button color
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                        (states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return colorI; // <-- Splash color
+                                  }
+                                }),
+                              ),
+                              child: const Icon(
+                                Icons.search,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -293,7 +362,7 @@ class _DashboardState extends State<Dashboard> {
                                             color: Colors.grey.withOpacity(0.5),
                                             spreadRadius: 1,
                                             blurRadius: 1,
-                                            offset: Offset(0, 1),
+                                            offset: const Offset(0, 1),
                                           ),
                                         ],
                                       ),
@@ -352,7 +421,8 @@ class _DashboardState extends State<Dashboard> {
                                                           ),
                                                           Text(
                                                             'TAMBO ${oProyecto.tambo ?? ''}',
-                                                            style: TextStyle(
+                                                            style:
+                                                                const TextStyle(
                                                               color: color_01,
                                                               fontSize: 11,
                                                               fontWeight:

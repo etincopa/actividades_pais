@@ -12,6 +12,7 @@ class WidgetCustoms {
     void Function()? onPressed,
     void Function()? onPressedAct,
     Widget? flexibleSpace,
+    PreferredSizeWidget? bottom,
   }) =>
       AppBar(
         backgroundColor: color_10o15,
@@ -52,5 +53,6 @@ class WidgetCustoms {
           ),
         ],
         flexibleSpace: flexibleSpace,
+        bottom: bottom,
       );
 }
