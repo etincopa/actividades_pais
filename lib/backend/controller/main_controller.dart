@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
@@ -881,6 +882,12 @@ class MainController extends GetxController {
   Future<List<TambosMapaModel>> getTamboParaMapa() async {
     List<TambosMapaModel> oResp =
         await Get.find<MainService>().tambosParaMapa();
+    return oResp;
+  }
+
+  Future<List<IncidentesInternetModel>> getIncidenciasInternet() async {
+    List<IncidentesInternetModel> oResp =
+        await Get.find<MainService>().incidenciasInternetTambo();
     return oResp;
   }
 

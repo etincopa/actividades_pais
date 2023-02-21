@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
@@ -388,6 +389,17 @@ class MainRepo {
   Future<List<TambosMapaModel>> tambosParaMapa() async {
     List<TambosMapaModel> aResp = [];
     final response = await _pnPaisApi.getTambosParaMapa();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<IncidentesInternetModel>> indicenciasInternetTambo() async {
+    List<IncidentesInternetModel> aResp = [];
+    final response = await _pnPaisApi.getIncidenciasInternet();
     if (response.error == null) {
       aResp = response.data!;
     } else {

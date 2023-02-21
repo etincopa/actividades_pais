@@ -122,73 +122,81 @@ class AtencionesView extends StatelessWidget {
                 width: 280,
                 child: Stack(
                   children: [
-                    Row(
-                      children: [
-                        const SizedBox(
-                          width: 48,
-                        ),
-                        Expanded(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 237, 237, 241),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16.0)),
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(
-                                  width: 70,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 10,
-                                          bottom: 16,
-                                          right: 16,
-                                        ),
-                                        child: Text(
-                                          category!.title!,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                            letterSpacing: 0.27,
-                                            color: Colors.black,
+                    Center(
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 48,
+                          ),
+                          Expanded(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 237, 237, 241),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blueGrey,
+                                    spreadRadius: 2,
+                                    blurRadius: 4,
+                                    offset: Offset(
+                                        0, 2), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 70,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 5, right: 16),
+                                          child: Text(
+                                            category!.title!,
+                                            textAlign: TextAlign.left,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15,
+                                              letterSpacing: 0.27,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, bottom: 16, right: 16),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '${category!.total}',
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 20,
-                                                letterSpacing: 0.27,
-                                                color: Colors.black,
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10, bottom: 16, right: 16),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '${category!.total}',
+                                                textAlign: TextAlign.left,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 45,
+                                                  letterSpacing: 0.27,
+                                                  color: Colors.black,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -204,7 +212,7 @@ class AtencionesView extends StatelessWidget {
                             child: AspectRatio(
                               aspectRatio: 1.0,
                               child: Image.asset(
-                                'assets/design_course/user-gobierno_central.png',
+                                'assets/icono_tambos.png',
                                 fit: BoxFit.fill,
                               ),
                             ),
