@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
@@ -305,6 +306,20 @@ class PnPaisApi {
             .toList();
         return (incidencias as List)
             .map((e) => IncidentesInternetModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<MonitoreoDetailModel>>> getMonitoreoDetail(
+    int numSnip,
+  ) async {
+    return await _http.request<List<MonitoreoDetailModel>>(
+      '${basePathApp4}ListaTramaMonitoreoDetail/$numSnip',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => MonitoreoDetailModel.fromJson(e))
             .toList();
       },
     );

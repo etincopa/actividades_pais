@@ -5,6 +5,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
+import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
@@ -901,6 +902,12 @@ class MainController extends GetxController {
   Future<List<IncidentesInternetModel>> getIncidenciasInternet(int snip) async {
     List<IncidentesInternetModel> oResp =
         await Get.find<MainService>().incidenciasInternetTambo(snip);
+    return oResp;
+  }
+
+  Future<List<MonitoreoDetailModel>> getMonitoreoDetail(int snip) async {
+    List<MonitoreoDetailModel> oResp =
+        await Get.find<MainService>().monitoreoDetail(snip);
     return oResp;
   }
 

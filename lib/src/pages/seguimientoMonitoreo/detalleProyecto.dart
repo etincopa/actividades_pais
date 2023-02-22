@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
+import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/src/pages/SeguimientoMonitoreo/gallery/image_view.dart';
@@ -23,20 +23,13 @@ class DetalleProyecto extends StatefulWidget {
 class _DetalleProyectoState extends State<DetalleProyecto>
     with TickerProviderStateMixin {
   MainController mainController = MainController();
-  List<TramaMonitoreoModel> imagenMonitor = [];
+  List<MonitoreoDetailModel> aMonitoreoAprobado = [];
   late TramaProyectoModel _oProject;
   bool isOKImage = false;
 
   late final _numSnip;
-  late final _cui;
   late final _latitud;
   late final _longitud;
-  late final _departamento;
-  late final _provincia;
-  late final _distrito;
-  late final _tambo;
-  late final _centroPoblado;
-  late final _estado;
   late final _subEstado;
   late final _estadoSaneamiento;
   late final _modalidad;
@@ -45,7 +38,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   late final _inversion;
   late final _costoEjecutado;
   late final _costoEstimadoFinal;
-  late final _avanceFisico;
   late final _residente;
   late final _supervisor;
   late final _crp;
@@ -76,15 +68,8 @@ class _DetalleProyectoState extends State<DetalleProyecto>
 
     _oProject = widget.datoProyecto;
     _numSnip = TextEditingController(text: _oProject.numSnip);
-    _cui = TextEditingController(text: _oProject.cui);
     _latitud = TextEditingController(text: _oProject.latitud);
     _longitud = TextEditingController(text: _oProject.longitud);
-    _departamento = TextEditingController(text: _oProject.departamento);
-    _provincia = TextEditingController(text: _oProject.provincia);
-    _distrito = TextEditingController(text: _oProject.distrito);
-    _tambo = TextEditingController(text: _oProject.tambo);
-    _centroPoblado = TextEditingController(text: _oProject.centroPoblado);
-    _estado = TextEditingController(text: _oProject.estado);
     _subEstado = TextEditingController(text: _oProject.subEstado);
     _estadoSaneamiento =
         TextEditingController(text: _oProject.estadoSaneamiento);
@@ -96,8 +81,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     _costoEjecutado = TextEditingController(text: _oProject.costoEjecutado);
     _costoEstimadoFinal =
         TextEditingController(text: _oProject.costoEstimadoFinal);
-    _avanceFisico =
-        TextEditingController(text: (_oProject.avanceFisico).toString());
     _residente = TextEditingController(text: _oProject.residente);
     _supervisor = TextEditingController(text: _oProject.supervisor);
     _crp = TextEditingController(text: _oProject.crp);
@@ -105,7 +88,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     _codSupervisor = TextEditingController(text: _oProject.codSupervisor);
     _codCrp = TextEditingController(text: _oProject.codCrp);
 
-    getImgMonitor(_oProject.numSnip.toString());
+    buildCarrouselImg(_oProject.numSnip.toString());
   }
 
   Future<void> setData() async {
@@ -119,87 +102,111 @@ class _DetalleProyectoState extends State<DetalleProyecto>
     opacity3 = 1.0;
   }
 
-  Future<void> getImgMonitor(String snip) async {
-    imagenMonitor =
-        await mainController.getTramaMonitoreo(TramaMonitoreoModel(snip: snip));
+  Future<void> buildCarrouselImg(String snip) async {
+    aMonitoreoAprobado =
+        await mainController.getMonitoreoDetail(int.parse(snip));
     int count = 1;
-    isOKImage = imagenMonitor.isEmpty ? true : false;
-    for (var item in imagenMonitor) {
-      List<ImagenesCourrusel> _lisImg = [
-        if (item.imgActividad1!.length > 10)
-          ImagenesCourrusel(
-            num: count,
-            descripcion: item.problemaIdentificado,
-            imagen: Image.memory(
-              base64Decode(item.imgActividad1!),
-            ),
+    isOKImage = aMonitoreoAprobado.isEmpty ? true : false;
+    for (var item in aMonitoreoAprobado) {
+      if (listImges.length > 5) break;
+      if (item.imgActividad1!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          num: count,
+          descripcion: item.problemaIdentificado,
+          imagen: Image.memory(
+            base64Decode(item.imgActividad1!),
           ),
-        if (item.imgActividad2!.length > 10)
-          ImagenesCourrusel(
-            num: count,
-            descripcion: item.problemaIdentificado,
-            imagen: Image.memory(
-              base64Decode(item.imgActividad2!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgActividad2!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          num: count,
+          descripcion: item.problemaIdentificado,
+          imagen: Image.memory(
+            base64Decode(item.imgActividad2!),
           ),
-        if (item.imgActividad3!.length > 10)
-          ImagenesCourrusel(
-            num: count,
-            descripcion: item.problemaIdentificado,
-            imagen: Image.memory(
-              base64Decode(item.imgActividad3!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgActividad3!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          num: count,
+          descripcion: item.problemaIdentificado,
+          imagen: Image.memory(
+            base64Decode(item.imgActividad3!),
           ),
-        if (item.imgProblema1!.length > 10)
-          ImagenesCourrusel(
-            num: count,
-            descripcion: item.problemaIdentificado,
-            imagen: Image.memory(
-              base64Decode(item.imgProblema1!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgProblema1!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          num: count,
+          descripcion: item.problemaIdentificado,
+          imagen: Image.memory(
+            base64Decode(item.imgProblema1!),
           ),
-        if (item.imgProblema2!.length > 10)
-          ImagenesCourrusel(
-            num: count,
-            descripcion: item.problemaIdentificado,
-            imagen: Image.memory(
-              base64Decode(item.imgProblema2!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgProblema2!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          num: count,
+          descripcion: item.problemaIdentificado,
+          imagen: Image.memory(
+            base64Decode(item.imgProblema2!),
           ),
-        if (item.imgProblema3!.length > 10)
-          ImagenesCourrusel(
-            num: count,
-            descripcion: item.problemaIdentificado,
-            imagen: Image.memory(
-              base64Decode(item.imgProblema3!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgProblema3!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          num: count,
+          descripcion: item.problemaIdentificado,
+          imagen: Image.memory(
+            base64Decode(item.imgProblema3!),
           ),
-        if (item.imgRiesgo1!.length > 10)
-          ImagenesCourrusel(
-            descripcion: item.problemaIdentificado,
-            num: count,
-            imagen: Image.memory(
-              base64Decode(item.imgRiesgo1!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgRiesgo1!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          descripcion: item.problemaIdentificado,
+          num: count,
+          imagen: Image.memory(
+            base64Decode(item.imgRiesgo1!),
           ),
-        if (item.imgRiesgo2!.length > 10)
-          ImagenesCourrusel(
-            descripcion: item.problemaIdentificado,
-            num: count,
-            imagen: Image.memory(
-              base64Decode(item.imgRiesgo2!),
-            ),
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgRiesgo2!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          descripcion: item.problemaIdentificado,
+          num: count,
+          imagen: Image.memory(
+            base64Decode(item.imgRiesgo2!),
           ),
-        if (item.imgRiesgo3!.length > 10)
-          ImagenesCourrusel(
-            descripcion: item.problemaIdentificado,
-            num: count,
-            imagen: Image.memory(
-              base64Decode(item.imgRiesgo3!),
-            ),
-          )
-      ];
-      listImges.addAll(_lisImg);
+        ));
+      }
+
+      if (listImges.length > 5) break;
+      if (item.imgRiesgo3!.length > 10) {
+        listImges.add(ImagenesCourrusel(
+          descripcion: item.problemaIdentificado,
+          num: count,
+          imagen: Image.memory(
+            base64Decode(item.imgRiesgo3!),
+          ),
+        ));
+      }
+
       count++;
     }
     isOKImage = listImges.isEmpty ? true : false;
@@ -557,7 +564,154 @@ class _DetalleProyectoState extends State<DetalleProyecto>
   *            ESTADO DEL PROYECTO
   * -----------------------------------------------
   */
+  Padding cardMonitoreo() {
+    var heading = 'DETALLE DEL PROYECTO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 2,
+            color: colorI,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: aMonitoreoAprobado.isNotEmpty
+                  ? SizedBox(
+                      height: 450,
+                      child: GridView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 3.0,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                        ),
+                        padding: const EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                          bottom: 58,
+                        ),
+                        itemCount: aMonitoreoAprobado.length,
+                        itemBuilder: (context, index) {
+                          MonitoreoDetailModel oMonitor =
+                              aMonitoreoAprobado[index];
+                          return GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(bottom: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    oMonitor.idMonitoreo!,
+                                                    style: const TextStyle(
+                                                      color: color_01,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'TAMBO ${oMonitor.tambo ?? ''}',
+                                                    style: const TextStyle(
+                                                      color: color_01,
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          oMonitor.estadoMonitoreo!,
+                                          style: const TextStyle(
+                                            color: color_01,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: color_07,
+                        ),
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
+  /*
+  * -----------------------------------------------
+  *            ESTADO DEL PROYECTO
+  * -----------------------------------------------
+  */
   Padding cardEstadoProyecto() {
     var heading = 'DETALLE DEL PROYECTO';
     return Padding(

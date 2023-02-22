@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
+import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
@@ -917,6 +918,12 @@ class MainService {
       int snip) async {
     List<IncidentesInternetModel> aFind =
         await Get.find<MainRepo>().indicenciasInternetTambo(snip);
+    return aFind;
+  }
+
+  Future<List<MonitoreoDetailModel>> monitoreoDetail(int snip) async {
+    List<MonitoreoDetailModel> aFind =
+        await Get.find<MainRepo>().getMonitoreoDetail(snip);
     return aFind;
   }
 }
