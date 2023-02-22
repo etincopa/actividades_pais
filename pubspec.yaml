@@ -83,7 +83,7 @@ dependencies:
   kdgaugeview: ^1.0.4
   shimmer: ^2.0.0
   fancy_shimmer_image: ^2.0.2
-  badges: ^2.0.2
+  badges: ^3.0.2
 
   lecle_bubble_timeline: ^0.0.1+1
   timelines: ^0.1.0
