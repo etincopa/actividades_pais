@@ -633,7 +633,8 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                                     ),
                                                   ),
                                                   Text(
-                                                    'TAMBO ${oMonitor.tambo ?? ''}',
+                                                    oMonitor.riesgoIdentificado ??
+                                                        '',
                                                     style: const TextStyle(
                                                       color: color_01,
                                                       fontSize: 11,
