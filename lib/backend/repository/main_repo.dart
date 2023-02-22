@@ -432,9 +432,10 @@ class MainRepo {
     return aResp;
   }
 
-  Future<List<IncidentesInternetModel>> indicenciasInternetTambo() async {
+  Future<List<IncidentesInternetModel>> indicenciasInternetTambo(
+      int snip) async {
     List<IncidentesInternetModel> aResp = [];
-    final response = await _pnPaisApi.getIncidenciasInternet();
+    final response = await _pnPaisApi.getIncidenciasInternet(snip);
     if (response.error == null) {
       aResp = response.data!;
     } else {

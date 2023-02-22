@@ -898,9 +898,9 @@ class MainController extends GetxController {
     return oResp;
   }
 
-  Future<List<IncidentesInternetModel>> getIncidenciasInternet() async {
+  Future<List<IncidentesInternetModel>> getIncidenciasInternet(int snip) async {
     List<IncidentesInternetModel> oResp =
-        await Get.find<MainService>().incidenciasInternetTambo();
+        await Get.find<MainService>().incidenciasInternetTambo(snip);
     return oResp;
   }
 

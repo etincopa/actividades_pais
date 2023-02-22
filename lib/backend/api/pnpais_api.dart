@@ -291,16 +291,18 @@ class PnPaisApi {
     );
   }
 
-  Future<HttpResponse<List<IncidentesInternetModel>>>
-      getIncidenciasInternet() async {
+  Future<HttpResponse<List<IncidentesInternetModel>>> getIncidenciasInternet(
+    int snip,
+  ) async {
     return await _http.request<List<IncidentesInternetModel>>(
       '${basePathApp4}listadarBandejaTambosInternet',
       method: "GET",
       parser: (data) {
         var incidencias = (data[2] as List)
-            .where((o) => o['estado'] == 'FINALIZADO')
+            .where((o) =>
+                ((o['estado'] == 'FINALIZADO' || o['estado'] == 'EN PROCESO') &&
+                    o['snip_tambo'] == snip))
             .toList();
-
         return (incidencias as List)
             .map((e) => IncidentesInternetModel.fromJson(e))
             .toList();

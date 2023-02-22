@@ -913,9 +913,10 @@ class MainService {
     return aFind;
   }
 
-  Future<List<IncidentesInternetModel>> incidenciasInternetTambo() async {
+  Future<List<IncidentesInternetModel>> incidenciasInternetTambo(
+      int snip) async {
     List<IncidentesInternetModel> aFind =
-        await Get.find<MainRepo>().indicenciasInternetTambo();
+        await Get.find<MainRepo>().indicenciasInternetTambo(snip);
     return aFind;
   }
 }

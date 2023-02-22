@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
@@ -26,6 +27,8 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:kdgaugeview/kdgaugeview.dart';
 import 'package:lecle_bubble_timeline/lecle_bubble_timeline.dart';
 import 'package:lecle_bubble_timeline/models/timeline_item.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:http/http.dart' as http;
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -55,6 +58,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aCoordinacio = [];
 
   late List<IncidentesInternetModel> incidencias = [];
+  late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
 
   int statusLoadActividad = 0;
@@ -102,7 +106,7 @@ class _DetalleTambookState extends State<DetalleTambook>
      */
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
-    incidenciasInternet();
+    //incidenciasInternet();
   }
 
   void handleNext() {
@@ -134,16 +138,32 @@ class _DetalleTambookState extends State<DetalleTambook>
     oTambo = await mainCtr.getTamboDatoGeneral(
       (widget.listTambo!.idTambo).toString(),
     );
+    obtenerDatosClima();
+    incidenciasInternet(oTambo.nSnip ?? 0);
 
     setState(() {});
   }
 
-  Future<void> incidenciasInternet() async {
-    incidencias = await mainCtr.getIncidenciasInternet();
+  Future<void> incidenciasInternet(int snip) async {
+    incidencias = await mainCtr.getIncidenciasInternet(snip);
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
       isLoading = false;
     });
+  }
+
+  Future<void> obtenerDatosClima() async {
+    String url =
+        "https://api.open-meteo.com/v1/forecast?latitude=${oTambo.yCcpp}2&longitude=${oTambo.xCcpp}&current_weather=true";
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      clima =
+          ClimaModel.fromJson(json.decode(response.body)['current_weather']);
+      print(clima.temp);
+    } else {
+      print("Error con la respusta");
+    }
   }
 
   Future<void> TamboIntervencionAtencionIncidencia() async {
@@ -241,6 +261,26 @@ class _DetalleTambookState extends State<DetalleTambook>
       ),
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
+        title: Container(
+            color: const Color.fromARGB(100, 22, 44, 33),
+            margin: const EdgeInsets.only(left: 150.0, bottom: 45),
+            padding: const EdgeInsets.all(10),
+            child: Stack(children: [
+              Text(
+                "${clima.temp} °",
+                style: const TextStyle(fontSize: 25, color: Colors.white),
+              ),
+              const SizedBox(width: 30),
+              Positioned(
+                right: -4.0,
+                top: 14.0,
+                child: ImageIcon(
+                  AssetImage('assets/sol.png'),
+                  size: 20,
+                  color: Colors.yellow,
+                ),
+              ),
+            ])),
         background: SizedBox(
           height: 200.0,
           child: InteractiveViewer(
@@ -248,7 +288,6 @@ class _DetalleTambookState extends State<DetalleTambook>
             boundaryMargin: EdgeInsets.all(100),
             minScale: 0.5,
             maxScale: 2,
-
             child: ImageUtil.ImageUrl(
               oTambo.tamboPathImage ?? '',
               fit: BoxFit.fitHeight,
@@ -274,7 +313,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 6,
+              length: 7,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -296,9 +335,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 padding: const EdgeInsets.only(top: 10),
                                 child: const Center(
                                   child: Text(
-                                    'OPERATIVO',
+                                    'Operativo',
                                     textAlign: TextAlign.left,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18,
                                       letterSpacing: 0.0,
@@ -328,28 +367,46 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ),
                             tabs: [
                               Tab(
-                                icon: Icon(Icons.account_box),
-                                text: "GESTOR",
+                                icon: ImageIcon(
+                                  AssetImage('assets/gestor.png'),
+                                  size: 55,
+                                ),
                               ),
                               Tab(
-                                icon: Icon(Icons.merge_outlined),
-                                text: "METAS",
+                                icon: ImageIcon(
+                                  AssetImage('assets/meta.png'),
+                                  size: 55,
+                                ),
                               ),
                               Tab(
-                                icon: Icon(Icons.cloud),
-                                text: "SERVICIOS INTERNET",
+                                icon: ImageIcon(
+                                  AssetImage('assets/internet.png'),
+                                  size: 55,
+                                ),
                               ),
                               Tab(
-                                icon: Icon(Icons.computer),
-                                text: "EQUIPAMIENTO TECNOLÓGICO",
+                                icon: ImageIcon(
+                                  AssetImage('assets/computadora.png'),
+                                  size: 55,
+                                ),
                               ),
                               Tab(
-                                icon: Icon(Icons.pending_actions),
-                                text: "ACTIVIDADES PROGRAMADAS",
+                                icon: ImageIcon(
+                                  AssetImage('assets/ATENCIONES.png'),
+                                  size: 55,
+                                ),
                               ),
                               Tab(
-                                icon: Icon(Icons.policy_rounded),
-                                text: "INTERVENCIONES",
+                                icon: ImageIcon(
+                                  AssetImage('assets/lluvioso.png'),
+                                  size: 55,
+                                ),
+                              ),
+                              Tab(
+                                icon: ImageIcon(
+                                  AssetImage('assets/intervenciones.png'),
+                                  size: 55,
+                                ),
                               ),
                             ],
                           ),
@@ -444,6 +501,15 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ListView(
                       children: [
                         cardActividadProgramada(),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+
+                    //const TabScreen("Clima"),
+
+                    ListView(
+                      children: [
+                        cardClima(),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -1839,18 +1905,34 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const Divider(color: colorI),
                 ListView.builder(
                     shrinkWrap: true,
-                    itemCount: isLoading ? 4 : incidencias.length,
+                    itemCount: isLoading
+                        ? 4
+                        : (incidencias.isEmpty ? 1 : incidencias.length),
                     itemBuilder: (context, index) {
                       if (isLoading) {
                         return ShinyWidget();
                       } else {
+                        if (incidencias.isEmpty) {
+                          return Center(
+                              child: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                  child: const Text(
+                                    'No existe incidencias',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  )));
+                        }
+
                         return Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(children: [
                               Text(
                                 incidencias[index].tipoAveria.toString(),
                                 style: const TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 25,
                                   fontWeight: FontWeight.w500,
                                 ), //Textstyle
                               ), //Text
@@ -1859,6 +1941,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ), //SizedBox
                               Text(
                                 incidencias[index].observacion.toString(),
+                                textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                   fontSize: 15,
                                 ), //Textstyle
@@ -1866,21 +1949,33 @@ class _DetalleTambookState extends State<DetalleTambook>
                               const SizedBox(
                                 height: 10,
                               ),
-                              Chip(
+
+                              Wrap(spacing: 10, children: [
+                                Chip(
                                   label: Text(
                                     'Fecha de averia : ${incidencias[index].fechaAveria ?? ''}',
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  padding: EdgeInsets.all(0),
-                                  backgroundColor: Colors.blue),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  backgroundColor: Colors.blue,
+                                ),
+                                Chip(
+                                    label: Text(
+                                      'Ticket : ${incidencias[index].ticket ?? ''}',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    padding: EdgeInsets.all(1),
+                                    backgroundColor: Colors.blue),
+                                Chip(
+                                    label: Text(
+                                      '${incidencias[index].estado ?? ''}',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    padding: EdgeInsets.all(1),
+                                    backgroundColor: Colors.blue),
+                              ]),
 
-                              Chip(
-                                  label: Text(
-                                    'Ticket : ${incidencias[index].ticket ?? ''}',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  padding: EdgeInsets.all(0),
-                                  backgroundColor: Colors.blue),
                               const Divider(color: colorI), //SizedBox
                             ]));
                       }
@@ -2618,6 +2713,93 @@ class _DetalleTambookState extends State<DetalleTambook>
                           iconColor: Color.fromARGB(255, 0, 0, 0),
                           title: Text('Visita tambo3 20.02.2023'),
                           subtitle: Text('PENDIENTE'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            INFORMACIÓN DEL CLIMA
+ * -----------------------------------------------
+ */
+  Padding cardClima() {
+    var heading = 'DATOS DEL CLIMA';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Temperatura:'),
+                          subtitle: Text(
+                            '${clima.temp} °',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 30),
+                          ),
+                        ),
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Velocidad del viento:'),
+                          subtitle: Text(
+                            '${clima.speed} km/h',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 30),
+                          ),
+                        ),
+                        ListTile(
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Dirección del viento:'),
+                          subtitle: Text(
+                            '${clima.direction}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 30),
+                          ),
                         ),
                       ],
                     ),
