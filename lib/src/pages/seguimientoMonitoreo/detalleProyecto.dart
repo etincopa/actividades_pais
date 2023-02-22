@@ -324,45 +324,94 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        CarouselSlider(
-                                          options: CarouselOptions(
-                                            enlargeCenterPage: true,
-                                            autoPlay: true,
-                                            aspectRatio: 16 / 9,
-                                            autoPlayCurve: Curves.fastOutSlowIn,
-                                            enableInfiniteScroll: true,
-                                            autoPlayAnimationDuration:
-                                                const Duration(
-                                                    milliseconds: 1000),
-                                            viewportFraction: 0.8,
-                                          ),
-                                          items: listImges.isNotEmpty
-                                              ? listImges
-                                                  .map((ImagenesCourrusel map) {
-                                                  return Builder(
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(10.0),
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            Navigator
-                                                                .pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    ImageView(
-                                                                        datoProyecto:
-                                                                            widget
-                                                                                .datoProyecto,
-                                                                        galleria:
-                                                                            map.imagen!),
+                                        listImges.isNotEmpty
+                                            ? CarouselSlider(
+                                                options: CarouselOptions(
+                                                  enlargeCenterPage: true,
+                                                  autoPlay: true,
+                                                  aspectRatio: 16 / 9,
+                                                  autoPlayCurve:
+                                                      Curves.fastOutSlowIn,
+                                                  enableInfiniteScroll: true,
+                                                  autoPlayAnimationDuration:
+                                                      const Duration(
+                                                          milliseconds: 1000),
+                                                  viewportFraction: 0.8,
+                                                ),
+                                                items: listImges.isNotEmpty
+                                                    ? listImges.map(
+                                                        (ImagenesCourrusel
+                                                            map) {
+                                                        return Builder(
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .all(
+                                                                      10.0),
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator
+                                                                      .pushReplacement(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (BuildContext context) => ImageView(
+                                                                          datoProyecto: widget
+                                                                              .datoProyecto,
+                                                                          galleria:
+                                                                              map.imagen!),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    color:
+                                                                        colorGB,
+                                                                    boxShadow: const [
+                                                                      BoxShadow(
+                                                                          color: Colors
+                                                                              .black54,
+                                                                          blurRadius:
+                                                                              15.0,
+                                                                          offset: Offset(
+                                                                              0.0,
+                                                                              0.75))
+                                                                    ],
+                                                                  ),
+                                                                  child: Image(
+                                                                    image: (map
+                                                                            .imagen)!
+                                                                        .image,
+                                                                    errorBuilder: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        const Icon(
+                                                                            Icons.image),
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: double
+                                                                        .infinity,
+                                                                  ),
+                                                                ),
                                                               ),
                                                             );
                                                           },
+                                                        );
+                                                      }).toList()
+                                                    : [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
                                                           child: Container(
                                                             decoration:
                                                                 BoxDecoration(
@@ -383,92 +432,24 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                                                             0.75))
                                                               ],
                                                             ),
-                                                            child: Image(
-                                                              image:
-                                                                  (map.imagen)!
-                                                                      .image,
-                                                              errorBuilder: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .image),
-                                                              fit: BoxFit.fill,
-                                                              width: double
-                                                                  .infinity,
-                                                              height: double
-                                                                  .infinity,
-                                                            ),
+                                                            child: isOKImage
+                                                                ? const Center(
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .image,
+                                                                      size: 50,
+                                                                    ),
+                                                                  )
+                                                                : Center(
+                                                                    child: Image
+                                                                        .asset(
+                                                                            'assets/loading_icon.gif'),
+                                                                  ),
                                                           ),
                                                         ),
-                                                      );
-                                                    },
-                                                  );
-                                                }).toList()
-                                              : [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10.0),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        color: colorGB,
-                                                        boxShadow: const [
-                                                          BoxShadow(
-                                                              color: Colors
-                                                                  .black54,
-                                                              blurRadius: 15.0,
-                                                              offset: Offset(
-                                                                  0.0, 0.75))
-                                                        ],
-                                                      ),
-                                                      child: isOKImage
-                                                          ? const Center(
-                                                              child: Icon(
-                                                                Icons.image,
-                                                                size: 50,
-                                                              ),
-                                                            )
-                                                          : Center(
-                                                              child: Image.asset(
-                                                                  'assets/loading_icon.gif'),
-                                                            ),
-                                                    ),
-                                                  ),
-                                                ],
-                                        ),
-
-                                        /*const SizedBox(height: 15),
-                                        Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            border: Border.all(
-                                              width: 1.5,
-                                              color: const Color(0xFF00B6F0),
-                                            ),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(16.0),
-                                            ),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              widget.datoProyecto.estado!,
-                                              textAlign: TextAlign.left,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                fontSize: 18,
-                                                letterSpacing: 0.0,
-                                                color: Color.fromARGB(
-                                                    255, 33, 32, 32),
-                                              ),
-                                            ),
-                                          ),
-                                        ),*/
+                                                      ],
+                                              )
+                                            : const Text(""),
                                         const SizedBox(height: 25),
 
                                         Text(
@@ -531,7 +512,6 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                             ),
                                           ),
                                         ),
-
                                         //detalle
                                       ],
                                     ),
@@ -541,9 +521,9 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                                 /**
                                  * BODY
                                  */
-
                                 const Divider(),
                                 cardEstadoProyecto(),
+                                cardMonitoreo(),
                               ],
                             );
                           }),
@@ -561,11 +541,11 @@ class _DetalleProyectoState extends State<DetalleProyecto>
 
   /*
   * -----------------------------------------------
-  *            ESTADO DEL PROYECTO
+  *            MONITOREOS APROBADOS
   * -----------------------------------------------
   */
   Padding cardMonitoreo() {
-    var heading = 'DETALLE DEL PROYECTO';
+    var heading = 'MONITOREOS APROBADOS';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -577,7 +557,7 @@ class _DetalleProyectoState extends State<DetalleProyecto>
           borderRadius: const BorderRadius.all(Radius.circular(10)),
         ),
         child: ExpansionTile(
-          initiallyExpanded: true,
+          initiallyExpanded: false,
           title: ListTile(
             title: Text(
               heading,
@@ -694,11 +674,13 @@ class _DetalleProyectoState extends State<DetalleProyecto>
                     )
                   : Container(
                       padding: const EdgeInsets.only(top: 40),
-                      child: const Center(
+                      child: const Text(
+                          "") /*const Center(
                         child: CircularProgressIndicator(
                           color: color_07,
                         ),
-                      ),
+                      )*/
+                      ,
                     ),
             ),
           ],

@@ -218,7 +218,7 @@ class TramaMonitoreoModel {
   static const sEstadoPEN = 'PENDIENTE';
 
   static const sIdEstadoAPR = 43;
-  static const sEstadoAPR = 'ENVIADO';
+  static const sEstadoAPR = 'APROBADO';
 
   static const sIdEstadoINC = 10001;
   static const sEstadoINC = 'INCOMPLETO';
