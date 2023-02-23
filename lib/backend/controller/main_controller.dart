@@ -12,6 +12,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
@@ -804,6 +805,16 @@ class MainController extends GetxController {
     List<BuscarTamboDto> aFind =
         await Get.find<MainService>().searchTambo(search);
     return aFind;
+  }
+
+  Future<List<MetasTamboModel>> metasTambo(
+    String? numSnip,
+    String? anio,
+    int? xMes,
+  ) async {
+    List<MetasTamboModel> aResp =
+        await Get.find<MainService>().getMetasTambo(numSnip, anio, xMes);
+    return aResp;
   }
 
   Future<RespTokenDto> login(

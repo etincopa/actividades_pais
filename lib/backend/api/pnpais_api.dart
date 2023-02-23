@@ -12,6 +12,7 @@ import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
@@ -84,7 +85,7 @@ class PnPaisApi {
   Future<HttpResponse<List<UltimoAvancePartidaModel>>>
       obtenerUltimoAvancePartida() async {
     return await _http.request<List<UltimoAvancePartidaModel>>(
-      '${basePathApp}obtenerUltimoAvancePartida',
+      '${basePathApp3}obtenerUltimoAvancePartida',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -224,12 +225,33 @@ class PnPaisApi {
   Future<HttpResponse<List<BuscarTamboDto>>> searchTambo(
     String? palabra,
   ) async {
-    var sFilter = palabra != null ? '/$palabra' : '';
+    var sFilter = palabra != null ? '/$palabra' : '/';
     return await _http.request<List<BuscarTamboDto>>(
       '${basePathApp3}buscarTamboOrGestor$sFilter',
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => BuscarTamboDto.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<MetasTamboModel>>> getMetasTambo(
+    String? numSnip,
+    String? anio,
+    int? xMes,
+  ) async {
+    DateTime today = DateTime.now();
+    String dateStr = "${today.year}";
+
+    var sNumSnip = numSnip != null ? '/$numSnip' : '/';
+    var sAnio = anio != null ? '/$anio' : '/$dateStr';
+    var sXMes = xMes != null ? '/$xMes' : '/0';
+
+    return await _http.request<List<MetasTamboModel>>(
+      '${basePathApp3}obtenerMetasTambo$sNumSnip$sAnio$sXMes',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => MetasTamboModel.fromJson(e)).toList();
       },
     );
   }
@@ -315,7 +337,7 @@ class PnPaisApi {
     int numSnip,
   ) async {
     return await _http.request<List<MonitoreoDetailModel>>(
-      '${basePathApp4}ListaTramaMonitoreoDetail/$numSnip',
+      '${basePathApp3}ListaTramaMonitoreoDetail/$numSnip',
       method: "GET",
       parser: (data) {
         return (data as List)

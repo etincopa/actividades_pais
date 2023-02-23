@@ -11,6 +11,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
@@ -253,6 +254,21 @@ class MainRepo {
       _log.e(response.error.message);
     }
     return oUserUp;
+  }
+
+  Future<List<MetasTamboModel>> getMetasTambo(
+    String? numSnip,
+    String? anio,
+    int? xMes,
+  ) async {
+    List<MetasTamboModel> aResp = [];
+    final response = await _pnPaisApi.getMetasTambo(numSnip, anio, xMes);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
   }
 
   Future<RespBase64FileDto> getBuildBase64PdfFichaTecnica(
