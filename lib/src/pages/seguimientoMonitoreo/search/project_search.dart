@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 class ProjectSMSearchDelegate extends SearchDelegate<String> {
   ProjectSMSearchDelegate({required this.aProyecto});
   List<TramaProyectoModel> aProyecto;
+  List<TramaProyectoModel> aProyectoSearch = [];
 
   Future<List<TramaProyectoModel>> getProyectos(String search) async {
-    aProyecto = aProyecto
+    aProyectoSearch = aProyecto
         .where((o) => o.tambo!.toUpperCase().contains(search.toUpperCase()))
         .toList();
-    return aProyecto;
+    return aProyectoSearch;
   }
 
   @override
@@ -51,10 +52,10 @@ class ProjectSMSearchDelegate extends SearchDelegate<String> {
         future: getProyectos(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (query.isEmpty || aProyecto.isEmpty) {
+            if (query.isEmpty || aProyectoSearch.isEmpty) {
               return buildNoSuggestions();
             } else {
-              return buildSuggestionsSuccess(aProyecto);
+              return buildSuggestionsSuccess(aProyectoSearch);
             }
           } else {
             return const Center(
@@ -68,16 +69,19 @@ class ProjectSMSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.isNotEmpty || aProyecto.isNotEmpty) {
-      for (var item in aProyecto) {
-        return ListView.builder(
-          padding: const EdgeInsets.all(10),
-          itemCount: 1,
-          itemBuilder: (context, index) {
-            return ListaProyectos(context: context, oProyecto: item);
-          },
-        );
-      }
+    if (query.isNotEmpty || aProyectoSearch.isNotEmpty) {
+      aProyectoSearch = aProyectoSearch
+          .where((o) => o.tambo!.toUpperCase().contains(query.toUpperCase()))
+          .toList();
+
+      return ListView.builder(
+        padding: const EdgeInsets.all(10),
+        itemCount: aProyectoSearch.length,
+        itemBuilder: (context, index) {
+          return ListaProyectos(
+              context: context, oProyecto: aProyectoSearch[index]);
+        },
+      );
     }
     return buildNoSuggestions();
   }
