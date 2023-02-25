@@ -4,14 +4,12 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
-import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
-import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
@@ -797,16 +795,6 @@ class MainService {
     return aFind;
   }
 
-  Future<List<MetasTamboModel>> getMetasTambo(
-    String? numSnip,
-    String? anio,
-    int? xMes,
-  ) async {
-    List<MetasTamboModel> aResp =
-        await Get.find<MainRepo>().getMetasTambo(numSnip, anio, xMes);
-    return aResp;
-  }
-
   Future<RespTokenDto> login(
     LoginDto oBody,
   ) async {
@@ -932,9 +920,9 @@ class MainService {
     return aFind;
   }
 
-  Future<List<MonitoreoDetailModel>> monitoreoDetail(int snip) async {
-    List<MonitoreoDetailModel> aFind =
-        await Get.find<MainRepo>().getMonitoreoDetail(snip);
+  Future<List<TambosMapaModel>> UbicacionTambo(int snip) async {
+    List<TambosMapaModel> aFind =
+        await Get.find<MainRepo>().UbicacionTambo(snip);
     return aFind;
   }
 }

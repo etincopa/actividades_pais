@@ -910,6 +910,12 @@ class MainController extends GetxController {
     return oResp;
   }
 
+  Future<List<TambosMapaModel>> getUbicacionTambo(int snip) async {
+    List<TambosMapaModel> oResp =
+        await Get.find<MainService>().UbicacionTambo(snip);
+    return oResp;
+  }
+
   Future<List<IncidentesInternetModel>> getIncidenciasInternet(int snip) async {
     List<IncidentesInternetModel> oResp =
         await Get.find<MainService>().incidenciasInternetTambo(snip);

@@ -12,7 +12,7 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Component
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/Home/mapa_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/Detalle/mapa.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
@@ -104,6 +104,9 @@ class _DetalleTambookState extends State<DetalleTambook>
     /**
      * OBTENER DETALLE GENERAL DE TMBO
      */
+
+    print("${widget.listTambo!.idTambo}");
+
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
     //incidenciasInternet();
@@ -160,7 +163,6 @@ class _DetalleTambookState extends State<DetalleTambook>
     if (response.statusCode == 200) {
       clima =
           ClimaModel.fromJson(json.decode(response.body)['current_weather']);
-      print(clima.temp);
     } else {
       print("Error con la respusta");
     }
@@ -267,7 +269,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             padding: const EdgeInsets.all(10),
             child: Stack(children: [
               Text(
-                "${clima.temp} °",
+                "${clima.temp ?? ''} °",
                 style: const TextStyle(fontSize: 25, color: Colors.white),
               ),
               const SizedBox(width: 30),
@@ -313,7 +315,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 7,
+              length: 8,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -387,6 +389,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                               Tab(
                                 icon: ImageIcon(
                                   AssetImage('assets/computadora.png'),
+                                  size: 55,
+                                ),
+                              ),
+                              Tab(
+                                icon: ImageIcon(
+                                  AssetImage('assets/velocimetro.png'),
                                   size: 55,
                                 ),
                               ),
@@ -496,6 +504,15 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     ),
 
+//const TabScreen("COMBUSTIBLE"),
+
+                    ListView(
+                      children: [
+                        cardCombustible(),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+
                     //const TabScreen("ACTIVIDADES PROGRAMADAS"),
 
                     ListView(
@@ -510,7 +527,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ListView(
                       children: [
                         cardClima(),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 10),
+                        cardCamino(),
                       ],
                     ),
 
@@ -622,7 +640,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             onPress: () async {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const MapTambook(),
+                  builder: (context) => MapaTambo(snip: oTambo.nSnip ?? 0),
                 ),
               );
             },
@@ -2653,6 +2671,136 @@ class _DetalleTambookState extends State<DetalleTambook>
 
 /*
  * -----------------------------------------------
+ *            COMBUSTIBLE
+ * -----------------------------------------------
+ */
+  Padding cardCombustible() {
+    var heading = 'COMBUSTIBLE ASIGNADO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                const ListTile(
+                  title: Text(
+                    'Consumo de combustible',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text("5 Gal = 5 km/h"),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    minSpeed: 0,
+                    maxSpeed: 10,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: kbpsTOmbps(3000),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: const [0, 5, 10],
+                    alertColorArray: const [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement: "Consumo",
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        ListTile(
+                          leading: ImageIcon(
+                            AssetImage(
+                              "assets/generador.png",
+                            ),
+                            size: 55,
+                            color: Colors.grey,
+                          ),
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Generador'),
+                          subtitle: Text('0'),
+                        ),
+                        ListTile(
+                          leading: ImageIcon(
+                            AssetImage("assets/moto.png"),
+                            size: 55,
+                          ),
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Moto'),
+                          subtitle: Text('0'),
+                        ),
+                        ListTile(
+                          leading: ImageIcon(AssetImage("assets/carro.png"),
+                              size: 55),
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Carro'),
+                          subtitle: Text('0'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
  *            ACTIVIDADES PROGRAMADAS
  * -----------------------------------------------
  */
@@ -2799,6 +2947,81 @@ class _DetalleTambookState extends State<DetalleTambook>
                             '${clima.direction}',
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 30),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            INFORMACIÓN DEL CLIMA
+ * -----------------------------------------------
+ */
+  Padding cardCamino() {
+    var heading = 'COMO LLEGAR AL TAMBO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text(
+                            'En BUS desde Lima por La Oroya hasta Huánuco, son 410 km y 08 horas en auto aproximadamente).',
+                            textAlign: TextAlign.justify,
+                          ),
+                        ),
+                        const Divider(color: colorI),
+                        ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text(
+                            'En AVIÓN desde Lima a Huánuco son aproximadamente 45 minutos.',
+                            textAlign: TextAlign.justify,
                           ),
                         ),
                       ],

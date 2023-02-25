@@ -89,7 +89,7 @@ class _HomeTambookState extends State<HomeTambook>
           cardAtenciones(),
           cardBeneficiarios(),
           avanceMetas(),
-          cardEstadoTambo(),
+          //cardEstadoTambo(),
           cardTambos(),
           cardPersonal(),
           cardEquipamiento(),
