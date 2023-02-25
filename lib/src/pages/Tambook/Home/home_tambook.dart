@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
+import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,11 @@ class _HomeTambookState extends State<HomeTambook>
   bool isLoading = true;
 
   late String numTambos = "";
+
+  List<MetasTamboModel> aMetasTipo1 = [];
+  List<MetasTamboModel> aMetasTipo2 = [];
+
+  String sCurrentYear = DateTime.now().year.toString();
 
   List<ChartData> chartData = [
     ChartData('PRESTA SERVICIO', 0, colorI),
@@ -52,6 +58,18 @@ class _HomeTambookState extends State<HomeTambook>
     buildData();
     setState(() {});
     tambosParaMapa();
+    getMetasGeneral();
+  }
+
+  Future<void> getMetasGeneral() async {
+    List<MetasTamboModel> aMetas =
+        await mainCtr.metasTambo("0", sCurrentYear, 0);
+
+    aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
+    aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
+
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {});
   }
 
   Future<void> tambosParaMapa() async {
@@ -84,7 +102,7 @@ class _HomeTambookState extends State<HomeTambook>
         children: [
           cardHeader(),
           const SizedBox(height: 20),
-          AtencionesListView(),
+          const AtencionesListView(),
           //tambosOperativos(),
           cardAtenciones(),
           cardBeneficiarios(),
@@ -197,9 +215,18 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding cardAtenciones() {
-    var heading = 'ATENCIONES 2023';
+    final totalMetaTipo1 =
+        aMetasTipo1.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    late ValueNotifier<double> valueNotifier = ValueNotifier(40);
+    int totalAvance1 = 0;
+    int totalBrecha1 = 0;
+    double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'\.?0*$'), ''));
+
+    var heading = 'ATENCIONES $sCurrentYear';
+    late ValueNotifier<double> valueNotifier =
+        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -275,37 +302,37 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 10,
                         ),
                         Table(
-                          children: const [
+                          children: [
                             TableRow(children: [
-                              Text(
+                              const Text(
                                 "Meta :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "12,000",
-                                style: TextStyle(
+                                '$totalMetaTipo1',
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
                             TableRow(children: [
-                              Text(
+                              const Text(
                                 "Avance :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "1,560",
-                                style: TextStyle(
+                                '$totalAvance1',
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
                             TableRow(children: [
-                              Text(
+                              const Text(
                                 "Brecha :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "10,440",
-                                style: TextStyle(
+                                '$totalBrecha1',
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
@@ -324,8 +351,17 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding cardBeneficiarios() {
-    var heading = 'BENEFICIARIOS 2023';
-    late ValueNotifier<double> valueNotifier3 = ValueNotifier(50);
+    final totalMetaTipo2 =
+        aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
+
+    int totalAvance2 = 0;
+    int totalBrecha2 = 0;
+    double totalPorcen2 = double.parse(((totalAvance2 / totalMetaTipo2) * 100)
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'\.?0*$'), ''));
+    var heading = 'BENEFICIARIOS $sCurrentYear';
+    late ValueNotifier<double> valueNotifier3 =
+        ValueNotifier(totalPorcen2.isNaN ? 0 : totalPorcen2);
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -399,37 +435,37 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 10,
                         ),
                         Table(
-                          children: const [
+                          children: [
                             TableRow(children: [
-                              Text(
+                              const Text(
                                 "Meta :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "10,000",
-                                style: TextStyle(
+                                '$totalMetaTipo2',
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
                             TableRow(children: [
-                              Text(
+                              const Text(
                                 "Avance :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "3,001",
-                                style: TextStyle(
+                                "$totalAvance2",
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
                             TableRow(children: [
-                              Text(
+                              const Text(
                                 "Brecha :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "6,999",
-                                style: TextStyle(
+                                "$totalBrecha2",
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
