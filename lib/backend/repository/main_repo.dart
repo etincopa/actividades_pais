@@ -2,6 +2,7 @@ import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
+import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/listar_programa_actividad_model.dart';
@@ -10,6 +11,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
@@ -436,6 +438,32 @@ class MainRepo {
       int snip) async {
     List<IncidentesInternetModel> aResp = [];
     final response = await _pnPaisApi.getIncidenciasInternet(snip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<MetasTamboModel>> getMetasTambo(
+    String? numSnip,
+    String? anio,
+    int? xMes,
+  ) async {
+    List<MetasTamboModel> aResp = [];
+    final response = await _pnPaisApi.getMetasTambo(numSnip, anio, xMes);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<MonitoreoDetailModel>> getMonitoreoDetail(int snip) async {
+    List<MonitoreoDetailModel> aResp = [];
+    final response = await _pnPaisApi.getMonitoreoDetail(snip);
     if (response.error == null) {
       aResp = response.data!;
     } else {
