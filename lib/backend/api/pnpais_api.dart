@@ -291,6 +291,22 @@ class PnPaisApi {
     );
   }
 
+  Future<HttpResponse<List<TambosMapaModel>>> getUbicacionTambo(
+      int snip) async {
+    return await _http.request<List<TambosMapaModel>>(
+      '${basePathApp4}listadarBandejaTambosInternet',
+      method: "GET",
+      parser: (data) {
+        var tambosOperativos =
+            (data[0] as List).where((o) => o['num_snip'] == snip).toList();
+
+        return (tambosOperativos as List)
+            .map((e) => TambosMapaModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
   Future<HttpResponse<List<IncidentesInternetModel>>> getIncidenciasInternet(
     int snip,
   ) async {

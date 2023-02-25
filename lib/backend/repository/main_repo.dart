@@ -443,4 +443,15 @@ class MainRepo {
     }
     return aResp;
   }
+
+  Future<List<TambosMapaModel>> UbicacionTambo(int snip) async {
+    List<TambosMapaModel> aResp = [];
+    final response = await _pnPaisApi.getUbicacionTambo(snip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
 }

@@ -919,4 +919,10 @@ class MainService {
         await Get.find<MainRepo>().indicenciasInternetTambo(snip);
     return aFind;
   }
+
+  Future<List<TambosMapaModel>> UbicacionTambo(int snip) async {
+    List<TambosMapaModel> aFind =
+        await Get.find<MainRepo>().UbicacionTambo(snip);
+    return aFind;
+  }
 }
