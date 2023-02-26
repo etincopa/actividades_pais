@@ -31,5 +31,10 @@ class AtencionesModel {
       title: 'Tambos prestando servicio',
       total: 486,
     ),
+    AtencionesModel(
+      imagePath: '',
+      title: 'intervenciones',
+      total: 486,
+    ),
   ];
 }
