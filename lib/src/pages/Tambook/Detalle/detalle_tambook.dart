@@ -387,16 +387,41 @@ class _DetalleTambookState extends State<DetalleTambook>
                               color: Colors.white70,
                             ),
                             tabs: [
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/gestor.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'Información del gestor institucional',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/gestor.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/meta.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message:
+                                    'Información de metas de atención y beneficiarios',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/meta.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
                               Tab(
@@ -3049,6 +3074,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
+                          leading: ImageIcon(
+                            AssetImage(
+                              "assets/carro.png",
+                            ),
+                            size: 55,
+                            color: Colors.grey,
+                          ),
                           iconColor: const Color.fromARGB(255, 0, 0, 0),
                           title: const Text(
                             'En BUS desde Lima por La Oroya hasta Huánuco, son 410 km y 08 horas en auto aproximadamente).',
@@ -3057,6 +3089,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         const Divider(color: colorI),
                         ListTile(
+                          leading: ImageIcon(
+                            AssetImage(
+                              "assets/avion.png",
+                            ),
+                            size: 55,
+                            color: Colors.grey,
+                          ),
                           iconColor: Color.fromARGB(255, 0, 0, 0),
                           title: Text(
                             'En AVIÓN desde Lima a Huánuco son aproximadamente 45 minutos.',

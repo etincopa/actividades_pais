@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -127,17 +128,40 @@ class _HomeTambookState extends State<HomeTambook>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: double.maxFinite,
-            height: 250.0,
-            child: Image.asset(
-              'assets/bgTamboDefault.jpeg',
-              fit: BoxFit.fill,
+          CarouselSlider(
+            items: [
+              SizedBox(
+                width: double.maxFinite,
+                height: 160.0,
+                child: Image.asset(
+                  'assets/banner.jpg',
+                  fit: BoxFit.fill,
+                ),
+              ),
+              SizedBox(
+                width: double.maxFinite,
+                height: 160.0,
+                child: Image.asset(
+                  'assets/bgTamboDefault.jpeg',
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ],
+            options: CarouselOptions(
+              height: 190.0,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              aspectRatio: 2.0,
+              autoPlayCurve: Curves.linear,
+              enableInfiniteScroll: true,
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
+              viewportFraction: 1.0,
             ),
           ),
-          const SizedBox(height: 23),
+
+          const SizedBox(height: 15),
           //const Divider(color: color_02o27),
-          const Text(
+          /*const Text(
             'PLATAFORMAS FIJAS Y MOVIL',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -146,7 +170,7 @@ class _HomeTambookState extends State<HomeTambook>
               letterSpacing: 0.27,
               color: color_01,
             ),
-          ),
+          ),*/
         ],
       ),
     );
@@ -186,6 +210,7 @@ class _HomeTambookState extends State<HomeTambook>
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               ListTile(
+                                tileColor: Colors.white,
                                 leading: SizedBox(
                                   height: 70.0,
                                   width: 70.0, // fixed width and height
@@ -206,7 +231,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   'Tambos prestando servicio',
                                   style: TextStyle(fontSize: 17),
                                 )),
-                              )
+                              ),
                             ]);
                       }
                     })
