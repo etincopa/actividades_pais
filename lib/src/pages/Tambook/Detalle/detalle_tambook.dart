@@ -3216,7 +3216,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         ListTile(
                           leading: ImageIcon(
                             AssetImage(
@@ -3225,13 +3225,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                             size: 55,
                             color: Colors.grey,
                           ),
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text(
                             'En BUS desde Lima por La Oroya hasta Huánuco, son 410 km y 08 horas en auto aproximadamente).',
                             textAlign: TextAlign.justify,
                           ),
                         ),
-                        const Divider(color: colorI),
+                        Divider(color: colorI),
                         ListTile(
                           leading: ImageIcon(
                             AssetImage(
