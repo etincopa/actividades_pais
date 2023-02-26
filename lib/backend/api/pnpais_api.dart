@@ -14,6 +14,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
@@ -252,6 +253,37 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => MetasTamboModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ProgIntervencionTamboModel>>> getProgIntervencion(
+    String? numSnip,
+    String? anio,
+    String? xMes,
+    String? tipo,
+    String? estado,
+    String? fechaInicio,
+    String? fechaFin,
+  ) async {
+    DateTime today = DateTime.now();
+    String dateStr = "${today.year}";
+
+    var sAnio = anio ?? dateStr;
+    var sNumSnip = numSnip ?? 'X';
+    var sXMes = xMes ?? 'X';
+    var sTipo = tipo ?? 'X';
+    var sEstado = estado ?? 'X';
+    var sFechaInicio = fechaInicio ?? 'X';
+    var sFechaFin = fechaFin ?? 'X';
+
+    return await _http.request<List<ProgIntervencionTamboModel>>(
+      '${basePathApp3}programacionIntervencionesTambos/$sNumSnip/$sTipo/$sEstado/$sFechaInicio/$sFechaFin/$sXMes/$sAnio',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ProgIntervencionTamboModel.fromJson(e))
+            .toList();
       },
     );
   }

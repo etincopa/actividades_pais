@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
@@ -6,15 +7,18 @@ import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
+import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
+import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/mostarFoto.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/mapa.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
+import 'package:actividades_pais/src/pages/widgets/image_preview.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
@@ -23,6 +27,8 @@ import 'package:actividades_pais/util/image_util.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:photo_view/photo_view.dart';
 import 'dart:math' as math;
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:kdgaugeview/kdgaugeview.dart';
@@ -69,6 +75,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   int limit = 15;
   String sCurrentYear = DateTime.now().year.toString();
 
+  List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
 
@@ -117,6 +124,25 @@ class _DetalleTambookState extends State<DetalleTambook>
     //incidenciasInternet();
   }
 
+  Future<void> getProgIntervencionTambo() async {
+    aAvance = await mainCtr.progIntervencionTambo(
+      '${oTambo.idTambo}',
+      sCurrentYear,
+      'X',
+      'X',
+      'X',
+      'X',
+      'X',
+    );
+
+    /**
+     * Solo filtral registros cuyo estados esten en 
+     * 4 : FINALIZADO/APROBADOS
+     */
+    aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
+    aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
+  }
+
   Future<void> getMetasGeneral() async {
     DateTime today = DateTime.now();
     String dateStr = "${today.year}";
@@ -125,6 +151,8 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
     aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
+
+    await getProgIntervencionTambo();
 
     await Future.delayed(const Duration(seconds: 2));
     setState(() {});
@@ -292,7 +320,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 style: const TextStyle(fontSize: 25, color: Colors.white),
               ),
               const SizedBox(width: 30),
-              Positioned(
+              const Positioned(
                 right: -4.0,
                 top: 14.0,
                 child: ImageIcon(
@@ -306,7 +334,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           height: 200.0,
           child: InteractiveViewer(
             panEnabled: false, // Set it to false
-            boundaryMargin: EdgeInsets.all(100),
+            boundaryMargin: const EdgeInsets.all(100),
             minScale: 0.5,
             maxScale: 2,
             child: ImageUtil.ImageUrl(
@@ -1326,8 +1354,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     final totalMetaTipo1 =
         aMetasTipo1.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance1 = 0;
-    int totalBrecha1 = 0;
+    int totalAvance1 = aAvance.length;
+    int totalBrecha1 = totalMetaTipo1 - totalAvance1;
     double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
@@ -1387,9 +1415,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mergeMode: true,
                       onGetText: (double value) {
                         return Text(
-                          '${value.toInt()}%',
+                          '$totalPorcen1%',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 35),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35,
+                          ),
                         );
                       },
                     ),
@@ -1419,7 +1449,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                               Text(
                                 '$totalMetaTipo1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
                             TableRow(children: [
@@ -1430,20 +1462,172 @@ class _DetalleTambookState extends State<DetalleTambook>
                               Text(
                                 '$totalAvance1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ]),
+                            TableRow(
+                              children: [
+                                const Text(
+                                  "Brecha :",
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  '$totalBrecha1',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardBeneficiarios() {
+    final totalMetaTipo1 =
+        aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
+
+    int totalAvance1 = 0;
+    int totalBrecha1 = totalMetaTipo1 - totalAvance1;
+    double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'\.?0*$'), ''));
+
+    var heading = 'BENEFICIARIOS $sCurrentYear';
+    late ValueNotifier<double> valueNotifier =
+        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child: SimpleCircularProgressBar(
+                      size: 150,
+                      maxValue: 100,
+                      valueNotifier: valueNotifier,
+                      backColor: Colors.black.withOpacity(0.4),
+                      progressStrokeWidth: 20,
+                      backStrokeWidth: 20,
+                      mergeMode: true,
+                      onGetText: (double value) {
+                        return Text(
+                          '$totalPorcen1%',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: [
+                            TableRow(children: [
+                              const Text(
+                                "Meta :",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              Text(
+                                '$totalMetaTipo1',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Brecha :",
+                                "Avance :",
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                '$totalBrecha1',
+                                '$totalAvance1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
+                            TableRow(
+                              children: [
+                                const Text(
+                                  "Brecha :",
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  '$totalBrecha1',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ],
@@ -1572,143 +1756,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                               Text(
                                 "10,440",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Padding cardBeneficiarios() {
-    final totalMetaTipo2 =
-        aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
-
-    int totalAvance2 = 0;
-    int totalBrecha2 = 0;
-    double totalPorcen2 = double.parse(((totalAvance2 / totalMetaTipo2) * 100)
-        .toStringAsFixed(2)
-        .replaceFirst(RegExp(r'\.?0*$'), ''));
-
-    var heading = 'BENEFICIARIOS $sCurrentYear';
-    late ValueNotifier<double> valueNotifier3 =
-        ValueNotifier(totalPorcen2.isNaN ? 0 : totalPorcen2);
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: colorI,
-          ),
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 5), // changes position of shadow
-            ),
-          ],
-        ),
-        child: ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            visualDensity: const VisualDensity(vertical: -4),
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: color_01,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          children: <Widget>[
-            const Divider(color: colorI),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Center(
-                    child: SimpleCircularProgressBar(
-                      size: 150,
-                      maxValue: 100,
-                      valueNotifier: valueNotifier3,
-                      backColor: Colors.black.withOpacity(0.4),
-                      progressColors: const [Colors.green, Colors.greenAccent],
-                      progressStrokeWidth: 20,
-                      backStrokeWidth: 20,
-                      mergeMode: true,
-                      onGetText: (double value) {
-                        return Text(
-                          '${value.toInt()}%',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 35),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Table(
-                          children: [
-                            TableRow(children: [
-                              const Text(
-                                "Meta :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                '$totalMetaTipo2',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              const Text(
-                                "Avance :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                "$totalAvance2",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              const Text(
-                                "Brecha :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                "$totalBrecha2",
-                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
@@ -2011,7 +2058,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 Chip(
                                   label: Text(
                                     'Fecha de averia : ${incidencias[index].fechaAveria ?? ''}',
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),
@@ -2020,16 +2067,18 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 Chip(
                                     label: Text(
                                       'Ticket : ${incidencias[index].ticket ?? ''}',
-                                      style: TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                    padding: EdgeInsets.all(1),
+                                    padding: const EdgeInsets.all(1),
                                     backgroundColor: Colors.blue),
                                 Chip(
                                     label: Text(
                                       '${incidencias[index].estado ?? ''}',
-                                      style: TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                    padding: EdgeInsets.all(1),
+                                    padding: const EdgeInsets.all(1),
                                     backgroundColor: Colors.blue),
                               ]),
 
@@ -2143,7 +2192,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   width: 10,
                 ),
                 Text(
-                  '${oActividad.nombreTambo} \n${oActividad.idProgramacion}',
+                  '${oActividad.nombreTambo} \n${oActividad.fecha}',
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -2175,12 +2224,55 @@ class _DetalleTambookState extends State<DetalleTambook>
                   shimmerBackColor: Colors.white,
                 ),
                 */
-                ImageUtil.ImageAssetNetwork(
+                GestureDetector(
+                  onTap: () async {
+                    BusyIndicator.show(context);
+                    try {
+                      if (oActividad.actividadPathImage == '') {
+                        return;
+                      }
+                      if (oActividad.base64Temp == '') {
+                        String sB64 = await ImageUtil().networkImageToBase64(
+                            oActividad.actividadPathImage!);
+                        oActividad.base64Temp = sB64;
+                      }
+                      //File aFile = await ImageUtil().imgBase64Decode(sB64);
+                      /*
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      Uint8List bytes = base64.decode(sB64);
+                      var fileImg =
+                          File('${directory.path}/temporalImageGenerate.png');
+                      fileImg.writeAsBytesSync(bytes);
+                      */
+                      BusyIndicator.hide(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImagePreview(
+                            imagen: oActividad.base64Temp,
+                          ),
+                        ),
+                      );
+                    } catch (oError) {
+                      BusyIndicator.hide(context);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      Icons.photo_size_select_large,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+
+                /*ImageUtil.ImageAssetNetwork(
                   oActividad.actividadPathImage!,
                   width: 200,
                   height: 200,
                   imgDefault: 'assets/iconusuario.png',
-                ),
+                ),*/
                 const SizedBox(height: 8),
                 /*InkWell(
                   onTap: callback,
@@ -2882,26 +2974,78 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const Divider(color: colorI),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        ListTile(
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Visita tambo 10.02.2023'),
-                          subtitle: Text('EJECUTADO'),
-                        ),
-                        ListTile(
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Visita tambo2 12.02.2023'),
-                          subtitle: Text('APROBADO'),
-                        ),
-                        ListTile(
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Visita tambo3 20.02.2023'),
-                          subtitle: Text('PENDIENTE'),
-                        ),
-                      ],
+                  child: SizedBox(
+                    height: 420,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: isLoading
+                          ? 4
+                          : (aAvance.isEmpty ? 1 : aAvance.length),
+                      itemBuilder: (context, index) {
+                        if (isLoading) {
+                          return ShinyWidget();
+                        } else {
+                          if (aAvance.isEmpty) {
+                            return Center(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                child: const Text(
+                                  'No existe actividades',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ),
+                            );
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  aAvance[index].descripcion.toString(),
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ), //Textstyle
+                                ), //Text
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                    Chip(
+                                      label: Text(
+                                        'Fecha : ${aAvance[index].fecha ?? ''}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        horizontal: 10,
+                                      ),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  ],
+                                ),
+
+                                const Divider(color: colorI), //SizedBox
+                              ],
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -2966,16 +3110,16 @@ class _DetalleTambookState extends State<DetalleTambook>
                           title: const Text('Temperatura:'),
                           subtitle: Text(
                             '${clima.temp} °',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 30),
                           ),
                         ),
                         ListTile(
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Velocidad del viento:'),
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Velocidad del viento:'),
                           subtitle: Text(
                             '${clima.speed} km/h',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 30),
                           ),
                         ),
@@ -3048,15 +3192,15 @@ class _DetalleTambookState extends State<DetalleTambook>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text(
+                        const ListTile(
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text(
                             'En BUS desde Lima por La Oroya hasta Huánuco, son 410 km y 08 horas en auto aproximadamente).',
                             textAlign: TextAlign.justify,
                           ),
                         ),
                         const Divider(color: colorI),
-                        ListTile(
+                        const ListTile(
                           iconColor: Color.fromARGB(255, 0, 0, 0),
                           title: Text(
                             'En AVIÓN desde Lima a Huánuco son aproximadamente 45 minutos.',

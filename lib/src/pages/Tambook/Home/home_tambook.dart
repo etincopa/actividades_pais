@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
+import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   late String numTambos = "";
 
+  List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
 
@@ -61,9 +63,29 @@ class _HomeTambookState extends State<HomeTambook>
     getMetasGeneral();
   }
 
+  Future<void> getProgIntervencionTambo() async {
+    aAvance = await mainCtr.progIntervencionTambo(
+      'X',
+      sCurrentYear,
+      'X',
+      'X',
+      'X',
+      'X',
+      'X',
+    );
+
+    /**
+     * Solo filtral registros cuyo estados esten en 
+     * 4 : FINALIZADO/APROBADOS
+     */
+    aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
+  }
+
   Future<void> getMetasGeneral() async {
     List<MetasTamboModel> aMetas =
         await mainCtr.metasTambo("0", sCurrentYear, 0);
+
+    await getProgIntervencionTambo();
 
     aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
     aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
@@ -218,8 +240,8 @@ class _HomeTambookState extends State<HomeTambook>
     final totalMetaTipo1 =
         aMetasTipo1.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance1 = 0;
-    int totalBrecha1 = 0;
+    int totalAvance1 = aAvance.length;
+    int totalBrecha1 = totalMetaTipo1 - totalAvance1;
     double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
@@ -279,9 +301,11 @@ class _HomeTambookState extends State<HomeTambook>
                       mergeMode: true,
                       onGetText: (double value) {
                         return Text(
-                          '${value.toInt()}%',
+                          '$totalPorcen1%',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 35),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35,
+                          ),
                         );
                       },
                     ),
@@ -311,7 +335,9 @@ class _HomeTambookState extends State<HomeTambook>
                               Text(
                                 '$totalMetaTipo1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
                             TableRow(children: [
@@ -322,20 +348,26 @@ class _HomeTambookState extends State<HomeTambook>
                               Text(
                                 '$totalAvance1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
-                            TableRow(children: [
-                              const Text(
-                                "Brecha :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                '$totalBrecha1',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
+                            TableRow(
+                              children: [
+                                const Text(
+                                  "Brecha :",
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  '$totalBrecha1',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ],
@@ -351,17 +383,19 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding cardBeneficiarios() {
-    final totalMetaTipo2 =
+    final totalMetaTipo1 =
         aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance2 = 0;
-    int totalBrecha2 = 0;
-    double totalPorcen2 = double.parse(((totalAvance2 / totalMetaTipo2) * 100)
+    int totalAvance1 = 0;
+    int totalBrecha1 = totalMetaTipo1 - totalAvance1;
+    double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
+
     var heading = 'BENEFICIARIOS $sCurrentYear';
-    late ValueNotifier<double> valueNotifier3 =
-        ValueNotifier(totalPorcen2.isNaN ? 0 : totalPorcen2);
+    late ValueNotifier<double> valueNotifier =
+        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -406,22 +440,25 @@ class _HomeTambookState extends State<HomeTambook>
                     child: SimpleCircularProgressBar(
                       size: 150,
                       maxValue: 100,
-                      valueNotifier: valueNotifier3,
+                      valueNotifier: valueNotifier,
                       backColor: Colors.black.withOpacity(0.4),
-                      progressColors: const [Colors.green, Colors.greenAccent],
                       progressStrokeWidth: 20,
                       backStrokeWidth: 20,
                       mergeMode: true,
                       onGetText: (double value) {
                         return Text(
-                          '${value.toInt()}%',
+                          '$totalPorcen1%',
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 35),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35,
+                          ),
                         );
                       },
                     ),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
@@ -442,9 +479,11 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                '$totalMetaTipo2',
+                                '$totalMetaTipo1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
                             TableRow(children: [
@@ -453,22 +492,28 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                "$totalAvance2",
+                                '$totalAvance1',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
                             ]),
-                            TableRow(children: [
-                              const Text(
-                                "Brecha :",
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Text(
-                                "$totalBrecha2",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
-                            ]),
+                            TableRow(
+                              children: [
+                                const Text(
+                                  "Brecha :",
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                Text(
+                                  '$totalBrecha1',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ],

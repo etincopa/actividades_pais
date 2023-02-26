@@ -16,6 +16,7 @@ import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
@@ -814,6 +815,34 @@ class MainController extends GetxController {
   ) async {
     List<MetasTamboModel> aResp =
         await Get.find<MainService>().getMetasTambo(numSnip, anio, xMes);
+    return aResp;
+  }
+
+  Future<List<ProgIntervencionTamboModel>> progIntervencionTambo(
+    String? numSnip,
+    String? anio,
+    String? xMes,
+    String? tipo,
+    String? estado,
+    String? fechaInicio,
+    String? fechaFin,
+  ) async {
+    /**
+     * tipoProgramacion:
+     * 1 : PS: INTERVENCIONES PRESTACION SERCICIOS
+     * 3 : ES: INTERVENCIONES SOPORTE
+     * 2 : Actividades GIT
+     */
+    List<ProgIntervencionTamboModel> aResp =
+        await Get.find<MainService>().getProgIntervencion(
+      numSnip,
+      anio,
+      xMes,
+      tipo,
+      estado,
+      fechaInicio,
+      fechaFin,
+    );
     return aResp;
   }
 

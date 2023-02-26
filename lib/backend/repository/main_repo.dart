@@ -13,6 +13,7 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:logger/logger.dart';
@@ -453,6 +454,33 @@ class MainRepo {
   ) async {
     List<MetasTamboModel> aResp = [];
     final response = await _pnPaisApi.getMetasTambo(numSnip, anio, xMes);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ProgIntervencionTamboModel>> getProgIntervencion(
+    String? numSnip,
+    String? anio,
+    String? xMes,
+    String? tipo,
+    String? estado,
+    String? fechaInicio,
+    String? fechaFin,
+  ) async {
+    List<ProgIntervencionTamboModel> aResp = [];
+    final response = await _pnPaisApi.getProgIntervencion(
+      numSnip,
+      anio,
+      xMes,
+      tipo,
+      estado,
+      fechaInicio,
+      fechaFin,
+    );
     if (response.error == null) {
       aResp = response.data!;
     } else {

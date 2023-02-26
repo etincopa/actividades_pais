@@ -32,6 +32,7 @@ class TamboActividadModel {
   String? imagen = '';
   String? actividadPathImage = '';
   String? fechaCreacionImagen = '';
+  String? base64Temp = '';
 
   TamboActividadModel.empty() {}
 
