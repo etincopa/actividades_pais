@@ -67,6 +67,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<IncidentesInternetModel> incidencias = [];
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
+  bool isLoading2 = false;
 
   int statusLoadActividad = 0;
   bool loading = true;
@@ -144,6 +145,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> getMetasGeneral() async {
+    isLoading2 = false;
     DateTime today = DateTime.now();
     String dateStr = "${today.year}";
     List<MetasTamboModel> aMetas =
@@ -154,7 +156,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     await getProgIntervencionTambo();
 
-    await Future.delayed(const Duration(seconds: 2));
+    isLoading2 = true;
     setState(() {});
   }
 
@@ -1429,26 +1431,28 @@ class _DetalleTambookState extends State<DetalleTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Center(
-                    child: SimpleCircularProgressBar(
-                      size: 150,
-                      maxValue: 100,
-                      valueNotifier: valueNotifier,
-                      backColor: Colors.black.withOpacity(0.4),
-                      progressStrokeWidth: 20,
-                      backStrokeWidth: 20,
-                      mergeMode: true,
-                      onGetText: (double value) {
-                        return Text(
-                          '$totalPorcen1%',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35,
+                  isLoading2
+                      ? Center(
+                          child: SimpleCircularProgressBar(
+                            size: 150,
+                            maxValue: 100,
+                            valueNotifier: valueNotifier,
+                            backColor: Colors.black.withOpacity(0.4),
+                            progressStrokeWidth: 20,
+                            backStrokeWidth: 20,
+                            mergeMode: true,
+                            onGetText: (double value) {
+                              return Text(
+                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        )
+                      : const CircularProgressIndicator(),
                   const SizedBox(
                     height: 15,
                   ),
@@ -1575,26 +1579,28 @@ class _DetalleTambookState extends State<DetalleTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Center(
-                    child: SimpleCircularProgressBar(
-                      size: 150,
-                      maxValue: 100,
-                      valueNotifier: valueNotifier,
-                      backColor: Colors.black.withOpacity(0.4),
-                      progressStrokeWidth: 20,
-                      backStrokeWidth: 20,
-                      mergeMode: true,
-                      onGetText: (double value) {
-                        return Text(
-                          '$totalPorcen1%',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35,
+                  isLoading2
+                      ? Center(
+                          child: SimpleCircularProgressBar(
+                            size: 150,
+                            maxValue: 100,
+                            valueNotifier: valueNotifier,
+                            backColor: Colors.black.withOpacity(0.4),
+                            progressStrokeWidth: 20,
+                            backStrokeWidth: 20,
+                            mergeMode: true,
+                            onGetText: (double value) {
+                              return Text(
+                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        )
+                      : const CircularProgressIndicator(),
                   const SizedBox(
                     height: 15,
                   ),

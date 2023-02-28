@@ -24,6 +24,7 @@ class _HomeTambookState extends State<HomeTambook>
   AnimationController? _controller;
   MainController mainCtr = MainController();
   bool isLoading = true;
+  bool isLoading2 = false;
 
   late String numTambos = "";
 
@@ -83,6 +84,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Future<void> getMetasGeneral() async {
+    isLoading2 = false;
     List<MetasTamboModel> aMetas =
         await mainCtr.metasTambo("0", sCurrentYear, 0);
 
@@ -91,7 +93,7 @@ class _HomeTambookState extends State<HomeTambook>
     aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
     aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
 
-    await Future.delayed(const Duration(seconds: 2));
+    isLoading2 = true;
     setState(() {});
   }
 
@@ -176,7 +178,7 @@ class _HomeTambookState extends State<HomeTambook>
               aspectRatio: 2.0,
               autoPlayCurve: Curves.linear,
               enableInfiniteScroll: true,
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
               viewportFraction: 1.0,
             ),
           ),
@@ -315,26 +317,28 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Center(
-                    child: SimpleCircularProgressBar(
-                      size: 150,
-                      maxValue: 100,
-                      valueNotifier: valueNotifier,
-                      backColor: Colors.black.withOpacity(0.4),
-                      progressStrokeWidth: 20,
-                      backStrokeWidth: 20,
-                      mergeMode: true,
-                      onGetText: (double value) {
-                        return Text(
-                          '$totalPorcen1%',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35,
+                  isLoading2
+                      ? Center(
+                          child: SimpleCircularProgressBar(
+                            size: 150,
+                            maxValue: 100,
+                            valueNotifier: valueNotifier,
+                            backColor: Colors.black.withOpacity(0.4),
+                            progressStrokeWidth: 20,
+                            backStrokeWidth: 20,
+                            mergeMode: true,
+                            onGetText: (double value) {
+                              return Text(
+                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        )
+                      : const CircularProgressIndicator(),
                   const SizedBox(
                     height: 15,
                   ),
@@ -461,26 +465,28 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Center(
-                    child: SimpleCircularProgressBar(
-                      size: 150,
-                      maxValue: 100,
-                      valueNotifier: valueNotifier,
-                      backColor: Colors.black.withOpacity(0.4),
-                      progressStrokeWidth: 20,
-                      backStrokeWidth: 20,
-                      mergeMode: true,
-                      onGetText: (double value) {
-                        return Text(
-                          '$totalPorcen1%',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35,
+                  isLoading2
+                      ? Center(
+                          child: SimpleCircularProgressBar(
+                            size: 150,
+                            maxValue: 100,
+                            valueNotifier: valueNotifier,
+                            backColor: Colors.black.withOpacity(0.4),
+                            progressStrokeWidth: 20,
+                            backStrokeWidth: 20,
+                            mergeMode: true,
+                            onGetText: (double value) {
+                              return Text(
+                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        )
+                      : const CircularProgressIndicator(),
                   const SizedBox(
                     height: 15,
                   ),
