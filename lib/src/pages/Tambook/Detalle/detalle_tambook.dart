@@ -468,13 +468,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                               Tab(
                                 icon: ImageIcon(
-                                  AssetImage('assets/velocimetro.png'),
+                                  AssetImage('assets/grifo.png'),
                                   size: 55,
                                 ),
                               ),
                               Tab(
                                 icon: ImageIcon(
-                                  AssetImage('assets/ATENCIONES.png'),
+                                  AssetImage('assets/calendario.png'),
                                   size: 55,
                                 ),
                               ),
@@ -509,6 +509,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO GESTOR
                           */
                         cardNuestroGestor(),
+                        const SizedBox(height: 10),
+                        cardVigilante(),
                         const SizedBox(height: 10),
                         cardHistorialGestores(),
                         const SizedBox(height: 10),
@@ -545,6 +547,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * CENTROS POBLADOS
                           */
                         cardAmbitoAccion(),
+                        const SizedBox(height: 10),
+                        cardServicios(),
                         const SizedBox(height: 50),
                       ],
                     ),
@@ -870,6 +874,100 @@ class _DetalleTambookState extends State<DetalleTambook>
                         const ListTile(
                           title: Text('TIPO CONTRATO'),
                           subtitle: Text('ORDEN SERVICIO'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            Guardian
+ * -----------------------------------------------
+ */
+  Padding cardVigilante() {
+    var heading = 'GUARDIÁN';
+    var subheading = 'HARDY';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                subtitle: Text(
+                  subheading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  // padding: EdgeInsets.all(5.0),
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('DNI'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('INICIO DE CONTRATO'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('SEXO'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('ESTADO CIVIL'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('FECHA DE NACIMIENTO'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: Text('TIPO CONTRATO'),
+                          subtitle: Text(''),
                         ),
                       ],
                     ),
@@ -1359,6 +1457,87 @@ class _DetalleTambookState extends State<DetalleTambook>
                             subtitle: Text(
                                 '( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
                           ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardServicios() {
+    var heading = 'SERVICIOS BÁSICOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text(
+                              '¿TIENE SERVICIO DE ENERGÍA ELÉCTRICA?'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text(
+                              'TIPO DE CONEXIÓN DE ENERGÍA ELÉCTRICA'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('PROVEEDOR DE ENERGÍA ELÉCTRICA'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('¿TIENE SERVICIO DE AGUA?'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text(
+                              'TIPO DE CONEXIÓN DEL SERVICIO DE AGUA'),
+                          subtitle: Text(''),
+                        ),
+                        ListTile(
+                          title: const Text('PROVEEDOR DE SERVICIO DE AGUA'),
+                          subtitle: Text(''),
+                        ),
                       ],
                     ),
                   ),
@@ -2185,7 +2364,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     callback,
   ) {
     return Card(
-      color: AppConfig.primaryColor,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: const EdgeInsets.all(20),
       elevation: 7,
@@ -2195,7 +2374,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             height: 25,
           ),
           const Divider(
-            color: Colors.white,
+            color: color_10o15,
             height: 5,
             thickness: 3,
             indent: 0,
@@ -2495,7 +2674,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -2504,9 +2683,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                   child: const Icon(
-                                    color: color_01,
-                                    Icons.desktop_mac_outlined,
-                                  ),
+                                      color: color_01,
+                                      Icons.desktop_mac_outlined,
+                                      size: 45),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
@@ -2533,7 +2712,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -2542,9 +2721,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                   child: const Icon(
-                                    color: color_01,
-                                    Icons.laptop,
-                                  ),
+                                      color: color_01, Icons.laptop, size: 45),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
@@ -2578,7 +2755,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -2587,9 +2764,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                   child: const Icon(
-                                    color: color_01,
-                                    Icons.photo_camera_front,
-                                  ),
+                                      color: color_01,
+                                      Icons.photo_camera_front,
+                                      size: 45),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
@@ -2616,7 +2793,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -2625,9 +2802,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                   child: const Icon(
-                                    color: color_01,
-                                    Icons.wifi,
-                                  ),
+                                      color: color_01, Icons.wifi, size: 45),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
@@ -2656,18 +2831,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                           alignment: Alignment.bottomRight,
                           child: TextButton(
                             style: flatButtonStyle,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    buildSuccessDialog(context),
-                              );
-                            },
+                            onPressed: () {},
                             child: Column(
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -2676,9 +2845,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                   child: const Icon(
-                                    color: color_01,
-                                    Icons.print_outlined,
-                                  ),
+                                      color: color_01,
+                                      Icons.print_outlined,
+                                      size: 45),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
@@ -2931,7 +3100,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           ),
                           iconColor: Color.fromARGB(255, 0, 0, 0),
                           title: Text('Generador'),
-                          subtitle: Text('0'),
+                          subtitle: Text('0 hrs'),
                         ),
                         ListTile(
                           leading: ImageIcon(
@@ -2940,14 +3109,22 @@ class _DetalleTambookState extends State<DetalleTambook>
                           ),
                           iconColor: Color.fromARGB(255, 0, 0, 0),
                           title: Text('Moto'),
-                          subtitle: Text('0'),
+                          subtitle: Text('0 km'),
                         ),
                         ListTile(
                           leading: ImageIcon(AssetImage("assets/carro.png"),
                               size: 55),
                           iconColor: Color.fromARGB(255, 0, 0, 0),
                           title: Text('Carro'),
-                          subtitle: Text('0'),
+                          subtitle: Text('0 km'),
+                        ),
+                        ListTile(
+                          leading: ImageIcon(
+                              AssetImage("assets/deslizador.png"),
+                              size: 55),
+                          iconColor: Color.fromARGB(255, 0, 0, 0),
+                          title: Text('Deslizador'),
+                          subtitle: Text('0 km'),
                         ),
                       ],
                     ),

@@ -132,10 +132,11 @@ class _HomeTambookState extends State<HomeTambook>
           cardAtenciones(),
           cardBeneficiarios(),
           avanceMetas(),
+          avanceMetasUsuarios(),
           //cardEstadoTambo(),
           cardTambos(),
           cardPersonal(),
-          cardEquipamiento(),
+          //cardEquipamiento(),
           cardEquipoTecnologico(),
           const SizedBox(height: 40),
         ],
@@ -164,9 +165,17 @@ class _HomeTambookState extends State<HomeTambook>
               ),
               SizedBox(
                 width: double.maxFinite,
-                height: 160.0,
+                height: 180.0,
                 child: Image.asset(
-                  'assets/bgTamboDefault.jpeg',
+                  'assets/fondo2.jpg',
+                  fit: BoxFit.fill,
+                ),
+              ),
+              SizedBox(
+                width: double.maxFinite,
+                height: 180.0,
+                child: Image.asset(
+                  'assets/fondo3.jpg',
                   fit: BoxFit.fill,
                 ),
               ),
@@ -405,6 +414,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -553,6 +566,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -648,14 +665,10 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding avanceMetas() {
-    var heading = 'AVANCE DE METAS POR MES';
+    var heading = 'METAS ATENCIONES 2023';
 
-    final List<AvancesData> chartData = [
-      AvancesData('ENE', 35, 10),
-      AvancesData('FEB', 28, 25),
-      AvancesData('MAR', 34, 20),
-      AvancesData('ABR', 32, 10),
-      AvancesData('MAY', 40, 30)
+    final List<ChartDataAvance> chartData1 = <ChartDataAvance>[
+      ChartDataAvance('ENE', 125848, 160174),
     ];
 
     return Padding(
@@ -704,30 +717,102 @@ class _HomeTambookState extends State<HomeTambook>
                         position: LegendPosition.bottom,
                         overflowMode: LegendItemOverflowMode.wrap),
                     primaryXAxis: CategoryAxis(),
-                    series: <ChartSeries>[
+                    series: <CartesianSeries>[
                       // Renders line chart
-                      LineSeries<AvancesData, String>(
-                          animationDuration: 2500,
-                          width: 2,
-                          name: 'Atenciones',
-                          markerSettings: const MarkerSettings(isVisible: true),
-                          dataSource: chartData,
-                          xValueMapper: (AvancesData avances, _) => avances.mes,
-                          yValueMapper: (AvancesData avances, _) =>
-                              avances.avanceAtenciones),
 
-                      LineSeries<AvancesData, String>(
-                          animationDuration: 2500,
-                          width: 2,
-                          name: 'Usuarios',
-                          markerSettings: const MarkerSettings(isVisible: true),
-                          dataSource: chartData,
-                          xValueMapper: (AvancesData avances, _) => avances.mes,
-                          yValueMapper: (AvancesData avances, _) =>
-                              avances.avanceUsuarios)
+                      ColumnSeries<ChartDataAvance, String>(
+                          name: 'Programado (125,848)',
+                          dataSource: chartData1,
+                          xValueMapper: (ChartDataAvance data, _) => data.x,
+                          yValueMapper: (ChartDataAvance data, _) => data.y),
+                      ColumnSeries<ChartDataAvance, String>(
+                          name: 'Ejecutado (160,174)',
+                          dataSource: chartData1,
+                          xValueMapper: (ChartDataAvance data, _) => data.x,
+                          yValueMapper: (ChartDataAvance data, _) => data.y1),
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
+                  const Text('Fuente: CEPLAN')
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding avanceMetasUsuarios() {
+    var heading = 'METAS DE USUARIOS - 2023';
+
+    final List<ChartDataAvance> chartData1 = <ChartDataAvance>[
+      ChartDataAvance('ENE', 72828, 91341),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SfCartesianChart(
+                    plotAreaBorderWidth: 0,
+                    legend: Legend(
+                        isVisible: true,
+                        position: LegendPosition.bottom,
+                        overflowMode: LegendItemOverflowMode.wrap),
+                    primaryXAxis: CategoryAxis(),
+                    series: <CartesianSeries>[
+                      ColumnSeries<ChartDataAvance, String>(
+                          animationDuration: 2500,
+                          name: 'Programado (72,828)',
+                          dataSource: chartData1,
+                          xValueMapper: (ChartDataAvance data, _) => data.x,
+                          yValueMapper: (ChartDataAvance data, _) => data.y),
+                      ColumnSeries<ChartDataAvance, String>(
+                          animationDuration: 2500,
+                          name: 'Ejecutado (91,341)',
+                          dataSource: chartData1,
+                          xValueMapper: (ChartDataAvance data, _) => data.x,
+                          yValueMapper: (ChartDataAvance data, _) => data.y1),
+                    ],
+                    tooltipBehavior: TooltipBehavior(enable: true),
+                  ),
+                  const Text('Fuente: CEPLAN')
                 ],
               ),
             ),
@@ -743,7 +828,7 @@ class _HomeTambookState extends State<HomeTambook>
  * -----------------------------------------------
  */
   Padding cardTambos() {
-    var heading = '485 TAMBOS';
+    var heading = 'PLATAFORMAS';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -790,7 +875,7 @@ class _HomeTambookState extends State<HomeTambook>
                         child: Column(
                           children: <Widget>[
                             const Text(
-                              'CONSTRUIDOS',
+                              'PRESTA SERVICIO',
                               style: TextStyle(fontSize: 10.0),
                             ),
                             Container(
@@ -805,7 +890,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     Icons.home_outlined,
                                   ),
                                   Text(
-                                    '450',
+                                    '488',
                                     style: TextStyle(fontSize: 20.0),
                                   ),
                                 ],
@@ -834,7 +919,36 @@ class _HomeTambookState extends State<HomeTambook>
                                     Icons.home_outlined,
                                   ),
                                   Text(
-                                    '10',
+                                    '11',
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Column(
+                          children: <Widget>[
+                            const Text(
+                              'RECEPCIONADO',
+                              style: TextStyle(fontSize: 10.0),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: const <Widget>[
+                                  Icon(
+                                    color: color_01,
+                                    Icons.home_outlined,
+                                  ),
+                                  Text(
+                                    '2',
                                     style: TextStyle(fontSize: 20.0),
                                   ),
                                 ],
@@ -849,7 +963,7 @@ class _HomeTambookState extends State<HomeTambook>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Padding(
+                      /*Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: Column(
                           children: <Widget>[
@@ -872,7 +986,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ),
                           ],
                         ),
-                      ),
+                      ),*/
                       Column(
                         children: <Widget>[
                           Row(
@@ -882,17 +996,20 @@ class _HomeTambookState extends State<HomeTambook>
                                 child: Column(
                                   children: const <Widget>[
                                     Text(
-                                      '1',
+                                      '13',
                                       style: TextStyle(fontSize: 20.0),
                                     ),
                                     Text(
-                                      'EN EJECUCION',
+                                      'PIAS OPERANDO',
                                       style: TextStyle(fontSize: 10.0),
                                     ),
                                   ],
                                 ),
                               ),
-                              Padding(
+                              const SizedBox(
+                                width: 35,
+                              ),
+                              /*Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Column(
                                   children: const <Widget>[
@@ -906,17 +1023,17 @@ class _HomeTambookState extends State<HomeTambook>
                                     ),
                                   ],
                                 ),
-                              ),
+                              ),*/
                               Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Column(
                                   children: const <Widget>[
                                     Text(
-                                      '8',
+                                      '2',
                                       style: TextStyle(fontSize: 20.0),
                                     ),
                                     Text(
-                                      'POR EJECUTAR',
+                                      'EN CONSTRUCCIÓN',
                                       style: TextStyle(fontSize: 10.0),
                                     ),
                                   ],
@@ -925,7 +1042,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ],
                           ),
                           const Text(
-                            '''|_________|_________|''',
+                            '''|__________________|''',
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Color.fromRGBO(155, 155, 155, 1.0),
@@ -942,7 +1059,7 @@ class _HomeTambookState extends State<HomeTambook>
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: const <Widget>[
                               Text(
-                                "14 PIAS",
+                                "PIAS",
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -1035,7 +1152,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: Column(
                                     children: const <Widget>[
                                       Text(
-                                        'JEFE UNIDAD TERRITORIAL',
+                                        'JEFE UNIDAD TERRITORIAL (17)',
                                         style: TextStyle(fontSize: 12.0),
                                       ),
                                     ],
@@ -1053,7 +1170,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: Column(
                                     children: const <Widget>[
                                       Text(
-                                        'MONITOR',
+                                        'MONITOR (28)',
                                         style: TextStyle(fontSize: 12.0),
                                       ),
                                     ],
@@ -1091,7 +1208,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: Column(
                                     children: const <Widget>[
                                       Text(
-                                        'GESTOR',
+                                        'GESTOR (487)',
                                         style: TextStyle(fontSize: 12.0),
                                       ),
                                     ],
@@ -1109,7 +1226,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: Column(
                                     children: const <Widget>[
                                       Text(
-                                        'GUARDIÁN',
+                                        'GUARDIÁN (487)',
                                         style: TextStyle(fontSize: 12.0),
                                       ),
                                     ],
@@ -1436,7 +1553,7 @@ class _HomeTambookState extends State<HomeTambook>
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
       ),
     );
-    var heading = 'PARQUE INFORMATICO';
+    var heading = 'PARQUE INFORMÁTICO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -1484,7 +1601,7 @@ class _HomeTambookState extends State<HomeTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -1495,13 +1612,14 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: const Icon(
                                     color: color_01,
                                     Icons.desktop_mac_outlined,
+                                    size: 45,
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
                                 ),
                                 const Text(
-                                  'PC (10)',
+                                  'PC (224)',
                                   style: TextStyle(
                                     color: color_01,
                                   ),
@@ -1522,7 +1640,7 @@ class _HomeTambookState extends State<HomeTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -1533,13 +1651,14 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: const Icon(
                                     color: color_01,
                                     Icons.laptop,
+                                    size: 45,
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
                                 ),
                                 const Text(
-                                  'LAPTOP (10)',
+                                  'LAPTOP (1047)',
                                   style: TextStyle(
                                     color: color_01,
                                   ),
@@ -1567,7 +1686,7 @@ class _HomeTambookState extends State<HomeTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -1578,13 +1697,14 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: const Icon(
                                     color: color_01,
                                     Icons.photo_camera_front,
+                                    size: 45,
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
                                 ),
                                 const Text(
-                                  'PROYECTOR (30)',
+                                  'PROYECTOR (572)',
                                   style: TextStyle(
                                     color: color_01,
                                   ),
@@ -1605,7 +1725,7 @@ class _HomeTambookState extends State<HomeTambook>
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -1616,13 +1736,14 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: const Icon(
                                     color: color_01,
                                     Icons.wifi,
+                                    size: 45,
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
                                 ),
                                 const Text(
-                                  'ANTENA WIFI (30)',
+                                  'ANTENA WIFI (0)',
                                   style: TextStyle(
                                     color: color_01,
                                   ),
@@ -1645,47 +1766,12 @@ class _HomeTambookState extends State<HomeTambook>
                           alignment: Alignment.bottomRight,
                           child: TextButton(
                             style: flatButtonStyle,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    buildSuccessDialog(
-                                  context,
-                                  title: 'EQUIPAMIENTO TECNOLÓGICO',
-                                  subTitle: 'IMPRESORAS',
-                                  child: Column(
-                                    children: const [
-                                      Text(
-                                        "PRESTA SERVICIO: 5",
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: color_01,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        "INPRESTA SERVICIO: 5",
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: color_01,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                            onPressed: () {},
                             child: Column(
                               children: <Widget>[
                                 Container(
                                   margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(15),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
@@ -1696,13 +1782,14 @@ class _HomeTambookState extends State<HomeTambook>
                                   child: const Icon(
                                     color: color_01,
                                     Icons.print_outlined,
+                                    size: 45,
                                   ),
                                 ),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 2.0),
                                 ),
                                 const Text(
-                                  'IMPRESORAS (10)',
+                                  'IMPRESORAS (669)',
                                   style: TextStyle(
                                     color: color_01,
                                   ),
@@ -2034,4 +2121,11 @@ class ShinyWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class ChartDataAvance {
+  ChartDataAvance(this.x, this.y, this.y1);
+  final String x;
+  final double? y;
+  final double? y1;
 }

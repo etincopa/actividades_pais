@@ -36,7 +36,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Container(
-        height: 134,
+        height: 144,
         width: double.infinity,
         child: FutureBuilder<bool>(
           future: getData(),
@@ -46,8 +46,8 @@ class _AtencionesListViewState extends State<AtencionesListView>
             } else {
               return ListView.builder(
                 padding: const EdgeInsets.only(
-                  top: 0,
-                  bottom: 0,
+                  top: 5,
+                  bottom: 5,
                   right: 16,
                   left: 16,
                 ),
