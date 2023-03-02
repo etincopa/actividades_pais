@@ -261,14 +261,11 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                           print("::: ${usuarioex}");
 
                           if (usuarioex == null) {
-
-                            showAlertDialog(context, "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
+                            showAlertDialog(context,
+                                "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
                             closeTraerDni = false;
                             enableController = true;
-                           setState(() {
-
-                           });
-
+                            setState(() {});
                           } else {
                             //  showAlertDialog(context);
                             visibilitytipotex = true;
@@ -295,7 +292,6 @@ class _FuncionariosPageState extends State<FuncionariosPage>
 
                           switch (usuario.estado_registro) {
                             case "ENCONTRADO_SERVICIO_RENIEC":
-
                               controllerNombre.text = usuario.nombres;
                               controllerApellidoPaterno.text =
                                   usuario.apellidoPaterno;
@@ -322,13 +318,14 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               setState(() {});
                               break;
                             case "NO_ENCONTRADO":
-                              showAlertDialog(context, "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
+                              showAlertDialog(context,
+                                  "Datos no encontrados en nuestra base de datos, registrar los datos manualmente.");
                               enableController = true;
                               closeTraerDni = false;
                               setState(() {});
                               break;
-                              //
-                            case  "ENCONTRADO_JSON":
+                            //
+                            case "ENCONTRADO_JSON":
                               controllerNombre.text = usuario.nombres;
                               controllerApellidoPaterno.text =
                                   usuario.apellidoPaterno;
@@ -340,12 +337,14 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                               enableController = false;
                               closeTraerDni = false;
                               setState(() {});
-                             enableController = false;
-                             closeTraerDni = false;
-                             setState(() {});
-                             break;
+                              enableController = false;
+                              closeTraerDni = false;
+                              setState(() {});
+                              break;
                             case "FALLECIDO":
-                              showAlertDialog(context, "!Funcionario Fallecido!, El funcionario a registrar tiene el estado de fallecido por lo que no puede ser registrado.",
+                              showAlertDialog(
+                                context,
+                                "!Funcionario Fallecido!, El funcionario a registrar tiene el estado de fallecido por lo que no puede ser registrado.",
                               );
                               enableController = false;
                               closeTraerDni = false;
@@ -560,6 +559,9 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                             funcionarios.telefono = controllerCelular.text;
                             funcionarios.flgReniec = flgReniec;
                             funcionarios.idEntidad = id_entidad;
+                            var listCpps = await DatabasePr.db.ListarCcpps();
+                            funcionarios.ubigeoCcpp =
+                                listCpps[0].ubigeoCcpp ?? '';
                             await DatabasePr.db.insertFuncionario(funcionarios);
                             Navigator.pop(context, 'funcionarios');
                             setState(() {});
@@ -582,17 +584,14 @@ class _FuncionariosPageState extends State<FuncionariosPage>
     Widget okButton = TextButton(
       child: Text("OK"),
       onPressed: () {
-        setState(() {
-         });
+        setState(() {});
         Navigator.pop(context);
       },
     );
 
     AlertDialog alert = AlertDialog(
       title: Text("PAIS"),
-      content: Text(
-          text
-          ),
+      content: Text(text),
       actions: [
         okButton,
       ],

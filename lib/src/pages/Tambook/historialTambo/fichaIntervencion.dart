@@ -52,9 +52,7 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
                   file = File('${dir.path}/${widget.idIntervencion}.pdf');
                   if (file.existsSync()) {
                     await file.delete();
-                    setState(() {
-
-                    });
+                    setState(() {});
                   }
 
                   if (status.isGranted) {
@@ -62,12 +60,16 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
                       await Dio().download(
                           'https://www.pais.gob.pe/backendsismonitor/public/reportesintervenciones/exportar-ficha-pdf?data=${widget.idIntervencion}',
                           file.path, onReceiveProgress: (received, total) {
+                        print((received / total * 100).toStringAsFixed(0) +
+                            "%");
+                            print(total);
                         if (total != -1) {
+                          print((received / total * 100).toStringAsFixed(0) +
+                              "%");
                           porcentaje =
                               (received / total * 100).toStringAsFixed(0) + "%";
                           setState(() {});
-                          print((received / total * 100).toStringAsFixed(0) +
-                              "%");
+
 
                           //you can build progressbar feature too
                         }

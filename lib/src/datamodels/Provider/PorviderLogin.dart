@@ -83,6 +83,8 @@ class ProviderLogin {
         loginClass.id = log.id;
         var a = await DatabasePr.db.Login(loginClass);
 
+        print(Uri.parse(AppConfig.urlBackndServicioSeguro +
+            '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'));
         http.Response responseUsuario = await http.get(
             Uri.parse(AppConfig.urlBackndServicioSeguro +
                 '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'),

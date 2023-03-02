@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
+import 'package:actividades_pais/src/pages/Intervenciones/IntervencionesHome.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/historialTambo/historialTambos.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -190,8 +193,7 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );
-
-        /*aHomeOptions.add(
+ /* aHomeOptions.add(
           HomeOptions(
             code: 'OPT1010',
             name: 'HISTORIAL TAMBOS'.tr,
@@ -200,7 +202,6 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );*/
-
         String sImagePias = modalidad == '1'
             ? icon2
             : modalidad == '2'
@@ -247,6 +248,15 @@ class _HomePagePais extends State<HomePagePais> {
           );
         }
       }
+      aHomeOptions.add(
+        HomeOptions(
+          code: 'OPT1008',
+          name: 'TAMBOOK',
+          types: const ['Ver'],
+          image: icon8,
+          color: const Color(0xFF78b8cd),
+        ),
+      );
       if (dniPrueba == 47532262 || dniPrueba == 48400113) {
         aHomeOptions.add(
           HomeOptions(
@@ -257,15 +267,7 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );
-        aHomeOptions.add(
-          HomeOptions(
-            code: 'OPT1008',
-            name: 'TAMBOOK',
-            types: const ['Ver'],
-            image: icon8,
-            color: const Color(0xFF78b8cd),
-          ),
-        );
+
         aHomeOptions.add(
           HomeOptions(
             code: 'OPT1007',
@@ -275,6 +277,7 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );
+
       }
     }
 
@@ -489,9 +492,16 @@ class _HomePagePais extends State<HomePagePais> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Intervenciones(unidadTerritorial),
+                                    IntervencionesHome(),
                               ),
                             );
+                            /* Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Intervenciones(unidadTerritorial),
+                              ),
+                            );*/
                             break;
                           case 'OPT1009':
                             Navigator.push(
@@ -502,7 +512,15 @@ class _HomePagePais extends State<HomePagePais> {
                               ),
                             );
                             break;
-
+                           /* case 'OPT1010':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const HistorialTambos(),
+                              ),
+                            );
+                            break;*/
                           case 'OPT1004':
                             Navigator.push(
                               context,
@@ -537,6 +555,7 @@ class _HomePagePais extends State<HomePagePais> {
                             ),
                           );
                           break;
+
                         case 'OPT1008':
                           var rspt = await Navigator.of(context).push(
                             MaterialPageRoute(

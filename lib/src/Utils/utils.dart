@@ -37,4 +37,38 @@ class utils{
       },
     );
   }
+
+  showAlertDialogGC(titulo, BuildContext context, guardar, cancelar, texto) {
+    Widget okButton = TextButton(child: Text("Guardar"), onPressed: guardar);
+    Widget moButton = TextButton(child: Text("Cancelar"), onPressed: cancelar);
+    AlertDialog alert = AlertDialog(
+      title: Text(titulo),
+      content: TextField(controller: texto, maxLines: 8,maxLength: 255, decoration: InputDecoration( labelText: 'Observación',),),
+      actions: [okButton, moButton],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlertDialogAprobar(titulo, BuildContext context, guardar, cancelar, texto) {
+    Widget okButton = TextButton(child: Text("Confirmar"), onPressed: guardar);
+    Widget moButton = TextButton(child: Text("Cancelar"), onPressed: cancelar);
+    AlertDialog alert = AlertDialog(
+      title: Text(titulo),
+      content: Text(texto),
+      actions: [okButton, moButton],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

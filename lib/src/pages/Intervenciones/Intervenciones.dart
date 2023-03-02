@@ -94,8 +94,8 @@ class _IntervencionesState extends State<Intervenciones> {
                 MaterialPageRoute(builder: (context) => HomePagePais()),
               )),
           title: Text(
-            "Intervenciones",
-            style: TextStyle(color: AppConfig.letrasColor),
+            "EJECUCION INTERVENCION",
+            style: TextStyle(color: AppConfig.letrasColor, fontSize: 12),
           ),
           actions: [accionesBotones()],
         ),

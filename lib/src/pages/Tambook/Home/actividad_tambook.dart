@@ -1,4 +1,5 @@
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
+import 'package:actividades_pais/src/pages/Tambook/historialTambo/intervemcionesHistora.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
@@ -37,29 +38,7 @@ class ActividadTambook extends StatelessWidget {
     listaPersonalAux.add(aServ);
     listaPersonalAux.add(aServ);
 
-    return Container(
-      color: colorGB,
-      child: Center(
-        child: ListView.builder(
-          controller: controller,
-          itemCount: listaPersonalAux.length,
-          itemBuilder: (context, i) => cardHistrialTambosInter(
-            listaPersonalAux[i],
-            () async {
-              /*
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    FichaIntervencion(listaPersonalAux[i].idProgramacion!),
-              ),
-            );
-            */
-            },
-          ),
-        ),
-      ),
-    );
+    return intervencionesHistoria();
   }
 
   Card cardHistrialTambosInter(
