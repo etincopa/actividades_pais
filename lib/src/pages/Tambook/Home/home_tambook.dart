@@ -1,10 +1,13 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
@@ -23,6 +26,7 @@ class _HomeTambookState extends State<HomeTambook>
   Animation<double>? _animation;
   AnimationController? _controller;
   MainController mainCtr = MainController();
+
   bool isLoading = true;
   bool isLoading2 = false;
 
@@ -31,6 +35,7 @@ class _HomeTambookState extends State<HomeTambook>
   List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
+  List<AtencionesModel> aAtencionResumen = [];
 
   String sCurrentYear = DateTime.now().year.toString();
 
@@ -63,6 +68,7 @@ class _HomeTambookState extends State<HomeTambook>
     setState(() {});
     tambosParaMapa();
     getMetasGeneral();
+    getAtenInterBeneResumen();
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -81,6 +87,49 @@ class _HomeTambookState extends State<HomeTambook>
      * 4 : FINALIZADO/APROBADOS
      */
     aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
+  }
+
+  Future<void> getAtenInterBeneResumen() async {
+    List<AtenInterBeneResumenModel> aAtenInterBene =
+        await mainCtr.AtenInterBeneResumen(
+      '0',
+    );
+
+    final totalAtenciones =
+        aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!);
+    final totalIntervenciones =
+        aAtenInterBene.fold(0, (sum, item) => sum + item.intervenciones!);
+    final totalBeneficiarios =
+        aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!);
+
+    if (aAtenInterBene.isNotEmpty) {
+      AtencionesModel o1 = AtencionesModel(
+        imagePath: '',
+        title: 'TAMBOS QUE PRESTAN SERVICIO',
+        total: 488,
+      );
+      AtencionesModel o2 = AtencionesModel(
+        imagePath: '',
+        title: 'ATENCIONES $sCurrentYear',
+        total: totalAtenciones,
+      );
+      AtencionesModel o3 = AtencionesModel(
+        imagePath: '',
+        title: 'INTERVENCIONES $sCurrentYear',
+        total: totalIntervenciones,
+      );
+      AtencionesModel o4 = AtencionesModel(
+        imagePath: '',
+        title: 'BENEFICIARIOS $sCurrentYear',
+        total: totalBeneficiarios,
+      );
+
+      aAtencionResumen.add(o1);
+      aAtencionResumen.add(o2);
+      aAtencionResumen.add(o3);
+      aAtencionResumen.add(o4);
+      setState(() {});
+    }
   }
 
   Future<void> getMetasGeneral() async {
@@ -127,7 +176,10 @@ class _HomeTambookState extends State<HomeTambook>
         children: [
           cardHeader(),
           const SizedBox(height: 20),
-          const AtencionesListView(),
+          if (aAtencionResumen.isNotEmpty)
+            AtencionesListView(
+              categoryList: aAtencionResumen,
+            ),
           //tambosOperativos(),
           cardAtenciones(),
           cardBeneficiarios(),

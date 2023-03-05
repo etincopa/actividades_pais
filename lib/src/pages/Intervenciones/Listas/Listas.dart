@@ -602,7 +602,7 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor: Colors.green,
+                          activeBgColor: [Colors.green],
                           changeOnTap: false,
                           fontSize: 7.5,
                           labels: ['INACTIVO', 'ACTIVO'],
@@ -619,7 +619,7 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor: Colors.red,
+                          activeBgColor: [Colors.red],
                           changeOnTap: false,
                           fontSize: 7.5,
                           labels: ['INACTIVO', 'ACTIVO'],
@@ -894,7 +894,7 @@ class Listas {
                       if (band.idEvaluacion == "0") ...[
                         Container(
                           margin: EdgeInsets.only(right: 10),
-                          child:  Row(
+                          child: Row(
                             children: [
                               Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.red),
@@ -924,7 +924,7 @@ class Listas {
                             ],
                           ),
                         ),
-                      ]else if (band.idEvaluacion == "3") ...[
+                      ] else if (band.idEvaluacion == "3") ...[
                         Container(
                           margin: EdgeInsets.only(right: 10),
                           child: Row(

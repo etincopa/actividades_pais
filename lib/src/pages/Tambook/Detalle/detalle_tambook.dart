@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
@@ -10,31 +9,27 @@ import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_inter
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
+import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
-import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/mostarFoto.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/mapa.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/src/pages/widgets/image_preview.dart';
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/util/app-config.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/image_util.dart';
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:kdgaugeview/kdgaugeview.dart';
 import 'package:lecle_bubble_timeline/lecle_bubble_timeline.dart';
 import 'package:lecle_bubble_timeline/models/timeline_item.dart';
-import 'package:badges/badges.dart' as badges;
 import 'package:http/http.dart' as http;
 
 class DetalleTambook extends StatefulWidget {
@@ -74,8 +69,14 @@ class _DetalleTambookState extends State<DetalleTambook>
   bool isEndPagination = false;
   int offset = 0;
   int limit = 15;
-  String sCurrentYear = DateTime.now().year.toString();
+  DateFormat oDFormat = DateFormat('yyyy-MM-dd');
+  DateFormat oDFormat2 = DateFormat('HHmmss');
+  DateTime now = DateTime.now();
+  String sCurrentYear = "";
+  String sCurrentTime = "0";
+  String sCurrentLogo = "assets/sol.png";
 
+  CombustibleTamboModel oCombustible = CombustibleTamboModel.empty();
   List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
@@ -90,6 +91,12 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   @override
   void initState() {
+    sCurrentYear = now.year.toString();
+    sCurrentTime = oDFormat2.format(now);
+
+    sCurrentLogo =
+        int.parse(sCurrentTime) > 180000 ? 'assets/luna.png' : 'assets/sol.png';
+
     scrollCtr = ScrollController();
     scrollCtr.addListener(
       () => setState(() {}),
@@ -118,8 +125,6 @@ class _DetalleTambookState extends State<DetalleTambook>
      * OBTENER DETALLE GENERAL DE TMBO
      */
 
-    print("${widget.listTambo!.idTambo}");
-
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
     //incidenciasInternet();
@@ -142,6 +147,20 @@ class _DetalleTambookState extends State<DetalleTambook>
      */
     aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
     aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
+  }
+
+  Future<void> getCombustibleTambo() async {
+    var aCombustible = await mainCtr.CombustibleTambo(
+      '0',
+      '${oTambo.idTambo}',
+      '1',
+      '1',
+      '10',
+    );
+    if (aCombustible.isNotEmpty) {
+      oCombustible = aCombustible[0];
+      setState(() {});
+    }
   }
 
   Future<void> getMetasGeneral() async {
@@ -192,6 +211,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     obtenerDatosClima();
     getMetasGeneral();
     incidenciasInternet(oTambo.nSnip ?? 0);
+    getCombustibleTambo();
 
     setState(() {});
   }
@@ -319,14 +339,16 @@ class _DetalleTambookState extends State<DetalleTambook>
             child: Stack(children: [
               Text(
                 "${clima.temp ?? ''} °",
-                style: const TextStyle(fontSize: 25, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                ),
               ),
-              const SizedBox(width: 30),
-              const Positioned(
+              Positioned(
                 right: -4.0,
-                top: 14.0,
+                top: 12.0,
                 child: ImageIcon(
-                  AssetImage('assets/sol.png'),
+                  AssetImage(sCurrentLogo),
                   size: 20,
                   color: Colors.yellow,
                 ),
@@ -944,25 +966,25 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         ListTile(
-                          title: const Text('DNI'),
+                          title: Text('DNI'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('INICIO DE CONTRATO'),
+                          title: Text('INICIO DE CONTRATO'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('SEXO'),
+                          title: Text('SEXO'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('ESTADO CIVIL'),
+                          title: Text('ESTADO CIVIL'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('FECHA DE NACIMIENTO'),
+                          title: Text('FECHA DE NACIMIENTO'),
                           subtitle: Text(''),
                         ),
                         ListTile(
@@ -1510,32 +1532,29 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: const [
                         ListTile(
-                          title: const Text(
-                              '¿TIENE SERVICIO DE ENERGÍA ELÉCTRICA?'),
+                          title: Text('¿TIENE SERVICIO DE ENERGÍA ELÉCTRICA?'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text(
-                              'TIPO DE CONEXIÓN DE ENERGÍA ELÉCTRICA'),
+                          title: Text('TIPO DE CONEXIÓN DE ENERGÍA ELÉCTRICA'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('PROVEEDOR DE ENERGÍA ELÉCTRICA'),
+                          title: Text('PROVEEDOR DE ENERGÍA ELÉCTRICA'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('¿TIENE SERVICIO DE AGUA?'),
+                          title: Text('¿TIENE SERVICIO DE AGUA?'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text(
-                              'TIPO DE CONEXIÓN DEL SERVICIO DE AGUA'),
+                          title: Text('TIPO DE CONEXIÓN DEL SERVICIO DE AGUA'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: const Text('PROVEEDOR DE SERVICIO DE AGUA'),
+                          title: Text('PROVEEDOR DE SERVICIO DE AGUA'),
                           subtitle: Text(''),
                         ),
                       ],
@@ -3007,6 +3026,11 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardCombustible() {
     var heading = 'COMBUSTIBLE ASIGNADO';
+    double totalPorcen1 = double.parse(
+        ((oCombustible.consumoGal! / oCombustible.stockCsmble!) * 100)
+            .toStringAsFixed(2)
+            .replaceFirst(RegExp(r'\.?0*$'), ''));
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -3064,7 +3088,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                       color: Colors.black,
                       fontSize: 10,
                     ),
-                    speed: kbpsTOmbps(3000),
+                    speed: totalPorcen1.isNaN ? 0.0 : totalPorcen1,
                     speedTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 40,
@@ -3073,7 +3097,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                     animate: true,
                     alertSpeedArray: const [0, 5, 10],
                     alertColorArray: const [colorP, colorI, colorS],
-                    duration: const Duration(seconds: 6),
+                    duration: const Duration(seconds: 1),
                     unitOfMeasurement: "Consumo",
                     unitOfMeasurementTextStyle: const TextStyle(
                       color: Colors.black,
@@ -3089,42 +3113,45 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         ListTile(
-                          leading: ImageIcon(
+                          leading: const ImageIcon(
                             AssetImage(
                               "assets/generador.png",
                             ),
                             size: 55,
                             color: Colors.grey,
                           ),
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Generador'),
-                          subtitle: Text('0 hrs'),
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Generador'),
+                          subtitle:
+                              Text('${oCombustible.horasGelectronico} hrs'),
                         ),
                         ListTile(
-                          leading: ImageIcon(
+                          leading: const ImageIcon(
                             AssetImage("assets/moto.png"),
                             size: 55,
                           ),
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Moto'),
-                          subtitle: Text('0 km'),
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Moto'),
+                          subtitle: Text('${oCombustible.recorridoMoto} km'),
                         ),
                         ListTile(
-                          leading: ImageIcon(AssetImage("assets/carro.png"),
+                          leading: const ImageIcon(
+                              AssetImage("assets/carro.png"),
                               size: 55),
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Carro'),
-                          subtitle: Text('0 km'),
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Carro'),
+                          subtitle:
+                              Text('${oCombustible.recorridoCamioneta} km'),
                         ),
                         ListTile(
-                          leading: ImageIcon(
+                          leading: const ImageIcon(
                               AssetImage("assets/deslizador.png"),
                               size: 55),
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text('Deslizador'),
-                          subtitle: Text('0 km'),
+                          iconColor: const Color.fromARGB(255, 0, 0, 0),
+                          title: const Text('Deslizador'),
+                          subtitle: Text('${oCombustible.horasDeslizador} km'),
                         ),
                       ],
                     ),

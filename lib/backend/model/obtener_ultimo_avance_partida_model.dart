@@ -36,7 +36,7 @@ class UltimoAvancePartidaModel {
 
   String? numSnip;
   int? idTambo;
-  int? idMonitoreo;
+  String? idMonitoreo;
   int? idAvanceFisicoPartida;
   double? avanceFisicoPartida;
 
@@ -59,7 +59,7 @@ class UltimoAvancePartidaModel {
     DateTime? createdTime,
     String? numSnip,
     int? idTambo,
-    int? idMonitoreo,
+    String? idMonitoreo,
     int? idAvanceFisicoPartida,
     double? avanceFisicoPartida,
   }) =>

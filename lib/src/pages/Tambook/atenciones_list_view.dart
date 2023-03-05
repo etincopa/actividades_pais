@@ -2,7 +2,11 @@ import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:flutter/material.dart';
 
 class AtencionesListView extends StatefulWidget {
-  const AtencionesListView({Key? key, this.callBack}) : super(key: key);
+  final List<AtencionesModel> categoryList;
+
+  const AtencionesListView(
+      {Key? key, required this.categoryList, this.callBack})
+      : super(key: key);
 
   final Function()? callBack;
   @override
@@ -35,7 +39,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: Container(
+      child: SizedBox(
         height: 144,
         width: double.infinity,
         child: FutureBuilder<bool>(
@@ -51,12 +55,12 @@ class _AtencionesListViewState extends State<AtencionesListView>
                   right: 16,
                   left: 16,
                 ),
-                itemCount: AtencionesModel.categoryList.length,
+                itemCount: widget.categoryList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final int count = AtencionesModel.categoryList.length > 10
+                  final int count = widget.categoryList.length > 10
                       ? 10
-                      : AtencionesModel.categoryList.length;
+                      : widget.categoryList.length;
                   final Animation<double> animation = Tween<double>(
                     begin: 0.0,
                     end: 1.0,
@@ -73,7 +77,7 @@ class _AtencionesListViewState extends State<AtencionesListView>
                   animationController?.forward();
 
                   return AtencionesView(
-                    category: AtencionesModel.categoryList[index],
+                    category: widget.categoryList[index],
                     animation: animation,
                     animationController: animationController,
                     callback: widget.callBack,
@@ -119,7 +123,7 @@ class AtencionesView extends StatelessWidget {
               splashColor: Colors.black,
               onTap: callback,
               child: SizedBox(
-                width: 280,
+                width: 340,
                 child: Stack(
                   children: [
                     Center(
@@ -180,7 +184,7 @@ class AtencionesView extends StatelessWidget {
                                                 textAlign: TextAlign.left,
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: 45,
+                                                  fontSize: 40,
                                                   letterSpacing: 0.27,
                                                   color: Colors.black,
                                                 ),
