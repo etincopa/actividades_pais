@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
@@ -80,6 +82,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
+  AtenInterBeneResumenModel oDatoGeneral = AtenInterBeneResumenModel.empty();
 
   @override
   void dispose() {
@@ -149,6 +152,17 @@ class _DetalleTambookState extends State<DetalleTambook>
     aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
   }
 
+  Future<void> getAtenInterBeneResumen() async {
+    List<AtenInterBeneResumenModel> aAtenInterBene =
+        await mainCtr.AtenInterBeneResumen(
+      '${oTambo.nSnip}',
+    );
+
+    if (aAtenInterBene.isNotEmpty) {
+      oDatoGeneral = aAtenInterBene[0];
+    }
+  }
+
   Future<void> getCombustibleTambo() async {
     var aCombustible = await mainCtr.CombustibleTambo(
       '0',
@@ -209,6 +223,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       (widget.listTambo!.idTambo).toString(),
     );
     obtenerDatosClima();
+    getAtenInterBeneResumen();
     getMetasGeneral();
     incidenciasInternet(oTambo.nSnip ?? 0);
     getCombustibleTambo();
@@ -1127,15 +1142,15 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           title: const Text('ATENCIONES'),
-                          subtitle: Text(oTambo.atencion ?? ''),
+                          subtitle: Text('${oDatoGeneral.atenciones}'),
                         ),
                         ListTile(
                           title: const Text('INTERVENCIONES'),
-                          subtitle: Text(oTambo.intervencion ?? ''),
+                          subtitle: Text('${oDatoGeneral.intervenciones}'),
                         ),
                         ListTile(
                           title: const Text('BENEFICIARIOS'),
-                          subtitle: Text(oTambo.beneficiario ?? ''),
+                          subtitle: Text('${oDatoGeneral.beneficiarios}'),
                         ),
                       ],
                     ),
