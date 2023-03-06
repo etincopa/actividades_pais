@@ -69,7 +69,6 @@ class ProviderLogin {
             "username": username,
             "password": password,
           }));
-      print(response.body);
       if (response.statusCode == 200) {
         final parsedJson = jsonDecode(response.body);
         final log = new LoginClass.fromJson(parsedJson);
@@ -82,9 +81,10 @@ class ProviderLogin {
         loginClass.token = log.token;
         loginClass.id = log.id;
         var a = await DatabasePr.db.Login(loginClass);
+        print(response.body);
+        print("log.rol ${log.rol}");
 
-        print(Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'));
+        await ProviderDatos().getInsertPerfiles(log.rol);
         http.Response responseUsuario = await http.get(
             Uri.parse(AppConfig.urlBackndServicioSeguro +
                 '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'),
@@ -95,7 +95,7 @@ class ProviderLogin {
         if (responseUsuario.statusCode == 200) {
           if (parsedJson2["total"] > 0) {
             var r2 = ConfigPersonal(
-                unidad: '',
+                unidad: '',//data[0]["area_abreviatura"] ?? ''
                 nombres: data[0]["empleado_nombre"] ?? '',
                 apellidoMaterno: data[0]["empleado_apellido_materno"] ?? '',
                 apellidoPaterno: data[0]["empleado_apellido_paterno"] ?? '',
@@ -140,6 +140,8 @@ class ProviderLogin {
         print(response.reasonPhrase);
 
         if (response.statusCode != 200) {
+          await ProviderDatos().getInsertPerfiles("x");
+
           MainController mainController = MainController();
           UserModel oUser;
           oUser = await mainController.getUserLogin(username, '');
