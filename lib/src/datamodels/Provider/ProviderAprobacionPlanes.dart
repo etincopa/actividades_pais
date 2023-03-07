@@ -111,7 +111,6 @@ class ProviderAprobacionPlanes {
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      print("jsponRewsposnse $jsonResponse");
       final listado =
           new ListaHistorialobservaciones.fromJsonList(jsonResponse);
       return listado.items;
@@ -134,7 +133,6 @@ class ProviderAprobacionPlanes {
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      print("jsponRewsposnse $jsonResponse");
       final listado =
           new ListaHistorialobservaciones.fromJsonList(jsonResponse);
       return listado.items;
@@ -156,7 +154,6 @@ class ProviderAprobacionPlanes {
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      print("jsponRewsposnse ${jsonResponse["lista"]}");
       final listado =
           new ListaUnidadesTerritoriales.fromJsonList(jsonResponse["lista"]);
       print(listado.items[0].idUnidadesTerritoriales);
@@ -172,7 +169,6 @@ class ProviderAprobacionPlanes {
       'Authorization': 'Bearer ${logUser[0].token}',
       'Content-Type': 'application/json'
     };
-    print("fdfdsfdsfdss ${ut}");
     if (ut != "x") {
       http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +

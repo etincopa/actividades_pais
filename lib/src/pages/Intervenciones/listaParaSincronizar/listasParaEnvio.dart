@@ -171,8 +171,11 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
   EnvioParticipantes() async {
     var listaParticipantes = await DatabasePr.db
         .listarParticipantes(widget.codigoIntervencion, 'participantes');
-    participantes = listaParticipantes[0];
-    setState(() {});
+    if(listaParticipante.length>0){
+      participantes = listaParticipantes[0];
+      setState(() {});
+    }
+
     var resp;
     for (var i = 0; i < listaParticipantes.length; i++) {
       resp = await ProviderDatos().subirParticipantes(listaParticipantes[i]);
@@ -184,8 +187,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
       if (resp == 200) {
         await DatabasePr.db
             .eliminarParticipantesPorid(listaParticipantes[i].id);
-        // listaParticipante = [];
-      }
+       }
     }
     cargarCantidadParticipantes();
 

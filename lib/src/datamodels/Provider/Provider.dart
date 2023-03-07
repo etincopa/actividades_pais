@@ -339,7 +339,7 @@ class ProviderDatos {
       var intentosRegistrosFallecidos = IntentosRegistrosFallecidos(
           ipmaqReg: macAddress,
           idUsuarioReg: login[0].id.toString(),
-          fechaReg:formattedDate,
+          fechaReg: formattedDate,
           dni: dni,
           idProgramacion: idProgramacion,
           idPlataforma: abc[0].idTambo);
@@ -415,7 +415,7 @@ class ProviderDatos {
   }
 
   Future<Participantes?> getUsuarioParticipanteDni(dni, idProgramacion) async {
-     Participantes participantes = Participantes();
+    Participantes participantes = Participantes();
     var resfallecidos =
         await ProviderServicios().getBuscarPersonasFallecidas(dni);
 
@@ -481,7 +481,6 @@ class ProviderDatos {
         }
       }
     }
-
   }
 
   Future<List<ListarCcpp>> getlistarCcpp(snip) async {
@@ -622,11 +621,10 @@ class ProviderDatos {
 
   Future createFile(
       Map<String, dynamic> content, Directory dir, String fileName) async {
-     File file = new File(dir.path + "/" + fileName);
+    File file = new File(dir.path + "/" + fileName);
     file.createSync();
     fileExists = true;
     file.writeAsStringSync(json.encode(content));
-
   }
 
   Future<int> deleteFile(nane) async {
@@ -653,7 +651,7 @@ class ProviderDatos {
     String fileName = "myJSONFile.json";
     bool fileExists = false;
     // late Map<String, String> fileContent;
-    getApplicationDocumentsDirectory().then((Directory directory) {
+    await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
@@ -665,7 +663,7 @@ class ProviderDatos {
           '/api-pnpais/app/listarParticipantesIntervencionesMovil/$UNIDAD_TERRITORIAL'),
     );
 
-print(response.statusCode);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       if (fileExists) {
         print("File exists");
@@ -687,7 +685,7 @@ print(response.statusCode);
     String fileName = "myJSONFile.json";
     bool fileExists = false;
     // late Map<String, String> fileContent;
-    getApplicationDocumentsDirectory().then((Directory directory) {
+    await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
@@ -792,18 +790,21 @@ print(response.statusCode);
     return respuesta;
   }
 
-  Future<int> subirFuncionarios(Funcionarios funcionarios) async {
+  Future<int> user() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
     http.Response usuariodb = await http.get(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
             '/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
         headers: headers);
-
     final jsonResponse = json.decode(usuariodb.body);
+    var usu = jsonResponse["response"][0]["id_usuario"];
 
-    funcionarios.idUsuario = jsonResponse["response"][0]["id_usuario"];
+    return usu;
+  }
 
+  Future<int> subirFuncionarios(Funcionarios funcionarios) async {
+    funcionarios.idUsuario = await user();
     http.Response response = await http.post(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
             '/api-pnpais/app/registrarFuncionariosMovil'),
@@ -815,59 +816,40 @@ print(response.statusCode);
     if (response.statusCode == 200) {
     } else if (response.statusCode == 400) {}
     return response.statusCode;
-/**/
-    return 0;
   }
 
   Future<int> subirParticipantes(Participantes participantes) async {
     DatabasePr.db.initDB();
-    print("aqqqwioop");
-    var abc = await DatabasePr.db.getAllConfigPersonal();
-    http.Response usuariodb = await http.get(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
-        headers: headers);
-    final jsonResponse = json.decode(usuariodb.body);
-    participantes.idUsuario = jsonResponse["response"][0]["id_usuario"];
-    print("prticipantes");
-    print(
-      jsonEncode(participantes),
-    );
-    print("participantes::: ${jsonEncode(participantes)}");
+    participantes.idUsuario = await user();
 
     http.Response response = await http.post(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
             '/api-pnpais/app/registrarParticipanteMovil'),
         body: jsonEncode(participantes),
         headers: headers);
-    print("registrarParticipanteMovil");
-    print(response.body);
-    print("registrarParticipanteMovil");
+
     if (response.statusCode == 200) {
       final jsonResponse2 = json.decode(response.body);
 
-      var resserv =
+      var dataBDServicioPart =
           await DatabasePr.db.buscarServicioParticipante(participantes.id);
-      for (var i = 0; i < resserv.length; i++) {
-        print(response.body);
-        resserv[i].idProgramacionesParticipante =
-            int.parse(jsonResponse2["response"]);
-        print(resserv[i].idProgramacionesParticipante);
-        print("jsonEncode(resserv[i])");
-        print(jsonEncode(resserv[i]));
-        print("jsonEncode(resserv[i])");
-        http.Response response1 = await http.post(
-            Uri.parse(AppConfig.urlBackndServicioSeguro +
-                '/api-pnpais/app/registrarParticipanteServicioMovil'),
-            body: jsonEncode(resserv[i]),
-            headers: headers);
-        print(response1.body);
-        print("la respouesta es ${response1.body}");
+      for (var i = 0; i < dataBDServicioPart.length; i++) {
+        if (jsonResponse2["msgResultado"] == "OK") {
+          dataBDServicioPart[i].idProgramacionesParticipante =
+              int.parse(jsonResponse2["response"]);
+
+          await http.post(
+              Uri.parse(AppConfig.urlBackndServicioSeguro +
+                  '/api-pnpais/app/registrarParticipanteServicioMovil'),
+              body: jsonEncode(dataBDServicioPart[i]),
+              headers: headers);
+        }
       }
-      // return response.statusCode;
+      await Future.delayed(Duration(seconds: 2));
+      return response.statusCode;
+    } else if (response.statusCode == 400) {
+      return response.statusCode;
     }
-    if (response.statusCode == 200) {
-    } else if (response.statusCode == 400) {}
     return response.statusCode;
   }
 
@@ -1078,7 +1060,7 @@ print(response.statusCode);
     late Directory dir;
     String fileName = "jsonFuncionarios.json";
     bool fileExists = false;
-    getApplicationDocumentsDirectory().then((Directory directory) {
+    await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
@@ -1107,7 +1089,7 @@ print(response.statusCode);
     late Directory dir;
     String fileName = "jsonPersonasFallecidas.json";
     bool fileExists = false;
-    getApplicationDocumentsDirectory().then((Directory directory) {
+    await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
@@ -1152,5 +1134,49 @@ print(response.statusCode);
     }
   }
 
-//GuardarIntentosFallecidos
+  Future getInsertPerfiles(idRol) async {
+    print("getInsertPerfiles");
+    late File jsonFile;
+    late Directory dir;
+    String fileName = "perfiles.json";
+    bool fileExists = false;
+    // late Map<String, String> fileContent;
+    await getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+    });
+    if (idRol == "x") {
+      print("1");
+      print(fileExists);
+      // print(jsonFile);
+      // await deleteFile(fileName);
+      if (fileExists) {
+        print("existe");
+        await deleteFile(fileName);
+      }
+    } else {
+      print(Uri.parse(AppConfig.urlBackndServicioSeguro +
+          '/api-pnpais/app/menus-rol-usuarios/$idRol'));
+      http.Response response = await http.get(Uri.parse(
+          AppConfig.urlBackndServicioSeguro +
+              '/api-pnpais/app/menus-rol-usuarios/$idRol'));
+      if (response.statusCode == 200) {
+        if (fileExists) {
+          print("File exists");
+          await deleteFile(fileName);
+          print("existe");
+          await Future.delayed(Duration(seconds: 10));
+          await createFile(json.decode(response.body), dir, fileName);
+        } else {
+          print("File does not exist!");
+          await createFile(json.decode(response.body), dir, fileName);
+        }
+      } else {
+        return List.empty();
+      }
+    }
+
+    return List.empty();
+  }
 }

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
-import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/IntervencionesHome.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
@@ -64,7 +62,6 @@ class _HomePagePais extends State<HomePagePais> {
   List<String> aUnidad = [];
 
   bool cargo = false;
-  List<Perfil> idMenuPadre = [];
 
   @override
   void initState() {
@@ -72,24 +69,12 @@ class _HomePagePais extends State<HomePagePais> {
     if (_nombrePersona != '') {
       _nombrePersona = "Un momento por favor";
     }
-    perfil();
+
     mostrarTmbo();
     traerdato();
     verificargps();
     datosParaPerfil();
     mostrarNombre();
-  }
-
-  perfil() async {
-    cantidadDB = 1;
-    var res = await ProviderServicios().loadPerfiles();
-    if (res!.isNotEmpty) {
-      for (int i = 0; i < res.length; i++) {
-        idMenuPadre.add(Perfil(idMenuPadre: res[i].idMenuPadre));
-      }
-
-      return;
-    }
   }
 
   Future verificargps() async {
@@ -108,7 +93,7 @@ class _HomePagePais extends State<HomePagePais> {
     if (res.isNotEmpty) {
       List<String> aUnidadTemp = [];
       for (var u in res) {
-          aUnidadTemp.add(u.unidad);
+        aUnidadTemp.add(u.unidad);
       }
       setState(() {
         aUnidad = aUnidadTemp;
@@ -178,102 +163,127 @@ class _HomePagePais extends State<HomePagePais> {
 
     List<HomeOptions> aHomeOptions = [];
 
-    for (int i = 0; i < idMenuPadre.length; i++) {
-      switch (idMenuPadre[i].idMenuPadre) {
-        case "mnu.articulacion":
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1003',
-              name: 'TileIntervencion'.tr,
-              types: const ['Ver'],
-              image: icon4,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
-
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1006',
-              name: 'TileProgramacionActividad'.tr,
-              types: const ['Ver'],
-              image: icon7,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
-          break;
-
-        case "mnu.soporte.equipo":
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1009',
-              name: 'TileParqueInfomatico'.tr,
-              types: const ['Ver'],
-              image: icon6,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
-          break;
-
-        case "mnu.administrativos":
-         // if (aUnidad.contains("UPS")) {
-            aHomeOptions.add(
-              HomeOptions(
-                code: 'OPT1007',
-                name: 'SEGUIMIENTO Y MONITOREO',
-                types: const ['Ver'],
-                image: icon5,
-                color: const Color(0xFF78b8cd),
-              ),
-            );
-          //}
-
-          break;
-      }
-    }
-
-    if (tipoPlataforma == 'PIAS' &&
-        (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
-      String sImagePias = modalidad == '1'
-          ? icon2
-          : modalidad == '2'
-              ? icon3
-              : icon1;
+    if (cantidadDB < 1) {
       aHomeOptions.add(
         HomeOptions(
-          code: 'OPT1004',
-          name: 'TilePias'.tr,
+          code: 'OPT1000',
+          name: 'TileAppRegister'.tr,
+          types: const ['Usuario'],
+          image: icon0,
+          color: color_07,
+        ),
+      );
+    } else {
+      if (tipoPlataforma == 'JF') {
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1003',
+            name: 'TileIntervencion'.tr,
+            types: const ['Ver'],
+            image: icon4,
+            color: const Color(0xFF78b8cd),
+          ),
+        );
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1009',
+            name: 'TileParqueInfomatico'.tr,
+            types: const ['Ver'],
+            image: icon6,
+            color: const Color(0xFF78b8cd),
+          ),
+        );
+ /* aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1010',
+            name: 'HISTORIAL TAMBOS'.tr,
+            types: const ['Ver'],
+            image: icon6,
+            color: const Color(0xFF78b8cd),
+          ),
+        );*/
+        String sImagePias = modalidad == '1'
+            ? icon2
+            : modalidad == '2'
+                ? icon3
+                : icon1;
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1004',
+            name: 'TilePias'.tr,
+            types: const ['Ver'],
+            image: sImagePias,
+            color: const Color(0xFF78b8cd),
+          ),
+        );
+      }
+      if (tipoPlataforma == 'TAMBO') {
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1003',
+            name: 'TileIntervencion'.tr,
+            types: const ['Ver'],
+            image: icon4,
+            color: const Color(0xFF78b8cd),
+          ),
+        );
+      } else {
+        //_log.i(tipoPlataforma);
+        //_log.i(modalidad);
+        if (tipoPlataforma == 'PIAS' &&
+            (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
+          String sImagePias = modalidad == '1'
+              ? icon2
+              : modalidad == '2'
+                  ? icon3
+                  : icon1;
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1004',
+              name: 'TilePias'.tr,
+              types: const ['Ver'],
+              image: sImagePias,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+        }
+      }
+      aHomeOptions.add(
+        HomeOptions(
+          code: 'OPT1008',
+          name: 'TAMBOOK',
           types: const ['Ver'],
-          image: sImagePias,
+          image: icon8,
           color: const Color(0xFF78b8cd),
         ),
       );
-    }
+      if (dniPrueba == 47532262 || dniPrueba == 48400113) {
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1006',
+            name: 'TileProgramacionActividad'.tr,
+            types: const ['Ver'],
+            image: icon7,
+            color: const Color(0xFF78b8cd),
+          ),
+        );
 
-    aHomeOptions.add(
-      HomeOptions(
-        code: 'OPT1008',
-        name: 'TAMBOOK',
-        types: const ['Ver'],
-        image: icon8,
-        color: const Color(0xFF78b8cd),
-      ),
-    );
-    if (dniPrueba == 47532262 || dniPrueba == 48400113) {
+        aHomeOptions.add(
+          HomeOptions(
+            code: 'OPT1007',
+            name: 'SEGUIMIENTO Y MONITOREO',
+            types: const ['Ver'],
+            image: icon5,
+            color: const Color(0xFF78b8cd),
+          ),
+        );
 
-     /* aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1007',
-          name: 'SEGUIMIENTO Y MONITOREO',
-          types: const ['Ver'],
-          image: icon5,
-          color: const Color(0xFF78b8cd),
-        ),
-      );*/
+      }
     }
 
     if (aUnidad.contains("UPS")) {
       if (token != null) {
-       /* aHomeOptions.add(
+        aHomeOptions.add(
           HomeOptions(
             code: 'OPT1007',
             name: 'SEGUIMIENTO Y MONITOREO',
@@ -281,7 +291,7 @@ class _HomePagePais extends State<HomePagePais> {
             image: icon1,
             color: const Color(0xFF78b8cd),
           ),
-        );*/
+        );
         aHomeOptions.add(
           HomeOptions(
             code: 'OPT1008',
@@ -481,7 +491,8 @@ class _HomePagePais extends State<HomePagePais> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => IntervencionesHome(),
+                                builder: (context) =>
+                                    IntervencionesHome(),
                               ),
                             );
                             /* Navigator.push(
@@ -501,7 +512,7 @@ class _HomePagePais extends State<HomePagePais> {
                               ),
                             );
                             break;
-                          /* case 'OPT1010':
+                           /* case 'OPT1010':
                             Navigator.push(
                               context,
                               MaterialPageRoute(

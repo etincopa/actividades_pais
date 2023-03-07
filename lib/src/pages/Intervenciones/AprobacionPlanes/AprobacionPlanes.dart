@@ -47,11 +47,12 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
   var formatter = new DateFormat('yyyy-MM-dd');
 
   var pageIndex = 1;
-
+  bool mostarIcono = false;
   @override
   void initState() {
     // TODO: implement initState
-    inicio();
+
+    _loadData(); inicio();
     ///controller.addListener(_onlistener);
     super.initState();
   }
@@ -102,8 +103,13 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
     filtroDataPlanMensual.pageSize = 10;
     filtroDataPlanMensual.inicio = DateFormat('yyyy-MM-dd HH:mm:ss')
         .format(DateTime.now().subtract(Duration(days: 7)));
+    _controlleFechaInici.text=DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(DateTime.now().subtract(Duration(days: 7)));
+
     filtroDataPlanMensual.fin =
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    _controlleFechaFin.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     setState(() {});
   }
 
@@ -121,7 +127,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
     return BackdropScaffold(
         key: _backdropKey,
         appBar: BackdropAppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           elevation: 0.0,
           // backgroundColor: AppConfig.primaryColor,
           leading: Util().iconbuton(() {
@@ -615,9 +621,8 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add),
-            SizedBox(width: 8),
-            Text('Agregar página'),
+            (_posts!.length != 0)?  Icon(Icons.add_circle_outline_sharp, size: 50): new Container(),
+
           ],
         ),
       ),
@@ -628,11 +633,6 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
     _loadData();
   }
 
-  void _onScrollEnd(ScrollMetrics metrics) {
-    if (metrics.pixels >= metrics.maxScrollExtent && !_isLoading) {
-      _loadData();
-    }
-  }
 
   Future<void> _loadData() async {
     setState(() {

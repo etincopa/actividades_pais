@@ -95,19 +95,21 @@ class _HomeTambookState extends State<HomeTambook>
       '0',
     );
 
-    final totalAtenciones =
-        aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!);
-    final totalIntervenciones =
-        aAtenInterBene.fold(0, (sum, item) => sum + item.intervenciones!);
-    final totalBeneficiarios =
-        aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!);
+    AtencionesModel o1 = AtencionesModel(
+      imagePath: '',
+      title: 'TAMBOS QUE PRESTAN SERVICIO',
+      total: 488,
+    );
+    aAtencionResumen.add(o1);
 
     if (aAtenInterBene.isNotEmpty) {
-      AtencionesModel o1 = AtencionesModel(
-        imagePath: '',
-        title: 'TAMBOS QUE PRESTAN SERVICIO',
-        total: 488,
-      );
+      final totalAtenciones =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!);
+      final totalIntervenciones =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.intervenciones!);
+      final totalBeneficiarios =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!);
+
       AtencionesModel o2 = AtencionesModel(
         imagePath: '',
         title: 'ATENCIONES $sCurrentYear',
@@ -124,7 +126,6 @@ class _HomeTambookState extends State<HomeTambook>
         total: totalBeneficiarios,
       );
 
-      aAtencionResumen.add(o1);
       aAtencionResumen.add(o2);
       aAtencionResumen.add(o3);
       aAtencionResumen.add(o4);

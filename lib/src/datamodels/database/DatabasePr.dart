@@ -697,6 +697,17 @@ class DatabasePr {
     return list;
   }
 
+  Future<List<Funcionarios>> buscarDniFuncioario(dni, idProgramacion) async {
+    await DatabasePr.db.initDB();
+    final res = await _db?.rawQuery(
+        "SELECT dni FROM funcionarios where dni = '$dni' and idProgramacion =  $idProgramacion");
+    List<Funcionarios> list = res!.isNotEmpty
+        ? res.map((e) => Funcionarios.fromMap(e)).toList()
+        : [];
+
+    return list;
+  }
+
   Future<int> insertParticipantes(Participantes participantes) async {
     await DatabasePr.db.initDB();
     print(participantes.toMap());

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/datamodels/Clases/NumeroTelefono.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Provincia.dart';
@@ -284,6 +285,16 @@ class ProviderServicios {
     }
 
     return new Funcionarios();
+  }
+
+  Future<List<Perfil>?> loadPerfiles() async {
+    String jsonString = await servicios.loadDataArchivos("perfiles.json");
+    final jsonResponse = json.decode(jsonString);
+
+    final listadoDepart =
+    new Perfiles.fromJsonList(jsonResponse["response"]);
+
+    return listadoDepart.items;
   }
 
   Future<List<Unidad>> getUnidad() async {

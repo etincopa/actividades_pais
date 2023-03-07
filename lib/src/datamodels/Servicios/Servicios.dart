@@ -126,7 +126,7 @@ class Servicios {
   Future loadDataArchivos(nombreArchivo) async {
     late File jsonFile;
     late Directory dir;
-    String fileName = "jsonPersonasFallecidas.json";
+    String fileName = nombreArchivo;
     bool fileExists = false;
     var fileEncode;
     await getApplicationDocumentsDirectory().then((Directory directory) {
