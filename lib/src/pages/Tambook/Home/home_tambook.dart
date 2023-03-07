@@ -108,7 +108,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    /*return Scaffold(
       backgroundColor: color_10o15,
       body: CustomScrollView(
         slivers: [
@@ -116,6 +116,29 @@ class _HomeTambookState extends State<HomeTambook>
             child: getBody(),
           ),
         ],
+      ),
+    );*/
+
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.flight)),
+              Tab(icon: Icon(Icons.directions_transit)),
+              Tab(icon: Icon(Icons.directions_car)),
+            ],
+          ),
+          title: Text('Tabs Demo'),
+        ),
+        body: TabBarView(
+          children: [
+            Icon(Icons.flight, size: 350),
+            Icon(Icons.directions_transit, size: 350),
+            Icon(Icons.directions_car, size: 350),
+          ],
+        ),
       ),
     );
   }
