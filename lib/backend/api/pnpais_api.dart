@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
@@ -16,6 +17,7 @@ import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
+import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
@@ -253,6 +255,38 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => MetasTamboModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<CombustibleTamboModel>>> getCombustibleTambo(
+    String? idUnidadTerritorial,
+    String? idTambo,
+    String? idTipoPlataforma,
+    String? iPagina,
+    String? iNumPagina,
+  ) async {
+    return await _http.request<List<CombustibleTamboModel>>(
+      '${basePathApp3}CuadroControlSaldoDisponible/$idUnidadTerritorial/$idTambo/$idTipoPlataforma/$iPagina/$iNumPagina',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => CombustibleTamboModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<AtenInterBeneResumenModel>>> getAtenInterBeneResumen(
+    String? numSnip,
+  ) async {
+    return await _http.request<List<AtenInterBeneResumenModel>>(
+      '${basePathApp3}atencionIntervencionBeneficiarioResumen/$numSnip',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => AtenInterBeneResumenModel.fromJson(e))
+            .toList();
       },
     );
   }

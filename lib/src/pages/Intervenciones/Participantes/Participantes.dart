@@ -108,6 +108,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
   var entidad = "Entidad";
   var id_entidad = 0;
   bool closeTraerDni = false;
+  final _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +186,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 SizedBox(
                   width: 350,
                   child: TextField(
+                    focusNode: _focusNode,
                     maxLength: 8,
                     keyboardType: TextInputType.number,
                     controller: controllerNumeroDoc,
@@ -222,10 +224,12 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                   color: Colors
                                       .white, // this is for your text colour
                                 ),
+
                               ),
                             ],
                           ),
                           onPressed: () async {
+                            _focusNode.unfocus();
                             setborrar();
                             closeTraerDni = true;
                             setState(() {});

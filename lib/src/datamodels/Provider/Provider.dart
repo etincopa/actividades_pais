@@ -415,8 +415,7 @@ class ProviderDatos {
   }
 
   Future<Participantes?> getUsuarioParticipanteDni(dni, idProgramacion) async {
-    // await ProviderServicios().getBuscarPersonasFallecidas(dni);
-    Participantes participantes = Participantes();
+     Participantes participantes = Participantes();
     var resfallecidos =
         await ProviderServicios().getBuscarPersonasFallecidas(dni);
 
@@ -427,17 +426,10 @@ class ProviderDatos {
       var login = await DatabasePr.db.loginUser();
       String macAddress = await GetMac.macAddress;
       DateTime now = DateTime.now();
-      print(macAddress);
-      print(login[0].id.toString());
-      print(DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000');
-      print(dni);
-      print(idProgramacion);
-      print(abc[0].idTambo);
-      //DateTime now = DateTime.now();
       String formattedDate =
           DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000';
       var intentosRegistrosFallecidos = IntentosRegistrosFallecidos(
-          ipmaqReg: macAddress,
+          ipmaqReg: "::movil",
           idUsuarioReg: login[0].id.toString(),
           fechaReg: formattedDate,
           dni: dni,
@@ -489,47 +481,8 @@ class ProviderDatos {
         }
       }
     }
-/*    else if (responseReniec.statusCode != 200) {
-      http.Response response = await http.get(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/app/validarParticipantes/$dni'),
-      );
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        if (jsonResponse["total"] == 0) {
-          return null;
-        } else {
-          final listadostraba =
-              new Participantes.fromJson(jsonResponse["response"][0]);
-          return listadostraba;
-        }
-      } else if (response.statusCode == 400) {
-        return null;
-      }
-    }*/
 
-    return null;
   }
-
-  // await TraerToken().mostrarDatos();
-
-  /*http.Response response = await http.get(
-      Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/validarParticipantes/$dni'),
-    );
-    print(response);
-    if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-      if (jsonResponse["total"] == 0) {
-        return null;
-      } else {
-        final listadostraba =
-            new Participantes.fromJson(jsonResponse["response"][0]);
-        return listadostraba;
-      }
-    } else if (response.statusCode == 400) {
-      return null;
-    }*/
 
   Future<List<ListarCcpp>> getlistarCcpp(snip) async {
     DatabasePr.db.eliminarTodoListarCcpp();
@@ -566,9 +519,7 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listaProvinciaporSnp/${abc[0].snip}'),
     );
-    print(Uri.parse(AppConfig.urlBackndServicioSeguro +
-        '/api-pnpais/app/listaProvinciaporSnp/${abc[0].snip}'));
-    print(response.body);
+
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
@@ -608,11 +559,6 @@ class ProviderDatos {
 
   Future guardarFuncionario(Funcionarios funcionarios) async {}
 
-/*  var cnt =  await _checkInternetConnection();
-  print(cnt);
-  if(cnt==false){
-  return null;
-  }*/
   // ignore: non_constant_identifier_names
   Future<List<ListarEntidadFuncionario>> listarEntidadFuncionario(
       idProgramacion) async {
@@ -625,9 +571,6 @@ class ProviderDatos {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      print("ss");
-      print(jsonResponse);
-      print("ss");
       final listadostraba =
           new ListarEntidadFuncionarios.fromJsonList(jsonResponse["response"]);
 
@@ -657,9 +600,6 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/participanteEjecucion/$idProgramacion/$idEntidad'),
     );
-    print("participanteEjecucion");
-    print(response.body);
-    print("participanteEjecucion");
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
@@ -682,30 +622,12 @@ class ProviderDatos {
 
   Future createFile(
       Map<String, dynamic> content, Directory dir, String fileName) async {
-    print("Creating file!");
-    File file = new File(dir.path + "/" + fileName);
+     File file = new File(dir.path + "/" + fileName);
     file.createSync();
     fileExists = true;
     file.writeAsStringSync(json.encode(content));
 
-    print(file.path);
-    print("creado");
   }
-
-/*
-  Future<String> get _localPath async {
-
-
-    return ;
-  }
-*/
-/*  Future<File> get _localFile async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    final path = await directory.path;
-    print('path ${path}');
-    return File('$path/myJSONFile.json');
-  }*/
 
   Future<int> deleteFile(nane) async {
     final directory = await getApplicationDocumentsDirectory();

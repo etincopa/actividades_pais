@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
@@ -18,6 +19,7 @@ import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
+import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -842,6 +844,38 @@ class MainController extends GetxController {
       estado,
       fechaInicio,
       fechaFin,
+    );
+    return aResp;
+  }
+
+  Future<List<CombustibleTamboModel>> CombustibleTambo(
+    String? idUnidadTerritorial,
+    String? idTambo,
+    String? idTipoPlataforma,
+    String? iPagina,
+    String? iNumPagina,
+  ) async {
+    /**
+     * idTipoPlataforma:
+     * 0 = AMBOS (TAMBO Y OFICINA); 1 = SOLO TAMBO; 2 = SOLO OFICINA
+     */
+    List<CombustibleTamboModel> aResp =
+        await Get.find<MainService>().getCombustibleTambo(
+      idUnidadTerritorial,
+      idTambo,
+      idTipoPlataforma,
+      iPagina,
+      iNumPagina,
+    );
+    return aResp;
+  }
+
+  Future<List<AtenInterBeneResumenModel>> AtenInterBeneResumen(
+    String? numSnip,
+  ) async {
+    List<AtenInterBeneResumenModel> aResp =
+        await Get.find<MainService>().getAtenInterBeneResumen(
+      numSnip,
     );
     return aResp;
   }

@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DatosPlanMensual.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEquipos.dart';
 import 'package:actividades_pais/util/app-config.dart';
@@ -621,7 +622,6 @@ class Listas {
                           activeBgColor: [Colors.red],
                           changeOnTap: false,
                           fontSize: 7.5,
-
                           labels: ['INACTIVO', 'ACTIVO'],
 
                           //     icons: Icon(Icons.abc),
@@ -801,4 +801,197 @@ class Listas {
       ),
     );
   }
+
+  Card cardAprobacionPlanTrabajo(DatosPlanMensual band, callback) {
+    return Card(
+      color: AppConfig.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: EdgeInsets.all(20),
+      elevation: 7,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 25,
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.fromLTRB(25, 5, 25, 15),
+            title: Row(
+              children: [
+                SizedBox(
+                  width: 60.0,
+                  height: 60.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        width: 40,
+                        'assets/icons/icon_account_balance.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 2.5,
+                ),
+                Container(
+                  width: 120,
+                  child: Text(
+                      '${band.plataformaDescripcion}\n'
+                      '${band.idProgramacion}\n'
+                      '${band.tipoPlan}\n',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                ),
+                Container(
+                  width: 120,
+                  child: Text(
+                      '${band.codigoPlan}\n'
+                      '${band.nombreSector}\n'
+                      '${DateFormat('dd/MM/yy').format(DateTime.parse(band.fecha.toString()))}\n',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            subtitle: Column(
+              children: [
+                SizedBox(height: 5),
+                Divider(
+                  color: Colors.white,
+                  //color of divider
+                  height: 5,
+                  //height spacing of divider
+                  thickness: 3,
+                  //thickness of divier line
+                  indent: 0,
+                  //spacing at the start of divider
+                  endIndent: 0, //spacing at the end of divider
+                ),
+                SizedBox(height: 10),
+                Text('${band.nombrePrograma}',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                SizedBox(height: 10),
+                Text(
+                    textAlign: TextAlign.justify,
+                    '${band.descripcionIntervencion}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    )),
+                SizedBox(height: 10),
+                InkWell(
+                  onTap: callback,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+/*              <mat-icon style="color: rgb(218, 58, 19);" *ngIf="dataintervencion.id_evaluacion == 0" >radio_button_checked</mat-icon>
+                                <mat-icon style="color: rgb(118, 233, 64);" *ngIf="dataintervencion.id_evaluacion == '1'"> radio_button_checked</mat-icon>
+                                <mat-icon style="color: rgb(0, 0, 0);" *ngIf="dataintervencion.id_evaluacion == '2'"> radio_button_checked</mat-icon>
+                                <mat-icon style="color: rgb(128, 87, 206);" *ngIf="dataintervencion.id_evaluacion == '3'"> radio_button_checked</mat-icon>*/
+                      if (band.idEvaluacion == "0") ...[
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.radio_button_checked_outlined,
+                                  color: Colors.red),
+                              Text(" PROGRAMADO")
+                            ],
+                          ),
+                        ),
+                      ] else if (band.idEvaluacion == "1") ...[
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.radio_button_checked_outlined,
+                                  color: Colors.green),
+                              Text(" APROBADO")
+                            ],
+                          ),
+                        ),
+                      ] else if (band.idEvaluacion == "2") ...[
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.radio_button_checked_outlined,
+                                  color: Colors.black),
+                              Text(" OBSERVADO")
+                            ],
+                          ),
+                        ),
+                      ] else if (band.idEvaluacion == "3") ...[
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.radio_button_checked_outlined,
+                                  color: Colors.deepPurpleAccent),
+                              Text(" SUBSANADO")
+                            ],
+                          ),
+                        ),
+                      ],
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: Icon(Icons.fact_check_outlined,
+                            color: Colors.black),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+/*
+
+  Card cardAprobacionPlanTrabajo(DatosPlanMensual band, callback, BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final Orientation orientation = MediaQuery.of(context).orientation;
+
+    bool light0 = true;
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: EdgeInsets.all(10),
+      elevation: 10,
+      child: Column(
+        children: [
+          Container(
+              margin: EdgeInsets.all(5),child: Row(
+
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [Text("data")],
+              ),
+              Column(
+                children: [Text("data")],
+              ),
+              Column(
+                children: [Text("data")],
+              )
+            ],
+          ),),
+          Row(
+            children: [
+              Container(
+                margin: EdgeInsets.all(20),
+                width: size.width*0.82,
+                child: Text("${band.descripcionIntervencion}",textAlign: TextAlign.justify),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  */
 }

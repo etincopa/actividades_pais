@@ -1,4 +1,5 @@
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
@@ -17,6 +18,7 @@ import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
+import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
@@ -952,6 +954,32 @@ class MainService {
       fechaInicio,
       fechaFin,
     );
+    return aResp;
+  }
+
+  Future<List<CombustibleTamboModel>> getCombustibleTambo(
+    String? idUnidadTerritorial,
+    String? idTambo,
+    String? idTipoPlataforma,
+    String? iPagina,
+    String? iNumPagina,
+  ) async {
+    List<CombustibleTamboModel> aResp =
+        await Get.find<MainRepo>().getCombustibleTambo(
+      idUnidadTerritorial,
+      idTambo,
+      idTipoPlataforma,
+      iPagina,
+      iNumPagina,
+    );
+    return aResp;
+  }
+
+  Future<List<AtenInterBeneResumenModel>> getAtenInterBeneResumen(
+    String? numSnip,
+  ) async {
+    List<AtenInterBeneResumenModel> aResp =
+        await Get.find<MainRepo>().getAtenInterBeneResumen(numSnip);
     return aResp;
   }
 

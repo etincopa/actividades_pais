@@ -21,6 +21,7 @@ class _HistorialTambosState extends State<HistorialTambos> {
     List listPages = [
       intervencionesHistoria(),
       Container(),
+      Container(),
     ];
     return Scaffold(
       appBar: PreferredSize(
