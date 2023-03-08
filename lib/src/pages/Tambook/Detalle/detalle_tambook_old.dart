@@ -45,19 +45,7 @@ class DetalleTambook extends StatefulWidget {
 class _DetalleTambookState extends State<DetalleTambook>
     with TickerProviderStateMixin<DetalleTambook> {
   late TabController _tabController;
-  late TabController _tabControllerTitle;
-  final List<String> titleList = [
-    "INFORMACIÓN DEL TAMBO",
-    "INFORMACIÓN DEL PERSONAL",
-    "METAS",
-    "INTERNET",
-    "EQUIPOS INFORMÁTICOS",
-    "COMBUSTIBLE",
-    "ACTIVIDADES",
-    "CLIMA",
-    "INTERVENCIONES"
-  ];
-  String currentTitle = '';
+
   int _selectedTab = 0;
 
   ScrollController scrollCtr = ScrollController();
@@ -135,10 +123,6 @@ class _DetalleTambookState extends State<DetalleTambook>
       }
     });
 
-    currentTitle = titleList[0];
-    _tabControllerTitle = TabController(length: 9, vsync: this);
-    _tabControllerTitle.addListener(changeTitle);
-
     super.initState();
     /**
      * OBTENER DETALLE GENERAL DE TMBO
@@ -147,14 +131,6 @@ class _DetalleTambookState extends State<DetalleTambook>
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
     //incidenciasInternet();
-  }
-
-  // This function is called, every time active tab is changed
-  void changeTitle() {
-    setState(() {
-      // get index of active tab & change current appbar title
-      currentTitle = titleList[_tabControllerTitle.index];
-    });
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -425,7 +401,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 9,
+              length: 8,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -445,9 +421,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                             children: [
                               Container(
                                 padding: const EdgeInsets.only(top: 10),
-                                child: Center(
+                                child: const Center(
                                   child: Text(
-                                    currentTitle,
+                                    'Operativo',
                                     textAlign: TextAlign.left,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w600,
@@ -469,34 +445,15 @@ class _DetalleTambookState extends State<DetalleTambook>
                         maxHeight: 80,
                         child: Container(
                           color: const Color.fromARGB(255, 230, 234, 236),
-                          child: TabBar(
+                          child: const TabBar(
                             labelColor: Colors.black,
                             unselectedLabelColor: Colors.black38,
                             indicatorColor: Colors.black,
                             isScrollable: true,
-                            indicator: const BoxDecoration(
+                            indicator: BoxDecoration(
                               color: Colors.white70,
                             ),
-                            controller: _tabControllerTitle,
                             tabs: [
-                              Tooltip(
-                                waitDuration: Duration(seconds: 1),
-                                showDuration: Duration(seconds: 2),
-                                padding: EdgeInsets.all(5),
-                                height: 35,
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                                triggerMode: TooltipTriggerMode.longPress,
-                                message: 'Información del tambo',
-                                child: Tab(
-                                  icon: ImageIcon(
-                                    AssetImage('assets/icono_tambo.png'),
-                                    size: 55,
-                                  ),
-                                ),
-                              ),
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -536,7 +493,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                               Tab(
                                 icon: ImageIcon(
-                                  AssetImage('assets/wifi.png'),
+                                  AssetImage('assets/internet.png'),
                                   size: 55,
                                 ),
                               ),
@@ -580,22 +537,35 @@ class _DetalleTambookState extends State<DetalleTambook>
                 },
                 body: TabBarView(
                   physics: const BouncingScrollPhysics(),
-                  controller: _tabControllerTitle,
                   children: [
-                    //const TabScreen("TAMBO"),
+                    //TabScreen("GESTOR"),
                     ListView(
                       children: [
+                        const SizedBox(height: 10),
+                        /*
+                          * NUESTRO GESTOR
+                          */
+                        cardNuestroGestor(),
+                        const SizedBox(height: 10),
+                        cardVigilante(),
+                        const SizedBox(height: 10),
+                        cardHistorialGestores(),
+                        const SizedBox(height: 10),
+                        /*
+                          * DATOS GENERALES
+                          */
+                        cardDatosGenerales(),
+                        const SizedBox(height: 10),
+                        /*
+                          * NUESTRO JEFE DE UNIDAD TERRITORIAL
+                          */
+                        cardNuestroJefeUnidad(),
                         const SizedBox(height: 10),
 
                         /*
                           * DATOS DE UBICACIÓN
                           */
                         cardDatosUbicacion(),
-                        const SizedBox(height: 10),
-                        /*
-                          * DATOS GENERALES
-                          */
-                        cardDatosGenerales(),
                         const SizedBox(height: 10),
 
                         /*
@@ -616,28 +586,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         cardAmbitoAccion(),
                         const SizedBox(height: 10),
                         cardServicios(),
-                        const SizedBox(height: 50),
-                      ],
-                    ),
-
-                    //TabScreen("PERSONAL"),
-                    ListView(
-                      children: [
-                        const SizedBox(height: 10),
-                        /*
-                          * NUESTRO GESTOR
-                          */
-                        cardNuestroGestor(),
-                        const SizedBox(height: 10),
-                        cardVigilante(),
-                        const SizedBox(height: 10),
-                        cardHistorialGestores(),
-                        const SizedBox(height: 10),
-
-                        /*
-                          * NUESTRO JEFE DE UNIDAD TERRITORIAL
-                          */
-                        cardNuestroJefeUnidad(),
                         const SizedBox(height: 50),
                       ],
                     ),
@@ -1174,7 +1122,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
-              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -1313,7 +1260,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
-              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -1393,7 +1339,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
-              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -1460,7 +1405,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
-              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -1525,7 +1469,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
-              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -1587,7 +1530,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
-              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 title: Text(
@@ -2463,7 +2405,14 @@ class _DetalleTambookState extends State<DetalleTambook>
       child: Column(
         children: <Widget>[
           const SizedBox(
-            height: 10,
+            height: 25,
+          ),
+          const Divider(
+            color: color_10o15,
+            height: 5,
+            thickness: 3,
+            indent: 0,
+            endIndent: 0,
           ),
           ListTile(
             contentPadding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
@@ -2492,13 +2441,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-                const Divider(
-                  color: color_10o15,
-                  height: 5,
-                  thickness: 3,
-                  indent: 0,
-                  endIndent: 0,
                 ),
               ],
             ),

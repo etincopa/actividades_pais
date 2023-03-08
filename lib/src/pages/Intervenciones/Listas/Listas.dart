@@ -671,28 +671,17 @@ class Listas {
   Card cardHistrialTambosInter(
       TamboServicioIntervencionesGeneral band, callback) {
     return Card(
-      color: AppConfig.primaryColor,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       margin: EdgeInsets.all(20),
       elevation: 7,
       child: Column(
         children: <Widget>[
           SizedBox(
-            height: 25,
-          ),
-          Divider(
-            color: Colors.white,
-            //color of divider
-            height: 5,
-            //height spacing of divider
-            thickness: 3,
-            //thickness of divier line
-            indent: 0,
-            //spacing at the start of divider
-            endIndent: 0, //spacing at the end of divider
+            height: 10,
           ),
           ListTile(
-            contentPadding: EdgeInsets.fromLTRB(25, 5, 25, 15),
+            contentPadding: EdgeInsets.fromLTRB(25, 5, 25, 10),
             title: Row(
               children: [
                 SizedBox(
@@ -717,6 +706,17 @@ class Listas {
                   child: Text('${band.tambo}\n${band.idProgramacion}',
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                ),
+                Divider(
+                  color: Colors.blueAccent,
+                  //color of divider
+                  height: 5,
+                  //height spacing of divider
+                  thickness: 3,
+                  //thickness of divier line
+                  indent: 0,
+                  //spacing at the start of divider
+                  endIndent: 0, //spacing at the end of divider
                 ),
               ],
             ),

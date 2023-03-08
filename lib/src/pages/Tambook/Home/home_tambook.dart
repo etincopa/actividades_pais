@@ -6,12 +6,12 @@ import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/home_options.dart';
+import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeTambook extends StatefulWidget {
@@ -29,6 +29,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   bool isLoading = true;
   bool isLoading2 = false;
+  bool isLoadingEI = true;
 
   late String numTambos = "";
 
@@ -39,6 +40,9 @@ class _HomeTambookState extends State<HomeTambook>
 
   String sCurrentYear = DateTime.now().year.toString();
 
+  List<HomeOptions> aEquipoInformatico = [];
+  List<HomeOptions> aPersonalTambo = [];
+  List<HomeOptions> aPlataforma = [];
   List<ChartData> chartData = [
     ChartData('PRESTA SERVICIO', 0, colorI),
     ChartData('NO PRESTA SERVICIO', 0, colorS),
@@ -64,11 +68,185 @@ class _HomeTambookState extends State<HomeTambook>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
     super.initState();
+    buildPlataforma();
+    buildEquipoInformatico();
+    buildPersonalTambo();
+
     buildData();
     setState(() {});
     tambosParaMapa();
     getMetasGeneral();
     getAtenInterBeneResumen();
+  }
+
+  Future<void> buildPlataforma() async {
+    String icon1 = 'assets/icons/tambo_circle.png';
+    String icon2 = 'assets/icons/pias_circle.png';
+
+    /**
+     * TAMBOS
+     */
+    List<HomeOptions> aSubOptionTambo = [
+      const HomeOptions(
+        name: '2',
+        name2: 'Recepcionado',
+        name3: 'assets/icons/casa.png',
+      ),
+      const HomeOptions(
+        name: '11',
+        name2: 'En construcción',
+        name3: 'assets/icons/arquitecto.png',
+      ),
+    ];
+    aPlataforma.add(
+      HomeOptions(
+        code: 'OPT4001',
+        name: '',
+        name2: 'TAMBOS',
+        name3: '488 Prestando Servicio',
+        asubOption: aSubOptionTambo,
+        image: icon1,
+        color: Colors.white,
+      ),
+    );
+
+    /**
+     * PIAS
+     */
+    List<HomeOptions> aSubOptionPias = [
+      const HomeOptions(
+        name: '13',
+        name2: 'PIAS operando',
+        name3: 'assets/icons/embarcacion.png',
+      ),
+      const HomeOptions(
+        name: '2',
+        name2: 'En construcción',
+        name3: 'assets/icons/arquitecto.png',
+      ),
+    ];
+    aPlataforma.add(
+      HomeOptions(
+        code: 'OPT4002',
+        name: '',
+        name2: 'PIAS',
+        name3: '13 Prestando Servicio',
+        asubOption: aSubOptionPias,
+        image: icon2,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Future<void> buildPersonalTambo() async {
+    String icon1 = 'assets/icons/persona1.png';
+    String icon2 = 'assets/icons/persona2.png';
+    String icon3 = 'assets/icons/persona3.png';
+    String icon4 = 'assets/icons/persona2.png';
+
+    aPersonalTambo.add(
+      HomeOptions(
+        code: 'OPT3001',
+        name: 'JEFES DE UNIDADES TERRITORIALES',
+        name2: '17',
+        types: const ['Ver'],
+        image: icon1,
+        color: Colors.white,
+      ),
+    );
+    aPersonalTambo.add(
+      HomeOptions(
+        code: 'OPT3002',
+        name: 'MONITORES',
+        name2: '28',
+        types: const ['Ver'],
+        image: icon2,
+        color: Colors.white,
+      ),
+    );
+    aPersonalTambo.add(
+      HomeOptions(
+        code: 'OPT3003',
+        name: 'GESTORES \nTAMBOS -PIAS',
+        name2: '487',
+        types: const ['Ver'],
+        image: icon3,
+        color: Colors.white,
+      ),
+    );
+    aPersonalTambo.add(
+      HomeOptions(
+          code: 'OPT3004',
+          name: 'GUARDIANES \nTAMBOS - PIAS',
+          name2: '487',
+          types: const ['Ver'],
+          image: icon4,
+          color: Colors.white),
+    );
+  }
+
+  Future<void> buildEquipoInformatico() async {
+    String icon1 = 'assets/icons/computadora.png';
+    String icon2 = 'assets/icons/laptop.png';
+    String icon3 = 'assets/icons/proyector.png';
+    String icon4 = 'assets/icons/wifi.png';
+    String icon5 = 'assets/icons/impresora.png';
+    String icon6 = 'assets/icons/parlante.png';
+
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2001',
+        name: 'PC \n(224)',
+        types: const ['Ver'],
+        image: icon1,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2002',
+        name: 'LAPTOP \n(1047)',
+        types: const ['Ver'],
+        image: icon2,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2003',
+        name: 'PROYECTOR \n(224)',
+        types: const ['Ver'],
+        image: icon3,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2004',
+        name: 'ANTENA WIFI \n(1047)',
+        types: const ['Ver'],
+        image: icon4,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2005',
+        name: 'IMPRESORAS \n(224)',
+        types: const ['Ver'],
+        image: icon5,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2006',
+        name: 'PARLANTES \n(1047)',
+        types: const ['Ver'],
+        image: icon6,
+        color: Colors.white,
+      ),
+    );
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -158,64 +336,649 @@ class _HomeTambookState extends State<HomeTambook>
 
   @override
   Widget build(BuildContext context) {
+    final Responsive responsive = Responsive.of(context);
+    double wp = responsive.wp(14);
+    double hp65 = responsive.hp(27);
+
     /*return Scaffold(
       backgroundColor: color_10o15,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: getBody(),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            cardHeader(),
+            const SizedBox(height: 15),
+            cardAtenciones(),
+            cardBeneficiarios(),
+            avanceMetas(),
+            avanceMetasUsuarios(),
+            cardPlataforma(),
+            cardPersonalTambo(),
+            cardEquipamientoTecnologico(),
+          ],
+        ),
       ),
     );*/
 
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
-        appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.flight)),
-              Tab(icon: Icon(Icons.directions_transit)),
-              Tab(icon: Icon(Icons.directions_car)),
-            ],
+          backgroundColor: color_10o15,
+          body: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                    expandedHeight: 180.0,
+                    automaticallyImplyLeading: false,
+                    pinned: false,
+                    floating: false,
+                    snap: false,
+                    //actionsIconTheme: IconThemeData(opacity: 0.0),
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Stack(
+                        children: <Widget>[
+                          CarouselSlider(
+                            items: [
+                              SizedBox(
+                                width: double.maxFinite,
+                                height: 180.0,
+                                child: Image.asset(
+                                  'assets/banner.jpg',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.maxFinite,
+                                height: 180.0,
+                                child: Image.asset(
+                                  'assets/fondo2.jpg',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.maxFinite,
+                                height: 180.0,
+                                child: Image.asset(
+                                  'assets/fondo3.jpg',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ],
+                            options: CarouselOptions(
+                              height: 190.0,
+                              enlargeCenterPage: true,
+                              autoPlay: true,
+                              aspectRatio: 2.0,
+                              autoPlayCurve: Curves.linear,
+                              enableInfiniteScroll: true,
+                              autoPlayAnimationDuration:
+                                  const Duration(milliseconds: 800),
+                              viewportFraction: 1.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                SliverPadding(
+                  padding: const EdgeInsets.all(1.0),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      ColoredBox(
+                        color: Colors.white70,
+                        child: TabBar(
+                          labelColor: Colors.black87,
+                          unselectedLabelColor: Colors.grey,
+                          padding: const EdgeInsets.all(5.0),
+                          tabs: [
+                            const Tab(
+                              icon: ImageIcon(
+                                AssetImage('assets/logros.png'),
+                                size: 60,
+                              ),
+                            ),
+                            Tab(
+                              icon: ImageIcon(
+                                AssetImage('assets/PLATAFORMAS.png'),
+                                size: 60,
+                              ),
+                            ),
+                            const Tab(
+                              icon: ImageIcon(
+                                AssetImage('assets/personal.png'),
+                                size: 60,
+                              ),
+                            ),
+                            const Tab(
+                              icon: ImageIcon(
+                                AssetImage('assets/equipos.png'),
+                                size: 60,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: <Widget>[
+                SingleChildScrollView(
+                    child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 15),
+                    cardAtenciones(),
+                    cardBeneficiarios(),
+                    avanceMetas(),
+                    avanceMetasUsuarios(),
+                  ],
+                )),
+                SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    const SizedBox(height: 15),
+                    cardPlataforma(),
+                  ],
+                )),
+                SingleChildScrollView(
+                    child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 15),
+                    cardPersonalTambo(),
+                  ],
+                )),
+                SingleChildScrollView(
+                    child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 15),
+                    cardEquipamientoTecnologico(),
+                  ],
+                )),
+              ],
+            ),
+          )),
+    );
+  }
+
+  Container cardPlataforma() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(1, 1, 1, 1),
+      alignment: Alignment.centerLeft,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          isLoadingEI ? plataforma() : const CircularProgressIndicator(),
+        ],
+      ),
+    );
+  }
+
+  Widget plataforma() {
+    return Flexible(
+      child: SizedBox(
+        height: 400.0,
+        child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            childAspectRatio: 1.5,
+            crossAxisSpacing: 30,
+            mainAxisSpacing: 30,
           ),
-          title: Text('Tabs Demo'),
-        ),
-        body: TabBarView(
-          children: [
-            Icon(Icons.flight, size: 350),
-            Icon(Icons.directions_transit, size: 350),
-            Icon(Icons.directions_car, size: 350),
-          ],
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            bottom: 58,
+          ),
+          itemCount: aPlataforma.length,
+          itemBuilder: (context, index) {
+            HomeOptions homeOption = aPlataforma[index];
+            return InkWell(
+              splashColor: Colors.white,
+              highlightColor: Colors.white,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/icons/botones 1-02.png"),
+                    fit: BoxFit.cover,
+                  ),
+                  color: homeOption.color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 241, 240, 240)
+                          .withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Hero(
+                              tag: homeOption.image!,
+                              child: Image.asset(
+                                homeOption.image!,
+                                fit: BoxFit.contain,
+                                width: 60,
+                                height: 60,
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: homeOption.name2!,
+                                    style: const TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: '${homeOption.name!}',
+                                        style: const TextStyle(
+                                          fontSize: 19,
+                                          height: 1.5,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(1),
+                                  child: Center(
+                                    child: Text(
+                                      ' ${homeOption.name3!}',
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 11.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(),
+                          ],
+                        ),
+                      ),
+                      for (var oSubOption in homeOption.asubOption!)
+                        Container(
+                          padding: const EdgeInsets.all(1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              oSubOption.name3 != ''
+                                  ? Container(
+                                      padding: const EdgeInsets.only(
+                                        top: 2,
+                                        bottom: 2,
+                                      ),
+                                      child: Hero(
+                                        tag: oSubOption.name3!,
+                                        child: Image.asset(
+                                          oSubOption.name3!,
+                                          fit: BoxFit.contain,
+                                          width: 40,
+                                          height: 40,
+                                          alignment: Alignment.center,
+                                        ),
+                                      ),
+                                    )
+                                  : const Text("       "),
+                              Text(
+                                oSubOption.name2!,
+                                style: const TextStyle(fontSize: 20.0),
+                              ),
+                              Text(
+                                oSubOption.name!,
+                                style: const TextStyle(fontSize: 20.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              onTap: () async {
+                //  var oHomeOptionSelect = aHomeOptions[index];
+              },
+            );
+          },
         ),
       ),
     );
   }
 
-  getBody() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          cardHeader(),
-          const SizedBox(height: 20),
-          if (aAtencionResumen.isNotEmpty)
-            AtencionesListView(
-              categoryList: aAtencionResumen,
+  Column cardPersonalTambo() {
+    //var heading = 'PERSONAL TAMBOS';
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        isLoadingEI ? personalTambo() : const CircularProgressIndicator(),
+      ],
+    );
+
+    /*return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: colorI,
             ),
-          //tambosOperativos(),
-          cardAtenciones(),
-          cardBeneficiarios(),
-          avanceMetas(),
-          avanceMetasUsuarios(),
-          //cardEstadoTambo(),
-          cardTambos(),
-          cardPersonal(),
-          //cardEquipamiento(),
-          cardEquipoTecnologico(),
-          const SizedBox(height: 40),
-        ],
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 5), // changes position of shadow
+              ),
+            ],
+          ),
+          child: ExpansionTile(
+            initiallyExpanded: true,
+            title: ListTile(
+              visualDensity: const VisualDensity(vertical: -4),
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: color_01,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            children: <Widget>[
+              const Divider(color: colorI),
+              Container(
+                padding: const EdgeInsets.fromLTRB(1, 1, 1, 1),
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    isLoadingEI
+                        ? personalTambo()
+                        : const CircularProgressIndicator(),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );*/
+  }
+
+  Widget personalTambo() {
+    return Flexible(
+      child: SizedBox(
+        height: 400.0,
+        child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+            crossAxisSpacing: 30,
+            mainAxisSpacing: 30,
+          ),
+          padding: const EdgeInsets.only(
+            left: 28,
+            right: 28,
+            bottom: 58,
+          ),
+          itemCount: aPersonalTambo.length,
+          itemBuilder: (context, index) {
+            HomeOptions homeOption = aPersonalTambo[index];
+            return InkWell(
+              splashColor: Colors.white10,
+              highlightColor: Colors.white10,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/icons/botones 1-02.png"),
+                    fit: BoxFit.cover,
+                  ),
+                  color: homeOption.color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 241, 240, 240)
+                          .withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 2,
+                        ),
+                        child: Hero(
+                          tag: homeOption.image!,
+                          child: Image.asset(
+                            homeOption.image!,
+                            fit: BoxFit.contain,
+                            width: 100,
+                            height: 100,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        child: Center(
+                          child: Text(
+                            homeOption.name2!,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 30.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        child: Center(
+                          child: Text(
+                            homeOption.name!,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 11.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              onTap: () async {
+                //  var oHomeOptionSelect = aHomeOptions[index];
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Column cardEquipamientoTecnologico() {
+    //var heading = 'EQUIPAMIENTO TECNOLÓGICO';
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        isLoadingEI ? equipoInformatico() : const CircularProgressIndicator(),
+      ],
+    );
+
+    /*return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: colorI,
+            ),
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 5), // changes position of shadow
+              ),
+            ],
+          ),
+          child: ExpansionTile(
+            initiallyExpanded: true,
+            title: ListTile(
+              visualDensity: const VisualDensity(vertical: -4),
+              title: Text(
+                heading,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: color_01,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            children: <Widget>[
+              const Divider(color: colorI),
+              Container(
+                padding: const EdgeInsets.fromLTRB(1, 1, 1, 1),
+                alignment: Alignment.centerLeft,
+                child: 
+              )
+            ],
+          ),
+        ),
+      ),
+    );*/
+  }
+
+  Widget equipoInformatico() {
+    return Flexible(
+      child: SizedBox(
+        height: 400.0,
+        child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.1,
+            crossAxisSpacing: 30,
+            mainAxisSpacing: 30,
+          ),
+          padding: const EdgeInsets.only(
+            left: 28,
+            right: 28,
+            bottom: 58,
+          ),
+          itemCount: aEquipoInformatico.length,
+          itemBuilder: (context, index) {
+            HomeOptions homeOption = aEquipoInformatico[index];
+            return InkWell(
+              splashColor: Colors.white10,
+              highlightColor: Colors.white10,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/icons/botones 1-02.png"),
+                    fit: BoxFit.cover,
+                  ),
+                  color: homeOption.color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 241, 240, 240)
+                          .withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 5),
+                      Container(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          bottom: 8,
+                        ),
+                        child: Hero(
+                          tag: homeOption.image!,
+                          child: Image.asset(
+                            homeOption.image!,
+                            fit: BoxFit.contain,
+                            width: 80,
+                            height: 70,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        child: Center(
+                          child: Text(
+                            homeOption.name!,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 11.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              onTap: () async {
+                //  var oHomeOptionSelect = aHomeOptions[index];
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -366,6 +1129,10 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -409,8 +1176,8 @@ class _HomeTambookState extends State<HomeTambook>
                             maxValue: 100,
                             valueNotifier: valueNotifier,
                             backColor: Colors.black.withOpacity(0.4),
-                            progressStrokeWidth: 20,
-                            backStrokeWidth: 20,
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 10,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
@@ -431,7 +1198,8 @@ class _HomeTambookState extends State<HomeTambook>
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
+                      color:
+                          Color.fromARGB(255, 197, 194, 194).withOpacity(0.2),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Column(
@@ -490,10 +1258,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text('Fuente: POI aprobado 2023')
+            const Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -518,6 +1286,10 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -561,8 +1333,8 @@ class _HomeTambookState extends State<HomeTambook>
                             maxValue: 100,
                             valueNotifier: valueNotifier,
                             backColor: Colors.black.withOpacity(0.4),
-                            progressStrokeWidth: 20,
-                            backStrokeWidth: 20,
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 10,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
@@ -583,7 +1355,8 @@ class _HomeTambookState extends State<HomeTambook>
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
+                      color:
+                          Color.fromARGB(255, 197, 194, 194).withOpacity(0.2),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Column(
@@ -642,10 +1415,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text('Fuente: POI aprobado 2023')
+            const Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -751,6 +1524,10 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -830,6 +1607,10 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
           border: Border.all(
             width: 1,
             color: colorI,

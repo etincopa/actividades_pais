@@ -5,6 +5,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:actividades_pais/util/Constants.dart';
 
 class intervencionesHistoria extends StatefulWidget {
   const intervencionesHistoria({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
     // await Future.delayed(const Duration(seconds: 1));
     //  pageIndexQ = pageIndex;
     await ProviderTambok()
-        .listaTamboServicioIntervencionesGeneral(pag: 1,sizePag: pageSize);
+        .listaTamboServicioIntervencionesGeneral(pag: 1, sizePag: pageSize);
     setState(() {});
   }
 
@@ -60,9 +61,10 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
   Widget build(BuildContext context) {
     Listas listas = Listas();
     return Scaffold(
+      backgroundColor: color_10o15,
       body: FutureBuilder<List<TamboServicioIntervencionesGeneral>>(
-        future: ProviderTambok()
-            .listaTamboServicioIntervencionesGeneral(pag: 1,sizePag: pageSizeQ),
+        future: ProviderTambok().listaTamboServicioIntervencionesGeneral(
+            pag: 1, sizePag: pageSizeQ),
         builder: (BuildContext context,
             AsyncSnapshot<List<TamboServicioIntervencionesGeneral>> snapshot) {
           if (snapshot.hasData) {
@@ -90,17 +92,17 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                               itemCount: listaPersonalAux.length,
                               itemBuilder: (context, i) =>
                                   listas.cardHistrialTambosInter(
-                                    listaPersonalAux[i],
-                                        () async {
-                                      await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FichaIntervencion(
-                                                      listaPersonalAux[i]
-                                                          .idProgramacion!)));
-                                    },
-                                  ),
+                                listaPersonalAux[i],
+                                () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FichaIntervencion(
+                                                  listaPersonalAux[i]
+                                                      .idProgramacion!)));
+                                },
+                              ),
                             ))),
                     if (isLoading == true)
                       new Center(
@@ -157,8 +159,8 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
     // await ProviderTambok().listaTamboServicioIntervencionesGeneral(1, 10);
     pageIndexQ = 1;
     pageSizeQ = 2;
-    await ProviderTambok()
-        .listaTamboServicioIntervencionesGeneral(pag: pageIndexQ,sizePag: pageSizeQ);
+    await ProviderTambok().listaTamboServicioIntervencionesGeneral(
+        pag: pageIndexQ, sizePag: pageSizeQ);
 
     setState(() {});
     /*   seleccionarMarca = "Seleccionar Marca";
