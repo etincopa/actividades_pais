@@ -27,10 +27,10 @@ class TiteCard extends StatelessWidget {
   final HomeOptions homeOption;
 
   List<Widget> _buildTypes() {
-    final widgetTypes = homeOption.types
+    final widgetTypes = homeOption.types!
         .map(
           (type) => Hero(
-            tag: homeOption.name + type,
+            tag: homeOption.name! + type,
             child: CardType(
               capitalizeFirstChar(type),
             ),
@@ -122,7 +122,7 @@ class TiteCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
-                color: homeOption.color.withOpacity(0.12),
+                color: homeOption.color!.withOpacity(0.12),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
