@@ -108,7 +108,7 @@ class _HomePagePais extends State<HomePagePais> {
     if (res.isNotEmpty) {
       List<String> aUnidadTemp = [];
       for (var u in res) {
-          aUnidadTemp.add(u.unidad);
+        aUnidadTemp.add(u.unidad);
       }
       setState(() {
         aUnidad = aUnidadTemp;
@@ -215,16 +215,16 @@ class _HomePagePais extends State<HomePagePais> {
           break;
 
         case "mnu.administrativos":
-         // if (aUnidad.contains("UPS")) {
-            aHomeOptions.add(
-              HomeOptions(
-                code: 'OPT1007',
-                name: 'SEGUIMIENTO Y MONITOREO',
-                types: const ['Ver'],
-                image: icon5,
-                color: const Color(0xFF78b8cd),
-              ),
-            );
+          // if (aUnidad.contains("UPS")) {
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1007',
+              name: 'SEGUIMIENTO Y MONITOREO',
+              types: const ['Ver'],
+              image: icon5,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
           //}
 
           break;
@@ -259,8 +259,7 @@ class _HomePagePais extends State<HomePagePais> {
       ),
     );
     if (dniPrueba == 47532262 || dniPrueba == 48400113) {
-
-     /* aHomeOptions.add(
+      /* aHomeOptions.add(
         HomeOptions(
           code: 'OPT1007',
           name: 'SEGUIMIENTO Y MONITOREO',
@@ -273,7 +272,7 @@ class _HomePagePais extends State<HomePagePais> {
 
     if (aUnidad.contains("UPS")) {
       if (token != null) {
-       /* aHomeOptions.add(
+        /* aHomeOptions.add(
           HomeOptions(
             code: 'OPT1007',
             name: 'SEGUIMIENTO Y MONITOREO',
@@ -421,9 +420,9 @@ class _HomePagePais extends State<HomePagePais> {
                                 bottom: 8,
                               ),
                               child: Hero(
-                                tag: homeOption.image,
+                                tag: homeOption.image!,
                                 child: Image.asset(
-                                  homeOption.image,
+                                  homeOption.image!,
                                   fit: BoxFit.contain,
                                   width: 40,
                                   height: 40,
@@ -435,7 +434,7 @@ class _HomePagePais extends State<HomePagePais> {
                               padding: const EdgeInsets.all(1),
                               child: Center(
                                 child: Text(
-                                  homeOption.name,
+                                  homeOption.name!,
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
                                     fontWeight: FontWeight.w700,

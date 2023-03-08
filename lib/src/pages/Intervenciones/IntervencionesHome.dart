@@ -119,9 +119,9 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                               bottom: 8,
                             ),
                             child: Hero(
-                              tag: homeOption.image,
+                              tag: homeOption.image!,
                               child: Image.asset(
-                                homeOption.image,
+                                homeOption.image!,
                                 fit: BoxFit.contain,
                                 width: 40,
                                 height: 40,
@@ -133,7 +133,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                             padding: const EdgeInsets.all(1),
                             child: Center(
                               child: Text(
-                                homeOption.name,
+                                homeOption.name!,
                                 style: const TextStyle(
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontWeight: FontWeight.w700,
@@ -155,7 +155,8 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Intervenciones(unidadTerritorial),
+                            builder: (context) =>
+                                Intervenciones(unidadTerritorial),
                           ),
                         );
                         break;
