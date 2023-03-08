@@ -2704,33 +2704,36 @@ class _DetalleTambookState extends State<DetalleTambook>
                           child: TextButton(
                             style: flatButtonStyle,
                             onPressed: () {},
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      width: 2,
+                            child: Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    margin: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                        width: 2,
+                                        color: color_01,
+                                      ),
+                                    ),
+                                    child: const Icon(
+                                        color: color_01,
+                                        Icons.desktop_mac_outlined,
+                                        size: 45),
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                  const Text(
+                                    'PC (10)',
+                                    style: TextStyle(
                                       color: color_01,
                                     ),
                                   ),
-                                  child: const Icon(
-                                      color: color_01,
-                                      Icons.desktop_mac_outlined,
-                                      size: 45),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                const Text(
-                                  'PC (10)',
-                                  style: TextStyle(
-                                    color: color_01,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
