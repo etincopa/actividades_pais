@@ -57,11 +57,11 @@ class TiteCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Hero(
-              tag: homeOption.name,
+              tag: homeOption.name!,
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  homeOption.name,
+                  homeOption.name!,
                   style: const TextStyle(
                     fontSize: 14,
                     height: 0.9,
@@ -85,9 +85,9 @@ class TiteCard extends StatelessWidget {
         bottom: 8,
         right: 12,
         child: Hero(
-          tag: homeOption.image,
+          tag: homeOption.image!,
           child: Image.asset(
-            homeOption.image,
+            homeOption.image!,
             fit: BoxFit.contain,
             width: itemHeight * 0.5,
             height: itemHeight * 0.5,

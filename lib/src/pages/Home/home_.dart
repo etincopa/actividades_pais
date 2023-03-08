@@ -193,7 +193,7 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );
- /* aHomeOptions.add(
+        /* aHomeOptions.add(
           HomeOptions(
             code: 'OPT1010',
             name: 'HISTORIAL TAMBOS'.tr,
@@ -277,7 +277,6 @@ class _HomePagePais extends State<HomePagePais> {
             color: const Color(0xFF78b8cd),
           ),
         );
-
       }
     }
 
@@ -431,9 +430,9 @@ class _HomePagePais extends State<HomePagePais> {
                                 bottom: 8,
                               ),
                               child: Hero(
-                                tag: homeOption.image,
+                                tag: homeOption.image!,
                                 child: Image.asset(
-                                  homeOption.image,
+                                  homeOption.image!,
                                   fit: BoxFit.contain,
                                   width: 40,
                                   height: 40,
@@ -445,7 +444,7 @@ class _HomePagePais extends State<HomePagePais> {
                               padding: const EdgeInsets.all(1),
                               child: Center(
                                 child: Text(
-                                  homeOption.name,
+                                  homeOption.name!,
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
                                     fontWeight: FontWeight.w700,
@@ -491,8 +490,7 @@ class _HomePagePais extends State<HomePagePais> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    IntervencionesHome(),
+                                builder: (context) => IntervencionesHome(),
                               ),
                             );
                             /* Navigator.push(
@@ -512,7 +510,7 @@ class _HomePagePais extends State<HomePagePais> {
                               ),
                             );
                             break;
-                           /* case 'OPT1010':
+                          /* case 'OPT1010':
                             Navigator.push(
                               context,
                               MaterialPageRoute(

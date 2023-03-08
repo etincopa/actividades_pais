@@ -6,12 +6,12 @@ import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
-import 'package:actividades_pais/util/home_options.dart';
-import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:actividades_pais/src/pages/Tambook/atenciones_list_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeTambook extends StatefulWidget {
@@ -29,7 +29,6 @@ class _HomeTambookState extends State<HomeTambook>
 
   bool isLoading = true;
   bool isLoading2 = false;
-  bool isLoadingEI = true;
 
   late String numTambos = "";
 
@@ -40,9 +39,6 @@ class _HomeTambookState extends State<HomeTambook>
 
   String sCurrentYear = DateTime.now().year.toString();
 
-  List<HomeOptions> aEquipoInformatico = [];
-  List<HomeOptions> aPersonalTambo = [];
-  List<HomeOptions> aPlataforma = [];
   List<ChartData> chartData = [
     ChartData('PRESTA SERVICIO', 0, colorI),
     ChartData('NO PRESTA SERVICIO', 0, colorS),
@@ -68,186 +64,11 @@ class _HomeTambookState extends State<HomeTambook>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
     super.initState();
-    buildPlataforma();
-    buildEquipoInformatico();
-    buildPersonalTambo();
-
     buildData();
     setState(() {});
     tambosParaMapa();
     getMetasGeneral();
     getAtenInterBeneResumen();
-  }
-
-  Future<void> buildPlataforma() async {
-    String icon1 = 'assets/icons/pias_circle.png';
-    String icon2 = 'assets/icons/tambo_circle.png';
-
-    /**
-     * TAMBOS
-     */
-    List<HomeOptions> aSubOptionTambo = [
-      const HomeOptions(
-        name: '11',
-        name2: 'en construcción',
-        name3: 'assets/icons/arquitecto.png',
-      ),
-      const HomeOptions(
-        name: '2',
-        name2: 'Recepcionado',
-        name3: 'assets/icons/casa.png',
-      ),
-    ];
-    aPlataforma.add(
-      HomeOptions(
-        code: 'OPT4001',
-        name: 'TAMBOS',
-        name2: '488',
-        name3: 'Prestando Servicio',
-        asubOption: aSubOptionTambo,
-        image: icon1,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-
-    /**
-     * PIAS
-     */
-    List<HomeOptions> aSubOptionPias = [
-      const HomeOptions(
-        name: '13',
-        name2: 'PIAS operando',
-        name3: '',
-      ),
-      const HomeOptions(
-        name: '2',
-        name2: 'en construcción',
-        name3: 'assets/icons/arquitecto.png',
-      ),
-    ];
-    aPlataforma.add(
-      HomeOptions(
-        code: 'OPT4002',
-        name: 'PIAS',
-        name2: '',
-        name3: '',
-        asubOption: aSubOptionPias,
-        image: icon2,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-  }
-
-  Future<void> buildPersonalTambo() async {
-    String icon1 = 'assets/icons/persona1.png';
-    String icon2 = 'assets/icons/persona2.png';
-    String icon3 = 'assets/icons/persona3.png';
-    String icon4 = 'assets/icons/persona2.png';
-
-    aPersonalTambo.add(
-      HomeOptions(
-        code: 'OPT3001',
-        name: 'JEFES DE UNIDADES TERRITORIALES',
-        name2: '17',
-        types: const ['Ver'],
-        image: icon1,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aPersonalTambo.add(
-      HomeOptions(
-        code: 'OPT3002',
-        name: 'MONITORES',
-        name2: '28',
-        types: const ['Ver'],
-        image: icon2,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aPersonalTambo.add(
-      HomeOptions(
-        code: 'OPT3003',
-        name: 'GESTORES \nTAMBOS -PIAS',
-        name2: '487',
-        types: const ['Ver'],
-        image: icon3,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aPersonalTambo.add(
-      HomeOptions(
-        code: 'OPT3004',
-        name: 'GUARDIANES \nTAMBOS - PIAS',
-        name2: '487',
-        types: const ['Ver'],
-        image: icon4,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-  }
-
-  Future<void> buildEquipoInformatico() async {
-    String icon1 = 'assets/icons/computadora.png';
-    String icon2 = 'assets/icons/laptop.png';
-    String icon3 = 'assets/icons/proyector.png';
-    String icon4 = 'assets/icons/wifi.png';
-    String icon5 = 'assets/icons/impresora.png';
-    String icon6 = 'assets/icons/parlante.png';
-
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2001',
-        name: 'PC \n(224)',
-        types: const ['Ver'],
-        image: icon1,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2002',
-        name: 'LAPTOP \n(1047)',
-        types: const ['Ver'],
-        image: icon2,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2003',
-        name: 'PROYECTOR \n(224)',
-        types: const ['Ver'],
-        image: icon3,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2004',
-        name: 'ANTENA WIFI \n(1047)',
-        types: const ['Ver'],
-        image: icon4,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2005',
-        name: 'IMPRESORAS \n(224)',
-        types: const ['Ver'],
-        image: icon5,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2006',
-        name: 'PARLANTES \n(1047)',
-        types: const ['Ver'],
-        image: icon6,
-        color: const Color(0xFFEAEBEC),
-      ),
-    );
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -337,542 +158,41 @@ class _HomeTambookState extends State<HomeTambook>
 
   @override
   Widget build(BuildContext context) {
-    final Responsive responsive = Responsive.of(context);
-    double wp = responsive.wp(14);
-    double hp65 = responsive.hp(27);
-
     return Scaffold(
       backgroundColor: color_10o15,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            cardHeader(),
-            const SizedBox(height: 15),
-            cardAtenciones(),
-            cardBeneficiarios(),
-            avanceMetas(),
-            avanceMetasUsuarios(),
-            cardPlataforma(),
-            cardPersonalTambo(),
-            cardEquipamientoTecnologico(),
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: getBody(),
+          ),
+        ],
       ),
     );
   }
 
-  Padding cardPlataforma() {
-    var heading = 'PLATAFORMA';
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: colorI,
+  getBody() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          cardHeader(),
+          const SizedBox(height: 20),
+          if (aAtencionResumen.isNotEmpty)
+            AtencionesListView(
+              categoryList: aAtencionResumen,
             ),
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 5), // changes position of shadow
-              ),
-            ],
-          ),
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            title: ListTile(
-              visualDensity: const VisualDensity(vertical: -4),
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: color_01,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: colorI),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    isLoadingEI
-                        ? plataforma()
-                        : const CircularProgressIndicator(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget plataforma() {
-    return Flexible(
-      child: SizedBox(
-        height: 400.0,
-        child: GridView.builder(
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            childAspectRatio: 1.5,
-            crossAxisSpacing: 30,
-            mainAxisSpacing: 30,
-          ),
-          padding: const EdgeInsets.only(
-            left: 28,
-            right: 28,
-            bottom: 58,
-          ),
-          itemCount: aPlataforma.length,
-          itemBuilder: (context, index) {
-            HomeOptions homeOption = aPlataforma[index];
-            return InkWell(
-              splashColor: Colors.white10,
-              highlightColor: Colors.white10,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/icons/botones 1-02.png"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: homeOption.color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 241, 240, 240)
-                          .withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Hero(
-                              tag: homeOption.image!,
-                              child: Image.asset(
-                                homeOption.image!,
-                                fit: BoxFit.contain,
-                                width: 60,
-                                height: 60,
-                                alignment: Alignment.center,
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    text: homeOption.name2!,
-                                    style: const TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: ' ${homeOption.name!}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          height: 1.5,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(1),
-                                  child: Center(
-                                    child: Text(
-                                      ' ${homeOption.name3!}',
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 11.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(),
-                          ],
-                        ),
-                      ),
-                      for (var oSubOption in homeOption.asubOption!)
-                        Container(
-                          padding: const EdgeInsets.all(1),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                oSubOption.name!,
-                                style: const TextStyle(fontSize: 20.0),
-                              ),
-                              Text(
-                                oSubOption.name2!,
-                                style: const TextStyle(fontSize: 20.0),
-                              ),
-                              oSubOption.name3 != ''
-                                  ? Container(
-                                      padding: const EdgeInsets.only(
-                                        top: 2,
-                                        bottom: 2,
-                                      ),
-                                      child: Hero(
-                                        tag: oSubOption.name3!,
-                                        child: Image.asset(
-                                          oSubOption.name3!,
-                                          fit: BoxFit.contain,
-                                          width: 20,
-                                          height: 20,
-                                          alignment: Alignment.center,
-                                        ),
-                                      ),
-                                    )
-                                  : const Text("       "),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-              onTap: () async {
-                //  var oHomeOptionSelect = aHomeOptions[index];
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Padding cardPersonalTambo() {
-    var heading = 'PERSONAL TAMBOS';
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: colorI,
-            ),
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 5), // changes position of shadow
-              ),
-            ],
-          ),
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            title: ListTile(
-              visualDensity: const VisualDensity(vertical: -4),
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: color_01,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: colorI),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    isLoadingEI
-                        ? personalTambo()
-                        : const CircularProgressIndicator(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget personalTambo() {
-    return Flexible(
-      child: SizedBox(
-        height: 400.0,
-        child: GridView.builder(
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.7,
-            crossAxisSpacing: 30,
-            mainAxisSpacing: 30,
-          ),
-          padding: const EdgeInsets.only(
-            left: 28,
-            right: 28,
-            bottom: 58,
-          ),
-          itemCount: aPersonalTambo.length,
-          itemBuilder: (context, index) {
-            HomeOptions homeOption = aPersonalTambo[index];
-            return InkWell(
-              splashColor: Colors.white10,
-              highlightColor: Colors.white10,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/icons/botones 1-02.png"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: homeOption.color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 241, 240, 240)
-                          .withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 2,
-                        ),
-                        child: Hero(
-                          tag: homeOption.image!,
-                          child: Image.asset(
-                            homeOption.image!,
-                            fit: BoxFit.contain,
-                            width: 100,
-                            height: 100,
-                            alignment: Alignment.center,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(1),
-                        child: Center(
-                          child: Text(
-                            homeOption.name2!,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 30.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(1),
-                        child: Center(
-                          child: Text(
-                            homeOption.name!,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 11.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              onTap: () async {
-                //  var oHomeOptionSelect = aHomeOptions[index];
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Padding cardEquipamientoTecnologico() {
-    var heading = 'EQUIPAMIENTO TECNOLÓGICO';
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: colorI,
-            ),
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 5), // changes position of shadow
-              ),
-            ],
-          ),
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            title: ListTile(
-              visualDensity: const VisualDensity(vertical: -4),
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: color_01,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: colorI),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    isLoadingEI
-                        ? equipoInformatico()
-                        : const CircularProgressIndicator(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget equipoInformatico() {
-    return Flexible(
-      child: SizedBox(
-        height: 400.0,
-        child: GridView.builder(
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.1,
-            crossAxisSpacing: 30,
-            mainAxisSpacing: 30,
-          ),
-          padding: const EdgeInsets.only(
-            left: 28,
-            right: 28,
-            bottom: 58,
-          ),
-          itemCount: aEquipoInformatico.length,
-          itemBuilder: (context, index) {
-            HomeOptions homeOption = aEquipoInformatico[index];
-            return InkWell(
-              splashColor: Colors.white10,
-              highlightColor: Colors.white10,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/icons/botones 1-02.png"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: homeOption.color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 241, 240, 240)
-                          .withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 15),
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 12,
-                          bottom: 8,
-                        ),
-                        child: Hero(
-                          tag: homeOption.image!,
-                          child: Image.asset(
-                            homeOption.image!,
-                            fit: BoxFit.contain,
-                            width: 60,
-                            height: 60,
-                            alignment: Alignment.center,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(1),
-                        child: Center(
-                          child: Text(
-                            homeOption.name!,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 11.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              onTap: () async {
-                //  var oHomeOptionSelect = aHomeOptions[index];
-              },
-            );
-          },
-        ),
+          //tambosOperativos(),
+          cardAtenciones(),
+          cardBeneficiarios(),
+          avanceMetas(),
+          avanceMetasUsuarios(),
+          //cardEstadoTambo(),
+          cardTambos(),
+          cardPersonal(),
+          //cardEquipamiento(),
+          cardEquipoTecnologico(),
+          const SizedBox(height: 40),
+        ],
       ),
     );
   }
@@ -1023,10 +343,6 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("assets/icons/botones 1-02.png"),
-            fit: BoxFit.cover,
-          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -1070,8 +386,8 @@ class _HomeTambookState extends State<HomeTambook>
                             maxValue: 100,
                             valueNotifier: valueNotifier,
                             backColor: Colors.black.withOpacity(0.4),
-                            progressStrokeWidth: 10,
-                            backStrokeWidth: 10,
+                            progressStrokeWidth: 20,
+                            backStrokeWidth: 20,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
@@ -1092,8 +408,7 @@ class _HomeTambookState extends State<HomeTambook>
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      color:
-                          Color.fromARGB(255, 197, 194, 194).withOpacity(0.2),
+                      color: Colors.black.withOpacity(0.2),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Column(
@@ -1152,10 +467,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 10,
             ),
-            const Text('Fuente: POI aprobado 2023')
+            Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -1180,10 +495,6 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("assets/icons/botones 1-02.png"),
-            fit: BoxFit.cover,
-          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -1227,8 +538,8 @@ class _HomeTambookState extends State<HomeTambook>
                             maxValue: 100,
                             valueNotifier: valueNotifier,
                             backColor: Colors.black.withOpacity(0.4),
-                            progressStrokeWidth: 10,
-                            backStrokeWidth: 10,
+                            progressStrokeWidth: 20,
+                            backStrokeWidth: 20,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
@@ -1249,8 +560,7 @@ class _HomeTambookState extends State<HomeTambook>
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      color:
-                          Color.fromARGB(255, 197, 194, 194).withOpacity(0.2),
+                      color: Colors.black.withOpacity(0.2),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Column(
@@ -1309,10 +619,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 10,
             ),
-            const Text('Fuente: POI aprobado 2023')
+            Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -1418,10 +728,6 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("assets/icons/botones 1-02.png"),
-            fit: BoxFit.cover,
-          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -1501,10 +807,6 @@ class _HomeTambookState extends State<HomeTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage("assets/icons/botones 1-02.png"),
-            fit: BoxFit.cover,
-          ),
           border: Border.all(
             width: 1,
             color: colorI,
