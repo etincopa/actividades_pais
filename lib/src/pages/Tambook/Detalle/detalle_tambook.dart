@@ -78,7 +78,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   late GuardianiaTamboModel oGuardia = GuardianiaTamboModel.empty();
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
-  bool isLoadingGuardian = true;
+  bool isLoadingGuardian = false;
   bool isLoading2 = false;
 
   int statusLoadActividad = 0;
@@ -260,14 +260,14 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> guardianTambo(int snip) async {
+    isLoadingGuardian = false;
     List<GuardianiaTamboModel> aGuardia =
         await mainCtr.guardianiaTambo(snip.toString());
     if (aGuardia.isNotEmpty) {
       oGuardia = aGuardia[0];
     }
-    setState(() {
-      isLoadingGuardian = false;
-    });
+    isLoadingGuardian = true;
+    setState(() {});
   }
 
   Future<void> incidenciasInternet(int snip) async {
