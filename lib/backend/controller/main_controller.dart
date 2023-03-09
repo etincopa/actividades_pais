@@ -20,6 +20,7 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
+import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -867,6 +868,14 @@ class MainController extends GetxController {
       iPagina,
       iNumPagina,
     );
+    return aResp;
+  }
+
+  Future<List<GuardianiaTamboModel>> guardianiaTambo(
+    String? numSnip,
+  ) async {
+    List<GuardianiaTamboModel> aResp =
+        await Get.find<MainService>().getGuardianiaTambo(numSnip);
     return aResp;
   }
 

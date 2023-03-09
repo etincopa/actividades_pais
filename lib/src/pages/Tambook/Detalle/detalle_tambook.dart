@@ -12,6 +12,7 @@ import 'package:actividades_pais/backend/model/programacion_intervenciones_tambo
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
+import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
@@ -74,8 +75,10 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aCoordinacio = [];
 
   late List<IncidentesInternetModel> incidencias = [];
+  late GuardianiaTamboModel oGuardia = GuardianiaTamboModel.empty();
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
+  bool isLoadingGuardian = true;
   bool isLoading2 = false;
 
   int statusLoadActividad = 0;
@@ -246,6 +249,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     oTambo = await mainCtr.getTamboDatoGeneral(
       (widget.listTambo!.idTambo).toString(),
     );
+    guardianTambo(oTambo.nSnip ?? 0);
     obtenerDatosClima();
     getAtenInterBeneResumen();
     getMetasGeneral();
@@ -253,6 +257,17 @@ class _DetalleTambookState extends State<DetalleTambook>
     getCombustibleTambo();
 
     setState(() {});
+  }
+
+  Future<void> guardianTambo(int snip) async {
+    List<GuardianiaTamboModel> aGuardia =
+        await mainCtr.guardianiaTambo(snip.toString());
+    if (aGuardia.isNotEmpty) {
+      oGuardia = aGuardia[0];
+    }
+    setState(() {
+      isLoadingGuardian = false;
+    });
   }
 
   Future<void> incidenciasInternet(int snip) async {
@@ -985,7 +1000,9 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardVigilante() {
     var heading = 'GUARDIÁN';
-    var subheading = 'HARDY';
+    var subheading =
+        "${oGuardia.empleadoNombre ?? ''} ${oGuardia.empleadoApellidoPaterno ?? ''} ${oGuardia.empleadoApellidoMaterno ?? ''}";
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -1035,10 +1052,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         ListTile(
                           title: Text('DNI'),
-                          subtitle: Text(''),
+                          subtitle:
+                              Text(oGuardia.empleadoNumeroDocumento ?? ''),
                         ),
                         ListTile(
                           title: Text('INICIO DE CONTRATO'),
@@ -1058,7 +1076,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: Text('TIPO CONTRATO'),
-                          subtitle: Text(''),
+                          subtitle:
+                              Text(oGuardia.modalidadContratoSiglas ?? ''),
                         ),
                       ],
                     ),

@@ -19,6 +19,7 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
+import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
@@ -972,6 +973,14 @@ class MainService {
       iPagina,
       iNumPagina,
     );
+    return aResp;
+  }
+
+  Future<List<GuardianiaTamboModel>> getGuardianiaTambo(
+    String? numSnip,
+  ) async {
+    List<GuardianiaTamboModel> aResp =
+        await Get.find<MainRepo>().getGuardianiaTambo(numSnip);
     return aResp;
   }
 
