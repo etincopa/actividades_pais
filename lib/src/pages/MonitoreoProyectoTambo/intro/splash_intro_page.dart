@@ -5,6 +5,7 @@ import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'package:actividades_pais/util/Constants.dart';
@@ -23,6 +24,8 @@ class _SplashPageState extends State<SplashPage>
   @override
   void initState() {
     super.initState();
+
+    initPlatform();
 
     InternetConnectionChecker().onStatusChange.listen((status) {
       final connected = status == InternetConnectionStatus.connected;
@@ -117,6 +120,16 @@ class _SplashPageState extends State<SplashPage>
         ),
       ),
     );
+  }
+
+  Future<void> initPlatform() async {
+    await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {});
+    await OneSignal.shared
+        .getDeviceState()
+        .then((value) => {print("IDS ${value!.userId}")});
   }
 }
 
