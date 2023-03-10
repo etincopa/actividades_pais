@@ -181,25 +181,27 @@ class _HomePagePais extends State<HomePagePais> {
     for (int i = 0; i < idMenuPadre.length; i++) {
       switch (idMenuPadre[i].idMenuPadre) {
         case "mnu.articulacion":
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1003',
-              name: 'TileIntervencion'.tr,
-              types: const ['Ver'],
-              image: icon4,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
+          if (tipoPlataforma != 'PIAS') {
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1003',
+                name: 'TileIntervencion'.tr,
+                types: const ['Ver'],
+                image: icon4,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
 
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1006',
-              name: 'TileProgramacionActividad'.tr,
-              types: const ['Ver'],
-              image: icon7,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1006',
+                name: 'TileProgramacionActividad'.tr,
+                types: const ['Ver'],
+                image: icon7,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+          }
           break;
 
         case "mnu.soporte.equipo":
@@ -216,7 +218,18 @@ class _HomePagePais extends State<HomePagePais> {
 
         case "mnu.administrativos":
           // if (aUnidad.contains("UPS")) {
-          aHomeOptions.add(
+           if (tipoPlataforma != 'PIAS') {
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1007',
+                name: 'SEGUIMIENTO Y MONITOREO',
+                types: const ['Ver'],
+                image: icon5,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+          }
+   /*        aHomeOptions.add(
             HomeOptions(
               code: 'OPT1007',
               name: 'SEGUIMIENTO Y MONITOREO',
@@ -224,8 +237,8 @@ class _HomePagePais extends State<HomePagePais> {
               image: icon5,
               color: const Color(0xFF78b8cd),
             ),
-          );
-          //}
+          );*/
+           //}
 
           break;
       }

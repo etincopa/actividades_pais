@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
@@ -68,6 +69,8 @@ class _ParteState extends State<Parte> {
 
   @override
   void initState() {
+    print("PARTE :::: widget.lat ${widget.lat}");
+    print("PARTE widget.long ${widget.long}");
     super.initState();
     consultarTambo();
     traerUltimo();
@@ -88,6 +91,8 @@ class _ParteState extends State<Parte> {
         controllerfecha.text = widget.idUnicoReporte;
         reportePias.fechaParteDiario = controllerfecha.text;
         reportePias.idUnicoReporte = widget.idUnicoReporte;
+        reportePias.longitud = widget.long;
+        reportePias.latitud = widget.lat;
       } else if (ar.length > 0) {
         acnuevo = 1;
         controllerDetalle.text = ar[0].detallePuntoAtencion;
@@ -116,6 +121,8 @@ class _ParteState extends State<Parte> {
         reportePias.sismonitor = ar[0].sismonitor;
         reportePias.clima = ar[0].clima;
         reportePias.codigoUbigeo = ar[0].codigoUbigeo;
+        reportePias.longitud = widget.long;
+        reportePias.latitud = widget.lat;
       }
     });
   }
@@ -150,6 +157,8 @@ class _ParteState extends State<Parte> {
               ),
               onPressed: () async {
                 if (acnuevo == 0) {
+
+                  jsonEncode(reportePias);
                   await DatabasePias.db.insertReportePias(reportePias);
                   acnuevo = 1;
                   traerUltimo();

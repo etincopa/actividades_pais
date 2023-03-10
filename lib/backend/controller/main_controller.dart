@@ -20,7 +20,10 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
+import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
+import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -870,6 +873,30 @@ class MainController extends GetxController {
     return aResp;
   }
 
+  Future<List<GuardianiaTamboModel>> guardianiaTambo(
+    String? numSnip,
+  ) async {
+    List<GuardianiaTamboModel> aResp =
+        await Get.find<MainService>().getGuardianiaTambo(numSnip);
+    return aResp;
+  }
+
+  Future<List<RutaTamboModel>> rutaTambo(
+    String? numSnip,
+  ) async {
+    List<RutaTamboModel> aResp =
+        await Get.find<MainService>().getRutaTambo(numSnip);
+    return aResp;
+  }
+
+  Future<List<ServicioBasicoTamboModel>> servicioBasicoTambo(
+    String? idTambo,
+  ) async {
+    List<ServicioBasicoTamboModel> aResp =
+        await Get.find<MainService>().getServicioBasicoTambo(idTambo);
+    return aResp;
+  }
+
   Future<List<AtenInterBeneResumenModel>> AtenInterBeneResumen(
     String? numSnip,
   ) async {
@@ -976,6 +1003,7 @@ class MainController extends GetxController {
   Future<List<TambosMapaModel>> getUbicacionTambo(int snip) async {
     List<TambosMapaModel> oResp =
         await Get.find<MainService>().UbicacionTambo(snip);
+
     return oResp;
   }
 

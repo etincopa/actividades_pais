@@ -1,8 +1,8 @@
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Intervenciones.dart';
+import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ListaIntervecionesProgramadas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
-import 'package:actividades_pais/util/app-config.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +55,15 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
     } else {
       aHomeOptions.add(
         HomeOptions(
+          code: 'OPT1012',
+          name: 'PROGRAMAR PRESTACION'.tr,
+          types: const ['Ver'],
+          image: icon7,
+          color: const Color(0xFF78b8cd),
+        ),
+      );
+      aHomeOptions.add(
+        HomeOptions(
           code: 'OPT1011',
           name: 'PLAN DE TRABAJO MENSUAL'.tr,
           types: const ['Ver'],
@@ -62,6 +71,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
           color: const Color(0xFF78b8cd),
         ),
       );
+
     }
 
     List listPages = [
@@ -164,6 +174,13 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => const AprobacionPlanesTrabajo(),
+                          ),
+                        );
+                        break;
+                        case 'OPT1012':
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>   ListaIntervecionesProgramadas(),
                           ),
                         );
                         break;

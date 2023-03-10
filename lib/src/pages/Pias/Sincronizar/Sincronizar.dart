@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/Utils/utils.dart';
@@ -41,7 +42,7 @@ class _SincronizarPageState extends State<SincronizarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Sincronizar"), actions: [], backgroundColor:  Colors.blue[800]),
+        appBar: AppBar(title: Text("Sincronizar"), actions: [],  backgroundColor: AppConfig.primaryColor,),
         body: FutureBuilder<List<ReportesPias>>(
           future: DatabasePias.db.listaReportePias(),
           builder: (BuildContext context,

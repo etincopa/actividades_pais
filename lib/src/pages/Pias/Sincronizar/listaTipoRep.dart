@@ -1,3 +1,4 @@
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/PorcentajesEnvioPias.dart';
@@ -62,7 +63,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                 widget.reportesPias.fechaParteDiario,
             style: TextStyle(fontSize: 15),
           ),
-          backgroundColor: Colors.blue[800],
+          backgroundColor: AppConfig.primaryColor,
         ),
       ),
       body: Center(

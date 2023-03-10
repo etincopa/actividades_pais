@@ -826,7 +826,8 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardNuestroGestor() {
     var heading = 'NUESTRO GESTOR';
-    var subheading = oTambo.gestorNombre ?? '';
+    var subheading =
+        '${oTambo.gestorNombre ?? ''} ${oTambo.gestorApellidos ?? ''}';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -875,6 +876,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: ImageUtil.ImageUrl(
                     oTambo.gestorPathImage ?? '',
                     width: 150,
+                    imgDefault: 'assets/icons/user-male-2.png',
                   ),
                 ),
                 Container(

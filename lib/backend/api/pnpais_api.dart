@@ -18,7 +18,10 @@ import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_mod
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
+import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
+import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -286,6 +289,47 @@ class PnPaisApi {
       parser: (data) {
         return (data as List)
             .map((e) => AtenInterBeneResumenModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<GuardianiaTamboModel>>> getGuardianiaTambo(
+      String? numSnip) async {
+    var sNumSnip = numSnip != null ? '/$numSnip' : '';
+
+    return await _http.request<List<GuardianiaTamboModel>>(
+      '${basePathApp3}obtenerGuardianiaTambo$sNumSnip',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => GuardianiaTamboModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<RutaTamboModel>>> getRutaTambo(
+      String? numSnip) async {
+    var sNumSnip = numSnip != null ? '/$numSnip' : '';
+    return await _http.request<List<RutaTamboModel>>(
+      '${basePathApp4}consultaRutastambo$sNumSnip',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => RutaTamboModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ServicioBasicoTamboModel>>> getServicioBasicoTambo(
+      String? idTambo) async {
+    var sidTambo = idTambo != null ? '/$idTambo' : '';
+    return await _http.request<List<ServicioBasicoTamboModel>>(
+      '${basePathApp3}listarServicioBasicoTambo$sidTambo',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ServicioBasicoTamboModel.fromJson(e))
             .toList();
       },
     );

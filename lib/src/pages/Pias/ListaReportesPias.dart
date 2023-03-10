@@ -52,8 +52,8 @@ class _ListaReportesState extends State<ListaReportesPias> {
 
   traerdato() async {
     var art = await ProviderDatos().verificacionpesmiso();
-    widget.lat = art[0].latitude.toString();
-    widget.long = art[0].longitude.toString();
+    lat = art[0].latitude.toString();
+    long = art[0].longitude.toString();
     setState(() {});
   }
 
@@ -90,8 +90,8 @@ class _ListaReportesState extends State<ListaReportesPias> {
                       idPlataforma: widget.idPlataforma,
                       idUnicoReporte: formatter.format(picked),
                       campaniaCod: widget.campaniaCod,
-                      lat: widget.lat,
-                      long: widget.long)),
+                      lat:lat,
+                      long: long)),
             );
             if (respuesta == "OK") {
               refreshList();
@@ -121,14 +121,14 @@ class _ListaReportesState extends State<ListaReportesPias> {
           SizedBox(
             width: 10,
           ),
-          InkWell(
+        /*  InkWell(
             child: Icon(Icons.cloud_download),
             onTap: () async {
-              await DatabasePias.db.deletePuntoAtencionPias();
-              await ProviderServiciosRest().listarPuntoAtencionPias(
-                  widget.campaniaCod, widget.idPlataforma, 0);
+         //     await DatabasePias.db.deletePuntoAtencionPias();
+        //      await ProviderServiciosRest().listarPuntoAtencionPias(
+          //        widget.campaniaCod, widget.idPlataforma, 0);
             },
-          ),
+          ),*/
           /*
             InkWell(
             child: Icon(Icons.cloud_upload),
@@ -171,30 +171,11 @@ class _ListaReportesState extends State<ListaReportesPias> {
                 //   return Container();
                 return Container(
                   child: RefreshIndicator(
+                      onRefresh: refreshList,
                       child: ListView.builder(
                         itemCount: listaPersonalAux.length,
                         itemBuilder: (context, i) => Dismissible(
                             key: UniqueKey(),
-                            child: listas.miCardLisReportPias(
-                                listaPersonalAux[i], () async {
-                              final respuesta = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ReporteDiario(
-                                          plataforma: widget.plataforma,
-                                          unidadTeritorial:
-                                              widget.unidadTeritorial,
-                                          idPlataforma: widget.idPlataforma,
-                                          idUnicoReporte: listaPersonalAux[i]
-                                              .fechaParteDiario,
-                                          campaniaCod: widget.campaniaCod,
-                                        )),
-                              );
-                               if (respuesta == "OK") {
-                                refreshList();
-                                setState(() {});
-                              }
-                            }),
                             background: Util().buildSwipeActionLeft(),
                             secondaryBackground: Util().buildSwipeActionRigth(),
                             onDismissed: (direction) async {
@@ -230,9 +211,28 @@ class _ListaReportesState extends State<ListaReportesPias> {
                                   });
                                   break;
                               }
-                            }),
-                      ),
-                      onRefresh: refreshList),
+                            },
+                            child: listas.miCardLisReportPias(
+                                listaPersonalAux[i], () async {
+                              final respuesta = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReporteDiario(
+                                          plataforma: widget.plataforma,
+                                          unidadTeritorial:
+                                              widget.unidadTeritorial,
+                                          idPlataforma: widget.idPlataforma,
+                                          idUnicoReporte: listaPersonalAux[i]
+                                              .fechaParteDiario,
+                                          campaniaCod: widget.campaniaCod,
+                                        )),
+                              );
+                               if (respuesta == "OK") {
+                                refreshList();
+                                setState(() {});
+                              }
+                            })),
+                      )),
                 );
               }
             }

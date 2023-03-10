@@ -34,6 +34,7 @@ class _HomeTambookState extends State<HomeTambook>
   late String numTambos = "";
 
   List<ProgIntervencionTamboModel> aAvance = [];
+  List<AtenInterBeneResumenModel> aAtenInterBene = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
   List<AtencionesModel> aAtencionResumen = [];
@@ -76,7 +77,7 @@ class _HomeTambookState extends State<HomeTambook>
     setState(() {});
     tambosParaMapa();
     getMetasGeneral();
-    getAtenInterBeneResumen();
+    getProgIntervencionTambo();
   }
 
   Future<void> buildPlataforma() async {
@@ -267,9 +268,21 @@ class _HomeTambookState extends State<HomeTambook>
     aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
   }
 
+  Future<void> getMetasGeneral() async {
+    isLoading2 = false;
+    getAtenInterBeneResumen();
+    List<MetasTamboModel> aMetas =
+        await mainCtr.metasTambo("0", sCurrentYear, 0);
+
+    aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
+    aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
+
+    isLoading2 = true;
+    setState(() {});
+  }
+
   Future<void> getAtenInterBeneResumen() async {
-    List<AtenInterBeneResumenModel> aAtenInterBene =
-        await mainCtr.AtenInterBeneResumen(
+    aAtenInterBene = await mainCtr.AtenInterBeneResumen(
       '0',
     );
 
@@ -309,20 +322,6 @@ class _HomeTambookState extends State<HomeTambook>
       aAtencionResumen.add(o4);
       setState(() {});
     }
-  }
-
-  Future<void> getMetasGeneral() async {
-    isLoading2 = false;
-    List<MetasTamboModel> aMetas =
-        await mainCtr.metasTambo("0", sCurrentYear, 0);
-
-    await getProgIntervencionTambo();
-
-    aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
-    aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
-
-    isLoading2 = true;
-    setState(() {});
   }
 
   Future<void> tambosParaMapa() async {
@@ -423,14 +422,14 @@ class _HomeTambookState extends State<HomeTambook>
                   padding: const EdgeInsets.all(1.0),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      ColoredBox(
+                      const ColoredBox(
                         color: Colors.white70,
                         child: TabBar(
                           labelColor: Colors.black87,
                           unselectedLabelColor: Colors.grey,
-                          padding: const EdgeInsets.all(5.0),
+                          padding: EdgeInsets.all(5.0),
                           tabs: [
-                            const Tab(
+                            Tab(
                               icon: ImageIcon(
                                 AssetImage('assets/logros.png'),
                                 size: 60,
@@ -442,13 +441,13 @@ class _HomeTambookState extends State<HomeTambook>
                                 size: 60,
                               ),
                             ),
-                            const Tab(
+                            Tab(
                               icon: ImageIcon(
                                 AssetImage('assets/personal.png'),
                                 size: 60,
                               ),
                             ),
-                            const Tab(
+                            Tab(
                               icon: ImageIcon(
                                 AssetImage('assets/equipos.png'),
                                 size: 60,
@@ -1056,66 +1055,78 @@ class _HomeTambookState extends State<HomeTambook>
 
   Container tambosOperativos() {
     return Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: const Offset(0, 2), // changes position of shadow
-            ),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: const Offset(0, 2), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Card(
+        margin: const EdgeInsets.all(7),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: isLoading ? 1 : 1,
+              itemBuilder: (context, index) {
+                if (isLoading) {
+                  return ShinyWidget();
+                } else {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                        tileColor: Colors.white,
+                        leading: SizedBox(
+                          height: 70.0,
+                          width: 70.0, // fixed width and height
+                          child: Image.asset(
+                            'assets/icono_tambos.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: Center(
+                          child: Text(
+                            numTambos ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 65,
+                            ),
+                          ),
+                        ),
+                        subtitle: const Center(
+                          child: Text(
+                            'Tambos prestando servicio',
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              },
+            )
           ],
         ),
-        child: Card(
-            margin: const EdgeInsets.all(7),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: isLoading ? 1 : 1,
-                    itemBuilder: (context, index) {
-                      if (isLoading) {
-                        return ShinyWidget();
-                      } else {
-                        return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                tileColor: Colors.white,
-                                leading: SizedBox(
-                                  height: 70.0,
-                                  width: 70.0, // fixed width and height
-                                  child: Image.asset(
-                                    'assets/icono_tambos.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                title: Center(
-                                    child: Text(
-                                  numTambos ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 65),
-                                )),
-                                subtitle: const Center(
-                                    child: Text(
-                                  'Tambos prestando servicio',
-                                  style: TextStyle(fontSize: 17),
-                                )),
-                              ),
-                            ]);
-                      }
-                    })
-              ],
-            )));
+      ),
+    );
   }
 
   Padding cardAtenciones() {
+    int totalAvance1 = 0;
+    if (aAtenInterBene.isNotEmpty) {
+      totalAvance1 =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!);
+    }
+
     final totalMetaTipo1 =
         aMetasTipo1.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance1 = aAvance.length;
     int totalBrecha1 = totalMetaTipo1 - totalAvance1;
     double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
@@ -1198,8 +1209,8 @@ class _HomeTambookState extends State<HomeTambook>
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      color:
-                          Color.fromARGB(255, 197, 194, 194).withOpacity(0.2),
+                      color: const Color.fromARGB(255, 197, 194, 194)
+                          .withOpacity(0.2),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Column(
@@ -1269,10 +1280,14 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding cardBeneficiarios() {
+    int totalAvance1 = 0;
+    if (aAtenInterBene.isNotEmpty) {
+      totalAvance1 =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!);
+    }
     final totalMetaTipo1 =
         aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance1 = 0;
     int totalBrecha1 = totalMetaTipo1 - totalAvance1;
     double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
@@ -1355,8 +1370,8 @@ class _HomeTambookState extends State<HomeTambook>
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      color:
-                          Color.fromARGB(255, 197, 194, 194).withOpacity(0.2),
+                      color: const Color.fromARGB(255, 197, 194, 194)
+                          .withOpacity(0.2),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Column(

@@ -74,6 +74,7 @@ class ProviderServiciosRest {
 
   Future<int> guardar(ReportesPias reportePias) async {
     reportePias.idUsuario = await user();
+    print(jsonEncode(reportePias));
     http.Response response = await http.post(
         Uri.parse(AppConfig.urlBackndServicioSeguro +
             '/api-pnpais/pias/app/registrarParteDiarioPiasMovil'),
@@ -121,6 +122,7 @@ class ProviderServiciosRest {
             '/api-pnpais/pias/app/registrarParteDiarioAtencionesMovil'),
         body: jsonEncode(atencion),
         headers: headers);
+    print("jsonEncode(atencion) ${jsonEncode(atencion)}");
     print("aquii ${response.body}");
     if (response.statusCode == 200) {
       return response.statusCode;

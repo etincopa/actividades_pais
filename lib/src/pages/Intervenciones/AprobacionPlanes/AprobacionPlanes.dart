@@ -48,11 +48,14 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
 
   var pageIndex = 1;
   bool mostarIcono = false;
+
   @override
   void initState() {
     // TODO: implement initState
 
-    _loadData(); inicio();
+    _loadData();
+    inicio();
+
     ///controller.addListener(_onlistener);
     super.initState();
   }
@@ -60,20 +63,19 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
   @override
   void dispose() {
     // TODO: implement dispose
-  //  controller.removeListener(_onlistener);
+    //  controller.removeListener(_onlistener);
     super.dispose();
   }
 
   _onlistener() async {
-       setState(() {
-        isLoading = true;
-        pageIndex = pageIndex + 1;
-      });
-      await traerPaguinado(10, pageIndex);
-      setState(() {
-        isLoading = false;
-      });
-
+    setState(() {
+      isLoading = true;
+      pageIndex = pageIndex + 1;
+    });
+    await traerPaguinado(10, pageIndex);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   /*  _onlistener() async {
@@ -102,12 +104,11 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
     filtroDataPlanMensual.pageIndex = 1;
     filtroDataPlanMensual.pageSize = 10;
     filtroDataPlanMensual.inicio = DateFormat('yyyy-MM-dd HH:mm:ss')
-        .format(DateTime.now().subtract(Duration(days: 7)));
-    _controlleFechaInici.text=DateFormat('yyyy-MM-dd HH:mm:ss')
-        .format(DateTime.now().subtract(Duration(days: 7)));
+        .format(DateTime.now().subtract(const Duration(days: 7)));
+    _controlleFechaInici.text = DateFormat('yyyy-MM-dd HH:mm:ss')
+        .format(DateTime.now().subtract(const Duration(days: 7)));
 
-    filtroDataPlanMensual.fin =
-        DateFormat('yyyy-MM-dd').format(DateTime.now());
+    filtroDataPlanMensual.fin = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     _controlleFechaFin.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     setState(() {});
@@ -115,12 +116,10 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
 
   String? selectedEstado = "x";
 
-
   List<DatosPlanMensual>? _posts = [];
   int _currentPage = 1;
   bool _isLoading = false;
   bool _showAddPageButton = true;
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +133,12 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
             Navigator.pop(context);
           }),
           automaticallyImplyLeading: false,
-          title: Text(
+          title: const Text(
             "PLAN DE TRABAJO MENSUAL",
             style: TextStyle(fontSize: 15, color: Colors.black),
           ),
           actions: <Widget>[
-            BackdropToggleButton(
+            const BackdropToggleButton(
               color: Colors.black,
               icon: AnimatedIcons.list_view,
             ),
@@ -171,119 +170,105 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
         backLayer: ListView(
           children: [
             Container(
-              margin: EdgeInsets.all(20),
+              margin: const EdgeInsets.all(20),
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                        child: Row(
+                    Row(
                       children: [
                         const Icon(Icons.account_balance_wallet_outlined,
                             size: 15, color: Colors.grey),
-                        SizedBox(width: 13),
+                        const SizedBox(width: 13),
                         Expanded(
-                          child: Container(
-                            child: DropdownButtonFormField<String>(
-                              value: selectedEstado,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedEstado = newValue;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Estado',
-                              ),
-                              items: estados.map((item) {
-                                return DropdownMenuItem<String>(
-                                  value: item["value"],
-                                  child: Text(
-                                    item["descripcion"]!,
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                );
-                              }).toList(),
+                          child: DropdownButtonFormField<String>(
+                            value: selectedEstado,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedEstado = newValue;
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              labelText: 'Estado',
                             ),
+                            items: estados.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item["value"],
+                                child: Text(
+                                  item["descripcion"]!,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
                       ],
-                    )),
-                    Container(
-                      child: FutureBuilder<List<UnidadesTerritoriales>>(
-                        future: ProviderAprobacionPlanes()
-                            .ListarUnidadesTerritoriales(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<UnidadesTerritoriales>>
-                                snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                          } else if (snapshot.hasError) {
-                            return Text('Error al cargar las opciones');
-                          } else {
-                            List<UnidadesTerritoriales> options =
-                                snapshot.data!;
-                            options.insert(
-                                0,
-                                UnidadesTerritoriales(
-                                    idUnidadesTerritoriales: 0,
-                                    unidadTerritorialDescripcion: 'TODOS'));
+                    ),
+                    FutureBuilder<List<UnidadesTerritoriales>>(
+                      future: ProviderAprobacionPlanes()
+                          .ListarUnidadesTerritoriales(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<UnidadesTerritoriales>> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                        } else if (snapshot.hasError) {
+                          return const Text('Error al cargar las opciones');
+                        } else {
+                          List<UnidadesTerritoriales> options = snapshot.data!;
+                          options.insert(
+                              0,
+                              UnidadesTerritoriales(
+                                  idUnidadesTerritoriales: 0,
+                                  unidadTerritorialDescripcion: 'TODOS'));
 
-                            return Row(
-                              children: [
-                                const Icon(
-                                    Icons.account_balance_wallet_outlined,
-                                    size: 15,
-                                    color: Colors.grey),
-                                SizedBox(width: 13),
-                                Expanded(
-                                  child: Container(
-                                    child: DropdownButtonFormField<
+                          return Row(
+                            children: [
+                              const Icon(Icons.account_balance_wallet_outlined,
+                                  size: 15, color: Colors.grey),
+                              const SizedBox(width: 13),
+                              Expanded(
+                                child: DropdownButtonFormField<
+                                    UnidadesTerritoriales>(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Unidad Territorial',
+                                  ),
+                                  isExpanded: true,
+                                  items: options.map((user) {
+                                    return DropdownMenuItem<
                                         UnidadesTerritoriales>(
-                                      decoration: InputDecoration(
-                                        labelText: 'Unidad Territorial',
-                                      ),
-                                      isExpanded: true,
-                                      items: options.map((user) {
-                                        return DropdownMenuItem<
-                                            UnidadesTerritoriales>(
-                                          value: user,
-                                          child: Text(
-                                            user.unidadTerritorialDescripcion!,
-                                            style: TextStyle(fontSize: 10),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged:
-                                          (UnidadesTerritoriales? value) {
-                                        seleccionarUnidadTerritorial = value!
-                                            .unidadTerritorialDescripcion!;
-                                        filtroDataPlanMensual.ut =
-                                            ((value.idUnidadesTerritoriales ==
-                                                        0)
-                                                    ? "x"
-                                                    : value
-                                                        .idUnidadesTerritoriales)
-                                                .toString();
-
-                                        isMostar = true;
-                                        seleccionarPlataformaDescripcion =
-                                            "Seleccionar plataforma";
-
-                                        setState(() {});
-                                      },
-                                      hint: Text(
-                                        seleccionarUnidadTerritorial,
+                                      value: user,
+                                      child: Text(
+                                        user.unidadTerritorialDescripcion!,
                                         style: const TextStyle(fontSize: 10),
                                       ),
-                                    ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (UnidadesTerritoriales? value) {
+                                    seleccionarUnidadTerritorial =
+                                        value!.unidadTerritorialDescripcion!;
+                                    filtroDataPlanMensual.ut =
+                                        ((value.idUnidadesTerritoriales == 0)
+                                                ? "x"
+                                                : value.idUnidadesTerritoriales)
+                                            .toString();
+
+                                    isMostar = true;
+                                    seleccionarPlataformaDescripcion =
+                                        "Seleccionar plataforma";
+
+                                   setState(() {});
+                                  },
+                                  hint: Text(
+                                    seleccionarUnidadTerritorial,
+                                    style: const TextStyle(fontSize: 10),
                                   ),
                                 ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
                     ),
                     Container(
                       margin: const EdgeInsets.only(),
@@ -296,9 +281,9 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                                   snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                              return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
                             } else if (snapshot.hasError) {
-                              return Text('');
+                              return const Text('');
                             } else {
                               if (snapshot.hasData) {
                                 List<TambosDependientes> optionsP =
@@ -315,12 +300,12 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                                         Icons.account_balance_wallet_outlined,
                                         size: 15,
                                         color: Colors.grey),
-                                    SizedBox(width: 13),
+                                    const SizedBox(width: 13),
                                     Expanded(
                                       child: Container(
                                         child: DropdownButtonFormField<
                                             TambosDependientes>(
-                                          decoration: InputDecoration(
+                                          decoration: const InputDecoration(
                                             labelText: 'Plataforma',
                                           ),
                                           isExpanded: true,
@@ -358,12 +343,12 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                             return Container();
                           }),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         const Icon(Icons.date_range_outlined,
                             size: 15, color: Colors.grey),
-                        SizedBox(width: 13),
+                        const SizedBox(width: 13),
                         Expanded(
                           child: TextoConFecha(
                               "Fecha Incio", true, _controlleFechaInici),
@@ -374,14 +359,14 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                       children: [
                         const Icon(Icons.date_range_sharp,
                             size: 15, color: Colors.grey),
-                        SizedBox(width: 13),
+                        const SizedBox(width: 13),
                         Expanded(
                           child: TextoConFecha(
                               "Fecha Fin", true, _controlleFechaFin),
                         ),
                       ],
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Container(
                         //  decoration: Servicios().myBoxDecoration(),
                         margin: const EdgeInsets.only(right: 10, left: 10),
@@ -401,7 +386,6 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                             filtroDataPlanMensual.pageIndex = 0;
                             filtroDataPlanMensual.pageSize = 10;
                             _loadData();
-
                           },
                           child: const Text("FILTRAR"),
                         )),
@@ -412,95 +396,94 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
           ],
         ),
         frontLayer: Center(
-          child:_isLoading
-              ? Center(child: CircularProgressIndicator())
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
-            itemCount: _posts!.length + (_showAddPageButton ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (index == _posts!.length) {
-                if (_isLoading) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  return _buildAddPageButton();
-                }
-              } else {
-                var post = _posts![index];
-             return   Listas().cardAprobacionPlanTrabajo(
-               _posts![index],
-                      () async {
-                    switch (_posts![index].idEvaluacion) {
-                      case "1":
-                        var resp = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AprobarObservar(_posts![index]),
-                            ));
-                        if (resp == "R") {
-                          resetlista();
-                        }
-                        break;
+                  itemCount: _posts!.length + (_showAddPageButton ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == _posts!.length) {
+                      if (_isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        print("_posts?.length ${_posts?.length}");
+                        return _buildAddPageButton();
+                      }
+                    } else {
+                      var post = _posts![index];
+                      return Listas().cardAprobacionPlanTrabajo(
+                        _posts![index],
+                        () async {
+                          switch (_posts![index].idEvaluacion) {
+                            case "1":
+                              var resp = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AprobarObservar(_posts![index]),
+                                  ));
+                              if (resp == "R") {
+                                _loadData();
+                                //    resetlista();
+                              }
+                              break;
 
-                      case "0":
-                        var resp = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AprobarObservar(_posts![index]),
-                            ));
-                        if (resp == "R") {
-                          resetlista();
-                        }
-                        break;
-                      case "2":
-                        var resp = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetalleObservacion(
-                                    _posts![index]
-                                        .idProgramacion
-                                        .toString(),
-                                    datosPlanMensual:_posts![index],
-                                  ),
-                            ));
-                        if (resp == "R") {
-                          resetlista();
-                        }
-                        break;
-                      case "3":
-                        var resp = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetalleSubsanado(
-                                    _posts![index]
-                                        .idProgramacion
-                                        .toString(),
-                                    datosPlanMensual: _posts![index],
-                                  ),
-                            ));
-                        if (resp == "R") {
-                          resetlista();
-                        }
-                        break;
+                            case "0":
+                              var resp = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AprobarObservar(_posts![index]),
+                                  ));
+                              if (resp == "R") {
+                                _loadData();
+                                //    resetlista();
+                              }
+                              break;
+                            case "2":
+                              var resp = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetalleObservacion(
+                                      _posts![index].idProgramacion.toString(),
+                                      datosPlanMensual: _posts![index],
+                                    ),
+                                  ));
+                              if (resp == "R") {
+                                _loadData();
+                                //    resetlista();
+                              }
+                              break;
+                            case "3":
+                              var resp = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetalleSubsanado(
+                                      _posts![index].idProgramacion.toString(),
+                                      datosPlanMensual: _posts![index],
+                                    ),
+                                  ));
+                              if (resp == "R") {
+                                _loadData();
+                                //    resetlista();
+                              }
+                              break;
+                          }
+                        },
+                      );
+                      return ListTile(
+                        title:
+                            Text(post.unidadTerritorialDescripcion.toString()),
+                        //   leading: Image.network(post.),
+                      );
                     }
                   },
-                );
-                return ListTile(
-                  title: Text(post.unidadTerritorialDescripcion.toString()),
-               //   leading: Image.network(post.),
-                );
-              }
-            },
-            ///  controller: controller,
-            //scrollDirection: ,
-          //  onScrollEndDrag: ,
-          ),
 
+                  ///  controller: controller,
+                  //scrollDirection: ,
+                  //  onScrollEndDrag: ,
+                ),
 
-
-        /*  FutureBuilder<List<DatosPlanMensual>>(
+          /*  FutureBuilder<List<DatosPlanMensual>>(
             future: ProviderAprobacionPlanes()
                 .ListarAprobacionPlanTrabajo(filtroDataPlanMensual),
             builder: (BuildContext context,
@@ -615,14 +598,17 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
 
   Widget _buildAddPageButton() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: GestureDetector(
         onTap: _addPage,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            (_posts!.length != 0)?  Icon(Icons.add_circle_outline_sharp, size: 50): new Container(),
-
+            (_posts!.isNotEmpty)
+                ? const Icon(Icons.add_circle_outline_sharp, size: 50)
+                : const Center(
+                    child: Text("¡No existen registros"),
+                  ),
           ],
         ),
       ),
@@ -632,7 +618,6 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
   void _addPage() {
     _loadData();
   }
-
 
   Future<void> _loadData() async {
     setState(() {
@@ -644,15 +629,17 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
       var posts = await ProviderAprobacionPlanes()
           .ListarAprobacionPlanTrabajo(filtroDataPlanMensual);
 
-   //   Iterable<DatosPlanMensual> iterableDatos = posts != null ? Iterable<DatosPlanMensual>.of(posts) : Iterable.empty();
-      Iterable<DatosPlanMensual> iterableDatos = posts != null ? List<DatosPlanMensual>.from(posts) : Iterable.empty();
+      //   Iterable<DatosPlanMensual> iterableDatos = posts != null ? Iterable<DatosPlanMensual>.of(posts) : Iterable.empty();
+      Iterable<DatosPlanMensual> iterableDatos = posts != null
+          ? List<DatosPlanMensual>.from(posts)
+          : const Iterable.empty();
 
       /*ProviderAprobacionPlanes()
                 .ListarAprobacionPlanTrabajo(filtroDataPlanMensual)*/
-      _posts =[];
+      _posts = [];
       setState(() {
-
         _posts?.addAll(iterableDatos);
+
         _currentPage++;
         _isLoading = false;
       });
@@ -663,9 +650,10 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
       print(e);
     }
   }
+
   TextoConFecha(labelText, enabled, controller) {
     return Container(
-        margin: EdgeInsets.only(top: 3),
+        margin: const EdgeInsets.only(top: 3),
         child: TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
