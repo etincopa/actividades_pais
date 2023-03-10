@@ -19,6 +19,8 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
+import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:logger/logger.dart';
 
 class MainRepo {
@@ -506,6 +508,32 @@ class MainRepo {
   ) async {
     List<GuardianiaTamboModel> aResp = [];
     final response = await _pnPaisApi.getGuardianiaTambo(numSnip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<RutaTamboModel>> getRutaTambo(
+    String? numSnip,
+  ) async {
+    List<RutaTamboModel> aResp = [];
+    final response = await _pnPaisApi.getRutaTambo(numSnip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ServicioBasicoTamboModel>> getServicioBasicoTambo(
+    String? idTambo,
+  ) async {
+    List<ServicioBasicoTamboModel> aResp = [];
+    final response = await _pnPaisApi.getServicioBasicoTambo(idTambo);
     if (response.error == null) {
       aResp = response.data!;
     } else {

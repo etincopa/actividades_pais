@@ -71,15 +71,21 @@ class GuardianiaTamboModel {
   factory GuardianiaTamboModel.fromJson(Map<String, dynamic> json) {
     return GuardianiaTamboModel(
       idTambo: _getInt(json[GuardianiaTamboFld.idTambo]),
-      numSnip: json[GuardianiaTamboFld.numSnip],
-      plataformaDescripcion: json[GuardianiaTamboFld.plataformaDescripcion],
-      estadoGuardiania: json[GuardianiaTamboFld.estadoGuardiania],
-      tipoDocumentoSiglas: json[GuardianiaTamboFld.tipoDocumentoSiglas],
-      empleadoNumeroDocumento: json[GuardianiaTamboFld.empleadoNumeroDocumento],
-      empleadoApellidoPaterno: json[GuardianiaTamboFld.empleadoApellidoPaterno],
-      empleadoApellidoMaterno: json[GuardianiaTamboFld.empleadoApellidoMaterno],
-      empleadoNombre: json[GuardianiaTamboFld.empleadoNombre],
-      modalidadContratoSiglas: json[GuardianiaTamboFld.modalidadContratoSiglas],
+      numSnip: _getString(json[GuardianiaTamboFld.numSnip]),
+      plataformaDescripcion:
+          _getString(json[GuardianiaTamboFld.plataformaDescripcion]),
+      estadoGuardiania: _getString(json[GuardianiaTamboFld.estadoGuardiania]),
+      tipoDocumentoSiglas:
+          _getString(json[GuardianiaTamboFld.tipoDocumentoSiglas]),
+      empleadoNumeroDocumento:
+          _getString(json[GuardianiaTamboFld.empleadoNumeroDocumento]),
+      empleadoApellidoPaterno:
+          _getString(json[GuardianiaTamboFld.empleadoApellidoPaterno]),
+      empleadoApellidoMaterno:
+          _getString(json[GuardianiaTamboFld.empleadoApellidoMaterno]),
+      empleadoNombre: _getString(json[GuardianiaTamboFld.empleadoNombre]),
+      modalidadContratoSiglas:
+          _getString(json[GuardianiaTamboFld.modalidadContratoSiglas]),
     );
   }
 

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
-import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
@@ -14,6 +13,8 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
+import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
@@ -70,14 +71,22 @@ class _DetalleTambookState extends State<DetalleTambook>
   late TamboModel oTambo = TamboModel.empty();
   late List<TamboActividadModel> aActividad = [];
 
+  late List<AtenInterBeneResumenModel> aAtenInterBene = [];
   late List<TamboActividadModel> aInterAmbDir = [];
   late List<TamboActividadModel> aInterSopEnt = [];
   late List<TamboActividadModel> aCoordinacio = [];
 
   late List<IncidentesInternetModel> incidencias = [];
   late GuardianiaTamboModel oGuardia = GuardianiaTamboModel.empty();
+
+  late List<RutaTamboModel> aRuta = [];
+  late List<ServicioBasicoTamboModel> aSrvBasico = [];
+
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
+  bool isLoadingRuta = false;
+
+  bool isLoadingSrvBasico = true;
   bool isLoadingGuardian = false;
   bool isLoading2 = false;
 
@@ -152,6 +161,22 @@ class _DetalleTambookState extends State<DetalleTambook>
     //incidenciasInternet();
   }
 
+  Future<void> tamboDatoGeneral() async {
+    oTambo = await mainCtr.getTamboDatoGeneral(
+      (widget.listTambo!.idTambo).toString(),
+    );
+    guardianTambo(oTambo.nSnip ?? 0);
+    rutaTambo(oTambo.nSnip ?? 0);
+    servicioBasicoTambo(oTambo.idTambo ?? 0);
+    obtenerDatosClima();
+    getMetasGeneral();
+    incidenciasInternet(oTambo.nSnip ?? 0);
+    getCombustibleTambo();
+    getProgIntervencionTambo();
+
+    setState(() {});
+  }
+
   // This function is called, every time active tab is changed
   void changeTitle() {
     setState(() {
@@ -180,8 +205,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> getAtenInterBeneResumen() async {
-    List<AtenInterBeneResumenModel> aAtenInterBene =
-        await mainCtr.AtenInterBeneResumen(
+    aAtenInterBene = await mainCtr.AtenInterBeneResumen(
       '${oTambo.nSnip}',
     );
 
@@ -206,6 +230,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   Future<void> getMetasGeneral() async {
     isLoading2 = false;
+    getAtenInterBeneResumen();
     DateTime today = DateTime.now();
     String dateStr = "${today.year}";
     List<MetasTamboModel> aMetas =
@@ -213,8 +238,6 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     aMetasTipo1 = aMetas.where((e) => e.numTipoMeta == 1).toList();
     aMetasTipo2 = aMetas.where((e) => e.numTipoMeta == 2).toList();
-
-    await getProgIntervencionTambo();
 
     isLoading2 = true;
     setState(() {});
@@ -245,20 +268,6 @@ class _DetalleTambookState extends State<DetalleTambook>
     return const Base64Decoder().convert(base64String.split(',').last);
   }
 
-  Future<void> tamboDatoGeneral() async {
-    oTambo = await mainCtr.getTamboDatoGeneral(
-      (widget.listTambo!.idTambo).toString(),
-    );
-    guardianTambo(oTambo.nSnip ?? 0);
-    obtenerDatosClima();
-    getAtenInterBeneResumen();
-    getMetasGeneral();
-    incidenciasInternet(oTambo.nSnip ?? 0);
-    getCombustibleTambo();
-
-    setState(() {});
-  }
-
   Future<void> guardianTambo(int snip) async {
     isLoadingGuardian = false;
     List<GuardianiaTamboModel> aGuardia =
@@ -266,6 +275,20 @@ class _DetalleTambookState extends State<DetalleTambook>
     if (aGuardia.isNotEmpty) {
       oGuardia = aGuardia[0];
     }
+    isLoadingGuardian = true;
+    setState(() {});
+  }
+
+  Future<void> rutaTambo(int snip) async {
+    isLoadingRuta = false;
+    aRuta = await mainCtr.rutaTambo(snip.toString());
+    isLoadingRuta = true;
+    setState(() {});
+  }
+
+  Future<void> servicioBasicoTambo(int idTambo) async {
+    isLoadingGuardian = false;
+    aSrvBasico = await mainCtr.servicioBasicoTambo(idTambo.toString());
     isLoadingGuardian = true;
     setState(() {});
   }
@@ -493,7 +516,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               color: Colors.white70,
                             ),
                             controller: _tabControllerTitle,
-                            tabs: [
+                            tabs: const [
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -630,7 +653,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           */
                         cardAmbitoAccion(),
                         const SizedBox(height: 10),
-                        cardServicios(),
+                        cardServicioBasico(),
                         const SizedBox(height: 50),
                       ],
                     ),
@@ -1054,28 +1077,28 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
-                          title: Text('DNI'),
+                          title: const Text('DNI'),
                           subtitle:
                               Text(oGuardia.empleadoNumeroDocumento ?? ''),
                         ),
-                        ListTile(
+                        const ListTile(
                           title: Text('INICIO DE CONTRATO'),
                           subtitle: Text(''),
                         ),
-                        ListTile(
+                        const ListTile(
                           title: Text('SEXO'),
                           subtitle: Text(''),
                         ),
-                        ListTile(
+                        const ListTile(
                           title: Text('ESTADO CIVIL'),
                           subtitle: Text(''),
                         ),
-                        ListTile(
+                        const ListTile(
                           title: Text('FECHA DE NACIMIENTO'),
                           subtitle: Text(''),
                         ),
                         ListTile(
-                          title: Text('TIPO CONTRATO'),
+                          title: const Text('TIPO CONTRATO'),
                           subtitle:
                               Text(oGuardia.modalidadContratoSiglas ?? ''),
                         ),
@@ -1584,7 +1607,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
-  Padding cardServicios() {
+  Padding cardServicioBasico() {
     var heading = 'SERVICIOS BÁSICOS';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -1626,31 +1649,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        ListTile(
-                          title: Text('¿TIENE SERVICIO DE ENERGÍA ELÉCTRICA?'),
-                          subtitle: Text(''),
-                        ),
-                        ListTile(
-                          title: Text('TIPO DE CONEXIÓN DE ENERGÍA ELÉCTRICA'),
-                          subtitle: Text(''),
-                        ),
-                        ListTile(
-                          title: Text('PROVEEDOR DE ENERGÍA ELÉCTRICA'),
-                          subtitle: Text(''),
-                        ),
-                        ListTile(
-                          title: Text('¿TIENE SERVICIO DE AGUA?'),
-                          subtitle: Text(''),
-                        ),
-                        ListTile(
-                          title: Text('TIPO DE CONEXIÓN DEL SERVICIO DE AGUA'),
-                          subtitle: Text(''),
-                        ),
-                        ListTile(
-                          title: Text('PROVEEDOR DE SERVICIO DE AGUA'),
-                          subtitle: Text(''),
-                        ),
+                      children: [
+                        for (var oSrvBasico in aSrvBasico)
+                          ListTile(
+                            title: Text(oSrvBasico.nombreServicio ?? ''),
+                            subtitle: Text(oSrvBasico.tipoServicio ?? ''),
+                          ),
                       ],
                     ),
                   ),
@@ -1670,10 +1674,15 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
 
   Padding cardAtenciones() {
+    int totalAvance1 = 0;
+    if (aAtenInterBene.isNotEmpty) {
+      totalAvance1 =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!);
+    }
+
     final totalMetaTipo1 =
         aMetasTipo1.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance1 = aAvance.length;
     int totalBrecha1 = totalMetaTipo1 - totalAvance1;
     double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
@@ -1818,10 +1827,14 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Padding cardBeneficiarios() {
+    int totalAvance1 = 0;
+    if (aAtenInterBene.isNotEmpty) {
+      totalAvance1 =
+          aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!);
+    }
     final totalMetaTipo1 =
         aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
 
-    int totalAvance1 = 0;
     int totalBrecha1 = totalMetaTipo1 - totalAvance1;
     double totalPorcen1 = double.parse(((totalAvance1 / totalMetaTipo1) * 100)
         .toStringAsFixed(2)
@@ -3520,36 +3533,40 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        ListTile(
-                          leading: ImageIcon(
-                            AssetImage(
-                              "assets/carro.png",
-                            ),
-                            size: 55,
-                            color: Colors.grey,
-                          ),
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text(
-                            'En BUS desde Lima por La Oroya hasta Huánuco, son 410 km y 08 horas en auto aproximadamente).',
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
-                        Divider(color: colorI),
-                        ListTile(
-                          leading: ImageIcon(
-                            AssetImage(
-                              "assets/avion.png",
-                            ),
-                            size: 55,
-                            color: Colors.grey,
-                          ),
-                          iconColor: Color.fromARGB(255, 0, 0, 0),
-                          title: Text(
-                            'En AVIÓN desde Lima a Huánuco son aproximadamente 45 minutos.',
-                            textAlign: TextAlign.justify,
-                          ),
-                        ),
+                      children: [
+                        for (var oRuta in aRuta)
+                          Column(
+                            children: [
+                              Text(
+                                oRuta.cidNombre ?? '',
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              ListTile(
+                                leading: ImageIcon(
+                                  AssetImage(oRuta.cidNombre!.contains("AÉREA")
+                                      ? "assets/avion.png"
+                                      : "assets/carro.png"),
+                                  size: 40,
+                                  color: Colors.grey,
+                                ),
+                                iconColor: const Color.fromARGB(255, 0, 0, 0),
+                                title: ListTile(
+                                  title: Text(
+                                    oRuta.txtDescripcion ?? '',
+                                    textAlign: TextAlign.justify,
+                                  ),
+                                  subtitle: Text(
+                                    oRuta.txtEncuenta ?? '',
+                                    textAlign: TextAlign.justify,
+                                  ),
+                                ),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          )
                       ],
                     ),
                   ),

@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
+import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:http/http.dart' as http;
 
 class MapaTambo extends StatefulWidget {
   const MapaTambo({super.key, required this.snip});
@@ -34,6 +40,10 @@ class _MapTambookState extends State<MapaTambo>
   late List<LatLng> mapPoints = [];
   late Future<List<Marker>> marcadores;
 
+  late ClimaModel clima = ClimaModel.empty();
+  late List<RutaTamboModel> aRuta = [];
+  bool isLoadingRuta = false;
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -50,8 +60,31 @@ class _MapTambookState extends State<MapaTambo>
     marcadores = tambosParaMapa();
   }
 
+  Future<void> rutaTambo(int snip) async {
+    isLoadingRuta = false;
+    aRuta = await mainCtr.rutaTambo(snip.toString());
+    if (aRuta.isNotEmpty) await obtenerDatosClima(aRuta[0].idTambo!);
+    isLoadingRuta = true;
+  }
+
+  Future<void> obtenerDatosClima(int idTambo) async {
+    late TamboModel oTambo = TamboModel.empty();
+    oTambo = await mainCtr.getTamboDatoGeneral((idTambo).toString());
+
+    String url =
+        "https://api.open-meteo.com/v1/forecast?latitude=${oTambo.yCcpp}2&longitude=${oTambo.xCcpp}&current_weather=true";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      clima =
+          ClimaModel.fromJson(json.decode(response.body)['current_weather']);
+    } else {
+      print("Error con la respusta");
+    }
+  }
+
   Future<List<Marker>> tambosParaMapa() async {
     List<TambosMapaModel> tambos = await mainCtr.getUbicacionTambo(widget.snip);
+
     List<Marker> allMarkers = [];
     for (var point in tambos) {
       LatLng latlng = LatLng(point.latitud!, point.longitud!);
@@ -61,7 +94,9 @@ class _MapTambookState extends State<MapaTambo>
           height: 80.0,
           point: latlng,
           builder: (ctx) => GestureDetector(
-            onTap: () {
+            onTap: () async {
+              await rutaTambo(point.snip!);
+              // ignore: use_build_context_synchronously
               showDialog(
                 context: context,
                 builder: (BuildContext context) => buildSuccessDialog(
@@ -72,13 +107,15 @@ class _MapTambookState extends State<MapaTambo>
                       Align(
                         alignment: Alignment.centerLeft,
                         child: RichText(
-                          text: const TextSpan(
+                          text: TextSpan(
                             children: [
-                              WidgetSpan(
-                                child: Icon(Icons.brightness_medium_outlined,
-                                    size: 15),
+                              const WidgetSpan(
+                                child: Icon(
+                                  Icons.brightness_medium_outlined,
+                                  size: 15,
+                                ),
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: " CLIMA: ",
                                 style: TextStyle(
                                   color: color_01,
@@ -87,8 +124,8 @@ class _MapTambookState extends State<MapaTambo>
                                 ),
                               ),
                               TextSpan(
-                                text: "CALIDO",
-                                style: TextStyle(
+                                text: "${clima.temp ?? ''} °",
+                                style: const TextStyle(
                                   color: color_01,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
@@ -99,32 +136,52 @@ class _MapTambookState extends State<MapaTambo>
                         ),
                       ),
                       const SizedBox(height: 10),
-                      RichText(
-                        text: const TextSpan(
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: const TextSpan(
+                            children: [
+                              WidgetSpan(
+                                child: Icon(
+                                  Icons.map_outlined,
+                                  size: 15,
+                                ),
+                              ),
+                              TextSpan(
+                                text: " COMO LLEGAR: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      for (var oRuta in aRuta)
+                        Column(
                           children: [
-                            WidgetSpan(
-                              child: Icon(Icons.map_outlined, size: 15),
-                            ),
-                            TextSpan(
-                              text: " COMO LLEGAR: ",
-                              style: TextStyle(
-                                color: color_01,
-                                fontSize: 13,
+                            Text(
+                              oRuta.cidNombre ?? '',
+                              style: const TextStyle(
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            TextSpan(
-                              text:
-                                  "PASAR POR CHOSICA, MATUCANA, SAN MATEO, ...",
-                              style: TextStyle(
-                                color: color_01,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
+                            ListTile(
+                              title: Text(
+                                oRuta.txtDescripcion ?? '',
+                                textAlign: TextAlign.justify,
+                              ),
+                              subtitle: Text(
+                                oRuta.txtEncuenta ?? '',
+                                textAlign: TextAlign.justify,
                               ),
                             ),
+                            const Divider(color: colorI),
                           ],
                         ),
-                      ),
                     ],
                   ),
                 ),
