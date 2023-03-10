@@ -17,9 +17,11 @@ import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 //late ObjectBoxDbPnPais OBoxDbPnPais;
 void main() async {
+  await initializeDateFormatting('es', 'es_ES');
   DependencyInjection.initialize("DEV");
   //GlobalBindings().dependencies();
 

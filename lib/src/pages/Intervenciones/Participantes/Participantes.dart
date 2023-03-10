@@ -623,19 +623,31 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                   builder: (BuildContext context,
                       AsyncSnapshot<List<ParticipanteEjecucion>> snapshot) {
                     if (snapshot.hasData) {
-                 /*     await showModalBottomSheet(
+                  /*  showModalBottomSheet(
                       isScrollControlled: true, // required for min/max child size
                       context: context,
                       builder: (ctx) {
                         return  MultiSelectBottomSheet(
-                          items: _items,
-                          initialValue: _selectedAnimals,
-                          onConfirm: (values) {...},
+                          items:snapshot.data!
+                              .map((animal) =>
+                              MultiSelectItem<ParticipanteEjecucion>(
+                                  animal, animal.nombre_servicio!))
+                              .toList(),
+                         initialValue: listas,
+                          onConfirm: (results) {
+                            listas.addAll(results);
+                       //  _selectedAnimals = results;
+                         },
                           maxChildSize: 0.8,
                         );
                       },
                       );*/
+                      var cantidad = 0;
+                       cantidad = snapshot.data!.length;
+                   //   cantidad = cantidad * 50;
                       return MultiSelectDialogField<ParticipanteEjecucion>(
+                       // dialogHeight:50,
+                        dialogHeight:cantidad * 45,
                         selectedColor: Colors.blue[800],
                         //activeColor: Colors.blue[800],
                         //focusColor: Colors.blue[800],

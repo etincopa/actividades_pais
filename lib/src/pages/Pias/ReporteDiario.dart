@@ -40,14 +40,16 @@ class _ReporteDiarioState extends State<ReporteDiario> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     traerdato();
+    super.initState();
+
   }
 
   traerdato() async {
     var art = await ProviderDatos().verificacionpesmiso();
     widget.lat = art[0].latitude.toString();
     widget.long = art[0].longitude.toString();
+    print(art[0].latitude);
     setState(() {});
   }
 
