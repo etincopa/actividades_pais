@@ -1078,29 +1078,23 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           title: const Text('DNI'),
-                          subtitle:
-                              Text(oGuardia.empleadoNumeroDocumento ?? ''),
+                          subtitle: Text(oGuardia.numeroDocumento ?? ''),
                         ),
-                        const ListTile(
-                          title: Text('INICIO DE CONTRATO'),
-                          subtitle: Text(''),
+                        ListTile(
+                          title: const Text('INICIO DE CONTRATO'),
+                          subtitle: Text(oGuardia.fecInicioContrato ?? ''),
                         ),
-                        const ListTile(
-                          title: Text('SEXO'),
-                          subtitle: Text(''),
+                        ListTile(
+                          title: const Text('SEXO'),
+                          subtitle: Text(oGuardia.sexo ?? ''),
                         ),
-                        const ListTile(
-                          title: Text('ESTADO CIVIL'),
-                          subtitle: Text(''),
-                        ),
-                        const ListTile(
-                          title: Text('FECHA DE NACIMIENTO'),
-                          subtitle: Text(''),
+                        ListTile(
+                          title: const Text('FECHA DE NACIMIENTO'),
+                          subtitle: Text(oGuardia.fechaNacimiento ?? ''),
                         ),
                         ListTile(
                           title: const Text('TIPO CONTRATO'),
-                          subtitle:
-                              Text(oGuardia.modalidadContratoSiglas ?? ''),
+                          subtitle: Text(oGuardia.tipoContrato ?? ''),
                         ),
                       ],
                     ),

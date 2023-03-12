@@ -4,24 +4,38 @@ class GuardianiaTamboFld {
   static String plataformaDescripcion = 'plataformaDescripcion';
   static String estadoGuardiania = 'estadoGuardiania';
   static String tipoDocumentoSiglas = 'tipoDocumentoSiglas';
-  static String empleadoNumeroDocumento = 'empleadoNumeroDocumento';
+  static String numeroDocumento = 'numeroDocumento';
   static String empleadoApellidoPaterno = 'empleadoApellidoPaterno';
   static String empleadoApellidoMaterno = 'empleadoApellidoMaterno';
   static String empleadoNombre = 'empleadoNombre';
+  static String empleadoCorreo = 'empleadoCorreo';
+  static String idGenero = 'idGenero';
+  static String fechaNacimiento = 'fechaNacimiento';
+  static String sexo = 'sexo';
   static String modalidadContratoSiglas = 'modalidadContratoSiglas';
+  static String tipoContrato = 'tipoContrato';
+  static String fecInicioContrato = 'fecInicioContrato';
+  static String fecFinalContrato = 'fecFinalContrato';
 }
 
 class GuardianiaTamboModel {
   int? idTambo = 0;
-  String? numSnip;
-  String? plataformaDescripcion;
-  String? estadoGuardiania;
-  String? tipoDocumentoSiglas;
-  String? empleadoNumeroDocumento;
-  String? empleadoApellidoPaterno;
-  String? empleadoApellidoMaterno;
-  String? empleadoNombre;
-  String? modalidadContratoSiglas;
+  String? numSnip = '';
+  String? plataformaDescripcion = '';
+  String? estadoGuardiania = '';
+  String? tipoDocumentoSiglas = '';
+  String? numeroDocumento = '';
+  String? empleadoApellidoPaterno = '';
+  String? empleadoApellidoMaterno = '';
+  String? empleadoNombre = '';
+  String? empleadoCorreo = '';
+  String? idGenero = '';
+  String? fechaNacimiento = '';
+  String? sexo = '';
+  String? modalidadContratoSiglas = '';
+  String? tipoContrato = '';
+  String? fecInicioContrato = '';
+  String? fecFinalContrato = '';
 
   GuardianiaTamboModel.empty() {}
 
@@ -31,11 +45,18 @@ class GuardianiaTamboModel {
     this.plataformaDescripcion,
     this.estadoGuardiania,
     this.tipoDocumentoSiglas,
-    this.empleadoNumeroDocumento,
+    this.numeroDocumento,
     this.empleadoApellidoPaterno,
     this.empleadoApellidoMaterno,
     this.empleadoNombre,
+    this.empleadoCorreo,
+    this.idGenero,
+    this.fechaNacimiento,
+    this.sexo,
     this.modalidadContratoSiglas,
+    this.tipoContrato,
+    this.fecInicioContrato,
+    this.fecFinalContrato,
   });
 
   GuardianiaTamboModel copy({
@@ -44,11 +65,18 @@ class GuardianiaTamboModel {
     String? plataformaDescripcion,
     String? estadoGuardiania,
     String? tipoDocumentoSiglas,
-    String? empleadoNumeroDocumento,
+    String? numeroDocumento,
     String? empleadoApellidoPaterno,
     String? empleadoApellidoMaterno,
     String? empleadoNombre,
+    String? empleadoCorreo,
+    String? idGenero,
+    String? fechaNacimiento,
+    String? sexo,
     String? modalidadContratoSiglas,
+    String? tipoContrato,
+    String? fecInicioContrato,
+    String? fecFinalContrato,
   }) =>
       GuardianiaTamboModel(
         idTambo: idTambo ?? this.idTambo,
@@ -57,15 +85,21 @@ class GuardianiaTamboModel {
             plataformaDescripcion ?? this.plataformaDescripcion,
         estadoGuardiania: estadoGuardiania ?? this.estadoGuardiania,
         tipoDocumentoSiglas: tipoDocumentoSiglas ?? this.tipoDocumentoSiglas,
-        empleadoNumeroDocumento:
-            empleadoNumeroDocumento ?? this.empleadoNumeroDocumento,
+        numeroDocumento: numeroDocumento ?? this.numeroDocumento,
         empleadoApellidoPaterno:
             empleadoApellidoPaterno ?? this.empleadoApellidoPaterno,
         empleadoApellidoMaterno:
             empleadoApellidoMaterno ?? this.empleadoApellidoMaterno,
         empleadoNombre: empleadoNombre ?? this.empleadoNombre,
+        empleadoCorreo: empleadoCorreo ?? this.empleadoCorreo,
+        idGenero: idGenero ?? this.idGenero,
+        fechaNacimiento: fechaNacimiento ?? this.fechaNacimiento,
+        sexo: sexo ?? this.sexo,
         modalidadContratoSiglas:
             modalidadContratoSiglas ?? this.modalidadContratoSiglas,
+        tipoContrato: tipoContrato ?? this.tipoContrato,
+        fecInicioContrato: fecInicioContrato ?? this.fecInicioContrato,
+        fecFinalContrato: fecFinalContrato ?? this.fecFinalContrato,
       );
 
   factory GuardianiaTamboModel.fromJson(Map<String, dynamic> json) {
@@ -77,15 +111,21 @@ class GuardianiaTamboModel {
       estadoGuardiania: _getString(json[GuardianiaTamboFld.estadoGuardiania]),
       tipoDocumentoSiglas:
           _getString(json[GuardianiaTamboFld.tipoDocumentoSiglas]),
-      empleadoNumeroDocumento:
-          _getString(json[GuardianiaTamboFld.empleadoNumeroDocumento]),
+      numeroDocumento: _getString(json[GuardianiaTamboFld.numeroDocumento]),
       empleadoApellidoPaterno:
           _getString(json[GuardianiaTamboFld.empleadoApellidoPaterno]),
       empleadoApellidoMaterno:
           _getString(json[GuardianiaTamboFld.empleadoApellidoMaterno]),
       empleadoNombre: _getString(json[GuardianiaTamboFld.empleadoNombre]),
+      empleadoCorreo: _getString(json[GuardianiaTamboFld.empleadoCorreo]),
+      idGenero: _getString(json[GuardianiaTamboFld.idGenero]),
+      fechaNacimiento: _getString(json[GuardianiaTamboFld.fechaNacimiento]),
+      sexo: _getString(json[GuardianiaTamboFld.sexo]),
       modalidadContratoSiglas:
           _getString(json[GuardianiaTamboFld.modalidadContratoSiglas]),
+      tipoContrato: _getString(json[GuardianiaTamboFld.tipoContrato]),
+      fecInicioContrato: _getString(json[GuardianiaTamboFld.fecInicioContrato]),
+      fecFinalContrato: _getString(json[GuardianiaTamboFld.fecFinalContrato]),
     );
   }
 
