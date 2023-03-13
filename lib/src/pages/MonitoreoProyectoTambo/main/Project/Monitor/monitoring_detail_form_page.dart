@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -15,6 +16,7 @@ import 'package:actividades_pais/util/alert_question.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -60,6 +62,8 @@ class _MonitoringDetailNewEditPageState
   final _longitud = TextEditingController();
   final _latitud = TextEditingController();
 
+  List<DataRow> aDataRow = [];
+  bool _enabledFormAvance = false;
   bool _enabledF = true;
   int idM = 0;
   String titleMonitor = "";
@@ -86,6 +90,7 @@ class _MonitoringDetailNewEditPageState
   List<bool> expandedPE = [false, false];
   final String _imgProblemaIdentificado = 'imgProblemaIdentificado';
   List<bool> expandedPI = [false, false];
+  List<bool> expandedPI2 = [false, false];
   final String _imgRiesgoIdentificado = 'imgRiesgoIdentificado';
   List<bool> expandedRI = [false, false];
 
@@ -630,151 +635,273 @@ class _MonitoringDetailNewEditPageState
                     }
                   : null,
             ),
-
-            /**
-             * PARTIDA EJECUTADA
-             */
             const SizedBox(height: 10),
-            Text(
-              'FldMonitor007'.tr,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "REGISTROS DE PARTIDAS EJECUTADAS:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add_circle),
+                  color: const Color.fromARGB(255, 84, 105, 226),
+                  onPressed: () async {
+                    if (!_enabledFormAvance) {
+                      setState(() {
+                        _enabledFormAvance = true;
+                      });
+                    }
+
+                    /*
+                    if (_formKey.currentState!.validate()) {
+                      await _showMyDialog(
+                        context,
+                        "PARTIDAS EJECUTADA",
+                      );
+                    }
+                    */
+                  },
+                  // color: Colors.pink,
+                ),
+              ],
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                    sortColumnIndex: 2,
+                    sortAscending: true,
+                    headingRowColor: MaterialStateProperty.all(
+                      const Color.fromARGB(255, 179, 180, 179),
+                    ),
+                    columnSpacing: 40,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          color: Colors.grey,
+                          width: 0.5,
+                        ),
+                      ),
+                    ),
+                    columns: const [
+                      DataColumn(label: Text("N°")),
+                      DataColumn(label: Text("Partida Ejecutada")),
+                      DataColumn(label: Text("% Avance")),
+                    ],
+                    rows: aDataRow),
               ),
             ),
-            DropdownButtonFormField(
-              isExpanded: true,
-              isDense: false,
-              value: _valuePartidaEje,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-              ),
-              validator: (value) => value
-                          .toString()
-                          .toUpperCase()
-                          .contains("SELECCIONE UNA OPCIÓN") ||
-                      value == ""
-                  ? 'Required'.tr
-                  : null,
-              items: widget.cbPEJEC.isNotEmpty
-                  ? widget.cbPEJEC.map(
-                      (ComboItemModel map) {
-                        return DropdownMenuItem<String>(
-                          value: map.codigo1.toString(),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: map.descripcion
-                                        .toString()
-                                        .toUpperCase()
-                                        .contains("SELECCIONE UNA OPCIÓN")
-                                    ? Text(
-                                        map.descripcion.toString(),
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Theme.of(context).hintColor,
-                                        ),
-                                      )
-                                    : Text(
-                                        map.descripcion.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                        ),
+            const SizedBox(height: 10),
+            _enabledFormAvance
+                ? Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(15),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 236, 236, 236),
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          topLeft: Radius.circular(20)),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /**
+                   * PARTIDA EJECUTADA
+                   */
+                        const SizedBox(height: 10),
+                        Text(
+                          'FldMonitor007'.tr,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        DropdownButtonFormField(
+                          isExpanded: true,
+                          isDense: false,
+                          value: _valuePartidaEje,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          validator: (value) => value
+                                      .toString()
+                                      .toUpperCase()
+                                      .contains("SELECCIONE UNA OPCIÓN") ||
+                                  value == ""
+                              ? 'Required'.tr
+                              : null,
+                          items: widget.cbPEJEC.isNotEmpty
+                              ? widget.cbPEJEC.map(
+                                  (ComboItemModel map) {
+                                    return DropdownMenuItem<String>(
+                                      value: map.codigo1.toString(),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: map.descripcion
+                                                    .toString()
+                                                    .toUpperCase()
+                                                    .contains(
+                                                        "SELECCIONE UNA OPCIÓN")
+                                                ? Text(
+                                                    map.descripcion.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Theme.of(context)
+                                                          .hintColor,
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    map.descripcion.toString(),
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
                                       ),
+                                    );
+                                  },
+                                ).toList()
+                              : null,
+                          onChanged: _enabledF
+                              ? (String? value) async {
+                                  String sValue =
+                                      value.toString().toUpperCase();
+                                  _valuePartidaEje = value.toString();
+                                  try {
+                                    TramaProyectoModel oProyect =
+                                        TramaProyectoModel.empty();
+                                    oProyect.numSnip = _snip;
+
+                                    UltimoAvancePartidaModel oLastAvance =
+                                        await mainCtr
+                                            .getUltimoAvanceByProyectoAndPartida(
+                                      oProyect,
+                                      _valuePartidaEje!,
+                                    );
+
+                                    _advanceFEP.text =
+                                        ((oLastAvance.avanceFisicoPartida! *
+                                                    100)
+                                                .toStringAsFixed(2))
+                                            .toString();
+                                  } catch (e) {
+                                    _advanceFEP.text = '0.00';
+                                  }
+
+                                  setState(() {});
+                                }
+                              : null,
+                        ),
+                        /**
+                   * % AVANCE FISICO ACUMULADO PARTIDA
+                   */
+                        const SizedBox(height: 10),
+                        Text(
+                          'FldMonitor008'.tr,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        TextFormField(
+                          controller: _advanceFEP,
+                          maxLength: 6,
+                          keyboardType: TextInputType.number,
+                          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+                          enabled: _enabledF,
+                        ),
+                        /**
+                   * Fotos de la Partida Ejecutada(Obligatorio) 
+                   */
+                        _enabledF
+                            ? OutlinedButton.icon(
+                                label: Text(
+                                  'FldMonitor009'.tr,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                icon: const Icon(Icons.image),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                ),
+                                onPressed: () async {
+                                  await _showChoiceDialog(
+                                      context, _imgPartidaEjecutada);
+                                  setState(() {});
+                                },
+                              )
+                            : Text(
+                                'FldMonitor009'.tr,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                        const SizedBox(height: 10),
+                        myExpansionPanelListethod(
+                            _imgPartidaEjecutada, expandedPE),
+                        Container(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _enabledFormAvance = false;
+                                  });
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 242, 94, 83),
+                                  ),
+                                ),
+                                child: const Text("Cancelar"),
+                              ),
+                              const Padding(padding: EdgeInsets.all(10)),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    _enabledFormAvance = false;
+                                  });
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(255, 44, 162, 99),
+                                  ),
+                                ),
+                                child: const Text("Agregar"),
                               ),
                             ],
                           ),
-                        );
-                      },
-                    ).toList()
-                  : null,
-              onChanged: _enabledF
-                  ? (String? value) async {
-                      String sValue = value.toString().toUpperCase();
-                      _valuePartidaEje = value.toString();
-                      try {
-                        TramaProyectoModel oProyect =
-                            TramaProyectoModel.empty();
-                        oProyect.numSnip = _snip;
-
-                        UltimoAvancePartidaModel oLastAvance =
-                            await mainCtr.getUltimoAvanceByProyectoAndPartida(
-                          oProyect,
-                          _valuePartidaEje!,
-                        );
-
-                        _advanceFEP.text =
-                            ((oLastAvance.avanceFisicoPartida! * 100)
-                                    .toStringAsFixed(2))
-                                .toString();
-                      } catch (e) {
-                        _advanceFEP.text = '0.00';
-                      }
-
-                      setState(() {});
-                    }
-                  : null,
-            ),
-            /**
-             * % AVANCE FISICO ACUMULADO PARTIDA
-             */
-            const SizedBox(height: 10),
-            Text(
-              'FldMonitor008'.tr,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            TextFormField(
-              controller: _advanceFEP,
-              maxLength: 6,
-              keyboardType: TextInputType.number,
-              validator: (v) => v!.isEmpty ? 'Required'.tr : null,
-              enabled: _enabledF,
-            ),
-            /**
-             * Fotos de la Partida Ejecutada(Obligatorio) 
-            */
-            _enabledF
-                ? OutlinedButton.icon(
-                    label: Text(
-                      'FldMonitor009'.tr,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                      ),
+                        ),
+                      ],
                     ),
-                    icon: const Icon(Icons.image),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                    ),
-                    onPressed: () async {
-                      await _showChoiceDialog(context, _imgPartidaEjecutada);
-                      setState(() {});
-                    },
                   )
-                : Text(
-                    'FldMonitor009'.tr,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-            const SizedBox(height: 10),
-            myExpansionPanelListethod(_imgPartidaEjecutada, expandedPE),
-
+                : SizedBox(),
             /**
-           * OBSERVACIONES
-           */
-            const SizedBox(height: 10),
+             * OBSERVACIONES
+             */
+            const SizedBox(height: 20),
             Text(
               'FldMonitor010'.tr,
               style: const TextStyle(
@@ -1331,7 +1458,7 @@ class _MonitoringDetailNewEditPageState
                             ).show(context);
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 50,
                           width: width / 3.5,
                           child: Center(
@@ -1458,7 +1585,7 @@ class _MonitoringDetailNewEditPageState
                             );
                           }
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 50,
                           width: width / 3.5,
                           child: Center(
@@ -1624,5 +1751,227 @@ class _MonitoringDetailNewEditPageState
             ),
           );
         });
+  }
+
+  final _formKey1 = GlobalKey<FormState>();
+  Future<void> _showMyDialog(BuildContext context, String? title) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title!),
+          content: Form(
+            key: _formKey1,
+            child: Card(
+              color: Colors.transparent,
+              elevation: 0.0,
+              child: regitroEntidades(),
+            ),
+          ),
+          actions: [
+            Container(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                    ),
+                    child: const Text("Cancelar"),
+                  ),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 26, 155, 86)),
+                    ),
+                    child: const Text("Guardar"),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Column regitroEntidades() {
+    List<String> itemsImagePath = [];
+    controller.itemsImagesAll.forEach((key, items) {
+      if (key == _imgPartidaEjecutada) {
+        items.forEach((entry) {
+          itemsImagePath.add(entry);
+        });
+      }
+    });
+
+    return Column(
+      children: [
+        /**
+         * PARTIDA EJECUTADA
+         */
+        const SizedBox(height: 10),
+        Text(
+          'FldMonitor007'.tr,
+          style: const TextStyle(
+            fontSize: 15,
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        DropdownButtonFormField(
+          isExpanded: true,
+          isDense: false,
+          value: _valuePartidaEje,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
+          validator: (value) => value
+                      .toString()
+                      .toUpperCase()
+                      .contains("SELECCIONE UNA OPCIÓN") ||
+                  value == ""
+              ? 'Required'.tr
+              : null,
+          items: widget.cbPEJEC.isNotEmpty
+              ? widget.cbPEJEC.map(
+                  (ComboItemModel map) {
+                    return DropdownMenuItem<String>(
+                      value: map.codigo1.toString(),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: map.descripcion
+                                    .toString()
+                                    .toUpperCase()
+                                    .contains("SELECCIONE UNA OPCIÓN")
+                                ? Text(
+                                    map.descripcion.toString(),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  )
+                                : Text(
+                                    map.descripcion.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ).toList()
+              : null,
+          onChanged: _enabledF
+              ? (String? value) async {
+                  String sValue = value.toString().toUpperCase();
+                  _valuePartidaEje = value.toString();
+                  try {
+                    TramaProyectoModel oProyect = TramaProyectoModel.empty();
+                    oProyect.numSnip = _snip;
+
+                    UltimoAvancePartidaModel oLastAvance =
+                        await mainCtr.getUltimoAvanceByProyectoAndPartida(
+                      oProyect,
+                      _valuePartidaEje!,
+                    );
+
+                    _advanceFEP.text = ((oLastAvance.avanceFisicoPartida! * 100)
+                            .toStringAsFixed(2))
+                        .toString();
+                  } catch (e) {
+                    _advanceFEP.text = '0.00';
+                  }
+
+                  setState(() {});
+                }
+              : null,
+        ),
+        /**
+             * % AVANCE FISICO ACUMULADO PARTIDA
+             */
+        const SizedBox(height: 10),
+        Text(
+          'FldMonitor008'.tr,
+          style: const TextStyle(
+            fontSize: 15,
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        TextFormField(
+          controller: _advanceFEP,
+          maxLength: 6,
+          keyboardType: TextInputType.number,
+          validator: (v) => v!.isEmpty ? 'Required'.tr : null,
+          enabled: _enabledF,
+        ),
+        OutlinedButton.icon(
+          label: Text(
+            'FldMonitor009'.tr,
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          icon: const Icon(Icons.image),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.black,
+          ),
+          onPressed: () async {
+            await _showChoiceDialog(context, _imgPartidaEjecutada);
+            setState(() {});
+          },
+        ),
+        SizedBox(
+            width: 400,
+            height: 300,
+            child: Expanded(
+              child: ListView.builder(
+                itemCount: itemsImagePath.length,
+                itemBuilder: (context, index) {
+                  return Stack(
+                    children: [
+                      Image.file(
+                        File(itemsImagePath[index]),
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                      Positioned(
+                        right: -2,
+                        top: -2,
+                        child: InkWell(
+                          child: const Icon(
+                            Icons.remove_circle,
+                            size: 30,
+                            color: Colors.red,
+                          ),
+                          onTap: () async {},
+                        ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ))
+      ],
+    );
   }
 }
