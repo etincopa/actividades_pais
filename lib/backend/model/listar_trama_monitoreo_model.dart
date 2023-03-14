@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
+
 String tableNameTramaMonitoreos = 'listar_trama_monitoreo';
 
 class MonitorFields {
@@ -430,6 +432,8 @@ class TramaMonitoreoModel {
   int? pageIndex;
   int? pageSize;
 
+  List<PartidaEjecutadaModel>? aPartidaEjecutada = [];
+
   TramaMonitoreoModel.empty() {}
 
   TramaMonitoreoModel({
@@ -486,6 +490,7 @@ class TramaMonitoreoModel {
     this.nivelRiesgo,
     this.pageIndex,
     this.pageSize,
+    this.aPartidaEjecutada,
   });
 
   TramaMonitoreoModel copy({

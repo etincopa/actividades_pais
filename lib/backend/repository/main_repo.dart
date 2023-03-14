@@ -12,6 +12,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -226,7 +227,9 @@ class MainRepo {
   Future<TramaMonitoreoModel> insertMonitorDb(
     TramaMonitoreoModel o,
   ) async {
-    return await _dbPnPais.insertMonitoreo(o);
+    return await _dbPnPais.insertMonitoreo(
+      o,
+    );
   }
 
   Future<ComboItemModel> insertMaestraDb(
@@ -342,7 +345,12 @@ class MainRepo {
     TramaMonitoreoModel o,
   ) async {
     final response = await _pnPaisApi.insertarMonitoreoP1(oBody: o);
-    final responseP2 = await _pnPaisApi.insertarMonitoreoP2(oBody: o);
+
+    for (var oPartidaEjecutada in o.aPartidaEjecutada!) {
+      var responseP2 =
+          await _pnPaisApi.insertarMonitoreoP2(oBody: oPartidaEjecutada);
+    }
+
     if (response.error != null) {
       _log.e(response.error.message);
       return Future.error(
@@ -351,6 +359,14 @@ class MainRepo {
     }
 
     return o;
+  }
+
+  Future<List<PartidaEjecutadaModel>> readPartidaEjecutadaByIdMonitoreo(
+    String idMonitoreo,
+  ) async {
+    List<PartidaEjecutadaModel> oResp =
+        await _dbPnPais.readPartidaEjecutadaByIdMonitoreo(idMonitoreo);
+    return oResp;
   }
 
   Future<ProgramacionActividadModel> insertProgramaIntervencion(

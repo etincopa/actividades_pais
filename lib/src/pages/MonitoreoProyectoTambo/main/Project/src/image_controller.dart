@@ -114,4 +114,8 @@ class ImageController extends GetxController {
     });
     itemsImagesAll[nameInputImage] = listImagePath;
   }
+
+  Future<void> removeAllMultipleImage(String nameInputImage) async {
+    itemsImagesAll[nameInputImage] = [];
+  }
 }

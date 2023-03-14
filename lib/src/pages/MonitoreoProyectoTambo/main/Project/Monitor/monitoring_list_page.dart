@@ -184,7 +184,7 @@ class _MonitorListState extends State<MonitorList> {
             child: aMonResp.isNotEmpty
                 ? ListViewMonitores(
                     context: context,
-                    oMonitoreo: aMonResp,
+                    aMonitoreo: aMonResp,
                     scrollController: scrollController)
                 : Container(
                     padding: const EdgeInsets.all(20),

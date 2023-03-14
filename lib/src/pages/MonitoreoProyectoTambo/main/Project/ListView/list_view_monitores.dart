@@ -12,12 +12,12 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 MainController mainController = MainController();
 
 class ListViewMonitores extends StatefulWidget {
-  List<TramaMonitoreoModel> oMonitoreo;
+  List<TramaMonitoreoModel> aMonitoreo;
   ScrollController? scrollController;
   ListViewMonitores({
     Key? key,
     required this.context,
-    required this.oMonitoreo,
+    required this.aMonitoreo,
     this.scrollController,
   }) : super(key: key);
 
@@ -68,15 +68,15 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
   }
 
   String getDescripcionCombo(String tipo, int id) {
-    String respuesta = "NAN";
-    if (tipo == "EM") {
+    String respuesta = 'NAN';
+    if (tipo == 'EM') {
       for (var item in cbEMONI) {
         if (int.parse(item.codigo1!) == id) {
           respuesta = item.descripcion!;
         }
       }
     }
-    if (tipo == "EA") {
+    if (tipo == 'EA') {
       for (var item in cbEAVAN) {
         if (int.parse(item.codigo1!) == id) {
           respuesta = item.descripcion!;
@@ -84,7 +84,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
       }
     }
 
-    if (tipo == "PJ") {
+    if (tipo == 'PJ') {
       for (var item in cbPEJEC) {
         if (int.parse(item.codigo1!) == id) {
           respuesta = item.descripcion!;
@@ -130,7 +130,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
 
   Future<String> syncMonitor(
       BuildContext context, List<TramaMonitoreoModel> a) async {
-    String sMsg = "";
+    String sMsg = '';
     try {
       List<TramaMonitoreoModel> aResp = await mainController.sendMonitoreo(a);
 
@@ -158,12 +158,12 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
 
   @override
   Widget build(BuildContext context) {
-    String experienceLevelColor = "4495FF";
+    String experienceLevelColor = '4495FF';
     return ListView.builder(
       padding: const EdgeInsets.all(10),
       controller: widget.scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
-      itemCount: widget.oMonitoreo.length,
+      itemCount: widget.aMonitoreo.length,
       itemBuilder: (context, index) {
         return Container(
           padding: const EdgeInsets.all(10),
@@ -187,7 +187,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                   Expanded(
                     child: Center(
                       child: Text(
-                        widget.oMonitoreo[index].tambo!,
+                        widget.aMonitoreo[index].tambo!,
                         style: const TextStyle(
                           color: Color.fromARGB(255, 37, 71, 194),
                           fontSize: 20,
@@ -201,18 +201,18 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
               Row(
                 children: [
                   Chip(
-                      label: Text(getDescripcionCombo("PJ",
-                          widget.oMonitoreo[index].idAvanceFisicoPartida!)),
+                      label: Text(getDescripcionCombo('PJ',
+                          widget.aMonitoreo[index].idAvanceFisicoPartida!)),
                       backgroundColor: Colors.green,
                       labelStyle: const TextStyle(color: Colors.white)),
                   const Padding(padding: EdgeInsets.all(10.0)),
                   Chip(
                     label: Text(
                       getDescripcionCombo(
-                          "EM", widget.oMonitoreo[index].idEstadoMonitoreo!),
+                          'EM', widget.aMonitoreo[index].idEstadoMonitoreo!),
                     ),
                     backgroundColor: getColorByStatus(
-                        widget.oMonitoreo[index].idEstadoMonitoreo!),
+                        widget.aMonitoreo[index].idEstadoMonitoreo!),
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ],
@@ -239,9 +239,9 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                   ),
                                   Text(
                                     getDescripcionCombo(
-                                        "EA",
+                                        'EA',
                                         widget
-                                            .oMonitoreo[index].idEstadoAvance!),
+                                            .aMonitoreo[index].idEstadoAvance!),
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -261,7 +261,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                     ),
                                   ),
                                   Text(
-                                    "${((widget.oMonitoreo[index].avanceFisicoAcumulado! * 100).toStringAsFixed(2)).toString()}%",
+                                    '${((widget.aMonitoreo[index].avanceFisicoAcumulado! * 100).toStringAsFixed(2)).toString()}%',
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -281,7 +281,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                     ),
                                   ),
                                   Text(
-                                    widget.oMonitoreo[index].nivelRiesgo!,
+                                    widget.aMonitoreo[index].nivelRiesgo!,
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -302,7 +302,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                     ),
                                   ),
                                   Text(
-                                    widget.oMonitoreo[index].fechaMonitoreo!,
+                                    widget.aMonitoreo[index].fechaMonitoreo!,
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -315,12 +315,12 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                       )
                     ]),
                   ),
-                  if (isUpdate(widget.oMonitoreo[index].idEstadoMonitoreo!))
+                  if (isUpdate(widget.aMonitoreo[index].idEstadoMonitoreo!))
                     GestureDetector(
                       onTap: () async {
                         final alert = AlertQuestion(
-                            title: "Información",
-                            message: "¿Está Seguro de Enviar Monitoreo?",
+                            title: 'Información',
+                            message: '¿Está Seguro de Enviar Monitoreo?',
                             onNegativePressed: () {
                               Navigator.of(context).pop();
                             },
@@ -328,12 +328,12 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                               Navigator.of(context).pop();
                               BusyIndicator.show(context);
                               String sMsg = await syncMonitor(
-                                  context, [widget.oMonitoreo[index]]);
+                                  context, [widget.aMonitoreo[index]]);
                               BusyIndicator.hide(context);
-                              if (sMsg != "") {
+                              if (sMsg != '') {
                                 await Future.delayed(
                                     const Duration(milliseconds: 100));
-                                mostrarAlerta(context, "Error!", sMsg);
+                                mostrarAlerta(context, 'Error!', sMsg);
                               } else {
                                 showSnackbar(
                                   success: true,
@@ -362,7 +362,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                           ),
                           borderRadius: BorderRadius.circular(12),
                           color: Color(
-                            int.parse("0xff$experienceLevelColor"),
+                            int.parse('0xff$experienceLevelColor'),
                           ).withAlpha(20),
                         ),
                         child: const Center(
@@ -382,13 +382,21 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                   Row(
                     children: [
                       if (isEditDelete(
-                          widget.oMonitoreo[index].idEstadoMonitoreo!))
+                          widget.aMonitoreo[index].idEstadoMonitoreo!))
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            TramaMonitoreoModel oDataUp =
+                                widget.aMonitoreo[index];
+
+                            oDataUp.aPartidaEjecutada = await mainController
+                                .getPartidaEjecutadaByIdMonitoreo(
+                                    oDataUp.idMonitoreo!);
+
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => MonitoringDetailNewEditPage(
-                                  datoMonitor: widget.oMonitoreo[index],
-                                  statusM: 'UPDATE'),
+                                datoMonitor: oDataUp,
+                                statusM: 'UPDATE',
+                              ),
                             ));
                           },
                           child: AnimatedContainer(
@@ -404,7 +412,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                     style: BorderStyle.solid),
                                 borderRadius: BorderRadius.circular(12),
                                 color: Color(
-                                        int.parse("0xff$experienceLevelColor"))
+                                        int.parse('0xff$experienceLevelColor'))
                                     .withAlpha(20)),
                             child: const Center(
                               child: Icon(
@@ -416,11 +424,19 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                         ),
                       const SizedBox(width: 10),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          TramaMonitoreoModel oDataUp =
+                              widget.aMonitoreo[index];
+
+                          oDataUp.aPartidaEjecutada = await mainController
+                              .getPartidaEjecutadaByIdMonitoreo(
+                                  oDataUp.idMonitoreo!);
+
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => MonitoringDetailNewEditPage(
-                                datoMonitor: widget.oMonitoreo[index],
-                                statusM: 'LECTURA'),
+                              datoMonitor: oDataUp,
+                              statusM: 'LECTURA',
+                            ),
                           ));
                         },
                         child: AnimatedContainer(
@@ -436,7 +452,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                   style: BorderStyle.solid),
                               borderRadius: BorderRadius.circular(12),
                               color:
-                                  Color(int.parse("0xff$experienceLevelColor"))
+                                  Color(int.parse('0xff$experienceLevelColor'))
                                       .withAlpha(20)),
                           child: const Center(
                             child: Icon(
@@ -448,12 +464,12 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                       ),
                       const SizedBox(width: 10),
                       if (isEditDelete(
-                          widget.oMonitoreo[index].idEstadoMonitoreo!))
+                          widget.aMonitoreo[index].idEstadoMonitoreo!))
                         GestureDetector(
                           onTap: () async {
                             final alert = AlertQuestion(
-                                title: "Información",
-                                message: "¿Está Seguro de Eliminar Monitoreo?",
+                                title: 'Información',
+                                message: '¿Está Seguro de Eliminar Monitoreo?',
                                 onNegativePressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -461,14 +477,14 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                                   Navigator.of(context).pop();
                                   BusyIndicator.show(context);
                                   bool res = await mainController
-                                      .deleteMonitor(widget.oMonitoreo[index]);
+                                      .deleteMonitor(widget.aMonitoreo[index]);
                                   BusyIndicator.hide(context);
                                   if (res) {
                                     showSnackbar(
                                       success: true,
                                       text: 'Monitor Eliminado Correctamente',
                                     );
-                                    widget.oMonitoreo.removeAt(index);
+                                    widget.aMonitoreo.removeAt(index);
                                     setState(() {});
                                   } else {
                                     AnimatedSnackBar.rectangle(
@@ -502,7 +518,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                               ),
                               borderRadius: BorderRadius.circular(12),
                               color: Color(
-                                int.parse("0xff$experienceLevelColor"),
+                                int.parse('0xff$experienceLevelColor'),
                               ).withAlpha(20),
                             ),
                             child: const Center(
@@ -519,7 +535,7 @@ class _ListViewMonitoresState extends State<ListViewMonitores> {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.right,
-                      widget.oMonitoreo[index].idMonitoreo!,
+                      widget.aMonitoreo[index].idMonitoreo!,
                       style: const TextStyle(
                         color: Color.fromARGB(255, 13, 0, 255),
                         fontSize: 11,
