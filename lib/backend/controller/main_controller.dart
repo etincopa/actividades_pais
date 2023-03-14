@@ -13,6 +13,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
@@ -261,6 +262,15 @@ class MainController extends GetxController {
     return await Get.find<MainService>().getMonitoreoByIdMonitor(sIdMonitoreo);
   }
 
+  Future<List<PartidaEjecutadaModel>> getPartidaEjecutadaByIdMonitoreo(
+    String idMonitoreo,
+  ) async {
+    List<PartidaEjecutadaModel> aFind = await Get.find<MainService>()
+        .getPartidaEjecutadaByIdMonitoreo(idMonitoreo);
+
+    return aFind;
+  }
+
   /*
    Obtiene los datos de generales del Monitoreo por el tipo de PARTIDA EJECUTADA
    @String sTypePartida
@@ -287,9 +297,7 @@ class MainController extends GetxController {
    Guardar/Actualizar nuevo Monitoreo y valida campos requeridos
    @TramaProyectoModel o
    */
-  Future<TramaMonitoreoModel> saveMonitoreo(
-    TramaMonitoreoModel o,
-  ) async {
+  Future<TramaMonitoreoModel> saveMonitoreo(TramaMonitoreoModel o) async {
     DateFormat oDFormat = DateFormat('yyyy-MM-dd');
     DateFormat oDFormat2 = DateFormat('HHmmss');
     DateTime _now = DateTime.now();
@@ -314,11 +322,15 @@ class MainController extends GetxController {
         'Imposible guardar monitoreo valores aceptados en avance físico acumulado es de 0 a 100 (%)',
       );
     }
-    if (!(avanceFisicoPartida >= 0 && avanceFisicoPartida <= 100)) {
-      loading.value = false;
-      return Future.error(
-        'Imposible guardar monitoreo valores aceptados en avance físico de partida es de 0 a 100 (%)',
-      );
+
+    for (var oItem in o.aPartidaEjecutada!) {
+      if (!(oItem.avanceFisicoPartida! >= 0 &&
+          oItem.avanceFisicoPartida! <= 100)) {
+        loading.value = false;
+        return Future.error(
+          'Imposible guardar monitoreo valores aceptados en avance físico de partida es de 0 a 100 (%)',
+        );
+      }
     }
 
     if (o.idEstadoMonitoreo == TramaMonitoreoModel.sIdEstadoAPR) {

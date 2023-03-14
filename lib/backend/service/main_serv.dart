@@ -12,6 +12,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
@@ -178,6 +179,16 @@ class MainService {
 
         if (isOnlines) {
           try {
+            /**
+             * Obtener REGISTROS DE PARTIDAS EJECUTADAS
+             */
+
+            List<PartidaEjecutadaModel> aPartidaEjecutada =
+                await Get.find<MainRepo>()
+                    .readPartidaEjecutadaByIdMonitoreo(oMonit.idMonitoreo!);
+
+            oMonit.aPartidaEjecutada = aPartidaEjecutada;
+
             final oResp =
                 await Get.find<MainRepo>().insertarMonitoreoApi(oMonit);
             if (oResp.idMonitoreo != "") {
@@ -257,6 +268,15 @@ class MainService {
     ///Obtiene los registros de la DB Local
     List<TramaProyectoModel> aFind = await Get.find<MainRepo>()
         .getAllProyectoByNeUserSearch(o, search, limit, offset);
+    return aFind;
+  }
+
+  Future<List<PartidaEjecutadaModel>> getPartidaEjecutadaByIdMonitoreo(
+    String idMonitoreo,
+  ) async {
+    List<PartidaEjecutadaModel> aFind = await Get.find<MainRepo>()
+        .readPartidaEjecutadaByIdMonitoreo(idMonitoreo);
+
     return aFind;
   }
 
@@ -666,7 +686,9 @@ class MainService {
   Future<TramaMonitoreoModel> insertMonitorDb(
     TramaMonitoreoModel o,
   ) async {
-    return await Get.find<MainRepo>().insertMonitorDb(o);
+    return await Get.find<MainRepo>().insertMonitorDb(
+      o,
+    );
   }
 
   Future<int> deleteMonitorDb(

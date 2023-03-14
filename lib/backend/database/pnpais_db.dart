@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -137,6 +138,23 @@ class DatabasePnPais {
       ${MonitorFields.fechaFin} $textType,
       ${MonitorFields.nomEstado} $textType,
       ${MonitorFields.nivelRiesgo} $textType
+      )
+    ''');
+
+    await db.execute('''
+    $createTable $tableNamePartidaEjecutadas ( 
+      $constFields,
+
+      ${PartidaEjecutadaFld.idMonitoreo} $textType,
+      ${PartidaEjecutadaFld.snip} $textType,
+      ${PartidaEjecutadaFld.sequence} $textType,
+      ${PartidaEjecutadaFld.idAvanceFisicoPartida} $textType,
+      ${PartidaEjecutadaFld.avanceFisicoPartidaDesc} $textType,
+      ${PartidaEjecutadaFld.avanceFisicoPartida} $textType,
+      ${PartidaEjecutadaFld.imgPartidaEjecutada} $textType,
+      ${PartidaEjecutadaFld.idUsuario} $textType,
+      ${PartidaEjecutadaFld.usuario} $textType,
+      ${PartidaEjecutadaFld.txtIpReg} $textType
       )
     ''');
 
@@ -838,9 +856,49 @@ class DatabasePnPais {
   Future<TramaMonitoreoModel> insertMonitoreo(
     TramaMonitoreoModel o,
   ) async {
+    TramaMonitoreoModel oResp = await insertOrUpdateMonitoreo(o);
+
+    if (o.aPartidaEjecutada!.isEmpty) {
+      await deleteAllMonitoreoPartidaEjecutada(o.idMonitoreo!);
+    } else {
+      List<PartidaEjecutadaModel> aPartidaEjecutada =
+          await readPartidaEjecutadaByIdMonitoreo(o.idMonitoreo!);
+
+      /**
+       * Elimina todos lo registros de la DB que fueron eliminados por el usuario
+       */
+      for (var oPartida in aPartidaEjecutada) {
+        PartidaEjecutadaModel oPartidaExist = o.aPartidaEjecutada!.firstWhere(
+            (map) => map.id == oPartida.id,
+            orElse: () => PartidaEjecutadaModel.empty());
+        if (oPartidaExist.id! == 0) {
+          await deleteMonitoreoPartidaEjecutada(oPartida.id!);
+        }
+      }
+
+      /**
+       * Registrar o actualizar las partidas
+       */
+      for (var oPartida in o.aPartidaEjecutada!) {
+        oPartida = await insertOrUpdateMonitoreoPartidaEjecutada(oPartida);
+      }
+    }
+
+    return oResp;
+  }
+
+  Future<TramaMonitoreoModel> insertOrUpdateMonitoreo(
+    TramaMonitoreoModel o,
+  ) async {
     final db = await instance.database;
     if (o.id != null && o.id! > 0) {
-      await updateMonitoreo(o);
+      await db.update(
+        tableNameTramaMonitoreos,
+        o.toJson(),
+        where: '${MonitorFields.id} = ?',
+        whereArgs: [o.id],
+      );
+
       return o.copy(id: o.id);
     } else {
       final id = await db.insert(
@@ -852,18 +910,6 @@ class DatabasePnPais {
     }
   }
 
-  Future<int> updateMonitoreo(
-    TramaMonitoreoModel o,
-  ) async {
-    final db = await instance.database;
-    return db.update(
-      tableNameTramaMonitoreos,
-      o.toJson(),
-      where: '${MonitorFields.id} = ?',
-      whereArgs: [o.id],
-    );
-  }
-
   Future<int> deleteMonitoreo(
     int i,
   ) async {
@@ -871,6 +917,85 @@ class DatabasePnPais {
     return await db.delete(
       tableNameTramaMonitoreos,
       where: '${MonitorFields.id} = ?',
+      whereArgs: [i],
+    );
+  }
+
+  Future<PartidaEjecutadaModel> insertMonitoreoPartidaEjecutada(
+    PartidaEjecutadaModel o,
+  ) async {
+    final db = await instance.database;
+    final id = await db.insert(
+      tableNamePartidaEjecutadas,
+      o.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return o.copy(id: id);
+  }
+
+  Future<PartidaEjecutadaModel> insertOrUpdateMonitoreoPartidaEjecutada(
+    PartidaEjecutadaModel o,
+  ) async {
+    final db = await instance.database;
+    if (o.id != null && o.id! > 0) {
+      await db.update(
+        tableNamePartidaEjecutadas,
+        o.toJson(),
+        where: '${PartidaEjecutadaFld.id} = ?',
+        whereArgs: [o.id],
+      );
+
+      return o.copy(id: o.id);
+    } else {
+      final id = await db.insert(
+        tableNamePartidaEjecutadas,
+        o.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+      return o.copy(id: id);
+    }
+  }
+
+  Future<List<PartidaEjecutadaModel>> readPartidaEjecutadaByIdMonitoreo(
+    String idMonitoreo,
+  ) async {
+    final db = await instance.database;
+    final orderBy = '${PartidaEjecutadaFld.sequence} ASC';
+    dynamic result;
+
+    result = await db.query(
+      tableNamePartidaEjecutadas,
+      columns: PartidaEjecutadaFld.values,
+      where: '${PartidaEjecutadaFld.idMonitoreo} = ?',
+      whereArgs: [idMonitoreo],
+      orderBy: orderBy,
+    );
+
+    if (result.length == 0) return [];
+    return result
+        .map<PartidaEjecutadaModel>(
+            (json) => PartidaEjecutadaModel.fromJson(json))
+        .toList();
+  }
+
+  Future<int> deleteAllMonitoreoPartidaEjecutada(
+    String idMonitoreo,
+  ) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableNamePartidaEjecutadas,
+      where: '${PartidaEjecutadaFld.idMonitoreo} = ?',
+      whereArgs: [idMonitoreo],
+    );
+  }
+
+  Future<int> deleteMonitoreoPartidaEjecutada(
+    int i,
+  ) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableNamePartidaEjecutadas,
+      where: '${PartidaEjecutadaFld.id} = ?',
       whereArgs: [i],
     );
   }

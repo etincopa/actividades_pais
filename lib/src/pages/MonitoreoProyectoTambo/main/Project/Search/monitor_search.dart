@@ -75,7 +75,7 @@ class MonitorSearchDelegate extends SearchDelegate<String> {
       final splitted = searched.split(' - ');
       for (var item in searchMonitor) {
         if (item.idMonitoreo == splitted[0]) {
-          return ListViewMonitores(context: context, oMonitoreo: [item]);
+          return ListViewMonitores(context: context, aMonitoreo: [item]);
         }
       }
     }

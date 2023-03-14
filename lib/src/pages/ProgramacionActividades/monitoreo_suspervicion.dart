@@ -472,11 +472,22 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
               color: Color.fromARGB(255, 230, 51, 35),
             ),
             onTap: () {
+              int iIndex = 0;
+              for (DataRow oDataRow in dataRows) {
+                LocalKey oKey = oDataRow.key!;
+                String iKey =
+                    oKey.toString().replaceAll(new RegExp(r'[^0-9]'), '');
+                if (iKey == data.idRegistroEntidadesYActividades) {
+                  break;
+                }
+                iIndex++;
+              }
+
+              lisData.removeWhere((item) =>
+                  item.idRegistroEntidadesYActividades ==
+                  data.idRegistroEntidadesYActividades);
               setState(() {
-                lisData.removeWhere((item) =>
-                    item.idRegistroEntidadesYActividades ==
-                    data.idRegistroEntidadesYActividades);
-                dataRows.removeAt(index);
+                dataRows.removeAt(iIndex);
               });
             },
           ),

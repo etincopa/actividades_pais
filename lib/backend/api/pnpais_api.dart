@@ -13,6 +13,7 @@ import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -190,7 +191,7 @@ class PnPaisApi {
   /*
    * POST: .../registrarAvanceAcumuladoPartidaMonitereoMovil
    */
-  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreoP2({
+  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreoP3({
     required TramaMonitoreoModel oBody,
   }) {
     List<Map<String, String>> aFile = [];
@@ -205,6 +206,31 @@ class PnPaisApi {
     return _http.postMultipartFile2<TramaRespApiDto>(
       '${basePathApp2}registrarAvanceAcumuladoPartidaMonitereoMovil',
       data: TramaMonitoreoModel.toJsonObjectApi4(oBody),
+      aFile: aFile,
+      parser: (data) {
+        return TramaRespApiDto.fromJson(data);
+      },
+    );
+  }
+
+  /*
+   * POST: .../registrarAvanceAcumuladoPartidaMonitereoMovil
+   */
+  Future<HttpResponse<TramaRespApiDto>> insertarMonitoreoP2({
+    required PartidaEjecutadaModel oBody,
+  }) {
+    List<Map<String, String>> aFile = [];
+
+    if (oBody.imgPartidaEjecutada != '') {
+      final aImgPartidaEjecutada = oBody.imgPartidaEjecutada!.split(',');
+      for (var oValue in aImgPartidaEjecutada) {
+        aFile.add({PartidaEjecutadaFld.imgPartidaEjecutada: oValue.trim()});
+      }
+    }
+
+    return _http.postMultipartFile2<TramaRespApiDto>(
+      '${basePathApp2}registrarAvanceAcumuladoPartidaMonitereoMovil',
+      data: PartidaEjecutadaModel.toJsonObjectApi4(oBody),
       aFile: aFile,
       parser: (data) {
         return TramaRespApiDto.fromJson(data);
