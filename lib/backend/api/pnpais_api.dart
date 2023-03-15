@@ -16,6 +16,8 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
@@ -343,6 +345,32 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => RutaTamboModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<PlanMantenimientoModel>>> getPlanMantenimiento(
+      String? idRegion) async {
+    return await _http.request<List<PlanMantenimientoModel>>(
+      '${basePathApp3}obtenerMantenimientoParqueInformatico/$idRegion',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => PlanMantenimientoModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<PriorizacionModel>>> getPriorizacion(
+      String? idTambo) async {
+    return await _http.request<List<PriorizacionModel>>(
+      '${basePathApp3}obtenerEstadoPriorizacion/$idTambo',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => PriorizacionModel.fromJson(e))
+            .toList();
       },
     );
   }

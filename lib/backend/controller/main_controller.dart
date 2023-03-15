@@ -16,6 +16,8 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -898,6 +900,22 @@ class MainController extends GetxController {
   ) async {
     List<RutaTamboModel> aResp =
         await Get.find<MainService>().getRutaTambo(numSnip);
+    return aResp;
+  }
+
+  Future<List<PlanMantenimientoModel>> planMantenimiento(
+    String? idRegion,
+  ) async {
+    List<PlanMantenimientoModel> aResp =
+        await Get.find<MainService>().getPlanMantenimiento(idRegion);
+    return aResp;
+  }
+
+  Future<List<PriorizacionModel>> priorizacionTambo(
+    String? idTambo,
+  ) async {
+    List<PriorizacionModel> aResp =
+        await Get.find<MainService>().getPriorizacion(idTambo);
     return aResp;
   }
 

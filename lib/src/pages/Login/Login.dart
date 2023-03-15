@@ -3,6 +3,8 @@
 import 'dart:async';
 
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
+import 'package:actividades_pais/src/pages/Login/politicas.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
@@ -115,12 +117,22 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           _Form(),
                           SizedBox(height: h / 35),
-                          const Text(
-                            'Términos y condiciones de uso',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w200,
+                          TextButton(
+                            child: const Text(
+                              'Políticas de privacidad',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          )
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Politicas()),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -128,6 +140,26 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            Expanded(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: TextButton(
+                    child: const Text(
+                      'Entrar sin credenciales',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TambookHome()),
+                      );
+                    },
+                  )),
+            )
           ],
         ),
       ),

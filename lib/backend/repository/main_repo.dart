@@ -15,6 +15,8 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
@@ -537,6 +539,32 @@ class MainRepo {
   ) async {
     List<RutaTamboModel> aResp = [];
     final response = await _pnPaisApi.getRutaTambo(numSnip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<PlanMantenimientoModel>> getPlanMantenimiento(
+    String? idRegion,
+  ) async {
+    List<PlanMantenimientoModel> aResp = [];
+    final response = await _pnPaisApi.getPlanMantenimiento(idRegion);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<PriorizacionModel>> getPriorizacion(
+    String? idTambo,
+  ) async {
+    List<PriorizacionModel> aResp = [];
+    final response = await _pnPaisApi.getPriorizacion(idTambo);
     if (response.error == null) {
       aResp = response.data!;
     } else {

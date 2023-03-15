@@ -13,6 +13,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -1226,7 +1227,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                '$totalMetaTipo1',
+                                '${formatoDecimal(totalMetaTipo1)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1239,7 +1240,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                '$totalAvance1',
+                                '${formatoDecimal(totalAvance1)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1253,7 +1254,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
-                                  '$totalBrecha1',
+                                  '${formatoDecimal(totalBrecha1)}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -1387,7 +1388,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                '$totalMetaTipo1',
+                                '${formatoDecimal(totalMetaTipo1)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1400,7 +1401,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                '$totalAvance1',
+                                '${formatoDecimal(totalAvance1)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1414,7 +1415,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                                 Text(
-                                  '$totalBrecha1',
+                                  '${formatoDecimal(totalBrecha1)}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -2918,6 +2919,12 @@ class _HomeTambookState extends State<HomeTambook>
         ],
       ),
     );
+  }
+
+  String formatoDecimal(int numero) {
+    NumberFormat f = new NumberFormat("#,###.0#", "es_US");
+    String result = f.format(numero);
+    return result;
   }
 }
 

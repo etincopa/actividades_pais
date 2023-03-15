@@ -7,6 +7,8 @@ import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
+import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
@@ -25,6 +27,7 @@ import 'package:actividades_pais/src/pages/widgets/image_preview.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
+import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/image_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +55,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     "INFORMACIÓN DEL TAMBO",
     "INFORMACIÓN DEL PERSONAL",
     "METAS",
+    "PLAN DE MANTENIMIENTO",
     "INTERNET",
     "EQUIPOS INFORMÁTICOS",
     "COMBUSTIBLE",
@@ -75,20 +79,26 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aInterAmbDir = [];
   late List<TamboActividadModel> aInterSopEnt = [];
   late List<TamboActividadModel> aCoordinacio = [];
+  List<HomeOptions> aEquipoInformatico = [];
 
   late List<IncidentesInternetModel> incidencias = [];
   late GuardianiaTamboModel oGuardia = GuardianiaTamboModel.empty();
 
   late List<RutaTamboModel> aRuta = [];
+  late List<PriorizacionModel> aPriorizacion = [];
+  late List<PlanMantenimientoModel> aPlanMantenimientoInformatico = [];
   late List<ServicioBasicoTamboModel> aSrvBasico = [];
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
   bool isLoadingRuta = false;
+  bool isLoadingMantenimientoEquipos = true;
+  bool isLoadingPriorizacion = false;
 
   bool isLoadingSrvBasico = true;
   bool isLoadingGuardian = false;
   bool isLoading2 = false;
+  bool isLoadingEI = true;
 
   int statusLoadActividad = 0;
   bool loading = true;
@@ -148,7 +158,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     });
 
     currentTitle = titleList[0];
-    _tabControllerTitle = TabController(length: 9, vsync: this);
+    _tabControllerTitle = TabController(length: 10, vsync: this);
     _tabControllerTitle.addListener(changeTitle);
 
     super.initState();
@@ -158,6 +168,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
+    buildEquipoInformatico();
     //incidenciasInternet();
   }
 
@@ -165,6 +176,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     oTambo = await mainCtr.getTamboDatoGeneral(
       (widget.listTambo!.idTambo).toString(),
     );
+
     guardianTambo(oTambo.nSnip ?? 0);
     rutaTambo(oTambo.nSnip ?? 0);
     servicioBasicoTambo(oTambo.idTambo ?? 0);
@@ -173,6 +185,9 @@ class _DetalleTambookState extends State<DetalleTambook>
     incidenciasInternet(oTambo.nSnip ?? 0);
     getCombustibleTambo();
     getProgIntervencionTambo();
+    getPlanMantenimientoInformatico(
+        widget.listTambo!.idDepartamento.toString());
+    getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
 
     setState(() {});
   }
@@ -363,6 +378,174 @@ class _DetalleTambookState extends State<DetalleTambook>
     return convertBase64(oB64.base64 ?? '');
   }
 
+  Future<void> getPlanMantenimientoInformatico(String idRegion) async {
+    isLoadingMantenimientoEquipos = true;
+    aPlanMantenimientoInformatico = await mainCtr.planMantenimiento(idRegion);
+    isLoadingMantenimientoEquipos = false;
+    setState(() {});
+  }
+
+  Future<void> getPriorizacionTambo(String idTambo) async {
+    isLoadingPriorizacion = false;
+    aPriorizacion = await mainCtr.priorizacionTambo(idTambo);
+    isLoadingPriorizacion = true;
+    setState(() {});
+  }
+
+  Future<void> buildEquipoInformatico() async {
+    String icon1 = 'assets/icons/computadora.png';
+    String icon2 = 'assets/icons/laptop.png';
+    String icon3 = 'assets/icons/proyector.png';
+    String icon4 = 'assets/icons/wifi.png';
+    String icon5 = 'assets/icons/impresora.png';
+    String icon6 = 'assets/icons/parlante.png';
+
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2001',
+        name: 'PC \n(224)',
+        types: const ['Ver'],
+        image: icon1,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2002',
+        name: 'LAPTOP \n(1047)',
+        types: const ['Ver'],
+        image: icon2,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2003',
+        name: 'PROYECTOR \n(224)',
+        types: const ['Ver'],
+        image: icon3,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2004',
+        name: 'ANTENA WIFI \n(1047)',
+        types: const ['Ver'],
+        image: icon4,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2005',
+        name: 'IMPRESORAS \n(224)',
+        types: const ['Ver'],
+        image: icon5,
+        color: Colors.white,
+      ),
+    );
+    aEquipoInformatico.add(
+      HomeOptions(
+        code: 'OPT2006',
+        name: 'PARLANTES \n(1047)',
+        types: const ['Ver'],
+        image: icon6,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget equipoInformatico() {
+    return Flexible(
+      child: SizedBox(
+        height: 400.0,
+        child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.1,
+            crossAxisSpacing: 30,
+            mainAxisSpacing: 30,
+          ),
+          padding: const EdgeInsets.only(
+            left: 28,
+            right: 28,
+            bottom: 58,
+          ),
+          itemCount: aEquipoInformatico.length,
+          itemBuilder: (context, index) {
+            HomeOptions homeOption = aEquipoInformatico[index];
+            return InkWell(
+              splashColor: Colors.white10,
+              highlightColor: Colors.white10,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/icons/botones 1-02.png"),
+                    fit: BoxFit.cover,
+                  ),
+                  color: homeOption.color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 241, 240, 240)
+                          .withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 5),
+                      Container(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          bottom: 8,
+                        ),
+                        child: Hero(
+                          tag: homeOption.image!,
+                          child: Image.asset(
+                            homeOption.image!,
+                            fit: BoxFit.contain,
+                            width: 80,
+                            height: 70,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        child: Center(
+                          child: Text(
+                            homeOption.name!,
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.normal,
+                              fontSize: 11.0,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              onTap: () async {
+                //  var oHomeOptionSelect = aHomeOptions[index];
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(
@@ -463,7 +646,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 9,
+              length: 10,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -572,6 +755,24 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'Plan de mantenimiento',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/mantenimiento.png'),
+                                    size: 55,
+                                  ),
+                                ),
+                              ),
                               Tab(
                                 icon: ImageIcon(
                                   AssetImage('assets/wifi.png'),
@@ -630,6 +831,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                           */
                         cardDatosUbicacion(),
                         const SizedBox(height: 10),
+                        /*
+                          * CATEGORIZACIÓN TAMBOS
+                          */
+                        if (aPriorizacion.isNotEmpty) cardDatosCategorizacion(),
+                        const SizedBox(height: 10),
+
                         /*
                           * DATOS GENERALES
                           */
@@ -690,6 +897,17 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     ),
 
+                    //const TabScreen("PLAN DE MANTENIMIENTO"),
+                    ListView(
+                      children: [
+                        const SizedBox(height: 10),
+                        cardDatosMantenimientoInformatico(),
+                        const SizedBox(height: 10),
+                        cardIncidencia(),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+
                     //const TabScreen("SERVICIOS INTERNET"),
                     ListView(
                       children: [
@@ -702,12 +920,14 @@ class _DetalleTambookState extends State<DetalleTambook>
 
                     //const TabScreen("EQUIPAMIENTO TECNOLÓGICO DEL TAMBO"),
 
-                    ListView(
+                    SingleChildScrollView(
+                        child: Column(
                       children: [
+                        const SizedBox(height: 15),
                         cardEquipoTecnologico(),
                         const SizedBox(height: 40),
                       ],
-                    ),
+                    )),
 
 //const TabScreen("COMBUSTIBLE"),
 
@@ -1081,20 +1301,24 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text(oGuardia.numeroDocumento ?? ''),
                         ),
                         ListTile(
-                          title: const Text('INICIO DE CONTRATO'),
-                          subtitle: Text(oGuardia.fecInicioContrato ?? ''),
-                        ),
-                        ListTile(
                           title: const Text('SEXO'),
                           subtitle: Text(oGuardia.sexo ?? ''),
                         ),
                         ListTile(
-                          title: const Text('FECHA DE NACIMIENTO'),
-                          subtitle: Text(oGuardia.fechaNacimiento ?? ''),
+                          title: const Text('CORREO'),
+                          subtitle: Text(oGuardia.empleadoCorreo ?? ''),
                         ),
                         ListTile(
                           title: const Text('TIPO CONTRATO'),
                           subtitle: Text(oGuardia.tipoContrato ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('FECHA INICIO CONTRATO'),
+                          subtitle: Text(oGuardia.fecInicioContrato ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('FECHA FIN CONTRATO'),
+                          subtitle: Text(oGuardia.fecFinalContrato ?? ''),
                         ),
                       ],
                     ),
@@ -1176,6 +1400,68 @@ class _DetalleTambookState extends State<DetalleTambook>
                           stripColor: Colors.teal,
                           dividerCircleColor: Colors.white,
                         )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardDatosCategorizacion() {
+    var heading = 'CATEGORIZACIÓN';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (aPriorizacion.isNotEmpty)
+                          for (var priorizacion in aPriorizacion!)
+                            ListTile(
+                              iconColor: const Color.fromARGB(255, 0, 0, 0),
+                              title:
+                                  Text(priorizacion.nombrePriorizacion ?? ''),
+                            ),
                       ],
                     ),
                   ),
@@ -1690,6 +1976,10 @@ class _DetalleTambookState extends State<DetalleTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -1842,6 +2132,10 @@ class _DetalleTambookState extends State<DetalleTambook>
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
           border: Border.all(
             width: 1,
             color: colorI,
@@ -1965,6 +2259,129 @@ class _DetalleTambookState extends State<DetalleTambook>
                   )
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *  PLAN DE MANTENIMIENTO DEL PARQUE INFORMÁTICO
+ * -----------------------------------------------
+ */
+  Padding cardDatosMantenimientoInformatico() {
+    var heading = 'MANTENIMIENTO DE EQUIPOS INFORMÁTICOS';
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/mantenimiento.png"),
+                  size: 40,
+                  color: Colors.grey,
+                ),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: isLoadingMantenimientoEquipos
+                        ? 1
+                        : (aPlanMantenimientoInformatico.isEmpty
+                            ? 1
+                            : aPlanMantenimientoInformatico.length),
+                    itemBuilder: (context, index) {
+                      if (isLoadingMantenimientoEquipos) {
+                        return ShinyWidget();
+                      } else {
+                        return Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: Column(children: [
+                              //
+                              ListTile(
+                                title: Text(
+                                    'Mantenimiento programado para el mes de ${obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? '')} del año ${aPlanMantenimientoInformatico[index].anio}.'),
+                              ),
+                              const ListTile(
+                                title: Text('Soporte de UTI asignado : '),
+                              ),
+                              SizedBox(
+                                height: 150.0,
+                                child: ImageUtil.ImageUrl(
+                                  aPlanMantenimientoInformatico[index]
+                                          .rutaFoto ??
+                                      '',
+                                  width: 110,
+                                  imgDefault: 'assets/icons/user-male-2.png',
+                                ),
+                              ),
+                              Container(
+                                // padding: EdgeInsets.all(5.0),
+                                alignment: Alignment.centerLeft,
+                                child: Card(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        title:
+                                            const Text('NOMBRES Y APELLIDOS'),
+                                        subtitle: Text(
+                                            '${aPlanMantenimientoInformatico[index].nombresTecnico} ${aPlanMantenimientoInformatico[index].apellidoPaternoTecnico} ${aPlanMantenimientoInformatico[index].apellidoMaternoTecnico}'),
+                                      ),
+                                      ListTile(
+                                        title: const Text('CORREO'),
+                                        subtitle: Text(
+                                            aPlanMantenimientoInformatico[index]
+                                                    .correoTecnico ??
+                                                ''),
+                                      ),
+                                      ListTile(
+                                        title: const Text('CELULAR'),
+                                        subtitle: Text(
+                                            aPlanMantenimientoInformatico[index]
+                                                    .celularTecnico ??
+                                                ''),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]));
+                      }
+                    })
+              ],
             ),
           ],
         ),
@@ -2732,265 +3149,12 @@ class _DetalleTambookState extends State<DetalleTambook>
  *            EQUIPAMIENTO TECNOLÓGICO
  * -----------------------------------------------
  */
-  Padding cardEquipoTecnologico() {
-    final ButtonStyle flatButtonStyle = TextButton.styleFrom(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
-      ),
-    );
-    var heading = 'EQUIPAMIENTO TECNOLÓGICO';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: colorI,
-          ),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 5), // changes position of shadow
-            ),
-          ],
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: ExpansionTile(
-          initiallyExpanded: true,
-          title: ListTile(
-            visualDensity: const VisualDensity(vertical: -4),
-            title: Text(
-              heading,
-              style: const TextStyle(
-                fontSize: 16,
-                color: color_01,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          children: <Widget>[
-            const Divider(color: colorI),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ButtonBar(
-                    alignment: MainAxisAlignment.spaceAround,
-                    buttonHeight: 52.0,
-                    buttonMinWidth: 90.0,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            style: flatButtonStyle,
-                            onPressed: () {},
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: color_01,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                      color: color_01,
-                                      Icons.desktop_mac_outlined,
-                                      size: 45),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                const Text(
-                                  'PC (10)',
-                                  style: TextStyle(
-                                    color: color_01,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            style: flatButtonStyle,
-                            onPressed: () {},
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: color_01,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                      color: color_01, Icons.laptop, size: 45),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                const Text(
-                                  'LAPTOP (10)',
-                                  style: TextStyle(
-                                    color: color_01,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.spaceAround,
-                    buttonHeight: 52.0,
-                    buttonMinWidth: 90.0,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            style: flatButtonStyle,
-                            onPressed: () {},
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: color_01,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                      color: color_01,
-                                      Icons.photo_camera_front,
-                                      size: 45),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                const Text(
-                                  'PROYECTOR (30)',
-                                  style: TextStyle(
-                                    color: color_01,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            style: flatButtonStyle,
-                            onPressed: () {},
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: color_01,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                      color: color_01, Icons.wifi, size: 45),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                const Text(
-                                  'ANTENA WIFI (30)',
-                                  style: TextStyle(
-                                    color: color_01,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.spaceAround,
-                    buttonHeight: 52.0,
-                    buttonMinWidth: 90.0,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: TextButton(
-                            style: flatButtonStyle,
-                            onPressed: () {},
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: const EdgeInsets.all(5),
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: color_01,
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                      color: color_01,
-                                      Icons.print_outlined,
-                                      size: 45),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                const Text(
-                                  'IMPRESORAS (10)',
-                                  style: TextStyle(
-                                    color: color_01,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+  Column cardEquipoTecnologico() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        isLoadingEI ? equipoInformatico() : const CircularProgressIndicator(),
+      ],
     );
   }
 
@@ -3571,6 +3735,64 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
       ),
     );
+  }
+
+  String obtenerNombreMes(String mes) {
+    String nombreMes = "";
+    switch (mes) {
+      case "1":
+        nombreMes = "Enero";
+        break;
+
+      case "2":
+        nombreMes = "Febrero";
+        break;
+
+      case "3":
+        nombreMes = "Marzo";
+        break;
+
+      case "4":
+        nombreMes = "Abril";
+        break;
+
+      case "5":
+        nombreMes = "Mayo";
+        break;
+
+      case "6":
+        nombreMes = "Junio";
+        break;
+
+      case "7":
+        nombreMes = "Julio";
+        break;
+
+      case "8":
+        nombreMes = "Agosto";
+        break;
+
+      case "9":
+        nombreMes = "Setiembre";
+        break;
+
+      case "10":
+        nombreMes = "Octubre";
+        break;
+
+      case "11":
+        nombreMes = "Noviembre";
+        break;
+
+      case "12":
+        nombreMes = "Diciembre";
+        break;
+
+      default:
+        nombreMes = "Sin mes asignado";
+        break;
+    }
+    return nombreMes;
   }
 }
 
