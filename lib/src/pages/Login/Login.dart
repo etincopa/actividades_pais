@@ -140,21 +140,19 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TambookHome()),
-                      );
-                    },
-                    icon: const Icon(Icons.person_pin),
-                    label: const Text("Entrar como invitado")),
-              ),
-            )
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const TambookHome()),
+                    );
+                  },
+                  icon: const Icon(Icons.person_pin),
+                  label: const Text("Entrar como invitado")),
+            ),
           ],
         ),
       ),
