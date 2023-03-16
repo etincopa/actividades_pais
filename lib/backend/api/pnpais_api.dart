@@ -6,6 +6,7 @@ import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
@@ -14,9 +15,11 @@ import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -26,6 +29,7 @@ import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/generated/l10n.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -363,6 +367,31 @@ class PnPaisApi {
     );
   }
 
+  Future<HttpResponse<List<PlanMantenimientoInfraestructuraModel>>>
+      getPlanMantenimientoInfraestructura(String? snip) async {
+    return await _http.request<List<PlanMantenimientoInfraestructuraModel>>(
+      '${basePathApp3}obtenerPlanMantenimientoInfraestructura/$snip',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => PlanMantenimientoInfraestructuraModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<PersonalPuestoModel>>> getPersonalPuesto() async {
+    return await _http.request<List<PersonalPuestoModel>>(
+      '${basePathApp3}cantidadporPuestoUsuario/ALL',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => PersonalPuestoModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
   Future<HttpResponse<List<PriorizacionModel>>> getPriorizacion(
       String? idTambo) async {
     return await _http.request<List<PriorizacionModel>>(
@@ -491,6 +520,21 @@ class PnPaisApi {
         return (tambosOperativos as List)
             .map((e) => TambosMapaModel.fromJson(e))
             .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<EquipamientoInformaticoModel>>>
+      getEquipamientoInformatico(String snip) async {
+    return await _http.request<List<EquipamientoInformaticoModel>>(
+      '${basePathApp3}obtenerParqueInformatico/${snip}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => EquipamientoInformaticoModel.fromJson(e))
+            .toList();
+
+        //return groupBy(equipamiento, (obj) => obj.categoria);
       },
     );
   }

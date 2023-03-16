@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
+import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
@@ -13,9 +14,11 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
+import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -213,6 +216,29 @@ class MainRepo {
   ) async {
     List<TramaMonitoreoModel> aResp = [];
     final response = await _pnPaisApi.listarTramaMonitoreoMovilPaginado(o);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<PersonalPuestoModel>> getPersonalPuesto() async {
+    List<PersonalPuestoModel> aResp = [];
+    final response = await _pnPaisApi.getPersonalPuesto();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<EquipamientoInformaticoModel>> getEquipamientoInformatico(
+      String snip) async {
+    List<EquipamientoInformaticoModel> aResp = [];
+    final response = await _pnPaisApi.getEquipamientoInformatico(snip);
     if (response.error == null) {
       aResp = response.data!;
     } else {
@@ -564,6 +590,20 @@ class MainRepo {
   ) async {
     List<PlanMantenimientoModel> aResp = [];
     final response = await _pnPaisApi.getPlanMantenimiento(idRegion);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<PlanMantenimientoInfraestructuraModel>>
+      getPlanMantenimientoInfraestructura(
+    String? snip,
+  ) async {
+    List<PlanMantenimientoInfraestructuraModel> aResp = [];
+    final response = await _pnPaisApi.getPlanMantenimientoInfraestructura(snip);
     if (response.error == null) {
       aResp = response.data!;
     } else {

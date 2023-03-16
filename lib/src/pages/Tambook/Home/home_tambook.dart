@@ -1,8 +1,10 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
+import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
+import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -14,6 +16,8 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
+
+import "package:collection/collection.dart";
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -141,6 +145,8 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Future<void> buildPersonalTambo() async {
+    List<PersonalPuestoModel> aPersonal = await mainCtr.getPersonalPuesto();
+
     String icon1 = 'assets/icons/persona1.png';
     String icon2 = 'assets/icons/persona2.png';
     String icon3 = 'assets/icons/persona3.png';
@@ -150,7 +156,7 @@ class _HomeTambookState extends State<HomeTambook>
       HomeOptions(
         code: 'OPT3001',
         name: 'JEFES DE UNIDADES TERRITORIALES',
-        name2: '17',
+        name2: aPersonal[0].jut.toString() ?? '0',
         types: const ['Ver'],
         image: icon1,
         color: Colors.white,
@@ -160,7 +166,7 @@ class _HomeTambookState extends State<HomeTambook>
       HomeOptions(
         code: 'OPT3002',
         name: 'MONITORES',
-        name2: '28',
+        name2: aPersonal[0].mo.toString() ?? '0',
         types: const ['Ver'],
         image: icon2,
         color: Colors.white,
@@ -170,17 +176,28 @@ class _HomeTambookState extends State<HomeTambook>
       HomeOptions(
         code: 'OPT3003',
         name: 'GESTORES \nTAMBOS -PIAS',
-        name2: '487',
+        name2: aPersonal[0].git.toString() ?? '0',
         types: const ['Ver'],
         image: icon3,
         color: Colors.white,
       ),
     );
+
     aPersonalTambo.add(
       HomeOptions(
           code: 'OPT3004',
           name: 'GUARDIANES \nTAMBOS - PIAS',
-          name2: '487',
+          name2: aPersonal[0].gu.toString() ?? '0',
+          types: const ['Ver'],
+          image: icon4,
+          color: Colors.white),
+    );
+
+    aPersonalTambo.add(
+      HomeOptions(
+          code: 'OPT3004',
+          name: 'SOPORTE \n TÉCNICO',
+          name2: aPersonal[0].st.toString() ?? '0',
           types: const ['Ver'],
           image: icon4,
           color: Colors.white),
@@ -188,6 +205,11 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Future<void> buildEquipoInformatico() async {
+    List<EquipamientoInformaticoModel> aEquipos =
+        await mainCtr.getEquipamientoInformatico("0");
+
+    var equipamiento = groupBy(aEquipos, (obj) => obj.categoria);
+
     String icon1 = 'assets/icons/computadora.png';
     String icon2 = 'assets/icons/laptop.png';
     String icon3 = 'assets/icons/proyector.png';
@@ -198,7 +220,7 @@ class _HomeTambookState extends State<HomeTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2001',
-        name: 'PC \n(224)',
+        name: 'PC \n(${equipamiento['CPU']!.length})',
         types: const ['Ver'],
         image: icon1,
         color: Colors.white,
@@ -207,7 +229,7 @@ class _HomeTambookState extends State<HomeTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2002',
-        name: 'LAPTOP \n(1047)',
+        name: 'LAPTOP \n(${equipamiento['LAPTOP']!.length})',
         types: const ['Ver'],
         image: icon2,
         color: Colors.white,
@@ -216,31 +238,31 @@ class _HomeTambookState extends State<HomeTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2003',
-        name: 'PROYECTOR \n(224)',
+        name: 'PROYECTOR \n(${equipamiento['PROYECTOR']!.length})',
         types: const ['Ver'],
         image: icon3,
         color: Colors.white,
       ),
     );
-    aEquipoInformatico.add(
+    /*aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2004',
-        name: 'ANTENA WIFI \n(1047)',
+        name: 'ANTENA WIFI \n(${equipamiento['CPU']!.length})',
         types: const ['Ver'],
         image: icon4,
         color: Colors.white,
       ),
-    );
+    );*/
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2005',
-        name: 'IMPRESORAS \n(224)',
+        name: 'IMPRESORAS \n(${equipamiento['IMPRESORA']!.length})',
         types: const ['Ver'],
         image: icon5,
         color: Colors.white,
       ),
     );
-    aEquipoInformatico.add(
+    /*aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2006',
         name: 'PARLANTES \n(1047)',
@@ -248,7 +270,7 @@ class _HomeTambookState extends State<HomeTambook>
         image: icon6,
         color: Colors.white,
       ),
-    );
+    );*/
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -638,7 +660,7 @@ class _HomeTambookState extends State<HomeTambook>
                                           fit: BoxFit.contain,
                                           width: 40,
                                           height: 40,
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                         ),
                                       ),
                                     )
@@ -646,6 +668,7 @@ class _HomeTambookState extends State<HomeTambook>
                               Text(
                                 oSubOption.name2!,
                                 style: const TextStyle(fontSize: 20.0),
+                                textAlign: TextAlign.left,
                               ),
                               Text(
                                 oSubOption.name!,
@@ -1209,11 +1232,6 @@ class _HomeTambookState extends State<HomeTambook>
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 197, 194, 194)
-                          .withOpacity(0.2),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -1225,6 +1243,7 @@ class _HomeTambookState extends State<HomeTambook>
                               const Text(
                                 "Meta :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '${formatoDecimal(totalMetaTipo1)}',
@@ -1238,6 +1257,7 @@ class _HomeTambookState extends State<HomeTambook>
                               const Text(
                                 "Avance :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '${formatoDecimal(totalAvance1)}',
@@ -1252,6 +1272,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 const Text(
                                   "Brecha :",
                                   style: TextStyle(fontSize: 15.0),
+                                  textAlign: TextAlign.right,
                                 ),
                                 Text(
                                   '${formatoDecimal(totalBrecha1)}',
@@ -1370,11 +1391,6 @@ class _HomeTambookState extends State<HomeTambook>
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 197, 194, 194)
-                          .withOpacity(0.2),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -1386,6 +1402,7 @@ class _HomeTambookState extends State<HomeTambook>
                               const Text(
                                 "Meta :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '${formatoDecimal(totalMetaTipo1)}',
@@ -1399,6 +1416,7 @@ class _HomeTambookState extends State<HomeTambook>
                               const Text(
                                 "Avance :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '${formatoDecimal(totalAvance1)}',
@@ -1413,6 +1431,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 const Text(
                                   "Brecha :",
                                   style: TextStyle(fontSize: 15.0),
+                                  textAlign: TextAlign.right,
                                 ),
                                 Text(
                                   '${formatoDecimal(totalBrecha1)}',

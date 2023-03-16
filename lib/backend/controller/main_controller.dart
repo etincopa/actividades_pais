@@ -7,6 +7,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
+import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
@@ -14,9 +15,11 @@ import 'package:actividades_pais/backend/model/listar_programa_actividad_model.d
 import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
+import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
+import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
@@ -912,11 +915,33 @@ class MainController extends GetxController {
     return aResp;
   }
 
+  Future<List<PlanMantenimientoInfraestructuraModel>>
+      planMantenimientoInfraestructura(
+    String? snip,
+  ) async {
+    List<PlanMantenimientoInfraestructuraModel> aResp =
+        await Get.find<MainService>().getPlanMantenimientoInfraestructura(snip);
+    return aResp;
+  }
+
   Future<List<PriorizacionModel>> priorizacionTambo(
     String? idTambo,
   ) async {
     List<PriorizacionModel> aResp =
         await Get.find<MainService>().getPriorizacion(idTambo);
+    return aResp;
+  }
+
+  Future<List<PersonalPuestoModel>> getPersonalPuesto() async {
+    List<PersonalPuestoModel> aResp =
+        await Get.find<MainService>().getPersonalPuesto();
+    return aResp;
+  }
+
+  Future<List<EquipamientoInformaticoModel>> getEquipamientoInformatico(
+      String snip) async {
+    List<EquipamientoInformaticoModel> aResp =
+        await Get.find<MainService>().getEquipamientoInformatico(snip);
     return aResp;
   }
 

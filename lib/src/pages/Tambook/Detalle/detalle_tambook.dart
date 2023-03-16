@@ -7,6 +7,8 @@ import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
+import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
+import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -38,6 +40,7 @@ import 'package:kdgaugeview/kdgaugeview.dart';
 import 'package:lecle_bubble_timeline/lecle_bubble_timeline.dart';
 import 'package:lecle_bubble_timeline/models/timeline_item.dart';
 import 'package:http/http.dart' as http;
+import "package:collection/collection.dart";
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -87,12 +90,15 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<RutaTamboModel> aRuta = [];
   late List<PriorizacionModel> aPriorizacion = [];
   late List<PlanMantenimientoModel> aPlanMantenimientoInformatico = [];
+  late List<PlanMantenimientoInfraestructuraModel>
+      aPlanMantenimientoInfraestructura = [];
   late List<ServicioBasicoTamboModel> aSrvBasico = [];
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
   bool isLoadingRuta = false;
   bool isLoadingMantenimientoEquipos = true;
+  bool isLoadingMantenimientoInfraestructura = true;
   bool isLoadingPriorizacion = false;
 
   bool isLoadingSrvBasico = true;
@@ -168,7 +174,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     tamboDatoGeneral();
     TamboIntervencionAtencionIncidencia();
-    buildEquipoInformatico();
+
     //incidenciasInternet();
   }
 
@@ -186,8 +192,9 @@ class _DetalleTambookState extends State<DetalleTambook>
     getCombustibleTambo();
     getProgIntervencionTambo();
     getPlanMantenimientoInformatico(oTambo.ut.toString());
+    getPlanMantenimientoInfraestructura(oTambo.nSnip.toString());
     getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
-
+    buildEquipoInformatico(oTambo.nSnip.toString());
     setState(() {});
   }
 
@@ -384,6 +391,14 @@ class _DetalleTambookState extends State<DetalleTambook>
     setState(() {});
   }
 
+  Future<void> getPlanMantenimientoInfraestructura(String snip) async {
+    isLoadingMantenimientoInfraestructura = true;
+    aPlanMantenimientoInfraestructura =
+        await mainCtr.planMantenimientoInfraestructura(snip);
+    isLoadingMantenimientoInfraestructura = false;
+    setState(() {});
+  }
+
   Future<void> getPriorizacionTambo(String idTambo) async {
     isLoadingPriorizacion = false;
     aPriorizacion = await mainCtr.priorizacionTambo(idTambo);
@@ -391,7 +406,12 @@ class _DetalleTambookState extends State<DetalleTambook>
     setState(() {});
   }
 
-  Future<void> buildEquipoInformatico() async {
+  Future<void> buildEquipoInformatico(String snip) async {
+    List<EquipamientoInformaticoModel> aEquipos =
+        await mainCtr.getEquipamientoInformatico(snip);
+
+    var equipamiento = groupBy(aEquipos, (obj) => obj.categoria);
+
     String icon1 = 'assets/icons/computadora.png';
     String icon2 = 'assets/icons/laptop.png';
     String icon3 = 'assets/icons/proyector.png';
@@ -399,10 +419,15 @@ class _DetalleTambookState extends State<DetalleTambook>
     String icon5 = 'assets/icons/impresora.png';
     String icon6 = 'assets/icons/parlante.png';
 
+    var cpu = equipamiento['CPU']?.length ?? '0';
+    var proyector = equipamiento['PROYECTOR']?.length ?? '0';
+    var laptop = equipamiento['LAPTOP']?.length ?? '0';
+    var impresora = equipamiento['IMPRESORA']?.length ?? '0';
+
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2001',
-        name: 'PC \n(224)',
+        name: 'PC \n(${cpu.toString()})',
         types: const ['Ver'],
         image: icon1,
         color: Colors.white,
@@ -411,7 +436,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2002',
-        name: 'LAPTOP \n(1047)',
+        name: 'LAPTOP \n(${laptop.toString()})',
         types: const ['Ver'],
         image: icon2,
         color: Colors.white,
@@ -420,13 +445,13 @@ class _DetalleTambookState extends State<DetalleTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2003',
-        name: 'PROYECTOR \n(224)',
+        name: 'PROYECTOR \n(${proyector.toString()})',
         types: const ['Ver'],
         image: icon3,
         color: Colors.white,
       ),
     );
-    aEquipoInformatico.add(
+    /*aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2004',
         name: 'ANTENA WIFI \n(1047)',
@@ -434,17 +459,17 @@ class _DetalleTambookState extends State<DetalleTambook>
         image: icon4,
         color: Colors.white,
       ),
-    );
+    );*/
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2005',
-        name: 'IMPRESORAS \n(224)',
+        name: 'IMPRESORAS \n(${impresora.toString()})',
         types: const ['Ver'],
         image: icon5,
         color: Colors.white,
       ),
     );
-    aEquipoInformatico.add(
+    /*aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2006',
         name: 'PARLANTES \n(1047)',
@@ -452,7 +477,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         image: icon6,
         color: Colors.white,
       ),
-    );
+    );*/
   }
 
   Widget equipoInformatico() {
@@ -902,7 +927,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         const SizedBox(height: 10),
                         cardDatosMantenimientoInformatico(),
                         const SizedBox(height: 10),
-                        cardIncidencia(),
+                        cardDatosMantenimientoInfraestructura(),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -1165,6 +1190,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/gestores.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1273,6 +1303,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/guardian.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1360,6 +1395,11 @@ class _DetalleTambookState extends State<DetalleTambook>
             ExpansionTile(
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/historial.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1441,6 +1481,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/categorizacion.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1503,6 +1548,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/datos_generales.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1571,6 +1621,11 @@ class _DetalleTambookState extends State<DetalleTambook>
             ExpansionTile(
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/gestores.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1642,6 +1697,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/ubicacion.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1722,6 +1782,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/demografico.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1789,6 +1854,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/datos_obra.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -1854,6 +1924,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/ambitos_accion.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   '$heading ( ${oTambo.aCentroPoblado!.length} )',
                   style: const TextStyle(
@@ -1916,6 +1991,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/servicios_basicos.png"),
+                  size: 45,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -2001,6 +2081,11 @@ class _DetalleTambookState extends State<DetalleTambook>
           initiallyExpanded: true,
           title: ListTile(
             visualDensity: const VisualDensity(vertical: -4),
+            leading: const ImageIcon(
+              AssetImage("assets/iconos_card/atenciones.png"),
+              size: 40,
+              color: Colors.black,
+            ),
             title: Text(
               heading,
               style: const TextStyle(
@@ -2046,10 +2131,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -2061,6 +2142,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               const Text(
                                 "Meta :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '$totalMetaTipo1',
@@ -2074,6 +2156,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               const Text(
                                 "Avance :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '$totalAvance1',
@@ -2088,6 +2171,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 const Text(
                                   "Brecha :",
                                   style: TextStyle(fontSize: 15.0),
+                                  textAlign: TextAlign.right,
                                 ),
                                 Text(
                                   '$totalBrecha1',
@@ -2157,6 +2241,11 @@ class _DetalleTambookState extends State<DetalleTambook>
           initiallyExpanded: true,
           title: ListTile(
             visualDensity: const VisualDensity(vertical: -4),
+            leading: const ImageIcon(
+              AssetImage("assets/iconos_card/beneficiarios.png"),
+              size: 40,
+              color: Colors.black,
+            ),
             title: Text(
               heading,
               style: const TextStyle(
@@ -2202,10 +2291,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
                     child: Column(
                       children: [
                         const SizedBox(
@@ -2217,6 +2302,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               const Text(
                                 "Meta :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '$totalMetaTipo1',
@@ -2230,6 +2316,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               const Text(
                                 "Avance :",
                                 style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
                               ),
                               Text(
                                 '$totalAvance1',
@@ -2244,6 +2331,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 const Text(
                                   "Brecha :",
                                   style: TextStyle(fontSize: 15.0),
+                                  textAlign: TextAlign.right,
                                 ),
                                 Text(
                                   '$totalBrecha1',
@@ -2302,8 +2390,8 @@ class _DetalleTambookState extends State<DetalleTambook>
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
-                  AssetImage("assets/mantenimiento.png"),
-                  size: 40,
+                  AssetImage("assets/iconos_card/mantenimiento_equipos.png"),
+                  size: 35,
                   color: Colors.grey,
                 ),
                 title: Text(
@@ -2334,19 +2422,33 @@ class _DetalleTambookState extends State<DetalleTambook>
                               //
                               ListTile(
                                 title: Text(
-                                    'Mantenimiento programado para el mes de ${obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? '')} del año ${aPlanMantenimientoInformatico[index].anio}.'),
+                                    'MANTENIMIENTO PROGRAMADO PARA EL MES DE ${obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? '')} DEL AÑO ${aPlanMantenimientoInformatico[index].anio}.'),
                               ),
                               const ListTile(
-                                title: Text('Soporte de UTI asignado : '),
+                                title: Text('SOPORTE DE UTI ASIGNADO : '),
                               ),
-                              SizedBox(
-                                height: 150.0,
-                                child: ImageUtil.ImageUrl(
-                                  aPlanMantenimientoInformatico[index]
-                                          .rutaFoto ??
-                                      '',
-                                  width: 110,
-                                  imgDefault: 'assets/icons/user-male-2.png',
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: SizedBox(
+                                  height: 150.0,
+                                  child: ImageUtil.ImageUrl(
+                                    aPlanMantenimientoInformatico[index]
+                                            .rutaFoto ??
+                                        '',
+                                    width: 110,
+                                    imgDefault: 'assets/icons/user-male-2.png',
+                                  ),
                                 ),
                               ),
                               Container(
@@ -2381,6 +2483,124 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                               ),
                             ]));
+                      }
+                    })
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *  PLAN DE MANTENIMIENTO DEL INFRAESTRUCTURA
+ * -----------------------------------------------
+ */
+  Padding cardDatosMantenimientoInfraestructura() {
+    var heading = 'MANTENIMIENTO DE INFRAESTRUCTURA';
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage(
+                      "assets/iconos_card/mantenimiento_infraestructura.png"),
+                  size: 40,
+                  color: Colors.grey,
+                ),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: isLoadingMantenimientoInfraestructura
+                        ? 1
+                        : (aPlanMantenimientoInfraestructura.isEmpty
+                            ? 1
+                            : aPlanMantenimientoInfraestructura.length),
+                    itemBuilder: (context, index) {
+                      if (isLoadingMantenimientoInfraestructura) {
+                        return ShinyWidget();
+                      } else {
+                        if (aPlanMantenimientoInfraestructura.isNotEmpty)
+                          return Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: Column(children: [
+                                Container(
+                                  // padding: EdgeInsets.all(5.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Card(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ListTile(
+                                          title: const Text('SITUACIÓN:'),
+                                          subtitle: Text(
+                                              '${aPlanMantenimientoInfraestructura[index].situacion}'),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              'MONTO DE MANTENIMIENTO DE INFRAESTRUCTURA'),
+                                          subtitle: Text(
+                                              aPlanMantenimientoInfraestructura[
+                                                          index]
+                                                      .montoMantenimientoInfraestructura ??
+                                                  ''),
+                                        ),
+                                        ListTile(
+                                          title: const Text('POZO A TIERRA'),
+                                          subtitle: Text(
+                                              aPlanMantenimientoInfraestructura[
+                                                          index]
+                                                      .pozoTierra ??
+                                                  ''),
+                                        ),
+                                        ListTile(
+                                          title:
+                                              const Text('CAMBIO DE BATERIAS'),
+                                          subtitle: Text(
+                                              aPlanMantenimientoInfraestructura[
+                                                          index]
+                                                      .cambioBaterias ??
+                                                  '0'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ]));
                       }
                     })
               ],
@@ -2746,6 +2966,10 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/incidencias.png"),
+                  size: 40,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -3323,6 +3547,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/combustible.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -3464,6 +3693,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/actividades.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -3591,6 +3825,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/clima.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -3648,7 +3887,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
 /*
  * -----------------------------------------------
- *            INFORMACIÓN DEL CLIMA
+ *            INFORMACIÓN COMO LLEGAR AL TAMBO
  * -----------------------------------------------
  */
   Padding cardCamino() {
@@ -3678,6 +3917,11 @@ class _DetalleTambookState extends State<DetalleTambook>
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/rutas.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
                 title: Text(
                   heading,
                   style: const TextStyle(
@@ -3739,59 +3983,65 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
+  String formatoDecimal(double numero) {
+    NumberFormat f = NumberFormat("#,###.##", "es_US");
+    String result = f.format(numero);
+    return result;
+  }
+
   String obtenerNombreMes(String mes) {
     String nombreMes = "";
     switch (mes) {
       case "1":
-        nombreMes = "Enero";
+        nombreMes = "ENERO";
         break;
 
       case "2":
-        nombreMes = "Febrero";
+        nombreMes = "FEBRERO";
         break;
 
       case "3":
-        nombreMes = "Marzo";
+        nombreMes = "MARZO";
         break;
 
       case "4":
-        nombreMes = "Abril";
+        nombreMes = "ABRIL";
         break;
 
       case "5":
-        nombreMes = "Mayo";
+        nombreMes = "MAYO";
         break;
 
       case "6":
-        nombreMes = "Junio";
+        nombreMes = "JUNIO";
         break;
 
       case "7":
-        nombreMes = "Julio";
+        nombreMes = "JULIO";
         break;
 
       case "8":
-        nombreMes = "Agosto";
+        nombreMes = "AGOSTO";
         break;
 
       case "9":
-        nombreMes = "Setiembre";
+        nombreMes = "SETIEMBRE";
         break;
 
       case "10":
-        nombreMes = "Octubre";
+        nombreMes = "OCTUBRE";
         break;
 
       case "11":
-        nombreMes = "Noviembre";
+        nombreMes = "NOVIEMBRE";
         break;
 
       case "12":
-        nombreMes = "Diciembre";
+        nombreMes = "DICIEMBRE";
         break;
 
       default:
-        nombreMes = "Sin mes asignado";
+        nombreMes = "SIN MES ASIGNADO";
         break;
     }
     return nombreMes;

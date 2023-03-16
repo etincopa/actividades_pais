@@ -84,7 +84,7 @@ class _AppBarPaisState extends State<AppBarPais> {
                         SizedBox(
                           width: 200,
                           child: Text(
-                            "USUARIO : ${widget.nombre}",
+                            "USUARIO : ${widget.nombre ?? 'USUARIO INVITADO'}",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: const TextStyle(

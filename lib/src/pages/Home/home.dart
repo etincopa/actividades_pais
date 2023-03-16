@@ -592,7 +592,7 @@ class _HomePagePais extends State<HomePagePais> {
           listPages[currenIndex]
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -601,7 +601,7 @@ class _HomePagePais extends State<HomePagePais> {
         },
         backgroundColor: Colors.blue,
         child: const Icon(Icons.settings),
-      ),
+      ),*/
     );
   }
 }

@@ -165,6 +165,7 @@ flutter:
     - assets/Monitor/
     - assets/design_course/
     - assets/icons/
+    - assets/iconos_card/
     - assets/paislogo.png
     - assets/unidadesOrganicas.json
     - assets/unidadesTerritoriales.json
