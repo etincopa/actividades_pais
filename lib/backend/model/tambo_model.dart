@@ -6,6 +6,7 @@ class TamboFld {
   static String nombreFisicoFoto = 'nombreFisicoFoto';
   static String extensionFoto = 'extensionFoto';
   static String folder = 'folder';
+  static String idUT = 'idUnidadesTerritoriales';
   static String fechaCreacionImagen = 'fechaCreacionImagen';
   static String atencion = 'atencion';
   static String intervencion = 'intervencion';
@@ -64,6 +65,7 @@ class TamboModel {
   String? folder;
   String? fechaCreacionImagen;
   String? tamboPathImage;
+  int? ut;
 
   /*
   * DATOS GENERALES
@@ -145,6 +147,7 @@ class TamboModel {
     this.nombreFisicoFoto,
     this.extensionFoto,
     this.folder,
+    this.ut,
     this.fechaCreacionImagen,
     this.atencion,
     this.intervencion,
@@ -199,6 +202,7 @@ class TamboModel {
         nombreFisicoFoto: json[TamboFld.nombreFisicoFoto],
         extensionFoto: json[TamboFld.extensionFoto],
         folder: json[TamboFld.folder],
+        ut: json[TamboFld.idUT],
         fechaCreacionImagen: json[TamboFld.fechaCreacionImagen],
         atencion: json[TamboFld.atencion],
         intervencion: json[TamboFld.intervencion],

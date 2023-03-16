@@ -130,6 +130,12 @@ class _SplashPageState extends State<SplashPage>
     await OneSignal.shared
         .getDeviceState()
         .then((value) => {print("IDS ${value!.userId}")});
+
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) async {
+      String onesignalUserId = changes.to.userId ?? '';
+      print('Player ID: ' + onesignalUserId);
+    });
   }
 }
 

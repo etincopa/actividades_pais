@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
@@ -1033,6 +1034,12 @@ class MainController extends GetxController {
   Future<List<TambosMapaModel>> getUbicacionTambo(int snip) async {
     List<TambosMapaModel> oResp =
         await Get.find<MainService>().UbicacionTambo(snip);
+
+    return oResp;
+  }
+
+  Future<List<CCPPModel>> getCentrosPoblados(int snip) async {
+    List<CCPPModel> oResp = await Get.find<MainService>().centrosPoblados(snip);
 
     return oResp;
   }

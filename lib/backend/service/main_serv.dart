@@ -1,3 +1,4 @@
+import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
@@ -949,6 +950,11 @@ class MainService {
       int snip) async {
     List<IncidentesInternetModel> aFind =
         await Get.find<MainRepo>().indicenciasInternetTambo(snip);
+    return aFind;
+  }
+
+  Future<List<CCPPModel>> centrosPoblados(int snip) async {
+    List<CCPPModel> aFind = await Get.find<MainRepo>().centrosPoblados(snip);
     return aFind;
   }
 

@@ -8,6 +8,7 @@ import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,6 +36,7 @@ class _MapTambookState extends State<MapTambook>
 
   MainController mainCtr = MainController();
   late List<TambosMapaModel> oTambo = [];
+  late TamboModel oTamboGeneral = TamboModel.empty();
   late List<LatLng> mapPoints = [];
   late Future<List<Marker>> marcadores;
 
@@ -67,11 +69,10 @@ class _MapTambookState extends State<MapTambook>
   }
 
   Future<void> obtenerDatosClima(int idTambo) async {
-    late TamboModel oTambo = TamboModel.empty();
-    oTambo = await mainCtr.getTamboDatoGeneral((idTambo).toString());
+    oTamboGeneral = await mainCtr.getTamboDatoGeneral((idTambo).toString());
 
     String url =
-        "https://api.open-meteo.com/v1/forecast?latitude=${oTambo.yCcpp}2&longitude=${oTambo.xCcpp}&current_weather=true";
+        "https://api.open-meteo.com/v1/forecast?latitude=${oTamboGeneral.yCcpp}2&longitude=${oTamboGeneral.xCcpp}&current_weather=true";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       clima =
@@ -84,12 +85,13 @@ class _MapTambookState extends State<MapTambook>
   Future<List<Marker>> tambosParaMapa() async {
     List<TambosMapaModel> tambos = await mainCtr.getTamboParaMapa();
     List<Marker> allMarkers = [];
+
     for (var point in tambos) {
       LatLng latlng = LatLng(point.latitud!, point.longitud!);
       allMarkers.add(
         Marker(
-          width: 80.0,
-          height: 80.0,
+          width: 60.0,
+          height: 60.0,
           point: latlng,
           builder: (ctx) => GestureDetector(
             onTap: () async {
@@ -133,27 +135,138 @@ class _MapTambookState extends State<MapTambook>
                         ),
                       ),
                       const SizedBox(height: 10),
-                      RichText(
-                        text: const TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                Icons.map_outlined,
-                                size: 15,
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: " Región: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: " COMO LLEGAR: ",
-                              style: TextStyle(
-                                color: color_01,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
+                              TextSpan(
+                                text: "${point.departamento ?? ''}  ",
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            TextSpan(text: "")
-                          ],
+                            ],
+                          ),
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: " PROVINCIA: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "${point.provincia ?? ''}  ",
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: " DISTRITO: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "${point.distrito ?? ''}  ",
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                child: Icon(Icons.person, size: 15),
+                              ),
+                              const TextSpan(
+                                text: " GESTOR: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    "${oTamboGeneral.gestorNombre ?? ''} ${oTamboGeneral.gestorApellidos ?? ''} ",
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: const TextSpan(
+                            children: [
+                              WidgetSpan(
+                                child: Icon(
+                                  Icons.map_outlined,
+                                  size: 15,
+                                ),
+                              ),
+                              TextSpan(
+                                text: " COMO LLEGAR: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
                       for (var oRuta in aRuta)
                         Column(
                           children: [
@@ -231,9 +344,34 @@ class _MapTambookState extends State<MapTambook>
                         darkMode ? darkModeTilesContainerBuilder : null,
                     panBuffer: panBuffer,
                   ),
-                  MarkerLayer(
+                  MarkerClusterLayerWidget(
+                    options: MarkerClusterLayerOptions(
+                      maxClusterRadius: 45,
+                      size: const Size(40, 40),
+                      anchor: AnchorPos.align(AnchorAlign.center),
+                      fitBoundsOptions: const FitBoundsOptions(
+                        padding: EdgeInsets.all(50),
+                        maxZoom: 15,
+                      ),
+                      markers: snapshot.data!,
+                      builder: (context, markers) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.blue),
+                          child: Center(
+                            child: Text(
+                              markers.length.toString(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                  /*MarkerLayer(
                     markers: snapshot.data!,
-                  ),
+                  ),*/
                 ],
               );
             } else {
@@ -244,7 +382,7 @@ class _MapTambookState extends State<MapTambook>
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FloatingActionButton.extended(
+          /*FloatingActionButton.extended(
             heroTag: 'zoom',
             label: const Text(
               'zoom',
@@ -263,7 +401,7 @@ class _MapTambookState extends State<MapTambook>
             icon: const Icon(Icons.remove_circle_outline_rounded),
             onPressed: () => _zoomMenos(),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 8),*/
           FloatingActionButton.extended(
             heroTag: 'dark-light',
             label: Text(
@@ -273,7 +411,7 @@ class _MapTambookState extends State<MapTambook>
             icon: Icon(darkMode ? Icons.brightness_high : Icons.brightness_2),
             onPressed: () => setState(() => darkMode = !darkMode),
           ),
-          const SizedBox(height: 8),
+          /*const SizedBox(height: 8),
           FloatingActionButton.extended(
             backgroundColor: colorP,
             heroTag: 'Salir',
@@ -283,7 +421,7 @@ class _MapTambookState extends State<MapTambook>
             ),
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
-          ),
+          ),*/
           const SizedBox(height: 80),
         ],
       ),

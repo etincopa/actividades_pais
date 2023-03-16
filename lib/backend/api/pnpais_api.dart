@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
@@ -523,6 +524,16 @@ class PnPaisApi {
         return (data as List)
             .map((e) => MonitoreoDetailModel.fromJson(e))
             .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<CCPPModel>>> getCCPP(int? numSnip) async {
+    return await _http.request<List<CCPPModel>>(
+      '${basePathApp}listarCcpp/${numSnip.toString()}',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => CCPPModel.fromJson(e)).toList();
       },
     );
   }

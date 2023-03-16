@@ -80,6 +80,10 @@ class ProviderLogin {
         loginClass.rol = log.rol;
         loginClass.token = log.token;
         loginClass.id = log.id;
+
+        SharedPreferences? _prefs = await SharedPreferences.getInstance();
+        _prefs.setString("idUser", log.id.toString());
+
         var a = await DatabasePr.db.Login(loginClass);
         print(response.body);
         print("log.rol ${log.rol}");
@@ -95,7 +99,7 @@ class ProviderLogin {
         if (responseUsuario.statusCode == 200) {
           if (parsedJson2["total"] > 0) {
             var r2 = ConfigPersonal(
-                unidad: '',//data[0]["area_abreviatura"] ?? ''
+                unidad: '', //data[0]["area_abreviatura"] ?? ''
                 nombres: data[0]["empleado_nombre"] ?? '',
                 apellidoMaterno: data[0]["empleado_apellido_materno"] ?? '',
                 apellidoPaterno: data[0]["empleado_apellido_paterno"] ?? '',

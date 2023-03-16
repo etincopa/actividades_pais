@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
+import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
@@ -462,6 +463,17 @@ class MainRepo {
       int snip) async {
     List<IncidentesInternetModel> aResp = [];
     final response = await _pnPaisApi.getIncidenciasInternet(snip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<CCPPModel>> centrosPoblados(int snip) async {
+    List<CCPPModel> aResp = [];
+    final response = await _pnPaisApi.getCCPP(snip);
     if (response.error == null) {
       aResp = response.data!;
     } else {

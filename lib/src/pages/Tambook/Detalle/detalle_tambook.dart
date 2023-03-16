@@ -185,8 +185,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     incidenciasInternet(oTambo.nSnip ?? 0);
     getCombustibleTambo();
     getProgIntervencionTambo();
-    getPlanMantenimientoInformatico(
-        widget.listTambo!.idDepartamento.toString());
+    getPlanMantenimientoInformatico(oTambo.ut.toString());
     getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
 
     setState(() {});
@@ -1065,7 +1064,10 @@ class _DetalleTambookState extends State<DetalleTambook>
             onPress: () async {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => MapaTambo(snip: oTambo.nSnip ?? 0),
+                  builder: (context) => MapaTambo(
+                      snip: oTambo.nSnip ?? 0,
+                      latitud: double.parse(oTambo.yCcpp!),
+                      longitud: double.parse(oTambo.xCcpp!)),
                 ),
               );
             },

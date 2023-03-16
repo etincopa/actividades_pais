@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
@@ -12,9 +13,15 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 
 class MapaTambo extends StatefulWidget {
-  const MapaTambo({super.key, required this.snip});
+  const MapaTambo(
+      {super.key,
+      required this.snip,
+      required this.latitud,
+      required this.longitud});
 
   final int snip;
+  final double latitud;
+  final double longitud;
 
   @override
   State<MapaTambo> createState() => _MapTambookState();
@@ -83,11 +90,11 @@ class _MapTambookState extends State<MapaTambo>
   }
 
   Future<List<Marker>> tambosParaMapa() async {
-    List<TambosMapaModel> tambos = await mainCtr.getUbicacionTambo(widget.snip);
+    List<CCPPModel> tambos = await mainCtr.getCentrosPoblados(widget.snip);
 
     List<Marker> allMarkers = [];
     for (var point in tambos) {
-      LatLng latlng = LatLng(point.latitud!, point.longitud!);
+      LatLng latlng = LatLng(point.longitud!, point.latitud!);
       allMarkers.add(
         Marker(
           width: 80.0,
@@ -95,13 +102,13 @@ class _MapTambookState extends State<MapaTambo>
           point: latlng,
           builder: (ctx) => GestureDetector(
             onTap: () async {
-              await rutaTambo(point.snip!);
+              //await rutaTambo(point.snip!);
               // ignore: use_build_context_synchronously
               showDialog(
                 context: context,
                 builder: (BuildContext context) => buildSuccessDialog(
                   context,
-                  title: point.tambo!,
+                  title: 'C.P. : ${point.nombre!}',
                   child: Column(
                     children: [
                       Align(
@@ -111,12 +118,12 @@ class _MapTambookState extends State<MapaTambo>
                             children: [
                               const WidgetSpan(
                                 child: Icon(
-                                  Icons.brightness_medium_outlined,
+                                  Icons.group,
                                   size: 15,
                                 ),
                               ),
                               const TextSpan(
-                                text: " CLIMA: ",
+                                text: " POBLACIÓN: ",
                                 style: TextStyle(
                                   color: color_01,
                                   fontSize: 13,
@@ -124,7 +131,7 @@ class _MapTambookState extends State<MapaTambo>
                                 ),
                               ),
                               TextSpan(
-                                text: "${clima.temp ?? ''} °",
+                                text: point.poblacion.toString(),
                                 style: const TextStyle(
                                   color: color_01,
                                   fontSize: 13,
@@ -139,49 +146,98 @@ class _MapTambookState extends State<MapaTambo>
                       Align(
                         alignment: Alignment.centerLeft,
                         child: RichText(
-                          text: const TextSpan(
+                          text: TextSpan(
                             children: [
-                              WidgetSpan(
+                              const WidgetSpan(
                                 child: Icon(
-                                  Icons.map_outlined,
+                                  Icons.house,
                                   size: 15,
                                 ),
                               ),
-                              TextSpan(
-                                text: " COMO LLEGAR: ",
+                              const TextSpan(
+                                text: " VIVIENDAS: ",
                                 style: TextStyle(
                                   color: color_01,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
+                              TextSpan(
+                                text: point.viviendas.toString(),
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      for (var oRuta in aRuta)
-                        Column(
-                          children: [
-                            Text(
-                              oRuta.cidNombre ?? '',
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w700,
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                child: Icon(
+                                  Icons.map,
+                                  size: 15,
+                                ),
                               ),
-                            ),
-                            ListTile(
-                              title: Text(
-                                oRuta.txtDescripcion ?? '',
-                                textAlign: TextAlign.justify,
+                              const TextSpan(
+                                text: " REGIÓN NATURAL: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              subtitle: Text(
-                                oRuta.txtEncuenta ?? '',
-                                textAlign: TextAlign.justify,
+                              TextSpan(
+                                text: point.region!,
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            const Divider(color: colorI),
-                          ],
+                            ],
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                child: Icon(
+                                  Icons.document_scanner_outlined,
+                                  size: 15,
+                                ),
+                              ),
+                              const TextSpan(
+                                text: " UBIGEO: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text: point.ubigeo!,
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -223,8 +279,8 @@ class _MapTambookState extends State<MapaTambo>
               return FlutterMap(
                 mapController: mapController,
                 options: MapOptions(
-                  center: LatLng(-8.840959270481326, -74.82263875411157),
-                  zoom: currentZoom,
+                  center: LatLng(widget.latitud, widget.longitud),
+                  zoom: 10,
                 ),
                 children: [
                   TileLayer(
@@ -249,7 +305,7 @@ class _MapTambookState extends State<MapaTambo>
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FloatingActionButton.extended(
+          /*FloatingActionButton.extended(
             heroTag: 'zoom_mas',
             label: const Text(
               'zoom',
@@ -268,7 +324,7 @@ class _MapTambookState extends State<MapaTambo>
             icon: const Icon(Icons.remove_circle_outline_rounded),
             onPressed: () => _zoomMenos(),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 8),*/
           FloatingActionButton.extended(
             heroTag: 'dark-light',
             label: Text(

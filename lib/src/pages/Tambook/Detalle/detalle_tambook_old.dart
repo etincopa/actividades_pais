@@ -755,7 +755,10 @@ class _DetalleTambookState extends State<DetalleTambook>
             onPress: () async {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => MapaTambo(snip: oTambo.nSnip ?? 0),
+                  builder: (context) => MapaTambo(
+                      snip: oTambo.nSnip ?? 0,
+                      latitud: double.parse(oTambo.yCcpp!),
+                      longitud: double.parse(oTambo.xCcpp!)),
                 ),
               );
             },

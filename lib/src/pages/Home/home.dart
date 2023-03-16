@@ -3,6 +3,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/IntervencionesHome.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/settings_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
@@ -10,6 +11,7 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_sus
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/historialTambos.dart';
+import 'package:actividades_pais/src/pages/configuracion/configuracionHome.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -218,7 +220,7 @@ class _HomePagePais extends State<HomePagePais> {
 
         case "mnu.administrativos":
           // if (aUnidad.contains("UPS")) {
-           if (tipoPlataforma != 'PIAS') {
+          if (tipoPlataforma != 'PIAS') {
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1007',
@@ -229,7 +231,7 @@ class _HomePagePais extends State<HomePagePais> {
               ),
             );
           }
-   /*        aHomeOptions.add(
+          /*        aHomeOptions.add(
             HomeOptions(
               code: 'OPT1007',
               name: 'SEGUIMIENTO Y MONITOREO',
@@ -238,7 +240,7 @@ class _HomePagePais extends State<HomePagePais> {
               color: const Color(0xFF78b8cd),
             ),
           );*/
-           //}
+          //}
 
           break;
       }
@@ -589,6 +591,16 @@ class _HomePagePais extends State<HomePagePais> {
           ),
           listPages[currenIndex]
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingPageAlert()),
+          );
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.settings),
       ),
     );
   }
