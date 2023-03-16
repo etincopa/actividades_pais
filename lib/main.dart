@@ -9,6 +9,7 @@ import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/intro/splash_intro_page.dart';
 import 'package:actividades_pais/resource/Internationalization.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'package:flutter/material.dart';
 
@@ -105,6 +106,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     //   _datdb.initDB();
     super.initState();
+
+    initPlatform();
   }
 
   Future<int> getToken() async {
@@ -114,6 +117,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // var abc = await _datdb.getAllTasks();
 
     return cantidad;
+  }
+
+  Future<void> initPlatform() async {
+    await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {});
+    await OneSignal.shared
+        .getDeviceState()
+        .then((value) => {print("IDS ${value!.userId}")});
+
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) async {
+      String onesignalUserId = changes.to.userId ?? '';
+      print('Player ID: ' + onesignalUserId);
+    });
   }
 
   @override
