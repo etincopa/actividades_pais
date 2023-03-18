@@ -67,7 +67,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
       ),
       appBar: AppBar(
         backgroundColor: AppConfig.primaryColor,
-        title: Text('Actividades'),
+        title: Text('Intervenciones en los Tambos'),
       ),
       body: Column(
         children: [
@@ -199,7 +199,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(right: 10),
+                                margin: const EdgeInsets.only(right: 10),
                                 constraints: BoxConstraints(
                                   maxHeight:
                                       event.descripcion.length.toDouble() -

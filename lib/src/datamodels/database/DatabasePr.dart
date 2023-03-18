@@ -1117,6 +1117,10 @@ class DatabasePr {
     return list;
   }
 
+  traerSnip()async{
+    var abc = await DatabasePr.db.getAllTasksConfigInicio();
+    return abc[0].snip;
+  }
 /*  Future<void> insertUnidadesOrganicas(
       UnidadesOrganicas regitroCalificada) async {
     //print("hola");

@@ -5,6 +5,8 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroDato
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/HistorialObservaciones.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
+import 'package:actividades_pais/src/datamodels/Clases/ListaTipoGobierno.dart';
+import 'package:actividades_pais/src/datamodels/Clases/TipoIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +15,8 @@ import 'package:actividades_pais/util/app-config.dart';
 
 class ProviderRegistarInterv {
   List<Evento> eventos = [];
+  List<TipoIntervencion> tipoIntervencion = [];
+  List<TipoGobierno> tipoGobierno=[];
 
   Future cargarEventos() async {
     var logUser = await DatabasePr.db.loginUser();
@@ -37,6 +41,43 @@ class ProviderRegistarInterv {
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
+    } else {
+      return List.empty();
+    }
+  }
+
+
+  Future getTipoIntervencion() async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor + '/programaciongit/lista-tipo-intervencion'),
+        headers: headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      return tipoIntervencion = jsonList.map((json) => TipoIntervencion.fromJson(json)).toList();
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future getlistaTipoGobierno() async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor + '/programaciongit/lista-tipo-gobierno'),
+        headers: headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      return tipoGobierno = jsonList.map((json) => TipoGobierno.fromJson(json)).toList();
     } else {
       return List.empty();
     }

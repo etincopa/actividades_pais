@@ -80,15 +80,11 @@ class ProviderLogin {
         loginClass.rol = log.rol;
         loginClass.token = log.token;
         loginClass.id = log.id;
-
-        SharedPreferences? _prefs = await SharedPreferences.getInstance();
-        _prefs.setString("idUser", log.id.toString());
-
         var a = await DatabasePr.db.Login(loginClass);
         print(response.body);
         print("log.rol ${log.rol}");
 
-        await ProviderDatos().getInsertPerfiles(log.rol);
+       // await ProviderDatos().getInsertPerfiles(log.rol);
         http.Response responseUsuario = await http.get(
             Uri.parse(AppConfig.urlBackndServicioSeguro +
                 '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'),
@@ -99,7 +95,8 @@ class ProviderLogin {
         if (responseUsuario.statusCode == 200) {
           if (parsedJson2["total"] > 0) {
             var r2 = ConfigPersonal(
-                unidad: '', //data[0]["area_abreviatura"] ?? ''
+                unidad: '',
+                //data[0]["area_abreviatura"] ?? ''
                 nombres: data[0]["empleado_nombre"] ?? '',
                 apellidoMaterno: data[0]["empleado_apellido_materno"] ?? '',
                 apellidoPaterno: data[0]["empleado_apellido_paterno"] ?? '',
@@ -144,7 +141,7 @@ class ProviderLogin {
         print(response.reasonPhrase);
 
         if (response.statusCode != 200) {
-          await ProviderDatos().getInsertPerfiles("x");
+      //    await ProviderDatos().getInsertPerfiles("x");
 
           MainController mainController = MainController();
           UserModel oUser;
@@ -184,6 +181,26 @@ class ProviderLogin {
           .getLoginUser(dni: username, contrasenia: password);
 
       return rsp.length;
+    }
+  }
+
+  forgotPassword(email) async {
+    var chekInternet = await _checkInternetConnection();
+    if (chekInternet == true) {
+      var headers = {'Content-Type': 'application/json'};
+      http.Response response = await http.post(
+          Uri.parse(AppConfig.backendsismonitor + '/seguridad/forgotPassword'),
+          headers: headers,
+          body: json.encode({
+            "email": email,
+          }));
+      print(response.body);
+      if (response.statusCode == 200) {
+        final parsedJson2 = jsonDecode(response.body);
+        final resultado =parsedJson2["result"];
+      //   print(parsedJson2["result"]);
+        return resultado;
+      }
     }
   }
 }

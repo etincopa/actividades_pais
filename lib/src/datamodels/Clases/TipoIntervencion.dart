@@ -1,3 +1,15 @@
+
+class ListaTipoIntervencion {
+  List<TipoIntervencion> items = [];
+  ListaTipoIntervencion();
+  ListaTipoIntervencion.fromJsonList(List<dynamic> jsonList) {
+    if (jsonList == null) return;
+    for (var item in jsonList) {
+      final _listarTrabajador = new TipoIntervencion.fromJson(item);
+      items.add(_listarTrabajador);
+    }
+  }
+}
 class TipoIntervencion {
   int? idTipoIntervencion;
   String? nombreTipoIntervencion;

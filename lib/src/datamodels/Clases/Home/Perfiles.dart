@@ -19,7 +19,7 @@ class Perfil {
  // String? moduloDescripcion;
  // String? menuDescripcion;
   String? idMenuPadre;
-  //String? idMenuHijo;
+  String? idMenuHijo;
 
   Perfil(
       {//this.idAccion,
@@ -34,7 +34,7 @@ class Perfil {
     moduloDescripcion = json['modulo_descripcion'];
     menuDescripcion = json['menu_descripcion'];*/
     idMenuPadre = json['id_menu_padre'];
-   // idMenuHijo = json['id_menu_hijo'];
+   idMenuHijo = json['id_menu_hijo']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -43,7 +43,7 @@ class Perfil {
    // data['modulo_descripcion'] = this.moduloDescripcion;
    // data['menu_descripcion'] = this.menuDescripcion;
     data['id_menu_padre'] = this.idMenuPadre;
-    //data['id_menu_hijo'] = this.idMenuHijo;
+    data['id_menu_hijo'] = this.idMenuHijo;
     return data;
   }
 }

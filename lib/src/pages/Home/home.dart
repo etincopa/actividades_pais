@@ -3,7 +3,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/IntervencionesHome.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/settings_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_articulacion.dart';
@@ -11,7 +10,6 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_sus
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/historialTambos.dart';
-import 'package:actividades_pais/src/pages/configuracion/configuracionHome.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -83,11 +81,22 @@ class _HomePagePais extends State<HomePagePais> {
   }
 
   perfil() async {
-    cantidadDB = 1;
+
+    /*  cantidadDB = 1;
     var res = await ProviderServicios().loadPerfiles();
     if (res!.isNotEmpty) {
       for (int i = 0; i < res.length; i++) {
-        idMenuPadre.add(Perfil(idMenuPadre: res[i].idMenuPadre));
+        idMenuPadre.add(Perfil(idMenuPadre: res[i].idMenuHijo));
+      }
+
+      return;
+    }*/
+
+    cantidadDB = 1;
+    var res = await DatabasePr.db.loginUser();
+    if (res.isNotEmpty) {
+      for (int i = 0; i < res.length; i++) {
+        idMenuPadre.add(Perfil(idMenuPadre: res[i].rol));
       }
 
       return;
@@ -182,6 +191,136 @@ class _HomePagePais extends State<HomePagePais> {
 
     for (int i = 0; i < idMenuPadre.length; i++) {
       switch (idMenuPadre[i].idMenuPadre) {
+        //1 :
+        case '1':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1009',
+              name: 'TileParqueInfomatico'.tr,
+              types: const ['Ver'],
+              image: icon6,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1007',
+              name: 'SEGUIMIENTO Y MONITOREO',
+              types: const ['Ver'],
+              image: icon5,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
+              types: const ['Ver'],
+              image: icon4,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          break;
+        case '110':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
+              types: const ['Ver'],
+              image: icon4,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          break;
+        case '77':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1009',
+              name: 'TileParqueInfomatico'.tr,
+              types: const ['Ver'],
+              image: icon6,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          break;
+        case '115':
+          if(tipoPlataforma!='PIAS'){
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1003',
+                name: 'TileIntervencion'.tr,
+                types: const ['Ver'],
+                image: icon4,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+          }
+
+          if (tipoPlataforma == 'PIAS' &&
+              (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
+            String sImagePias = modalidad == '1'
+                ? icon2
+                : modalidad == '2'
+                ? icon3
+                : icon1;
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1004',
+                name: 'TilePias'.tr,
+                types: const ['Ver'],
+                image: sImagePias,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+          }
+          break;
+        case '136':
+          if (tipoPlataforma == 'PIAS' &&
+              (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
+            String sImagePias = modalidad == '1'
+                ? icon2
+                : modalidad == '2'
+                ? icon3
+                : icon1;
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1004',
+                name: 'TilePias'.tr,
+                types: const ['Ver'],
+                image: sImagePias,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+          }
+          break;
+
+        case '119':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
+              types: const ['Ver'],
+              image: icon4,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          break;
+
+        case '133':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1007',
+              name: 'SEGUIMIENTO Y MONITOREO',
+              types: const ['Ver'],
+              image: icon5,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          break;
+      }
+
+      /* switch (idMenuPadre[i].idMenuPadre) {
         case "mnu.articulacion":
           if (tipoPlataforma != 'PIAS') {
             aHomeOptions.add(
@@ -218,9 +357,21 @@ class _HomePagePais extends State<HomePagePais> {
           );
           break;
 
+        case "mnu.soporte":
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1009',
+              name: 'TileParqueInfomatico'.tr,
+              types: const ['Ver'],
+              image: icon6,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          break;
+
         case "mnu.administrativos":
           // if (aUnidad.contains("UPS")) {
-          if (tipoPlataforma != 'PIAS') {
+           if (tipoPlataforma != 'PIAS') {
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1007',
@@ -231,7 +382,7 @@ class _HomePagePais extends State<HomePagePais> {
               ),
             );
           }
-          /*        aHomeOptions.add(
+   /*        aHomeOptions.add(
             HomeOptions(
               code: 'OPT1007',
               name: 'SEGUIMIENTO Y MONITOREO',
@@ -240,13 +391,13 @@ class _HomePagePais extends State<HomePagePais> {
               color: const Color(0xFF78b8cd),
             ),
           );*/
-          //}
+           //}
 
           break;
-      }
+      }*/
     }
 
-    if (tipoPlataforma == 'PIAS' &&
+   /* if (tipoPlataforma == 'PIAS' &&
         (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
       String sImagePias = modalidad == '1'
           ? icon2
@@ -262,7 +413,7 @@ class _HomePagePais extends State<HomePagePais> {
           color: const Color(0xFF78b8cd),
         ),
       );
-    }
+    }*/
 
     aHomeOptions.add(
       HomeOptions(
@@ -592,16 +743,6 @@ class _HomePagePais extends State<HomePagePais> {
           listPages[currenIndex]
         ],
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SettingPageAlert()),
-          );
-        },
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.settings),
-      ),*/
     );
   }
 }

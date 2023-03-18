@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Intervenciones.dart';
@@ -22,13 +23,27 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
   String tipoPlataforma = "";
   String unidadTerritorial = "";
 
+  List<Perfil> idMenuPadre = [];
+
   @override
   void initState() {
     // TODO: implement initState
+    perfil();
     mostrarTmbo();
     super.initState();
   }
+  perfil() async {
 
+
+    var res = await DatabasePr.db.loginUser();
+    if (res.isNotEmpty) {
+      for (int i = 0; i < res.length; i++) {
+        idMenuPadre.add(Perfil(idMenuPadre: res[i].rol));
+      }
+
+      return;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     List<HomeOptions> aHomeOptions = [];
@@ -42,37 +57,97 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     if (!isPortrait) {}
 
-    if (tipoPlataforma == "TAMBO") {
-      aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1003',
-          name: 'TileEjeIntervencion'.tr,
-          types: const ['Ver'],
-          image: icon4,
-          color: const Color(0xFF78b8cd),
-        ),
-      );
-    } else {
-      aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1012',
-          name: 'PROGRAMAR PRESTACION'.tr,
-          types: const ['Ver'],
-          image: icon7,
-          color: const Color(0xFF78b8cd),
-        ),
-      );
-      aHomeOptions.add(
-        HomeOptions(
-          code: 'OPT1011',
-          name: 'PLAN DE TRABAJO MENSUAL'.tr,
-          types: const ['Ver'],
-          image: icon7,
-          color: const Color(0xFF78b8cd),
-        ),
-      );
+    for (int i = 0; i < idMenuPadre.length; i++) {
+      print(idMenuPadre[i].idMenuPadre);
+      switch (idMenuPadre[i].idMenuPadre) {
 
+
+        case '115':
+          if (tipoPlataforma == "TAMBO") {
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1012',
+                name: 'PROGRAMAR PRESTACION'.tr,
+                types: const ['Ver'],
+                image: icon7,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1003',
+                name: 'TileEjeIntervencion'.tr,
+                types: const ['Ver'],
+                image: icon4,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+
+          } else {
+            aHomeOptions.add(
+              HomeOptions(
+                code: 'OPT1011',
+                name: 'PLAN DE TRABAJO MENSUAL'.tr,
+                types: const ['Ver'],
+                image: icon7,
+                color: const Color(0xFF78b8cd),
+              ),
+            );
+
+
+          }
+
+          break;
+        case '110'  :
+
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1012',
+              name: 'PROGRAMAR PRESTACION'.tr,
+              types: const ['Ver'],
+              image: icon7,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1011',
+              name: 'PLAN DE TRABAJO MENSUAL'.tr,
+              types: const ['Ver'],
+              image: icon7,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+        break;
+        case '1'  :
+
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1012',
+              name: 'PROGRAMAR PRESTACION'.tr,
+              types: const ['Ver'],
+              image: icon7,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1011',
+              name: 'PLAN DE TRABAJO MENSUAL'.tr,
+              types: const ['Ver'],
+              image: icon7,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          break;
+      }
     }
+
 
     List listPages = [
       Column(
