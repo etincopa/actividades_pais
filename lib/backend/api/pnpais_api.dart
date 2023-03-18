@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -23,6 +25,7 @@ import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
+import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -414,6 +417,43 @@ class PnPaisApi {
       parser: (data) {
         return (data as List)
             .map((e) => ServicioBasicoTamboModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<HistorialGestorModel>>> getHistorialGestor(
+      String? snip) async {
+    return await _http.request<List<HistorialGestorModel>>(
+      '${basePathApp3}obtenerHistorialGestores/${snip}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => HistorialGestorModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<AvanceMetasModel>>> getAvanceMetasMensualizada(
+      String anio) async {
+    return await _http.request<List<AvanceMetasModel>>(
+      '${basePathApp3}obtenerEjecucionMetasMensualizadoAnio/${anio}',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => AvanceMetasModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ProgramacionMantenimientoModel>>>
+      getProgramacionMantenimiento(String? nomUT) async {
+    return await _http.request<List<ProgramacionMantenimientoModel>>(
+      '${basePathApp3}obtenerProgramacionMantenimiento/${nomUT}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ProgramacionMantenimientoModel.fromJson(e))
             .toList();
       },
     );

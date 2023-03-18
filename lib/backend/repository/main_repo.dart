@@ -3,7 +3,9 @@ import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
+import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -22,6 +24,7 @@ import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
+import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -630,6 +633,43 @@ class MainRepo {
   ) async {
     List<ServicioBasicoTamboModel> aResp = [];
     final response = await _pnPaisApi.getServicioBasicoTambo(idTambo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<HistorialGestorModel>> getHistorialGestor(
+    String? snip,
+  ) async {
+    List<HistorialGestorModel> aResp = [];
+    final response = await _pnPaisApi.getHistorialGestor(snip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<AvanceMetasModel>> getAvanceMetasMensualizada(String anio) async {
+    List<AvanceMetasModel> aResp = [];
+    final response = await _pnPaisApi.getAvanceMetasMensualizada(anio);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ProgramacionMantenimientoModel>> getProgramacionMantenimiento(
+    String? nomUT,
+  ) async {
+    List<ProgramacionMantenimientoModel> aResp = [];
+    final response = await _pnPaisApi.getProgramacionMantenimiento(nomUT);
     if (response.error == null) {
       aResp = response.data!;
     } else {

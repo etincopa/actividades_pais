@@ -7,12 +7,14 @@ import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
+import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
+import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -90,14 +92,17 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<RutaTamboModel> aRuta = [];
   late List<PriorizacionModel> aPriorizacion = [];
   late List<PlanMantenimientoModel> aPlanMantenimientoInformatico = [];
+  late List<ProgramacionMantenimientoModel> aPlanMantenimientoMeses = [];
   late List<PlanMantenimientoInfraestructuraModel>
       aPlanMantenimientoInfraestructura = [];
   late List<ServicioBasicoTamboModel> aSrvBasico = [];
+  late List<HistorialGestorModel> aHistorialGestor = [];
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
   bool isLoadingRuta = false;
   bool isLoadingMantenimientoEquipos = true;
+  bool isLoadingMantenimientoMeses = true;
   bool isLoadingMantenimientoInfraestructura = true;
   bool isLoadingPriorizacion = false;
 
@@ -105,7 +110,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   bool isLoadingGuardian = false;
   bool isLoading2 = false;
   bool isLoadingEI = true;
-
+  bool isLoadingHistorialGestor = false;
   int statusLoadActividad = 0;
   bool loading = true;
   bool isEndPagination = false;
@@ -192,9 +197,11 @@ class _DetalleTambookState extends State<DetalleTambook>
     getCombustibleTambo();
     getProgIntervencionTambo();
     getPlanMantenimientoInformatico(oTambo.ut.toString());
+
     getPlanMantenimientoInfraestructura(oTambo.nSnip.toString());
     getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
     buildEquipoInformatico(oTambo.nSnip.toString());
+    getHistorialGestores(oTambo.nSnip.toString());
     setState(() {});
   }
 
@@ -391,10 +398,23 @@ class _DetalleTambookState extends State<DetalleTambook>
     setState(() {});
   }
 
+  Future<void> getProgramacionMantenimientoInfrasestructura(
+      String idRegion) async {
+    isLoadingMantenimientoMeses = true;
+    aPlanMantenimientoMeses =
+        await mainCtr.getProgramacionMantenimiento(idRegion);
+    isLoadingMantenimientoMeses = false;
+    setState(() {});
+  }
+
   Future<void> getPlanMantenimientoInfraestructura(String snip) async {
     isLoadingMantenimientoInfraestructura = true;
     aPlanMantenimientoInfraestructura =
         await mainCtr.planMantenimientoInfraestructura(snip);
+
+    getProgramacionMantenimientoInfrasestructura(
+        aPlanMantenimientoInfraestructura[0].departamento!);
+
     isLoadingMantenimientoInfraestructura = false;
     setState(() {});
   }
@@ -403,6 +423,13 @@ class _DetalleTambookState extends State<DetalleTambook>
     isLoadingPriorizacion = false;
     aPriorizacion = await mainCtr.priorizacionTambo(idTambo);
     isLoadingPriorizacion = true;
+    setState(() {});
+  }
+
+  Future<void> getHistorialGestores(String snip) async {
+    isLoadingHistorialGestor = false;
+    aHistorialGestor = await mainCtr.getHistorialGestor(snip);
+    isLoadingHistorialGestor = true;
     setState(() {});
   }
 
@@ -1342,10 +1369,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text(oGuardia.sexo ?? ''),
                         ),
                         ListTile(
-                          title: const Text('CORREO'),
-                          subtitle: Text(oGuardia.empleadoCorreo ?? ''),
-                        ),
-                        ListTile(
                           title: const Text('TIPO CONTRATO'),
                           subtitle: Text(oGuardia.tipoContrato ?? ''),
                         ),
@@ -1415,31 +1438,26 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         BubbleTimeline(
-                          bubbleSize: 70,
+                          bubbleSize: 85,
                           // List of Timeline Bubble Items
                           items: [
-                            TimelineItem(
-                              title: 'Irma Soledad',
-                              subtitle: '20/10/2021',
-                              icon: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              bubbleColor: Colors.grey,
-                            ),
-                            TimelineItem(
-                              title: 'Juan Luis',
-                              subtitle: '01/01/2019',
-                              icon: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              bubbleColor: Colors.grey,
-                            ),
+                            if (isLoadingHistorialGestor)
+                              for (var gestor in aHistorialGestor!)
+                                TimelineItem(
+                                  title: '${gestor.nombres}',
+                                  subtitle:
+                                      'FECHA INICIO: ${gestor.fechaInicio} \nFECHA FIN: ${gestor.fechaFin} ',
+                                  icon: const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                  bubbleColor: Colors.grey,
+                                ),
                           ],
-                          stripColor: Colors.teal,
+                          stripColor: colorI,
                           dividerCircleColor: Colors.white,
                         )
                       ],
@@ -2572,7 +2590,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         ),
                                         ListTile(
                                           title: const Text(
-                                              'MONTO DE MANTENIMIENTO DE INFRAESTRUCTURA'),
+                                              'MANTENIMIENTO DE INFRAESTRUCTURA'),
                                           subtitle: Text(
                                               aPlanMantenimientoInfraestructura[
                                                           index]
@@ -2595,6 +2613,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                                                           index]
                                                       .cambioBaterias ??
                                                   '0'),
+                                        ),
+                                        ListTile(
+                                          title: const Text(
+                                              'MANTENIMIENTO PROGRAMADO PARA'),
+                                          subtitle: Text(aPlanMantenimientoMeses
+                                                  .isNotEmpty
+                                              ? '${aPlanMantenimientoMeses[0].marzo!.isNotEmpty ? 'MARZO' : ''} ${aPlanMantenimientoMeses[0].abril!.isNotEmpty ? 'ABRIL' : ''} ${aPlanMantenimientoMeses[0].mayo!.isNotEmpty ? 'MAYO' : ''}  ${aPlanMantenimientoMeses[0].junio!.isNotEmpty ? 'JUNIO' : ''} ${aPlanMantenimientoMeses[0].julio!.isNotEmpty ? 'JULIO' : ''} ${aPlanMantenimientoMeses[0].agosto!.isNotEmpty ? 'AGOSTO' : ''} ${aPlanMantenimientoMeses[0].setiembre!.isNotEmpty ? 'SETIEMBRE' : ''} ${aPlanMantenimientoMeses[0].octubre!.isNotEmpty ? 'OCTUBRE' : ''} '
+                                              : ''),
                                         ),
                                       ],
                                     ),

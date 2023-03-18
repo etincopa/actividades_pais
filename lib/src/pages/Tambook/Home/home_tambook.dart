@@ -1,6 +1,7 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
+import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
@@ -35,6 +36,7 @@ class _HomeTambookState extends State<HomeTambook>
   bool isLoading = true;
   bool isLoading2 = false;
   bool isLoadingEI = true;
+  bool isLoadingEquipos = false;
 
   late String numTambos = "";
 
@@ -43,6 +45,7 @@ class _HomeTambookState extends State<HomeTambook>
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
   List<AtencionesModel> aAtencionResumen = [];
+  List<AvanceMetasModel> aMetasMensualizada = [];
 
   String sCurrentYear = DateTime.now().year.toString();
 
@@ -74,13 +77,14 @@ class _HomeTambookState extends State<HomeTambook>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
     super.initState();
+    //buildEquipoInformatico();
     buildPlataforma();
-    buildEquipoInformatico();
+
     buildPersonalTambo();
 
     buildData();
     setState(() {});
-    tambosParaMapa();
+    obtenerAvanceMetasPorMes();
     getMetasGeneral();
     getProgIntervencionTambo();
   }
@@ -95,7 +99,7 @@ class _HomeTambookState extends State<HomeTambook>
     List<HomeOptions> aSubOptionTambo = [
       const HomeOptions(
         name: '2',
-        name2: 'Recepcionado',
+        name2: 'Recepcionado   ',
         name3: 'assets/icons/casa.png',
       ),
       const HomeOptions(
@@ -208,7 +212,14 @@ class _HomeTambookState extends State<HomeTambook>
     List<EquipamientoInformaticoModel> aEquipos =
         await mainCtr.getEquipamientoInformatico("0");
 
-    var equipamiento = groupBy(aEquipos, (obj) => obj.categoria);
+    aEquipoInformatico = [];
+
+    var cpu = aEquipos.where((e) => e.categoria == 'CPU').length;
+    var laptop = aEquipos.where((e) => e.categoria == 'LAPTOP').length;
+    var proyector = aEquipos.where((e) => e.categoria == 'PROYECTOR').length;
+    var impresora = aEquipos.where((e) => e.categoria == 'IMPRESORA').length;
+
+    //var equipamiento = groupBy(aEquipos, (obj) => obj.categoria);
 
     String icon1 = 'assets/icons/computadora.png';
     String icon2 = 'assets/icons/laptop.png';
@@ -217,10 +228,16 @@ class _HomeTambookState extends State<HomeTambook>
     String icon5 = 'assets/icons/impresora.png';
     String icon6 = 'assets/icons/parlante.png';
 
+    //var cpu = equipamiento['CPU']?.length ?? '0';
+
+    //var proyector = equipamiento['PROYECTOR']?.length ?? '0';
+    //var laptop = equipamiento['LAPTOP']?.length ?? '0';
+    //var impresora = equipamiento['IMPRESORA']?.length ?? '0';
+
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2001',
-        name: 'PC \n(${equipamiento['CPU']!.length})',
+        name: 'PC \n(${cpu.toString()})',
         types: const ['Ver'],
         image: icon1,
         color: Colors.white,
@@ -229,7 +246,7 @@ class _HomeTambookState extends State<HomeTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2002',
-        name: 'LAPTOP \n(${equipamiento['LAPTOP']!.length})',
+        name: 'LAPTOP \n(${laptop.toString()})',
         types: const ['Ver'],
         image: icon2,
         color: Colors.white,
@@ -238,39 +255,24 @@ class _HomeTambookState extends State<HomeTambook>
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2003',
-        name: 'PROYECTOR \n(${equipamiento['PROYECTOR']!.length})',
+        name: 'PROYECTOR \n(${proyector.toString()})',
         types: const ['Ver'],
         image: icon3,
         color: Colors.white,
       ),
     );
-    /*aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2004',
-        name: 'ANTENA WIFI \n(${equipamiento['CPU']!.length})',
-        types: const ['Ver'],
-        image: icon4,
-        color: Colors.white,
-      ),
-    );*/
+
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2005',
-        name: 'IMPRESORAS \n(${equipamiento['IMPRESORA']!.length})',
+        name: 'IMPRESORAS \n(${impresora.toString()})',
         types: const ['Ver'],
         image: icon5,
         color: Colors.white,
       ),
     );
-    /*aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2006',
-        name: 'PARLANTES \n(1047)',
-        types: const ['Ver'],
-        image: icon6,
-        color: Colors.white,
-      ),
-    );*/
+
+    isLoadingEquipos = true;
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -356,6 +358,10 @@ class _HomeTambookState extends State<HomeTambook>
     });
   }
 
+  Future<void> obtenerAvanceMetasPorMes() async {
+    aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada('2023');
+  }
+
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = Responsive.of(context);
@@ -405,7 +411,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 width: double.maxFinite,
                                 height: 180.0,
                                 child: Image.asset(
-                                  'assets/banner.jpg',
+                                  'assets/carrusel1.jpg',
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -413,7 +419,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 width: double.maxFinite,
                                 height: 180.0,
                                 child: Image.asset(
-                                  'assets/fondo2.jpg',
+                                  'assets/carrusel2.jpg',
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -421,7 +427,15 @@ class _HomeTambookState extends State<HomeTambook>
                                 width: double.maxFinite,
                                 height: 180.0,
                                 child: Image.asset(
-                                  'assets/fondo3.jpg',
+                                  'assets/carrusel3.jpg',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.maxFinite,
+                                height: 180.0,
+                                child: Image.asset(
+                                  'assets/carrusel4.jpg',
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -624,7 +638,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   padding: const EdgeInsets.all(1),
                                   child: Center(
                                     child: Text(
-                                      ' ${homeOption.name3!}',
+                                      homeOption.name3!,
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontWeight: FontWeight.w700,
@@ -864,9 +878,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        isLoadingEI ? equipoInformatico() : const CircularProgressIndicator(),
-      ],
+      children: [equipoInformatico()],
     );
 
     /*return Padding(
@@ -919,90 +931,98 @@ class _HomeTambookState extends State<HomeTambook>
   Widget equipoInformatico() {
     return Flexible(
       child: SizedBox(
-        height: 400.0,
-        child: GridView.builder(
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.1,
-            crossAxisSpacing: 30,
-            mainAxisSpacing: 30,
-          ),
-          padding: const EdgeInsets.only(
-            left: 28,
-            right: 28,
-            bottom: 58,
-          ),
-          itemCount: aEquipoInformatico.length,
-          itemBuilder: (context, index) {
-            HomeOptions homeOption = aEquipoInformatico[index];
-            return InkWell(
-              splashColor: Colors.white10,
-              highlightColor: Colors.white10,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/icons/botones 1-02.png"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: homeOption.color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 241, 240, 240)
-                          .withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
+          height: 400.0,
+          child: FutureBuilder(
+              future: buildEquipoInformatico(),
+              builder: (context, snapshot) {
+                if (aEquipoInformatico.isNotEmpty) {
+                  return GridView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.1,
+                      crossAxisSpacing: 30,
+                      mainAxisSpacing: 30,
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 5),
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 12,
-                          bottom: 8,
-                        ),
-                        child: Hero(
-                          tag: homeOption.image!,
-                          child: Image.asset(
-                            homeOption.image!,
-                            fit: BoxFit.contain,
-                            width: 80,
-                            height: 70,
-                            alignment: Alignment.center,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(1),
-                        child: Center(
-                          child: Text(
-                            homeOption.name!,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 11.0,
+                    padding: const EdgeInsets.only(
+                      left: 28,
+                      right: 28,
+                      bottom: 58,
+                    ),
+                    itemCount: aEquipoInformatico.length,
+                    itemBuilder: (context, index) {
+                      HomeOptions homeOption = aEquipoInformatico[index];
+                      return InkWell(
+                        splashColor: Colors.white10,
+                        highlightColor: Colors.white10,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: const DecorationImage(
+                              image:
+                                  AssetImage("assets/icons/botones 1-02.png"),
+                              fit: BoxFit.cover,
                             ),
-                            textAlign: TextAlign.center,
+                            color: homeOption.color,
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color.fromARGB(255, 241, 240, 240)
+                                    .withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 5),
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                    top: 12,
+                                    bottom: 8,
+                                  ),
+                                  child: Hero(
+                                    tag: homeOption.image!,
+                                    child: Image.asset(
+                                      homeOption.image!,
+                                      fit: BoxFit.contain,
+                                      width: 80,
+                                      height: 70,
+                                      alignment: Alignment.center,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(1),
+                                  child: Center(
+                                    child: Text(
+                                      homeOption.name!,
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontWeight: FontWeight.w700,
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: 11.0,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              onTap: () async {
-                //  var oHomeOptionSelect = aHomeOptions[index];
-              },
-            );
-          },
-        ),
-      ),
+                        onTap: () async {
+                          //  var oHomeOptionSelect = aHomeOptions[index];
+                        },
+                      );
+                    },
+                  );
+                }
+                return const Center(child: CircularProgressIndicator());
+              })),
     );
   }
 
@@ -1294,7 +1314,8 @@ class _HomeTambookState extends State<HomeTambook>
             const SizedBox(
               height: 10,
             ),
-            const Text('Fuente: POI aprobado 2023')
+            Text(
+                'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
           ],
         ),
       ),
@@ -1453,7 +1474,8 @@ class _HomeTambookState extends State<HomeTambook>
             const SizedBox(
               height: 10,
             ),
-            const Text('Fuente: POI aprobado 2023')
+            Text(
+                'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
           ],
         ),
       ),
@@ -1551,9 +1573,14 @@ class _HomeTambookState extends State<HomeTambook>
   Padding avanceMetas() {
     var heading = 'METAS ATENCIONES 2023';
 
-    final List<ChartDataAvance> chartData1 = <ChartDataAvance>[
-      ChartDataAvance('ENE', 125848, 160174),
-    ];
+    final List<ChartDataAvance> chartData1 = [];
+
+    for (var meta in aMetasMensualizada) {
+      chartData1.add(ChartDataAvance(
+          obtenerNombreMes(meta.mes!),
+          double.parse(meta.atencionesProgramadas!),
+          double.parse(meta.atencionesEjecutadas!)));
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -1609,19 +1636,24 @@ class _HomeTambookState extends State<HomeTambook>
                       // Renders line chart
 
                       ColumnSeries<ChartDataAvance, String>(
-                          name: 'Programado (125,848)',
+                          name: 'Programado',
                           dataSource: chartData1,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
-                          name: 'Ejecutado (160,174)',
+                          name: 'Ejecutado',
                           dataSource: chartData1,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y1),
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
-                  const Text('Fuente: CEPLAN')
+                  Text(
+                      'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
                 ],
               ),
             ),
@@ -1634,9 +1666,14 @@ class _HomeTambookState extends State<HomeTambook>
   Padding avanceMetasUsuarios() {
     var heading = 'METAS DE USUARIOS - 2023';
 
-    final List<ChartDataAvance> chartData1 = <ChartDataAvance>[
-      ChartDataAvance('ENE', 72828, 91341),
-    ];
+    final List<ChartDataAvance> chartData1 = [];
+
+    for (var meta in aMetasMensualizada) {
+      chartData1.add(ChartDataAvance(
+          obtenerNombreMes(meta.mes!),
+          double.parse(meta.usuariosProgramados!),
+          double.parse(meta.usuariosAtendidos!)));
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -1691,20 +1728,25 @@ class _HomeTambookState extends State<HomeTambook>
                     series: <CartesianSeries>[
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
-                          name: 'Programado (72,828)',
+                          name: 'Programado',
                           dataSource: chartData1,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
-                          name: 'Ejecutado (91,341)',
+                          name: 'Ejecutado',
                           dataSource: chartData1,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y1),
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
-                  const Text('Fuente: CEPLAN')
+                  Text(
+                      'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
                 ],
               ),
             ),
@@ -2944,6 +2986,122 @@ class _HomeTambookState extends State<HomeTambook>
     NumberFormat f = new NumberFormat("#,###.0#", "es_US");
     String result = f.format(numero);
     return result;
+  }
+
+  String obtenerNombreMesCompleto(String mes) {
+    String nombreMes = "";
+    switch (mes) {
+      case "1":
+        nombreMes = "ENERO";
+        break;
+
+      case "2":
+        nombreMes = "FEBRERO";
+        break;
+
+      case "3":
+        nombreMes = "MARZO";
+        break;
+
+      case "4":
+        nombreMes = "ABRIL";
+        break;
+
+      case "5":
+        nombreMes = "MAYO";
+        break;
+
+      case "6":
+        nombreMes = "JUNIO";
+        break;
+
+      case "7":
+        nombreMes = "JULIO";
+        break;
+
+      case "8":
+        nombreMes = "AGOSTO";
+        break;
+
+      case "9":
+        nombreMes = "SETIEMBRE";
+        break;
+
+      case "10":
+        nombreMes = "OCTUBRE";
+        break;
+
+      case "11":
+        nombreMes = "NOVIEMBRE";
+        break;
+
+      case "12":
+        nombreMes = "DICIEMBRE";
+        break;
+
+      default:
+        nombreMes = "SIN MES ASIGNADO";
+        break;
+    }
+    return nombreMes;
+  }
+
+  String obtenerNombreMes(String mes) {
+    String nombreMes = "";
+    switch (mes) {
+      case "1":
+        nombreMes = "ENE";
+        break;
+
+      case "2":
+        nombreMes = "FEB";
+        break;
+
+      case "3":
+        nombreMes = "MAR";
+        break;
+
+      case "4":
+        nombreMes = "ABR";
+        break;
+
+      case "5":
+        nombreMes = "MAY";
+        break;
+
+      case "6":
+        nombreMes = "JUN";
+        break;
+
+      case "7":
+        nombreMes = "JUL";
+        break;
+
+      case "8":
+        nombreMes = "AGO";
+        break;
+
+      case "9":
+        nombreMes = "SET";
+        break;
+
+      case "10":
+        nombreMes = "OCT";
+        break;
+
+      case "11":
+        nombreMes = "NOV";
+        break;
+
+      case "12":
+        nombreMes = "DIC";
+        break;
+
+      default:
+        nombreMes = "SIN MES ASIGNADO";
+        break;
+    }
+    return nombreMes;
   }
 }
 
