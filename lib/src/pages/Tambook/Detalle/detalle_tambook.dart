@@ -1214,6 +1214,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -1327,6 +1328,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -1416,6 +1418,8 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
@@ -1497,6 +1501,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               initiallyExpanded: true,
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
@@ -1563,6 +1568,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -1637,6 +1643,8 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
@@ -1713,6 +1721,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               initiallyExpanded: true,
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
@@ -1797,6 +1806,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -1869,6 +1879,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -1939,6 +1950,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -2007,11 +2019,12 @@ class _DetalleTambookState extends State<DetalleTambook>
           children: [
             ExpansionTile(
               initiallyExpanded: true,
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               title: ListTile(
-                visualDensity: const VisualDensity(vertical: -4),
+                visualDensity: const VisualDensity(vertical: -1),
                 leading: const ImageIcon(
                   AssetImage("assets/iconos_card/servicios_basicos.png"),
-                  size: 45,
+                  size: 55,
                   color: Colors.black,
                 ),
                 title: Text(
@@ -2097,6 +2110,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
         child: ExpansionTile(
           initiallyExpanded: true,
+          tilePadding: const EdgeInsets.only(left: 0, right: 10),
           title: ListTile(
             visualDensity: const VisualDensity(vertical: -4),
             leading: const ImageIcon(
@@ -2256,12 +2270,13 @@ class _DetalleTambookState extends State<DetalleTambook>
           ],
         ),
         child: ExpansionTile(
+          tilePadding: const EdgeInsets.only(left: 0, right: 10),
           initiallyExpanded: true,
           title: ListTile(
-            visualDensity: const VisualDensity(vertical: -4),
+            visualDensity: const VisualDensity(vertical: -1),
             leading: const ImageIcon(
               AssetImage("assets/iconos_card/beneficiarios.png"),
-              size: 40,
+              size: 55,
               color: Colors.black,
             ),
             title: Text(
@@ -2404,13 +2419,14 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
                   AssetImage("assets/iconos_card/mantenimiento_equipos.png"),
                   size: 35,
-                  color: Colors.grey,
+                  color: Colors.black,
                 ),
                 title: Text(
                   heading,
@@ -2541,6 +2557,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -2548,7 +2565,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   AssetImage(
                       "assets/iconos_card/mantenimiento_infraestructura.png"),
                   size: 40,
-                  color: Colors.grey,
+                  color: Colors.black,
                 ),
                 title: Text(
                   heading,
@@ -2989,12 +3006,14 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
                 leading: const ImageIcon(
                   AssetImage("assets/iconos_card/incidencias.png"),
                   size: 40,
+                  color: Colors.black,
                 ),
                 title: Text(
                   heading,
@@ -3570,6 +3589,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -3716,6 +3736,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -3848,6 +3869,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -3940,12 +3962,13 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
-                visualDensity: const VisualDensity(vertical: -4),
+                visualDensity: const VisualDensity(vertical: -1),
                 leading: const ImageIcon(
                   AssetImage("assets/iconos_card/rutas.png"),
-                  size: 40,
+                  size: 55,
                   color: Colors.black,
                 ),
                 title: Text(
