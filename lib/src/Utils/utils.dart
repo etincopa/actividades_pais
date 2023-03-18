@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class utils{
+class utils {
   Widget buildSwipeActionLeft() => Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       color: Colors.transparent,
       child: Icon(
         Icons.settings_backup_restore_rounded,
@@ -13,7 +13,7 @@ class utils{
       ));
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.transparent,
       child: Icon(
         Icons.settings_backup_restore_rounded,
@@ -22,7 +22,7 @@ class utils{
       ));
 
   showAlertDialog(titulo, text, BuildContext context, presse) {
-    Widget okButton = TextButton(child: Text("OK"), onPressed: presse);
+    Widget okButton = TextButton(child: const Text("OK"), onPressed: presse);
 
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
@@ -39,11 +39,20 @@ class utils{
   }
 
   showAlertDialogGC(titulo, BuildContext context, guardar, cancelar, texto) {
-    Widget okButton = TextButton(child: Text("Guardar"), onPressed: guardar);
-    Widget moButton = TextButton(child: Text("Cancelar"), onPressed: cancelar);
+    Widget okButton =
+        TextButton(child: const Text("Guardar"), onPressed: guardar);
+    Widget moButton =
+        TextButton(child: const Text("Cancelar"), onPressed: cancelar);
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
-      content: TextField(controller: texto, maxLines: 8,maxLength: 255, decoration: InputDecoration( labelText: 'Observación',),),
+      content: TextField(
+        controller: texto,
+        maxLines: 8,
+        maxLength: 255,
+        decoration: const InputDecoration(
+          labelText: 'Observación',
+        ),
+      ),
       actions: [okButton, moButton],
     );
 
@@ -55,9 +64,12 @@ class utils{
     );
   }
 
-  showAlertDialogAprobar(titulo, BuildContext context, guardar, cancelar, texto) {
-    Widget okButton = TextButton(child: Text("Confirmar"), onPressed: guardar);
-    Widget moButton = TextButton(child: Text("Cancelar"), onPressed: cancelar);
+  showAlertDialogAprobar(
+      titulo, BuildContext context, guardar, cancelar, texto) {
+    Widget okButton =
+        TextButton(child: const Text("Confirmar"), onPressed: guardar);
+    Widget moButton =
+        TextButton(child: const Text("Cancelar"), onPressed: cancelar);
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
       content: Text(texto),
@@ -70,5 +82,83 @@ class utils{
         return alert;
       },
     );
+  }
+
+  showMyDialog(BuildContext context, String? title,
+      {Widget? wFormulario, onPressed, activo}) async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) {
+        //    return   StatefulBuilder(builder: (context, setState) {
+        return CupertinoAlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(title!),
+              GestureDetector(
+                child: const Icon(Icons.close),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          content: Form(
+            // key: _formKey1,
+            child: Card(
+              color: Colors.transparent,
+              elevation: 0.0,
+              child: wFormulario,
+            ),
+          ),
+          actions: [
+            Container(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                    ),
+                    child: const Text("Cancelar"),
+                  ),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  activo
+                      ? ElevatedButton(
+                          onPressed: onPressed,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                const Color.fromARGB(255, 26, 155, 86)),
+                          ),
+                          child: const Text(
+                            "Agregar",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      : Container(),
+                ],
+              ),
+            )
+          ],
+        );
+
+        ///     );
+      },
+    );
+  }
+
+  tieneNtieneDni({titulo, valor, color, oncalbakc, selectedOption}) {
+    return RadioListTile(
+      activeColor: color,
+      title: Text(titulo),
+      value: valor,
+      groupValue: selectedOption,
+      onChanged: oncalbakc,
+    ); //
   }
 }
