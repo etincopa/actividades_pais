@@ -5,9 +5,11 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
+import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -32,6 +34,7 @@ import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
@@ -293,6 +296,57 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => MetasTamboModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<DatosJUTTamboModel>>> getDatosJUTTambo(
+    String? numSnip,
+  ) async {
+    var sNumSnip = numSnip != null ? '/$numSnip' : '';
+
+    return await _http.request<List<DatosJUTTamboModel>>(
+      '${basePathApp3}obtenerDatosJUT$sNumSnip',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => DatosJUTTamboModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<HistorialJUTModel>>> getHistorialJUT(
+    String? ut,
+  ) async {
+    DateTime today = DateTime.now();
+    String dateStr = "${today.year}";
+
+    var sut = ut != null ? '/$ut' : '';
+
+    return await _http.request<List<HistorialJUTModel>>(
+      '${basePathApp3}obtenerHistorialJUT$sut',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => HistorialJUTModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<UnidadTerritorialModel>>> getUnidadTerritorial(
+    String? ut,
+  ) async {
+    var sut = ut != null ? '/$ut' : '';
+
+    return await _http.request<List<UnidadTerritorialModel>>(
+      '${basePathApp3}obtenerUTJUT$sut',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => UnidadTerritorialModel.fromJson(e))
+            .toList();
       },
     );
   }
@@ -585,14 +639,18 @@ class PnPaisApi {
       '${basePathApp4}listadarBandejaTambosInternet',
       method: "GET",
       parser: (data) {
-        var incidencias = (data[2] as List)
-            .where((o) =>
-                ((o['estado'] == 'FINALIZADO' || o['estado'] == 'EN PROCESO') &&
-                    o['snip_tambo'] == snip))
-            .toList();
-        return (incidencias as List)
-            .map((e) => IncidentesInternetModel.fromJson(e))
-            .toList();
+        if (data[2] is List) {
+          var incidencias = (data[2] as List)
+              .where((o) => ((o['estado'] == 'FINALIZADO' ||
+                      o['estado'] == 'EN PROCESO') &&
+                  o['snip_tambo'] == snip))
+              .toList();
+          return (incidencias as List)
+              .map((e) => IncidentesInternetModel.fromJson(e))
+              .toList();
+        }
+
+        return [];
       },
     );
   }

@@ -3,12 +3,14 @@ import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
+import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -34,6 +36,7 @@ import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
 import 'package:actividades_pais/util/throw-exception.dart';
@@ -844,6 +847,30 @@ class MainController extends GetxController {
     return aResp;
   }
 
+  Future<List<DatosJUTTamboModel>> DatosJUTTambo(
+    String? numSnip,
+  ) async {
+    List<DatosJUTTamboModel> aResp =
+        await Get.find<MainService>().getDatosJUTTambo(numSnip);
+    return aResp;
+  }
+
+  Future<List<HistorialJUTModel>> HistorialJUT(
+    String? ut,
+  ) async {
+    List<HistorialJUTModel> aResp =
+        await Get.find<MainService>().getHistorialJUT(ut);
+    return aResp;
+  }
+
+  Future<List<UnidadTerritorialModel>> UnidadTerritorial(
+    String? ut,
+  ) async {
+    List<UnidadTerritorialModel> aResp =
+        await Get.find<MainService>().getUnidadTerritorial(ut);
+    return aResp;
+  }
+
   Future<List<ProgIntervencionTamboModel>> progIntervencionTambo(
     String? numSnip,
     String? anio,
@@ -957,10 +984,10 @@ class MainController extends GetxController {
   }
 
   Future<List<HistorialGestorModel>> getHistorialGestor(
-    String? snip,
+    String? ut,
   ) async {
     List<HistorialGestorModel> aResp =
-        await Get.find<MainService>().getHistorialGestor(snip);
+        await Get.find<MainService>().getHistorialGestor(ut);
     return aResp;
   }
 

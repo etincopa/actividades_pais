@@ -4,8 +4,10 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
+import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -31,6 +33,7 @@ import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:logger/logger.dart';
 
 class MainRepo {
@@ -518,6 +521,49 @@ class MainRepo {
   ) async {
     List<MetasTamboModel> aResp = [];
     final response = await _pnPaisApi.getMetasTambo(numSnip, anio, xMes);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<DatosJUTTamboModel>> getDatosJUTTambo(
+    String? numSnip,
+  ) async {
+    List<DatosJUTTamboModel> aResp = [];
+    final response = await _pnPaisApi.getDatosJUTTambo(numSnip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<HistorialJUTModel>> getHistorialJUT(
+    String? ut,
+  ) async {
+    List<HistorialJUTModel> aResp = [];
+    final response = await _pnPaisApi.getHistorialJUT(
+      ut,
+    );
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<UnidadTerritorialModel>> getUnidadTerritorial(
+    String? ut,
+  ) async {
+    List<UnidadTerritorialModel> aResp = [];
+    final response = await _pnPaisApi.getUnidadTerritorial(
+      ut,
+    );
     if (response.error == null) {
       aResp = response.data!;
     } else {

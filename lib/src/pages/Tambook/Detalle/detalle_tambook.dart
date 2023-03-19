@@ -4,10 +4,12 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
+import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
+import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
@@ -21,6 +23,7 @@ import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
@@ -78,6 +81,8 @@ class _DetalleTambookState extends State<DetalleTambook>
   MainController mainCtr = MainController();
 
   late TamboModel oTambo = TamboModel.empty();
+  late DatosJUTTamboModel oJUT = DatosJUTTamboModel.empty();
+  late UnidadTerritorialModel oUT = UnidadTerritorialModel.empty();
   late List<TamboActividadModel> aActividad = [];
 
   late List<AtenInterBeneResumenModel> aAtenInterBene = [];
@@ -97,6 +102,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       aPlanMantenimientoInfraestructura = [];
   late List<ServicioBasicoTamboModel> aSrvBasico = [];
   late List<HistorialGestorModel> aHistorialGestor = [];
+  late List<HistorialJUTModel> aHistorialJUT = [];
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
@@ -108,6 +114,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   bool isLoadingSrvBasico = true;
   bool isLoadingGuardian = false;
+  bool isLoadingJUT = false;
   bool isLoading2 = false;
   bool isLoadingEI = true;
   bool isLoadingHistorialGestor = false;
@@ -188,6 +195,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       (widget.listTambo!.idTambo).toString(),
     );
 
+    jutTambo(oTambo.nSnip ?? 0);
     guardianTambo(oTambo.nSnip ?? 0);
     rutaTambo(oTambo.nSnip ?? 0);
     servicioBasicoTambo(oTambo.idTambo ?? 0);
@@ -214,6 +222,22 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> getProgIntervencionTambo() async {
+    /**
+      Intervenciones en los Tambos
+      ----------------------------------
+      - TIPO											                CLAVE
+      TODOS											                  x
+      INTERVENCION DE PRESTACIONES DE SERVICIOS		1
+      ACTIVIDADES-GIT									            2
+      INTERVENCION DE SOPORTE							        3
+      - ESTADO				            CLAVE
+      TODOS				                x
+      PROGRAMADOS			            1
+      EJECUTADO / POR APROBAR			2
+      OBSERVADOS			            3
+      APROBADAS			              4
+      ELIMINADOS			            0
+     */
     aAvance = await mainCtr.progIntervencionTambo(
       '${oTambo.idTambo}',
       sCurrentYear,
@@ -304,6 +328,26 @@ class _DetalleTambookState extends State<DetalleTambook>
       oGuardia = aGuardia[0];
     }
     isLoadingGuardian = true;
+    setState(() {});
+  }
+
+  Future<void> jutTambo(int snip) async {
+    isLoadingJUT = false;
+    List<DatosJUTTamboModel> aJut =
+        await mainCtr.DatosJUTTambo(snip.toString());
+
+    if (aJut.isNotEmpty) {
+      oJUT = aJut[0];
+      List<UnidadTerritorialModel> aUnidadTerritoria =
+          await mainCtr.UnidadTerritorial(oJUT.idUnidadesTerritoriales);
+      if (aUnidadTerritoria.isNotEmpty) {
+        oUT = aUnidadTerritoria[0];
+      }
+
+      getHistorialJUT(oJUT.idUnidadesTerritoriales!);
+    }
+
+    isLoadingJUT = true;
     setState(() {});
   }
 
@@ -429,6 +473,13 @@ class _DetalleTambookState extends State<DetalleTambook>
   Future<void> getHistorialGestores(String snip) async {
     isLoadingHistorialGestor = false;
     aHistorialGestor = await mainCtr.getHistorialGestor(snip);
+    isLoadingHistorialGestor = true;
+    setState(() {});
+  }
+
+  Future<void> getHistorialJUT(String ut) async {
+    isLoadingHistorialGestor = false;
+    aHistorialJUT = await mainCtr.HistorialJUT(ut);
     isLoadingHistorialGestor = true;
     setState(() {});
   }
@@ -934,6 +985,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO JEFE DE UNIDAD TERRITORIAL
                           */
                         cardNuestroJefeUnidad(),
+                        //const SizedBox(height: 10),
+                        //cardHistorialJUT(),
                         const SizedBox(height: 50),
                       ],
                     ),
@@ -1280,9 +1333,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                           title: const Text('EMAIL'),
                           subtitle: Text(oTambo.gestorCorreo ?? ''),
                         ),
-                        const ListTile(
-                          title: Text('TIPO CONTRATO'),
-                          subtitle: Text('ORDEN SERVICIO'),
+                        ListTile(
+                          title: const Text('TIPO CONTRATO'),
+                          subtitle: Text(oTambo.gestorTipoContrato ?? ''),
                         ),
                       ],
                     ),
@@ -1476,6 +1529,88 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
+  Padding cardHistorialJUT() {
+    var heading = 'UT HISTORIAL DE JUT';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/historial.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BubbleTimeline(
+                          bubbleSize: 85,
+                          // List of Timeline Bubble Items
+                          items: [
+                            if (isLoadingHistorialGestor)
+                              for (var oJut in aHistorialJUT)
+                                TimelineItem(
+                                  title: '${oJut.nombresJut}',
+                                  subtitle:
+                                      '${oJut.apellidoPaternoJut} ${oJut.apellidoMaternoJut}',
+                                  icon: const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                  bubbleColor: Colors.grey,
+                                ),
+                          ],
+                          stripColor: colorI,
+                          dividerCircleColor: Colors.white,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Padding cardDatosCategorizacion() {
     var heading = 'CATEGORIZACIÓN';
     return Padding(
@@ -1620,7 +1755,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardNuestroJefeUnidad() {
     var heading = 'NUESTRO JEFE DE UNIDAD TERRITORIAL';
     var subheading =
-        "${oTambo.jefeNombre ?? ''} ${oTambo.jefeApellidoPaterno ?? ''} ${oTambo.jefeApellidoMaterno ?? ''}";
+        "${oJUT.nombresJut ?? ''} ${oJUT.apellidoPaternoJut ?? ''} ${oJUT.apellidoMaternoJut ?? ''}";
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -1670,6 +1805,16 @@ class _DetalleTambookState extends State<DetalleTambook>
               ),
               children: <Widget>[
                 const Divider(color: colorI),
+                /*
+                SizedBox(
+                  height: 150.0,
+                  child: ImageUtil.ImageUrl(
+                    oTambo.gestorPathImage ?? '',
+                    width: 150,
+                    imgDefault: 'assets/icons/user-male-2.png',
+                  ),
+                ),
+                */
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
@@ -1677,12 +1822,36 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
+                          title: const Text('DNI'),
+                          subtitle: Text(oJUT.nroDocumento ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('SEXO'),
+                          subtitle: Text(oJUT.genero ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('FECHA DE NACIMIENTO'),
+                          subtitle: Text(oJUT.fechaNacimiento ?? ''),
+                        ),
+                        ListTile(
                           title: const Text('TÉLEFONO'),
-                          subtitle: Text(oTambo.jefeTelefono ?? ''),
+                          subtitle: Text(oJUT.telefono ?? ''),
                         ),
                         ListTile(
                           title: const Text('EMAIL'),
-                          subtitle: Text(oTambo.jefeCorreo ?? ''),
+                          subtitle: Text(oJUT.correo ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('UNIDAD TERRITORIAL'),
+                          subtitle: Text(oUT.nombreUt ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('UT DIRECCION'),
+                          subtitle: Text(oUT.unidadTerritorialDireccion ?? ''),
+                        ),
+                        ListTile(
+                          title: const Text('UT DEPARTAMENTO'),
+                          subtitle: Text(oUT.departamentoUt ?? ''),
                         ),
                       ],
                     ),
@@ -1768,7 +1937,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('ALTITUD'),
-                          subtitle: Text(oTambo.altitudCcpp ?? ''),
+                          subtitle: Text("${oTambo.altitudCcpp ?? ''} msnm"),
                         ),
                       ],
                     ),

@@ -79,14 +79,13 @@ class _HomeTambookState extends State<HomeTambook>
     super.initState();
     //buildEquipoInformatico();
     buildPlataforma();
-
     buildPersonalTambo();
-
     buildData();
-    setState(() {});
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
     getProgIntervencionTambo();
+
+    setState(() {});
   }
 
   Future<void> buildPlataforma() async {
@@ -99,7 +98,7 @@ class _HomeTambookState extends State<HomeTambook>
     List<HomeOptions> aSubOptionTambo = [
       const HomeOptions(
         name: '2',
-        name2: 'Recepcionado   ',
+        name2: 'Recepcionado    ',
         name3: 'assets/icons/casa.png',
       ),
       const HomeOptions(
@@ -556,7 +555,7 @@ class _HomeTambookState extends State<HomeTambook>
   Widget plataforma() {
     return Flexible(
       child: SizedBox(
-        height: 400.0,
+        height: 550.0,
         child: GridView.builder(
           physics: const BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -772,7 +771,7 @@ class _HomeTambookState extends State<HomeTambook>
   Widget personalTambo() {
     return Flexible(
       child: SizedBox(
-        height: 400.0,
+        height: 550.0,
         child: GridView.builder(
           physics: const BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -931,7 +930,7 @@ class _HomeTambookState extends State<HomeTambook>
   Widget equipoInformatico() {
     return Flexible(
       child: SizedBox(
-          height: 400.0,
+          height: 550.0,
           child: FutureBuilder(
               future: buildEquipoInformatico(),
               builder: (context, snapshot) {

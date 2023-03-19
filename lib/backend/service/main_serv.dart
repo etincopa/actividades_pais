@@ -2,12 +2,14 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
+import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -33,6 +35,7 @@ import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/file_util.dart';
@@ -986,6 +989,30 @@ class MainService {
   ) async {
     List<MetasTamboModel> aResp =
         await Get.find<MainRepo>().getMetasTambo(numSnip, anio, xMes);
+    return aResp;
+  }
+
+  Future<List<DatosJUTTamboModel>> getDatosJUTTambo(
+    String? numSnip,
+  ) async {
+    List<DatosJUTTamboModel> aResp =
+        await Get.find<MainRepo>().getDatosJUTTambo(numSnip);
+    return aResp;
+  }
+
+  Future<List<HistorialJUTModel>> getHistorialJUT(
+    String? ut,
+  ) async {
+    List<HistorialJUTModel> aResp =
+        await Get.find<MainRepo>().getHistorialJUT(ut);
+    return aResp;
+  }
+
+  Future<List<UnidadTerritorialModel>> getUnidadTerritorial(
+    String? ut,
+  ) async {
+    List<UnidadTerritorialModel> aResp =
+        await Get.find<MainRepo>().getUnidadTerritorial(ut);
     return aResp;
   }
 
