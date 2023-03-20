@@ -358,7 +358,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Future<void> obtenerAvanceMetasPorMes() async {
-    aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada('2023');
+    aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
   }
 
   @override

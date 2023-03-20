@@ -2002,15 +2002,24 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           title: const Text('N° DE HOGARES'),
-                          subtitle: Text(oTambo.hogaresAnteriores ?? ''),
+                          subtitle: Text(
+                              double.parse(oTambo.hogaresAnteriores ?? '0')
+                                  .toInt()
+                                  .toString()),
                         ),
                         ListTile(
                           title: const Text('N° DE VIVIENDAS'),
-                          subtitle: Text(oTambo.viviendasAnterior ?? ''),
+                          subtitle: Text(
+                              double.parse(oTambo.viviendasAnterior ?? '0')
+                                  .toInt()
+                                  .toString()),
                         ),
                         ListTile(
                           title: const Text('POBLACIÓN'),
-                          subtitle: Text(oTambo.poblacionAnterior ?? ''),
+                          subtitle: Text(
+                              double.parse(oTambo.poblacionAnterior ?? '0')
+                                  .toInt()
+                                  .toString()),
                         ),
                       ],
                     ),
