@@ -95,6 +95,8 @@ dependencies:
   #NOTIFICATIONS
   onesignal_flutter: ^3.5.0
 
+  cached_network_image: ^3.2.3
+
 flutter_icons:
   android: "launcher_icon"
   ios: true

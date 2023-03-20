@@ -11,6 +11,7 @@ import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
+import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -934,6 +935,14 @@ class MainController extends GetxController {
   ) async {
     List<RutaTamboModel> aResp =
         await Get.find<MainService>().getRutaTambo(numSnip);
+    return aResp;
+  }
+
+  Future<List<ImagenJUTModel>> obtenerImagenJUT(
+    String? numSnip,
+  ) async {
+    List<ImagenJUTModel> aResp =
+        await Get.find<MainService>().obtenerImagenJUT(numSnip);
     return aResp;
   }
 

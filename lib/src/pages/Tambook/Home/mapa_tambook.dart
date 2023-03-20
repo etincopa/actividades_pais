@@ -118,7 +118,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: " CLIMA: ",
                                 style: TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -126,7 +126,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: "${clima.temp ?? ''} °",
                                 style: const TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -144,7 +144,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: " Región: ",
                                 style: TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -152,7 +152,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: "${point.departamento ?? ''}  ",
                                 style: const TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -170,7 +170,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: " PROVINCIA: ",
                                 style: TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -178,7 +178,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: "${point.provincia ?? ''}  ",
                                 style: const TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -196,7 +196,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: " DISTRITO: ",
                                 style: TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -204,7 +204,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: "${point.distrito ?? ''}  ",
                                 style: const TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -225,7 +225,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: " GESTOR: ",
                                 style: TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -234,7 +234,7 @@ class _MapTambookState extends State<MapTambook>
                                     "${oTamboGeneral.gestorNombre ?? ''} ${oTamboGeneral.gestorApellidos ?? ''} ",
                                 style: const TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -258,7 +258,7 @@ class _MapTambookState extends State<MapTambook>
                                 text: " COMO LLEGAR: ",
                                 style: TextStyle(
                                   color: color_01,
-                                  fontSize: 13,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -273,7 +273,7 @@ class _MapTambookState extends State<MapTambook>
                             Text(
                               oRuta.cidNombre ?? '',
                               style: const TextStyle(
-                                fontSize: 16.0,
+                                fontSize: 14.0,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

@@ -1631,14 +1631,19 @@ class _HomeTambookState extends State<HomeTambook>
                         position: LegendPosition.bottom,
                         overflowMode: LegendItemOverflowMode.wrap),
                     primaryXAxis: CategoryAxis(),
+                    primaryYAxis: NumericAxis(
+                      edgeLabelPlacement: EdgeLabelPlacement.shift,
+                      numberFormat: NumberFormat.decimalPattern(),
+                    ),
                     series: <CartesianSeries>[
                       // Renders line chart
 
                       ColumnSeries<ChartDataAvance, String>(
                           name: 'Programado',
                           dataSource: chartData1,
-                          dataLabelSettings:
-                              const DataLabelSettings(isVisible: true),
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                          ),
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
@@ -1724,6 +1729,10 @@ class _HomeTambookState extends State<HomeTambook>
                         position: LegendPosition.bottom,
                         overflowMode: LegendItemOverflowMode.wrap),
                     primaryXAxis: CategoryAxis(),
+                    primaryYAxis: NumericAxis(
+                      edgeLabelPlacement: EdgeLabelPlacement.shift,
+                      numberFormat: NumberFormat.decimalPattern(),
+                    ),
                     series: <CartesianSeries>[
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
@@ -3109,6 +3118,23 @@ class AvancesData {
   final String mes;
   final double avanceAtenciones;
   final double avanceUsuarios;
+}
+
+class ShinyWidgetImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade400,
+      highlightColor: Colors.grey.shade200,
+      child: Container(
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
 }
 
 class ShinyWidget extends StatelessWidget {
