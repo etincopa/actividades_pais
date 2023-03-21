@@ -18,7 +18,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
-
+import 'dart:math' as math;
 import "package:collection/collection.dart";
 
 class HomeTambook extends StatefulWidget {
@@ -98,7 +98,7 @@ class _HomeTambookState extends State<HomeTambook>
      */
     List<HomeOptions> aSubOptionTambo = [
       const HomeOptions(
-        name: '2',
+        name: '1',
         name2: 'Recepcionado    ',
         name3: 'assets/icons/casa.png',
       ),
@@ -113,7 +113,7 @@ class _HomeTambookState extends State<HomeTambook>
         code: 'OPT4001',
         name: '',
         name2: 'TAMBOS',
-        name3: '488 Prestando Servicio',
+        name3: '',
         asubOption: aSubOptionTambo,
         image: icon1,
         color: Colors.white,
@@ -125,11 +125,6 @@ class _HomeTambookState extends State<HomeTambook>
      */
     List<HomeOptions> aSubOptionPias = [
       const HomeOptions(
-        name: '13',
-        name2: 'PIAS operando',
-        name3: 'assets/icons/embarcacion.png',
-      ),
-      const HomeOptions(
         name: '2',
         name2: 'En construcción',
         name3: 'assets/icons/arquitecto.png',
@@ -140,7 +135,7 @@ class _HomeTambookState extends State<HomeTambook>
         code: 'OPT4002',
         name: '',
         name2: 'PIAS',
-        name3: '13 Prestando Servicio',
+        name3: '',
         asubOption: aSubOptionPias,
         image: icon2,
         color: Colors.white,
@@ -454,6 +449,54 @@ class _HomeTambookState extends State<HomeTambook>
                       ],
                     ),
                   )),
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                  minHeight: 50,
+                  maxHeight: 55,
+                  child: Container(
+                    height: 800 * (1 / 11),
+                    width: double.infinity,
+                    color: const Color.fromARGB(255, 230, 234, 236),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: SizedBox(
+                            height: 35,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                    child: Marquee(
+                                  text:
+                                      '488 Tambos operativos y 14 PIAS operando',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                  scrollAxis:
+                                      Axis.horizontal, //scroll direction
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  blankSpace: 20.0,
+                                  velocity: 50.0, //speed
+                                  pauseAfterRound: const Duration(seconds: 1),
+                                  startPadding: 10.0,
+                                  accelerationDuration:
+                                      const Duration(seconds: 1),
+                                  accelerationCurve: Curves.linear,
+                                  decelerationDuration:
+                                      const Duration(milliseconds: 500),
+                                  decelerationCurve: Curves.easeOut,
+                                ))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               SliverPadding(
                 padding: const EdgeInsets.all(1.0),
                 sliver: SliverList(
@@ -504,36 +547,9 @@ class _HomeTambookState extends State<HomeTambook>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 15),
-                  SizedBox(
-                    height: 40,
-                    width: 350,
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: Marquee(
-                          text: '"488 tambos operativos" y "14 PIAS operando"',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                          scrollAxis: Axis.horizontal, //scroll direction
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          blankSpace: 20.0,
-                          velocity: 50.0, //speed
-                          pauseAfterRound: const Duration(seconds: 1),
-                          startPadding: 10.0,
-                          accelerationDuration: const Duration(seconds: 1),
-                          accelerationCurve: Curves.linear,
-                          decelerationDuration:
-                              const Duration(milliseconds: 500),
-                          decelerationCurve: Curves.easeOut,
-                        ))
-                      ],
-                    ),
-                  ),
                   cardAtenciones(),
-                  cardBeneficiarios(),
                   avanceMetas(),
+                  cardBeneficiarios(),
                   avanceMetasUsuarios(),
                 ],
               )),
@@ -3162,6 +3178,36 @@ class ShinyWidgetImage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
 
