@@ -677,7 +677,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                     context: context,
                     builder: (BuildContext context) => buildSuccessDialog2(
                       context,
-                      title: "DETALLE EQUIPO INFORMATICO",
+                      title: "DETALLE DE EQUIPOS",
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: aEquipoSelect.length,
@@ -692,13 +692,16 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
+                              const SizedBox(
+                                height: 15,
+                              ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: RichText(
                                   text: TextSpan(
                                     children: [
                                       const TextSpan(
-                                        text: "FECHA: ",
+                                        text: "FECHA DE ADQUISICIÓN: ",
                                         style: TextStyle(
                                           color: color_01,
                                           fontSize: 14,
