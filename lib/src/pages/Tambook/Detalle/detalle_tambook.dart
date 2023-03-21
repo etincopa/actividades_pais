@@ -1334,6 +1334,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text(oTambo.gestorCorreo ?? ''),
                         ),
                         ListTile(
+                          title: const Text('CELULAR'),
+                          subtitle: Text(oTambo.gestorTelefono ?? ''),
+                        ),
+                        ListTile(
                           title: const Text('TIPO CONTRATO'),
                           subtitle: Text(oTambo.gestorTipoContrato ?? ''),
                         ),
@@ -1834,7 +1838,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text(oJUT.fechaNacimiento ?? ''),
                         ),
                         ListTile(
-                          title: const Text('TÉLEFONO'),
+                          title: const Text('CELULAR'),
                           subtitle: Text(oJUT.telefono ?? ''),
                         ),
                         ListTile(
@@ -3060,8 +3064,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                   height: 200,
                   padding: const EdgeInsets.all(10),
                   child: KdGaugeView(
-                    minSpeed: 0,
-                    maxSpeed: 10,
+                    fractionDigits: 2,
+                    minSpeed: 0.0,
+                    maxSpeed: 10.0,
                     minMaxTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 10,
@@ -3080,7 +3085,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         "Mbps", //getText(oSrvInter.veloBaja ?? "Mbps"),
                     unitOfMeasurementTextStyle: const TextStyle(
                       color: Colors.black,
-                      fontSize: 30,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                     ),
                     gaugeWidth: 15,
@@ -3103,6 +3108,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   height: 200,
                   padding: const EdgeInsets.all(10),
                   child: KdGaugeView(
+                    fractionDigits: 2,
                     minSpeed: 0,
                     maxSpeed: 100,
                     minMaxTextStyle: const TextStyle(
@@ -3123,7 +3129,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         "Mbps", //getText(oSrvInter.veloSube ?? "Mbps"),
                     unitOfMeasurementTextStyle: const TextStyle(
                       color: Colors.black,
-                      fontSize: 30,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                     ),
                     gaugeWidth: 15,

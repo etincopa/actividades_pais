@@ -17,6 +17,7 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 
 import "package:collection/collection.dart";
 
@@ -389,153 +390,180 @@ class _HomeTambookState extends State<HomeTambook>
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-          backgroundColor: color_10o15,
-          body: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                    expandedHeight: 180.0,
-                    automaticallyImplyLeading: false,
-                    pinned: false,
-                    floating: false,
-                    snap: false,
-                    //actionsIconTheme: IconThemeData(opacity: 0.0),
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Stack(
-                        children: <Widget>[
-                          CarouselSlider(
-                            items: [
-                              SizedBox(
-                                width: double.maxFinite,
-                                height: 180.0,
-                                child: Image.asset(
-                                  'assets/carrusel1.jpg',
-                                  fit: BoxFit.fill,
-                                ),
+        backgroundColor: color_10o15,
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                  expandedHeight: 180.0,
+                  automaticallyImplyLeading: false,
+                  pinned: false,
+                  floating: false,
+                  snap: false,
+                  //actionsIconTheme: IconThemeData(opacity: 0.0),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Stack(
+                      children: <Widget>[
+                        CarouselSlider(
+                          items: [
+                            SizedBox(
+                              width: double.maxFinite,
+                              height: 180.0,
+                              child: Image.asset(
+                                'assets/carrusel1.jpg',
+                                fit: BoxFit.fill,
                               ),
-                              SizedBox(
-                                width: double.maxFinite,
-                                height: 180.0,
-                                child: Image.asset(
-                                  'assets/carrusel2.jpg',
-                                  fit: BoxFit.fill,
-                                ),
+                            ),
+                            SizedBox(
+                              width: double.maxFinite,
+                              height: 180.0,
+                              child: Image.asset(
+                                'assets/carrusel2.jpg',
+                                fit: BoxFit.fill,
                               ),
-                              SizedBox(
-                                width: double.maxFinite,
-                                height: 180.0,
-                                child: Image.asset(
-                                  'assets/carrusel3.jpg',
-                                  fit: BoxFit.fill,
-                                ),
+                            ),
+                            SizedBox(
+                              width: double.maxFinite,
+                              height: 180.0,
+                              child: Image.asset(
+                                'assets/carrusel3.jpg',
+                                fit: BoxFit.fill,
                               ),
-                              SizedBox(
-                                width: double.maxFinite,
-                                height: 180.0,
-                                child: Image.asset(
-                                  'assets/carrusel4.jpg',
-                                  fit: BoxFit.fill,
-                                ),
+                            ),
+                            SizedBox(
+                              width: double.maxFinite,
+                              height: 180.0,
+                              child: Image.asset(
+                                'assets/carrusel4.jpg',
+                                fit: BoxFit.fill,
                               ),
-                            ],
-                            options: CarouselOptions(
-                              height: 190.0,
-                              enlargeCenterPage: true,
-                              autoPlay: true,
-                              aspectRatio: 2.0,
-                              autoPlayCurve: Curves.linear,
-                              enableInfiniteScroll: true,
-                              autoPlayAnimationDuration:
-                                  const Duration(milliseconds: 800),
-                              viewportFraction: 1.0,
+                            ),
+                          ],
+                          options: CarouselOptions(
+                            height: 190.0,
+                            enlargeCenterPage: true,
+                            autoPlay: true,
+                            aspectRatio: 2.0,
+                            autoPlayCurve: Curves.linear,
+                            enableInfiniteScroll: true,
+                            autoPlayAnimationDuration:
+                                const Duration(milliseconds: 800),
+                            viewportFraction: 1.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+              SliverPadding(
+                padding: const EdgeInsets.all(1.0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    const ColoredBox(
+                      color: Colors.white70,
+                      child: TabBar(
+                        labelColor: Colors.black87,
+                        unselectedLabelColor: Colors.grey,
+                        padding: EdgeInsets.all(5.0),
+                        tabs: [
+                          Tab(
+                            icon: ImageIcon(
+                              AssetImage('assets/logros.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
+                              AssetImage('assets/PLATAFORMAS.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
+                              AssetImage('assets/personal.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
+                              AssetImage('assets/equipos.png'),
+                              size: 60,
                             ),
                           ),
                         ],
                       ),
-                    )),
-                SliverPadding(
-                  padding: const EdgeInsets.all(1.0),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate([
-                      const ColoredBox(
-                        color: Colors.white70,
-                        child: TabBar(
-                          labelColor: Colors.black87,
-                          unselectedLabelColor: Colors.grey,
-                          padding: EdgeInsets.all(5.0),
-                          tabs: [
-                            Tab(
-                              icon: ImageIcon(
-                                AssetImage('assets/logros.png'),
-                                size: 60,
-                              ),
-                            ),
-                            Tab(
-                              icon: ImageIcon(
-                                AssetImage('assets/PLATAFORMAS.png'),
-                                size: 60,
-                              ),
-                            ),
-                            Tab(
-                              icon: ImageIcon(
-                                AssetImage('assets/personal.png'),
-                                size: 60,
-                              ),
-                            ),
-                            Tab(
-                              icon: ImageIcon(
-                                AssetImage('assets/equipos.png'),
-                                size: 60,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  ),
+                    ),
+                  ]),
                 ),
-              ];
-            },
-            body: TabBarView(
-              children: <Widget>[
-                SingleChildScrollView(
+              ),
+            ];
+          },
+          body: TabBarView(
+            children: <Widget>[
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  SizedBox(
+                    height: 40,
+                    width: 350,
                     child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 15),
-                    cardAtenciones(),
-                    cardBeneficiarios(),
-                    avanceMetas(),
-                    avanceMetasUsuarios(),
-                  ],
-                )),
-                SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    const SizedBox(height: 15),
-                    cardPlataforma(),
-                  ],
-                )),
-                SingleChildScrollView(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 15),
-                    cardPersonalTambo(),
-                  ],
-                )),
-                SingleChildScrollView(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 15),
-                    cardEquipamientoTecnologico(),
-                  ],
-                )),
-              ],
-            ),
-          )),
+                      children: [
+                        Expanded(
+                            child: Marquee(
+                          text: '"488 tambos operativos" y "14 PIAS operando"',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                          scrollAxis: Axis.horizontal, //scroll direction
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          blankSpace: 20.0,
+                          velocity: 50.0, //speed
+                          pauseAfterRound: const Duration(seconds: 1),
+                          startPadding: 10.0,
+                          accelerationDuration: const Duration(seconds: 1),
+                          accelerationCurve: Curves.linear,
+                          decelerationDuration:
+                              const Duration(milliseconds: 500),
+                          decelerationCurve: Curves.easeOut,
+                        ))
+                      ],
+                    ),
+                  ),
+                  cardAtenciones(),
+                  cardBeneficiarios(),
+                  avanceMetas(),
+                  avanceMetasUsuarios(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  cardPlataforma(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardPersonalTambo(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardEquipamientoTecnologico(),
+                ],
+              )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
