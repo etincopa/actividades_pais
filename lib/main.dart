@@ -107,7 +107,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     //   _datdb.initDB();
     super.initState();
 
-    initPlatform();
+    //initPlatform();
   }
 
   Future<int> getToken() async {
@@ -121,7 +121,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   Future<void> initPlatform() async {
     await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
-    OneSignal.shared
+
+    await OneSignal.shared
+        .getDeviceState()
+        .then((value) => {print(value!.userId)});
+
+    /*OneSignal.shared
         .promptUserForPushNotificationPermission()
         .then((accepted) {});
     await OneSignal.shared
@@ -132,7 +137,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         .setSubscriptionObserver((OSSubscriptionStateChanges changes) async {
       String onesignalUserId = changes.to.userId ?? '';
       print('Player ID: ' + onesignalUserId);
-    });
+    });*/
   }
 
   @override

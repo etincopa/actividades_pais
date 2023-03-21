@@ -109,6 +109,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
+  bool isLoadingTambo = false;
   bool isLoadingRuta = false;
   bool isLoadingMantenimientoEquipos = true;
   bool isLoadingMantenimientoMeses = true;
@@ -200,6 +201,8 @@ class _DetalleTambookState extends State<DetalleTambook>
       (widget.listTambo!.idTambo).toString(),
     );
 
+    isLoadingTambo = true;
+
     jutTambo(oTambo.nSnip ?? 0);
     jutTamboImagen(oTambo.nSnip.toString() ?? '0');
     guardianTambo(oTambo.nSnip ?? 0);
@@ -216,6 +219,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
     buildEquipoInformatico(oTambo.nSnip.toString());
     getHistorialGestores(oTambo.nSnip.toString());
+
     setState(() {});
   }
 
@@ -247,7 +251,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     aAvance = await mainCtr.progIntervencionTambo(
       '${oTambo.idTambo}',
       sCurrentYear,
-      'X',
+      '03',
       'X',
       'X',
       'X',
@@ -259,7 +263,7 @@ class _DetalleTambookState extends State<DetalleTambook>
      * 4 : FINALIZADO/APROBADOS
      */
     aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
-    aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
+    //aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
   }
 
   Future<void> getAtenInterBeneResumen() async {
@@ -1083,9 +1087,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                           */
                         cardNuestroGestor(),
                         const SizedBox(height: 10),
-                        cardVigilante(),
-                        const SizedBox(height: 10),
                         cardHistorialGestores(),
+                        const SizedBox(height: 10),
+                        cardVigilante(),
                         const SizedBox(height: 10),
 
                         /*
@@ -1400,58 +1404,80 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
               children: <Widget>[
-                const Divider(color: colorI),
-                SizedBox(
-                  height: 150.0,
-                  child: ImageUtil.ImageUrl(
-                    oTambo.gestorPathImage ?? '',
-                    width: 150,
-                    imgDefault: 'assets/icons/user-male-2.png',
-                  ),
-                ),
-                Container(
-                  // padding: EdgeInsets.all(5.0),
-                  alignment: Alignment.centerLeft,
-                  child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('CARRERA'),
-                          subtitle: Text(oTambo.gestorProfession ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('GRADO'),
-                          subtitle: Text(oTambo.gestorGradoAcademico ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('SEXO'),
-                          subtitle: Text(oTambo.gestorSexo ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('ESTADO CIVIL'),
-                          subtitle: Text(oTambo.gestorEstadoCivil ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA DE NACIMIENTO'),
-                          subtitle: Text(oTambo.gestorFechaNacimiento ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('EMAIL'),
-                          subtitle: Text(oTambo.gestorCorreo ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('CELULAR'),
-                          subtitle: Text(oTambo.gestorTelefono ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('TIPO CONTRATO'),
-                          subtitle: Text(oTambo.gestorTipoContrato ?? ''),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                isLoadingTambo
+                    ? oTambo.gestorNombre!.isNotEmpty
+                        ? Column(children: [
+                            const Divider(color: colorI),
+                            SizedBox(
+                              height: 150.0,
+                              child: ImageUtil.ImageUrl(
+                                oTambo.gestorPathImage ?? '',
+                                width: 150,
+                                imgDefault: 'assets/icons/user-male-2.png',
+                              ),
+                            ),
+                            Container(
+                              // padding: EdgeInsets.all(5.0),
+                              alignment: Alignment.centerLeft,
+                              child: Card(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      title: const Text('CARRERA'),
+                                      subtitle:
+                                          Text(oTambo.gestorProfession ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('GRADO'),
+                                      subtitle: Text(
+                                          oTambo.gestorGradoAcademico ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('SEXO'),
+                                      subtitle: Text(oTambo.gestorSexo ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('ESTADO CIVIL'),
+                                      subtitle:
+                                          Text(oTambo.gestorEstadoCivil ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('FECHA DE NACIMIENTO'),
+                                      subtitle: Text(
+                                          oTambo.gestorFechaNacimiento ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('EMAIL'),
+                                      subtitle: Text(oTambo.gestorCorreo ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('CELULAR'),
+                                      subtitle:
+                                          Text(oTambo.gestorTelefono ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('TIPO CONTRATO'),
+                                      subtitle:
+                                          Text(oTambo.gestorTipoContrato ?? ''),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ])
+                        : Center(
+                            child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                child: const Text(
+                                  'Tambo sin gestor',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                )))
+                    : const CircularProgressIndicator(),
               ],
             ),
           ],
@@ -2919,20 +2945,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           title: const Text(
                                               'MANTENIMIENTO DE INFRAESTRUCTURA'),
                                           subtitle: Text(
-                                              aPlanMantenimientoInfraestructura[
-                                                          index]
-                                                      .montoMantenimientoInfraestructura ??
-                                                  ''),
+                                              "S/.  ${aPlanMantenimientoInfraestructura[index].montoMantenimientoInfraestructura ?? ''}"),
                                         ),
                                         ListTile(
                                           title: const Text('POZO A TIERRA'),
                                           subtitle: Text(
-                                              aPlanMantenimientoInfraestructura[
-                                                          index]
-                                                      .pozoTierra ??
-                                                  ''),
+                                              "S/. ${aPlanMantenimientoInfraestructura[index].pozoTierra ?? ''}"),
                                         ),
-                                        ListTile(
+                                        /*ListTile(
                                           title:
                                               const Text('CAMBIO DE BATERIAS'),
                                           subtitle: Text(
@@ -2940,7 +2960,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                                           index]
                                                       .cambioBaterias ??
                                                   '0'),
-                                        ),
+                                        ),*/
                                         ListTile(
                                           title: const Text(
                                               'MANTENIMIENTO PROGRAMADO PARA'),
