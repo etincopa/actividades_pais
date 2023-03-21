@@ -50,6 +50,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   String sCurrentYear = DateTime.now().year.toString();
 
+  List<EquipamientoInformaticoModel> aEquipos = [];
   List<HomeOptions> aEquipoInformatico = [];
   List<HomeOptions> aPersonalTambo = [];
   List<HomeOptions> aPlataforma = [];
@@ -209,8 +210,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Future<void> buildEquipoInformatico() async {
-    List<EquipamientoInformaticoModel> aEquipos =
-        await mainCtr.getEquipamientoInformatico("0");
+    aEquipos = await mainCtr.getEquipamientoInformatico("0");
 
     aEquipoInformatico = [];
 
@@ -652,7 +652,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     ),
                                     children: [
                                       TextSpan(
-                                        text: '${homeOption.name!}',
+                                        text: homeOption.name!,
                                         style: const TextStyle(
                                           fontSize: 19,
                                           height: 1.5,
@@ -1042,7 +1042,103 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                         ),
                         onTap: () async {
-                          //  var oHomeOptionSelect = aHomeOptions[index];
+                          var oEquipoInformatico = aEquipoInformatico[index];
+                          String sType = '';
+                          if (oEquipoInformatico.code == 'OPT2001') {
+                            sType = 'CPU';
+                          } else if (oEquipoInformatico.code == 'OPT2002') {
+                            sType = 'LAPTOP';
+                          } else if (oEquipoInformatico.code == 'OPT2003') {
+                            sType = 'PROYECTOR';
+                          } else if (oEquipoInformatico.code == 'OPT2005') {
+                            sType = 'IMPRESORA';
+                          }
+                          var aEquipoSelect = aEquipos
+                              .where((o) => o.categoria!.toUpperCase() == sType)
+                              .toList();
+                          if (aEquipoSelect.isNotEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  buildSuccessDialog2(
+                                context,
+                                title: "DETALLE EQUIPO INFORMATICO",
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: aEquipoSelect.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    var oEquipoSelect = aEquipoSelect[index];
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          oEquipoSelect.descripcion ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                const TextSpan(
+                                                  text: "FECHA: ",
+                                                  style: TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: oEquipoSelect
+                                                          .fechaContabilidad ??
+                                                      '',
+                                                  style: const TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                const TextSpan(
+                                                  text: "ESTADO: ",
+                                                  style: TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: oEquipoSelect.estado ??
+                                                      '',
+                                                  style: const TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const Divider(color: colorI),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          }
                         },
                       );
                     },
@@ -1293,7 +1389,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalMetaTipo1)}',
+                                formatoDecimal(totalMetaTipo1),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1307,7 +1403,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalAvance1)}',
+                                formatoDecimal(totalAvance1),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1322,7 +1418,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   textAlign: TextAlign.right,
                                 ),
                                 Text(
-                                  '${formatoDecimal(totalBrecha1)}',
+                                  formatoDecimal(totalBrecha1),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -1453,7 +1549,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalMetaTipo1)}',
+                                formatoDecimal(totalMetaTipo1),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1467,7 +1563,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalAvance1)}',
+                                formatoDecimal(totalAvance1),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1482,7 +1578,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   textAlign: TextAlign.right,
                                 ),
                                 Text(
-                                  '${formatoDecimal(totalBrecha1)}',
+                                  formatoDecimal(totalBrecha1),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -2780,6 +2876,37 @@ class _HomeTambookState extends State<HomeTambook>
     );
   }
 
+  Widget buildSuccessDialog2(
+    BuildContext context, {
+    String? title,
+    String? subTitle,
+    Widget? child,
+  }) {
+    return AlertDialog(
+      title: Text(title!),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      actions: const <Widget>[],
+      content: SingleChildScrollView(
+        child: Container(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Divider(),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.4,
+                ),
+                child: child,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildSuccessDialog(
     BuildContext context, {
     String? title,
@@ -3019,7 +3146,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   String formatoDecimal(int numero) {
-    NumberFormat f = new NumberFormat("#,###.0#", "es_US");
+    NumberFormat f = NumberFormat("#,###.0#", "es_US");
     String result = f.format(numero);
     return result;
   }
