@@ -139,6 +139,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
+  List<EquipamientoInformaticoModel> aEquipos = [];
   AtenInterBeneResumenModel oDatoGeneral = AtenInterBeneResumenModel.empty();
 
   @override
@@ -504,8 +505,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> buildEquipoInformatico(String snip) async {
-    List<EquipamientoInformaticoModel> aEquipos =
-        await mainCtr.getEquipamientoInformatico(snip);
+    aEquipos = await mainCtr.getEquipamientoInformatico(snip);
 
     var equipamiento = groupBy(aEquipos, (obj) => obj.categoria);
 
@@ -517,8 +517,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     String icon6 = 'assets/icons/parlante.png';
 
     var cpu = equipamiento['CPU']?.length ?? '0';
-    var proyector = equipamiento['PROYECTOR']?.length ?? '0';
     var laptop = equipamiento['LAPTOP']?.length ?? '0';
+    var proyector = equipamiento['PROYECTOR']?.length ?? '0';
     var impresora = equipamiento['IMPRESORA']?.length ?? '0';
 
     aEquipoInformatico.add(
@@ -658,7 +658,99 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
               onTap: () async {
-                //  var oHomeOptionSelect = aHomeOptions[index];
+                var oEquipoInformatico = aEquipoInformatico[index];
+                String sType = '';
+                if (oEquipoInformatico.code == 'OPT2001') {
+                  sType = 'CPU';
+                } else if (oEquipoInformatico.code == 'OPT2002') {
+                  sType = 'LAPTOP';
+                } else if (oEquipoInformatico.code == 'OPT2003') {
+                  sType = 'PROYECTOR';
+                } else if (oEquipoInformatico.code == 'OPT2005') {
+                  sType = 'IMPRESORA';
+                }
+                var aEquipoSelect = aEquipos
+                    .where((o) => o.categoria!.toUpperCase() == sType)
+                    .toList();
+                if (aEquipoSelect.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => buildSuccessDialog2(
+                      context,
+                      title: "DETALLE EQUIPO INFORMATICO",
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: aEquipoSelect.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var oEquipoSelect = aEquipoSelect[index];
+                          return Column(
+                            children: [
+                              Text(
+                                oEquipoSelect.descripcion ?? '',
+                                style: const TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: "FECHA: ",
+                                        style: TextStyle(
+                                          color: color_01,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: oEquipoSelect.fechaContabilidad ??
+                                            '',
+                                        style: const TextStyle(
+                                          color: color_01,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: "ESTADO: ",
+                                        style: TextStyle(
+                                          color: color_01,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: oEquipoSelect.estado ?? '',
+                                        style: const TextStyle(
+                                          color: color_01,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }
               },
             );
           },
@@ -3682,14 +3774,97 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
   }
 
-  Widget buildSuccessDialog(BuildContext context) {
+  Widget buildSuccessDialog2(
+    BuildContext context, {
+    String? title,
+    String? subTitle,
+    Widget? child,
+  }) {
+    return AlertDialog(
+      title: Text(title!),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      actions: const <Widget>[],
+      content: SingleChildScrollView(
+        child: Container(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Divider(),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.4,
+                ),
+                child: child,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildSuccessDialog(
+    BuildContext context, {
+    String? title,
+    String? subTitle,
+    Widget? child,
+  }) {
     return AlertDialog(
       backgroundColor: Colors.white,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          dialogBox(),
+          SizedBox(
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          5.00,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Text(
+                              title ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                color: color_01,
+                                fontSize: 15,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                          SizedBox(
+                            child: child,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
       actions: const <Widget>[
