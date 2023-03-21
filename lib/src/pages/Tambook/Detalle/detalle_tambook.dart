@@ -864,7 +864,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
                                 message:
-                                    'Información de metas de atención y beneficiarios',
+                                    'Información de metas de atención y usuarios',
                                 child: Tab(
                                   icon: ImageIcon(
                                     AssetImage('assets/meta.png'),
@@ -1752,7 +1752,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text('${oDatoGeneral.intervenciones}'),
                         ),
                         ListTile(
-                          title: const Text('BENEFICIARIOS'),
+                          title: const Text('USUARIOS'),
                           subtitle: Text('${oDatoGeneral.beneficiarios}'),
                         ),
                       ],
@@ -2426,7 +2426,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
-    var heading = 'BENEFICIARIOS $sCurrentYear';
+    var heading = 'USUARIOS $sCurrentYear';
     late ValueNotifier<double> valueNotifier =
         ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
 

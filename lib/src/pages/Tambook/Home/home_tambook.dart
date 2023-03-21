@@ -337,7 +337,7 @@ class _HomeTambookState extends State<HomeTambook>
       );
       AtencionesModel o4 = AtencionesModel(
         imagePath: '',
-        title: 'BENEFICIARIOS $sCurrentYear',
+        title: 'USUARIOS $sCurrentYear',
         total: totalBeneficiarios,
       );
 
@@ -505,8 +505,8 @@ class _HomeTambookState extends State<HomeTambook>
                   children: [
                     const SizedBox(height: 15),
                     cardAtenciones(),
-                    cardBeneficiarios(),
                     avanceMetas(),
+                    cardBeneficiarios(),
                     avanceMetasUsuarios(),
                   ],
                 )),
@@ -1335,7 +1335,7 @@ class _HomeTambookState extends State<HomeTambook>
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
-    var heading = 'BENEFICIARIOS $sCurrentYear';
+    var heading = 'USUARIOS $sCurrentYear';
     late ValueNotifier<double> valueNotifier =
         ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
 
