@@ -10,6 +10,7 @@ import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
+import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -406,6 +407,18 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => RutaTamboModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ImagenJUTModel>>> obtenerImagenJUT(
+      String? numSnip) async {
+    var sNumSnip = numSnip != null ? '/$numSnip' : '';
+    return await _http.request<List<ImagenJUTModel>>(
+      '${basePathApp3}obtenerImagenJUT$sNumSnip',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => ImagenJUTModel.fromJson(e)).toList();
       },
     );
   }

@@ -8,6 +8,7 @@ import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
+import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -626,6 +627,19 @@ class MainRepo {
   ) async {
     List<RutaTamboModel> aResp = [];
     final response = await _pnPaisApi.getRutaTambo(numSnip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ImagenJUTModel>> obtenerImagenJUT(
+    String? numSnip,
+  ) async {
+    List<ImagenJUTModel> aResp = [];
+    final response = await _pnPaisApi.obtenerImagenJUT(numSnip);
     if (response.error == null) {
       aResp = response.data!;
     } else {

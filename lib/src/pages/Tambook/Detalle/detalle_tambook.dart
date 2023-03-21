@@ -10,6 +10,7 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/dto/response_tambo_servicio_internet_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
+import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
@@ -44,6 +45,7 @@ import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:kdgaugeview/kdgaugeview.dart';
 import 'package:lecle_bubble_timeline/lecle_bubble_timeline.dart';
 import 'package:lecle_bubble_timeline/models/timeline_item.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import "package:collection/collection.dart";
 
@@ -90,6 +92,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<TamboActividadModel> aInterSopEnt = [];
   late List<TamboActividadModel> aCoordinacio = [];
   List<HomeOptions> aEquipoInformatico = [];
+  late List<ImagenJUTModel> aImagenJut = [];
 
   late List<IncidentesInternetModel> incidencias = [];
   late GuardianiaTamboModel oGuardia = GuardianiaTamboModel.empty();
@@ -115,6 +118,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   bool isLoadingSrvBasico = true;
   bool isLoadingGuardian = false;
   bool isLoadingJUT = false;
+  bool isLoadingImagenJUT = false;
   bool isLoading2 = false;
   bool isLoadingEI = true;
   bool isLoadingHistorialGestor = false;
@@ -196,6 +200,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     );
 
     jutTambo(oTambo.nSnip ?? 0);
+    jutTamboImagen(oTambo.nSnip.toString() ?? '0');
     guardianTambo(oTambo.nSnip ?? 0);
     rutaTambo(oTambo.nSnip ?? 0);
     servicioBasicoTambo(oTambo.idTambo ?? 0);
@@ -331,6 +336,14 @@ class _DetalleTambookState extends State<DetalleTambook>
     setState(() {});
   }
 
+  Future<void> jutTamboImagen(String snip) async {
+    isLoadingImagenJUT = false;
+    aImagenJut = await mainCtr.obtenerImagenJUT(snip.toString());
+
+    isLoadingImagenJUT = true;
+    setState(() {});
+  }
+
   Future<void> jutTambo(int snip) async {
     isLoadingJUT = false;
     List<DatosJUTTamboModel> aJut =
@@ -456,8 +469,10 @@ class _DetalleTambookState extends State<DetalleTambook>
     aPlanMantenimientoInfraestructura =
         await mainCtr.planMantenimientoInfraestructura(snip);
 
-    getProgramacionMantenimientoInfrasestructura(
-        aPlanMantenimientoInfraestructura[0].departamento!);
+    if (aPlanMantenimientoInfraestructura.isNotEmpty) {
+      getProgramacionMantenimientoInfrasestructura(
+          aPlanMantenimientoInfraestructura[0].departamento!);
+    }
 
     isLoadingMantenimientoInfraestructura = false;
     setState(() {});
@@ -849,7 +864,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
                                 message:
-                                    'Información de metas de atención y beneficiarios',
+                                    'Información de metas de atención y usuarios',
                                 child: Tab(
                                   icon: ImageIcon(
                                     AssetImage('assets/meta.png'),
@@ -985,8 +1000,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO JEFE DE UNIDAD TERRITORIAL
                           */
                         cardNuestroJefeUnidad(),
-                        //const SizedBox(height: 10),
-                        //cardHistorialJUT(),
+                        const SizedBox(height: 10),
+                        cardHistorialJUT(),
                         const SizedBox(height: 50),
                       ],
                     ),
@@ -1741,7 +1756,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text('${oDatoGeneral.intervenciones}'),
                         ),
                         ListTile(
-                          title: const Text('BENEFICIARIOS'),
+                          title: const Text('USUARIOS'),
                           subtitle: Text('${oDatoGeneral.beneficiarios}'),
                         ),
                       ],
@@ -1809,16 +1824,16 @@ class _DetalleTambookState extends State<DetalleTambook>
               ),
               children: <Widget>[
                 const Divider(color: colorI),
-                /*
                 SizedBox(
                   height: 150.0,
-                  child: ImageUtil.ImageUrl(
-                    oTambo.gestorPathImage ?? '',
-                    width: 150,
-                    imgDefault: 'assets/icons/user-male-2.png',
-                  ),
+                  child: isLoadingImagenJUT
+                      ? ImageUtil.ImageUrl(
+                          'https://www.pais.gob.pe/backendsismonitor/public/storage/${aImagenJut[0].path}',
+                          width: 150,
+                          imgDefault: 'assets/icons/user-male-2.png',
+                        )
+                      : Center(),
                 ),
-                */
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
@@ -2324,8 +2339,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                             maxValue: 100,
                             valueNotifier: valueNotifier,
                             backColor: Colors.black.withOpacity(0.4),
-                            progressStrokeWidth: 20,
-                            backStrokeWidth: 20,
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 10,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
@@ -2359,7 +2374,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '$totalMetaTipo1',
+                                '${formatoDecimal(totalMetaTipo1.toDouble())}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2373,7 +2388,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '$totalAvance1',
+                                '${formatoDecimal(totalAvance1.toDouble())}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2388,7 +2403,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   textAlign: TextAlign.right,
                                 ),
                                 Text(
-                                  '$totalBrecha1',
+                                  '${formatoDecimal(totalBrecha1.toDouble())}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -2424,7 +2439,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
-    var heading = 'BENEFICIARIOS $sCurrentYear';
+    var heading = 'USUARIOS $sCurrentYear';
     late ValueNotifier<double> valueNotifier =
         ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
 
@@ -2485,8 +2500,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                             maxValue: 100,
                             valueNotifier: valueNotifier,
                             backColor: Colors.black.withOpacity(0.4),
-                            progressStrokeWidth: 20,
-                            backStrokeWidth: 20,
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 10,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
@@ -2520,7 +2535,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '$totalMetaTipo1',
+                                '${formatoDecimal(totalMetaTipo1.toDouble())}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2534,7 +2549,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '$totalAvance1',
+                                '${formatoDecimal(totalAvance1.toDouble())}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2549,7 +2564,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   textAlign: TextAlign.right,
                                 ),
                                 Text(
-                                  '$totalBrecha1',
+                                  '${formatoDecimal(totalBrecha1.toDouble())}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -2658,13 +2673,34 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                                 child: SizedBox(
                                   height: 150.0,
-                                  child: ImageUtil.ImageUrl(
+                                  child: CachedNetworkImage(
+                                    width: 110,
+                                    imageUrl:
+                                        aPlanMantenimientoInformatico[index]
+                                                .rutaFoto ??
+                                            '',
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) =>
+                                        ShinyWidgetImage(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+
+                                  /*ImageUtil.ImageUrl(
                                     aPlanMantenimientoInformatico[index]
                                             .rutaFoto ??
                                         '',
                                     width: 110,
                                     imgDefault: 'assets/icons/user-male-2.png',
-                                  ),
+                                  ),*/
                                 ),
                               ),
                               Container(
@@ -2771,7 +2807,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                       if (isLoadingMantenimientoInfraestructura) {
                         return ShinyWidget();
                       } else {
-                        if (aPlanMantenimientoInfraestructura.isNotEmpty)
+                        if (aPlanMantenimientoInfraestructura.isNotEmpty) {
                           return Padding(
                               padding: const EdgeInsets.all(1.0),
                               child: Column(children: [
@@ -2826,6 +2862,19 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ]));
+                        } else {
+                          return Center(
+                              child: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                  child: const Text(
+                                    'No hay datos para mostrar',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  )));
+                        }
                       }
                     })
               ],
@@ -3110,7 +3159,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   child: KdGaugeView(
                     fractionDigits: 2,
                     minSpeed: 0,
-                    maxSpeed: 100,
+                    maxSpeed: 10,
                     minMaxTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 10,
@@ -3809,7 +3858,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   padding: const EdgeInsets.all(10),
                   child: KdGaugeView(
                     minSpeed: 0,
-                    maxSpeed: 10,
+                    maxSpeed: 100,
                     minMaxTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 10,
@@ -3846,7 +3895,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               "assets/generador.png",
                             ),
                             size: 55,
-                            color: Colors.grey,
+                            color: Colors.black,
                           ),
                           iconColor: const Color.fromARGB(255, 0, 0, 0),
                           title: const Text('Generador'),
@@ -4187,17 +4236,23 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       ? "assets/avion.png"
                                       : "assets/carro.png"),
                                   size: 40,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                                 iconColor: const Color.fromARGB(255, 0, 0, 0),
                                 title: ListTile(
                                   title: Text(
                                     oRuta.txtDescripcion ?? '',
                                     textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                   subtitle: Text(
                                     oRuta.txtEncuenta ?? '',
                                     textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
