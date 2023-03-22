@@ -1073,6 +1073,9 @@ class _HomeTambookState extends State<HomeTambook>
                               .where((o) => o.categoria!.toUpperCase() == sType)
                               .toList();
                           if (aEquipoSelect.isNotEmpty) {
+                            aEquipoSelect
+                                .sort((a, b) => a.tambo!.compareTo(b.tambo!));
+
                             showDialog(
                               context: context,
                               builder: (BuildContext context) =>
@@ -1092,6 +1095,32 @@ class _HomeTambookState extends State<HomeTambook>
                                           style: const TextStyle(
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                const TextSpan(
+                                                  text: "TAMBO: ",
+                                                  style: TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text:
+                                                      oEquipoSelect.tambo ?? '',
+                                                  style: const TextStyle(
+                                                    color: color_01,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         Align(
