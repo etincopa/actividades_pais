@@ -469,7 +469,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 Expanded(
                                     child: Marquee(
                                   text:
-                                      '488 Tambos operativos y 14 PIAS operando',
+                                      '488 Tambos operativos y 13 PIAS operando',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -1483,7 +1483,7 @@ class _HomeTambookState extends State<HomeTambook>
               height: 10,
             ),
             Text(
-                'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
           ],
         ),
       ),
@@ -1643,7 +1643,7 @@ class _HomeTambookState extends State<HomeTambook>
               height: 10,
             ),
             Text(
-                'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
           ],
         ),
       ),
@@ -1826,7 +1826,7 @@ class _HomeTambookState extends State<HomeTambook>
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
                   Text(
-                      'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
+                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
                 ],
               ),
             ),
@@ -1923,7 +1923,7 @@ class _HomeTambookState extends State<HomeTambook>
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
                   Text(
-                      'ACTUALIZADO AL MES DE ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
+                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
                 ],
               ),
             ),

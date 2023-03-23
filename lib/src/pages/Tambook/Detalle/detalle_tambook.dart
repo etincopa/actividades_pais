@@ -1099,8 +1099,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO JEFE DE UNIDAD TERRITORIAL
                           */
                         cardNuestroJefeUnidad(),
-                        const SizedBox(height: 10),
-                        cardHistorialJUT(),
+                        //const SizedBox(height: 10),
+                        //cardHistorialJUT(),
                         const SizedBox(height: 50),
                       ],
                     ),
