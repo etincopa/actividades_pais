@@ -246,6 +246,64 @@ class _MapTambookState extends State<MapTambook>
                       Align(
                         alignment: Alignment.centerLeft,
                         child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                child: Icon(Icons.pin, size: 15),
+                              ),
+                              const TextSpan(
+                                text: " LATITUD: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "${oTamboGeneral.yCcpp ?? ''} ",
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const WidgetSpan(
+                                child: Icon(Icons.pin, size: 15),
+                              ),
+                              const TextSpan(
+                                text: " LONGITUD: ",
+                                style: TextStyle(
+                                  color: color_01,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "${oTamboGeneral.xCcpp ?? ''} ",
+                                style: const TextStyle(
+                                  color: color_01,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
                           text: const TextSpan(
                             children: [
                               WidgetSpan(

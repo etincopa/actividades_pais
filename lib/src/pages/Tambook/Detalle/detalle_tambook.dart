@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
@@ -71,6 +72,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     "COMBUSTIBLE",
     "ACTIVIDADES",
     "CLIMA",
+    "COMO LLEGAR AL TAMBO",
     "INTERVENCIONES"
   ];
   String currentTitle = '';
@@ -86,6 +88,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   late DatosJUTTamboModel oJUT = DatosJUTTamboModel.empty();
   late UnidadTerritorialModel oUT = UnidadTerritorialModel.empty();
   late List<TamboActividadModel> aActividad = [];
+  List<AvanceMetasModel> aMetasMensualizada = [];
 
   late List<AtenInterBeneResumenModel> aAtenInterBene = [];
   late List<TamboActividadModel> aInterAmbDir = [];
@@ -182,7 +185,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     });
 
     currentTitle = titleList[0];
-    _tabControllerTitle = TabController(length: 10, vsync: this);
+    _tabControllerTitle = TabController(length: 11, vsync: this);
     _tabControllerTitle.addListener(changeTitle);
 
     super.initState();
@@ -191,6 +194,7 @@ class _DetalleTambookState extends State<DetalleTambook>
      */
 
     tamboDatoGeneral();
+    obtenerAvanceMetasPorMes();
     TamboIntervencionAtencionIncidencia();
 
     //incidenciasInternet();
@@ -213,6 +217,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     incidenciasInternet(oTambo.nSnip ?? 0);
     getCombustibleTambo();
     getProgIntervencionTambo();
+
     getPlanMantenimientoInformatico(oTambo.ut.toString());
 
     getPlanMantenimientoInfraestructura(oTambo.nSnip.toString());
@@ -229,6 +234,10 @@ class _DetalleTambookState extends State<DetalleTambook>
       // get index of active tab & change current appbar title
       currentTitle = titleList[_tabControllerTitle.index];
     });
+  }
+
+  Future<void> obtenerAvanceMetasPorMes() async {
+    aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
   }
 
   Future<void> getProgIntervencionTambo() async {
@@ -400,7 +409,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       clima =
           ClimaModel.fromJson(json.decode(response.body)['current_weather']);
     } else {
-      print("Error con la respusta");
+      print("Error con la respuesta");
     }
   }
 
@@ -862,7 +871,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 10,
+              length: 11,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -1021,6 +1030,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                               Tab(
                                 icon: ImageIcon(
+                                  AssetImage('assets/iconos_card/rutas.png'),
+                                  size: 55,
+                                ),
+                              ),
+                              Tab(
+                                icon: ImageIcon(
                                   AssetImage('assets/intervenciones.png'),
                                   size: 55,
                                 ),
@@ -1075,8 +1090,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * CENTROS POBLADOS
                           */
                         cardAmbitoAccion(),
-                        const SizedBox(height: 10),
-                        cardServicioBasico(),
                         const SizedBox(height: 50),
                       ],
                     ),
@@ -1132,6 +1145,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         cardDatosSrvInternet(),
                         const SizedBox(height: 10),
                         cardIncidencia(),
+                        const SizedBox(height: 10),
+                        cardServicioBasico(),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -1170,6 +1185,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ListView(
                       children: [
                         cardClima(),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+
+                    //const TabScreen("Clima"),
+
+                    ListView(
+                      children: [
                         const SizedBox(height: 10),
                         cardCamino(),
                       ],
@@ -2092,7 +2115,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Padding cardDatosDemograficos() {
-    var heading = 'DATOS DEMOGRÁFICOS';
+    var heading = 'AMBITOS DE INFLUENCIA';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -2165,6 +2188,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: INEI'),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -2447,6 +2473,10 @@ class _DetalleTambookState extends State<DetalleTambook>
           ),
           children: <Widget>[
             const Divider(color: colorI),
+            const SizedBox(height: 10),
+            Text(
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+            const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               alignment: Alignment.centerLeft,
@@ -2490,7 +2520,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta :",
+                                "Meta física:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2504,7 +2534,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Avance :",
+                                "Ejecución física :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2516,7 +2546,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                               ),
                             ]),
-                            TableRow(
+                            /*TableRow(
                               children: [
                                 const Text(
                                   "Brecha :",
@@ -2531,7 +2561,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ],
@@ -2608,6 +2638,10 @@ class _DetalleTambookState extends State<DetalleTambook>
           ),
           children: <Widget>[
             const Divider(color: colorI),
+            const SizedBox(height: 10),
+            Text(
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+            const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               alignment: Alignment.centerLeft,
@@ -2651,7 +2685,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta :",
+                                "Meta física:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2665,7 +2699,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Avance :",
+                                "Ejecución física :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2677,7 +2711,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                               ),
                             ]),
-                            TableRow(
+                            /*TableRow(
                               children: [
                                 const Text(
                                   "Brecha :",
@@ -2692,7 +2726,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ],
@@ -3106,7 +3140,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
                             ]),
-                            TableRow(children: [
+                            /*TableRow(children: [
                               Text(
                                 "Brecha :",
                                 style: TextStyle(fontSize: 15.0),
@@ -3116,7 +3150,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 15),
                               ),
-                            ]),
+                            ]),*/
                           ],
                         ),
                       ],
@@ -4473,6 +4507,64 @@ class _DetalleTambookState extends State<DetalleTambook>
     NumberFormat f = NumberFormat("#,###.##", "es_US");
     String result = f.format(numero);
     return result;
+  }
+
+  String obtenerNombreMesCompleto(String mes) {
+    String nombreMes = "";
+    switch (mes) {
+      case "1":
+        nombreMes = "ENERO";
+        break;
+
+      case "2":
+        nombreMes = "FEBRERO";
+        break;
+
+      case "3":
+        nombreMes = "MARZO";
+        break;
+
+      case "4":
+        nombreMes = "ABRIL";
+        break;
+
+      case "5":
+        nombreMes = "MAYO";
+        break;
+
+      case "6":
+        nombreMes = "JUNIO";
+        break;
+
+      case "7":
+        nombreMes = "JULIO";
+        break;
+
+      case "8":
+        nombreMes = "AGOSTO";
+        break;
+
+      case "9":
+        nombreMes = "SETIEMBRE";
+        break;
+
+      case "10":
+        nombreMes = "OCTUBRE";
+        break;
+
+      case "11":
+        nombreMes = "NOVIEMBRE";
+        break;
+
+      case "12":
+        nombreMes = "DICIEMBRE";
+        break;
+
+      default:
+        nombreMes = "SIN MES ASIGNADO";
+        break;
+    }
+    return nombreMes;
   }
 
   String obtenerNombreMes(String mes) {

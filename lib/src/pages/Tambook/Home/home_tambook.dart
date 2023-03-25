@@ -175,7 +175,7 @@ class _HomeTambookState extends State<HomeTambook>
     aPersonalTambo.add(
       HomeOptions(
         code: 'OPT3003',
-        name: 'GESTORES \nTAMBOS -PIAS',
+        name: 'GESTORES \nTAMBOS',
         name2: aPersonal[0].git.toString() ?? '0',
         types: const ['Ver'],
         image: icon3,
@@ -186,7 +186,7 @@ class _HomeTambookState extends State<HomeTambook>
     aPersonalTambo.add(
       HomeOptions(
           code: 'OPT3004',
-          name: 'GUARDIANES \nTAMBOS - PIAS',
+          name: 'GUARDIANES \nTAMBOS',
           name2: aPersonal[0].gu.toString() ?? '0',
           types: const ['Ver'],
           image: icon4,
@@ -196,7 +196,7 @@ class _HomeTambookState extends State<HomeTambook>
     aPersonalTambo.add(
       HomeOptions(
           code: 'OPT3004',
-          name: 'SOPORTE \n TÉCNICO',
+          name: 'SOPORTE \n TÉCNICO DE UTI',
           name2: aPersonal[0].st.toString() ?? '0',
           types: const ['Ver'],
           image: icon4,
@@ -1386,6 +1386,14 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           children: <Widget>[
             const Divider(color: colorI),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               alignment: Alignment.centerLeft,
@@ -1429,7 +1437,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta :",
+                                "Meta física:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1443,7 +1451,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Avance :",
+                                "Ejecución física :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1455,7 +1463,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 ),
                               ),
                             ]),
-                            TableRow(
+                            /*TableRow(
                               children: [
                                 const Text(
                                   "Brecha :",
@@ -1470,7 +1478,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ],
@@ -1479,11 +1487,6 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
           ],
         ),
       ),
@@ -1546,6 +1549,14 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           children: <Widget>[
             const Divider(color: colorI),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               alignment: Alignment.centerLeft,
@@ -1589,7 +1600,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta :",
+                                "Meta física:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1603,7 +1614,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Avance :",
+                                "Ejecución física :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1615,7 +1626,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 ),
                               ),
                             ]),
-                            TableRow(
+                            /*TableRow(
                               children: [
                                 const Text(
                                   "Brecha :",
@@ -1630,7 +1641,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ],
@@ -1639,11 +1650,6 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
           ],
         ),
       ),
@@ -1739,7 +1745,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding avanceMetas() {
-    var heading = 'METAS ATENCIONES 2023';
+    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE LAS ATENCIONES 2023';
 
     final List<ChartDataAvance> chartData1 = [];
 
@@ -1788,6 +1794,10 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           children: <Widget>[
             const Divider(color: colorI),
+            const SizedBox(height: 10),
+            Text(
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+            const SizedBox(height: 10),
             Container(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -1808,7 +1818,7 @@ class _HomeTambookState extends State<HomeTambook>
                       // Renders line chart
 
                       ColumnSeries<ChartDataAvance, String>(
-                          name: 'Programado',
+                          name: 'Meta física',
                           dataSource: chartData1,
                           dataLabelSettings: const DataLabelSettings(
                             isVisible: true,
@@ -1816,7 +1826,7 @@ class _HomeTambookState extends State<HomeTambook>
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
-                          name: 'Ejecutado',
+                          name: 'Ejecución física',
                           dataSource: chartData1,
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true),
@@ -1825,8 +1835,6 @@ class _HomeTambookState extends State<HomeTambook>
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
-                  Text(
-                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
                 ],
               ),
             ),
@@ -1837,7 +1845,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding avanceMetasUsuarios() {
-    var heading = 'METAS DE USUARIOS - 2023';
+    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE USUARIOS - 2023';
 
     final List<ChartDataAvance> chartData1 = [];
 
@@ -1886,6 +1894,10 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           children: <Widget>[
             const Divider(color: colorI),
+            const SizedBox(height: 10),
+            Text(
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+            const SizedBox(height: 10),
             Container(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -1905,7 +1917,7 @@ class _HomeTambookState extends State<HomeTambook>
                     series: <CartesianSeries>[
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
-                          name: 'Programado',
+                          name: 'Meta física',
                           dataSource: chartData1,
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true),
@@ -1913,7 +1925,7 @@ class _HomeTambookState extends State<HomeTambook>
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
-                          name: 'Ejecutado',
+                          name: 'Ejecución física',
                           dataSource: chartData1,
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true),
@@ -1922,8 +1934,6 @@ class _HomeTambookState extends State<HomeTambook>
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),
-                  Text(
-                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}')
                 ],
               ),
             ),
@@ -3191,7 +3201,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   String formatoDecimal(int numero) {
-    NumberFormat f = NumberFormat("#,###.0#", "es_US");
+    NumberFormat f = NumberFormat("#,###.##", "es_US");
     String result = f.format(numero);
     return result;
   }
