@@ -2,6 +2,7 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
@@ -31,6 +32,7 @@ import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -1138,6 +1140,18 @@ class MainService {
 
   Future<List<TamboPias>> getCantidadTambosPIAS() async {
     List<TamboPias> aResp = await Get.find<MainRepo>().getCantidadTambosPIAS();
+    return aResp;
+  }
+
+  Future<List<ResumenParqueInformatico>> getResumenParqueInformatico() async {
+    List<ResumenParqueInformatico> aResp =
+        await Get.find<MainRepo>().getResumenParqueInformatico();
+    return aResp;
+  }
+
+  Future<List<CantidadTamboRegion>> getCantidadTambosRegion() async {
+    List<CantidadTamboRegion> aResp =
+        await Get.find<MainRepo>().getCantidadTambosRegion();
     return aResp;
   }
 

@@ -4,6 +4,7 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
@@ -29,6 +30,7 @@ import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -741,6 +743,28 @@ class MainRepo {
   Future<List<TamboPias>> getCantidadTambosPIAS() async {
     List<TamboPias> aResp = [];
     final response = await _pnPaisApi.getCantidadTambosPIAS();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ResumenParqueInformatico>> getResumenParqueInformatico() async {
+    List<ResumenParqueInformatico> aResp = [];
+    final response = await _pnPaisApi.getResumenParqueInformatico();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<CantidadTamboRegion>> getCantidadTambosRegion() async {
+    List<CantidadTamboRegion> aResp = [];
+    final response = await _pnPaisApi.getCantidadTambosRegion();
     if (response.error == null) {
       aResp = response.data!;
     } else {

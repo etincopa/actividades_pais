@@ -5,6 +5,7 @@ import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
@@ -30,6 +31,7 @@ import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
+import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -532,6 +534,32 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => TamboPias.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ResumenParqueInformatico>>>
+      getResumenParqueInformatico() async {
+    return await _http.request<List<ResumenParqueInformatico>>(
+      '${basePathApp3}obtenerResumenParqueInformatico',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ResumenParqueInformatico.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<CantidadTamboRegion>>>
+      getCantidadTambosRegion() async {
+    return await _http.request<List<CantidadTamboRegion>>(
+      '${basePathApp3}obtenerCantidadTambosRegion',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => CantidadTamboRegion.fromJson(e))
+            .toList();
       },
     );
   }
