@@ -8,6 +8,7 @@ import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
+import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -20,7 +21,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'dart:math' as math;
-import "package:collection/collection.dart";
 import 'package:actividades_pais/util/busy-indicator.dart';
 
 class HomeTambook extends StatefulWidget {
@@ -42,6 +42,7 @@ class _HomeTambookState extends State<HomeTambook>
   bool isLoadingEquipos = false;
 
   late String numTambos = "";
+  late String banerTambosPias = "---                 ----                ---";
 
   List<ProgIntervencionTamboModel> aAvance = [];
   List<AtenInterBeneResumenModel> aAtenInterBene = [];
@@ -84,6 +85,7 @@ class _HomeTambookState extends State<HomeTambook>
     //buildEquipoInformatico();
     buildPlataforma();
     buildPersonalTambo();
+    getCantidadTambosPIAS();
     buildData();
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
@@ -144,6 +146,13 @@ class _HomeTambookState extends State<HomeTambook>
         color: Colors.white,
       ),
     );
+  }
+
+  Future<void> getCantidadTambosPIAS() async {
+    List<TamboPias> aTamboPias = await mainCtr.getCantidadTambosPIAS();
+    TamboPias oTamboPias = aTamboPias[0];
+    banerTambosPias =
+        '${oTamboPias.tambos} Tambos operativos y ${oTamboPias.pias} PIAS operando';
   }
 
   Future<void> buildPersonalTambo() async {
@@ -470,8 +479,7 @@ class _HomeTambookState extends State<HomeTambook>
                               children: [
                                 Expanded(
                                     child: Marquee(
-                                  text:
-                                      '488 Tambos operativos y 13 PIAS operando',
+                                  text: banerTambosPias,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,

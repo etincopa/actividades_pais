@@ -34,6 +34,7 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
@@ -521,6 +522,16 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => PersonalTambo.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<TamboPias>>> getCantidadTambosPIAS() async {
+    return await _http.request<List<TamboPias>>(
+      '${basePathApp3}obtenerCantidadTambosPIAS',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => TamboPias.fromJson(e)).toList();
       },
     );
   }

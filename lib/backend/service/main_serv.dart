@@ -35,6 +35,7 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
@@ -1132,6 +1133,11 @@ class MainService {
   Future<List<PersonalTambo>> getPersonalPuestoTambo(String sTipo) async {
     List<PersonalTambo> aResp =
         await Get.find<MainRepo>().getPersonalPuestoTambo(sTipo);
+    return aResp;
+  }
+
+  Future<List<TamboPias>> getCantidadTambosPIAS() async {
+    List<TamboPias> aResp = await Get.find<MainRepo>().getCantidadTambosPIAS();
     return aResp;
   }
 
