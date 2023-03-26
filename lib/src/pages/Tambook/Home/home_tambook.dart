@@ -6,6 +6,7 @@ import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.da
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
+import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -20,6 +21,7 @@ import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'dart:math' as math;
 import "package:collection/collection.dart";
+import 'package:actividades_pais/util/busy-indicator.dart';
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -195,7 +197,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     aPersonalTambo.add(
       HomeOptions(
-          code: 'OPT3004',
+          code: 'OPT3005',
           name: 'SOPORTE \n TÉCNICO DE UTI',
           name2: aPersonal[0].st.toString() ?? '0',
           types: const ['Ver'],
@@ -907,7 +909,46 @@ class _HomeTambookState extends State<HomeTambook>
                 ),
               ),
               onTap: () async {
-                //  var oHomeOptionSelect = aHomeOptions[index];
+                BusyIndicator.show(context);
+                HomeOptions oOption = aPersonalTambo[index];
+
+                String sPersonalCode = '';
+                if (oOption.code == 'OPT3001') sPersonalCode = 'JUT';
+                if (oOption.code == 'OPT3002') sPersonalCode = 'MO';
+                if (oOption.code == 'OPT3003') sPersonalCode = 'GIT';
+                if (oOption.code == 'OPT3004') sPersonalCode = 'GU';
+                if (oOption.code == 'OPT3005') sPersonalCode = 'ST';
+                List<PersonalTambo> aPersonalDetTambo =
+                    await mainCtr.getPersonalPuestoTambo(sPersonalCode);
+
+                BusyIndicator.hide(context);
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => buildSuccessDialog2(
+                    context,
+                    title: "",
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: aPersonalDetTambo.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var oEquipoSelect = aPersonalDetTambo[index];
+                        return Column(
+                          children: [
+                            Text(
+                              oEquipoSelect.nombres ?? '',
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const Divider(color: colorI),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                );
               },
             );
           },

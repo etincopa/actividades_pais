@@ -25,6 +25,7 @@ import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecut
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
+import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
@@ -1003,6 +1004,12 @@ class MainController extends GetxController {
   Future<List<AvanceMetasModel>> getAvanceMetasMensualizada(String anio) async {
     List<AvanceMetasModel> aResp =
         await Get.find<MainService>().getAvanceMetasMensualizada(anio);
+    return aResp;
+  }
+
+  Future<List<PersonalTambo>> getPersonalPuestoTambo(String sTipo) async {
+    List<PersonalTambo> aResp =
+        await Get.find<MainService>().getPersonalPuestoTambo(sTipo);
     return aResp;
   }
 

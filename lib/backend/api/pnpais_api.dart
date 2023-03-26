@@ -25,6 +25,7 @@ import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecut
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
+import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -508,6 +509,18 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => AvanceMetasModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<PersonalTambo>>> getPersonalPuestoTambo(
+    String sTipo,
+  ) async {
+    return await _http.request<List<PersonalTambo>>(
+      '${basePathApp3}obtenerPersonalPuesto/${sTipo}',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => PersonalTambo.fromJson(e)).toList();
       },
     );
   }

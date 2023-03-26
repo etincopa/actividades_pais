@@ -24,6 +24,7 @@ import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecut
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
+import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -717,6 +718,17 @@ class MainRepo {
   Future<List<AvanceMetasModel>> getAvanceMetasMensualizada(String anio) async {
     List<AvanceMetasModel> aResp = [];
     final response = await _pnPaisApi.getAvanceMetasMensualizada(anio);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<PersonalTambo>> getPersonalPuestoTambo(String sTipo) async {
+    List<PersonalTambo> aResp = [];
+    final response = await _pnPaisApi.getPersonalPuestoTambo(sTipo);
     if (response.error == null) {
       aResp = response.data!;
     } else {
