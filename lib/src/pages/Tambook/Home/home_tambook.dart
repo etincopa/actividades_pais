@@ -2,12 +2,14 @@ import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
+import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
+import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -22,6 +24,9 @@ import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'dart:math' as math;
 import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import "package:collection/collection.dart";
 
 class HomeTambook extends StatefulWidget {
   const HomeTambook({super.key});
@@ -44,12 +49,17 @@ class _HomeTambookState extends State<HomeTambook>
   late String numTambos = "";
   late String banerTambosPias = "---                 ----                ---";
 
+  late ResumenParqueDataSource _resumenParqueInformatico;
+
   List<ProgIntervencionTamboModel> aAvance = [];
   List<AtenInterBeneResumenModel> aAtenInterBene = [];
   List<MetasTamboModel> aMetasTipo1 = [];
   List<MetasTamboModel> aMetasTipo2 = [];
   List<AtencionesModel> aAtencionResumen = [];
   List<AvanceMetasModel> aMetasMensualizada = [];
+  late List<CantidadTamboRegion> aTambosRegion = [];
+
+  late List<EquiposInformaticosResumen> aequiposResumen = [];
 
   String sCurrentYear = DateTime.now().year.toString();
 
@@ -84,13 +94,14 @@ class _HomeTambookState extends State<HomeTambook>
     super.initState();
     //buildEquipoInformatico();
     buildPlataforma();
+    getTambosRegion();
     buildPersonalTambo();
     getCantidadTambosPIAS();
     buildData();
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
     getProgIntervencionTambo();
-
+    getResumenParqueInformatico();
     setState(() {});
   }
 
@@ -153,6 +164,98 @@ class _HomeTambookState extends State<HomeTambook>
     TamboPias oTamboPias = aTamboPias[0];
     banerTambosPias =
         '${oTamboPias.tambos} Tambos operativos y ${oTamboPias.pias} PIAS operando';
+  }
+
+  Future<void> getTambosRegion() async {
+    aTambosRegion = await mainCtr.getCantidadTambosRegion();
+    setState(() {});
+  }
+
+  Future getResumenParqueInformatico() async {
+    List<ResumenParqueInformatico> aResumenParque =
+        await mainCtr.getResumenParqueInformatico();
+    _resumenParqueInformatico = ResumenParqueDataSource(parque: aResumenParque);
+
+    var equipamiento = groupBy(aResumenParque, (obj) => obj.descripcion);
+
+    String icon1 = 'assets/icons/computadora.png';
+    String icon2 = 'assets/icons/laptop.png';
+    String icon3 = 'assets/icons/proyector.png';
+    String icon4 = 'assets/icons/wifi.png';
+    String icon5 = 'assets/icons/impresora.png';
+    String icon6 = 'assets/icons/parlante.png';
+
+    int totalequipos = 0;
+    int bueno = 0;
+    int regular = 0;
+    int malo = 0;
+    int baja = 0;
+
+    var tipoEquipos = equipamiento.keys.toList();
+    for (int i = 0; i < tipoEquipos.length; i++) {
+      for (var equipo in equipamiento[tipoEquipos[i].toString()] as List) {
+        totalequipos = totalequipos + equipo.cantidad as int;
+        if (equipo.estado == 'BUENO') {
+          bueno = bueno + equipo.cantidad as int;
+        } else if (equipo.estado == 'REGULAR') {
+          regular = regular + equipo.cantidad as int;
+        } else if (equipo.estado == 'MALO') {
+          malo = malo + equipo.cantidad as int;
+        } else {
+          baja = baja + equipo.cantidad as int;
+        }
+      }
+
+      if (tipoEquipos[i].toString() == "IMPRESORA MATRICIAL" ||
+          tipoEquipos[i].toString() == "IMPRESORA LASER" ||
+          tipoEquipos[i].toString() == "IMPRESORA MULTIFUNCIONAL" ||
+          tipoEquipos[i].toString() == "PLOTTERS") {
+        aequiposResumen.add(EquiposInformaticosResumen(
+            tipoEquipos[i].toString(),
+            totalequipos,
+            bueno,
+            regular,
+            malo,
+            baja,
+            icon5));
+      }
+
+      if (tipoEquipos[i].toString() == "LAPTOP") {
+        aequiposResumen.add(EquiposInformaticosResumen(
+            tipoEquipos[i].toString(),
+            totalequipos,
+            bueno,
+            regular,
+            malo,
+            baja,
+            icon2));
+      }
+
+      if (tipoEquipos[i].toString() == "PROYECTOR") {
+        aequiposResumen.add(EquiposInformaticosResumen(
+            tipoEquipos[i].toString(),
+            totalequipos,
+            bueno,
+            regular,
+            malo,
+            baja,
+            icon3));
+      }
+
+      if (tipoEquipos[i].toString() == "CPU" ||
+          tipoEquipos[i].toString() == "All In One") {
+        aequiposResumen.add(EquiposInformaticosResumen(
+            tipoEquipos[i].toString(),
+            totalequipos,
+            bueno,
+            regular,
+            malo,
+            baja,
+            icon1));
+      }
+    }
+
+    isLoadingEquipos = true;
   }
 
   Future<void> buildPersonalTambo() async {
@@ -567,7 +670,9 @@ class _HomeTambookState extends State<HomeTambook>
                   child: Column(
                 children: [
                   const SizedBox(height: 15),
-                  cardPlataforma(),
+                  cardTambosRegion(),
+                  const SizedBox(height: 15),
+                  //cardPlataforma(),
                 ],
               )),
               SingleChildScrollView(
@@ -583,7 +688,8 @@ class _HomeTambookState extends State<HomeTambook>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 15),
-                  cardEquipamientoTecnologico(),
+                  cardResumenEquipos(),
+                  //cardEquipamientoTecnologico(),
                 ],
               )),
             ],
@@ -921,11 +1027,27 @@ class _HomeTambookState extends State<HomeTambook>
                 HomeOptions oOption = aPersonalTambo[index];
 
                 String sPersonalCode = '';
-                if (oOption.code == 'OPT3001') sPersonalCode = 'JUT';
-                if (oOption.code == 'OPT3002') sPersonalCode = 'MO';
-                if (oOption.code == 'OPT3003') sPersonalCode = 'GIT';
-                if (oOption.code == 'OPT3004') sPersonalCode = 'GU';
-                if (oOption.code == 'OPT3005') sPersonalCode = 'ST';
+                String tipoPersonal = '';
+                if (oOption.code == 'OPT3001') {
+                  sPersonalCode = 'JUT';
+                  tipoPersonal = 'JEFES DE UNIDADES TERRITORIALES';
+                }
+                if (oOption.code == 'OPT3002') {
+                  sPersonalCode = 'MO';
+                  tipoPersonal = 'MONITORES';
+                }
+                if (oOption.code == 'OPT3003') {
+                  sPersonalCode = 'GIT';
+                  tipoPersonal = 'GESTORES INSTITUCIONALES';
+                }
+                if (oOption.code == 'OPT3004') {
+                  sPersonalCode = 'GU';
+                  tipoPersonal = 'GUARDIANES';
+                }
+                if (oOption.code == 'OPT3005') {
+                  sPersonalCode = 'ST';
+                  tipoPersonal = 'SOPORTE TÉCNICO - UTI';
+                }
                 List<PersonalTambo> aPersonalDetTambo =
                     await mainCtr.getPersonalPuestoTambo(sPersonalCode);
 
@@ -935,7 +1057,7 @@ class _HomeTambookState extends State<HomeTambook>
                   context: context,
                   builder: (BuildContext context) => buildSuccessDialog2(
                     context,
-                    title: "",
+                    title: tipoPersonal,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: aPersonalDetTambo.length,
@@ -1022,225 +1144,71 @@ class _HomeTambookState extends State<HomeTambook>
 
   Widget equipoInformatico() {
     return Flexible(
-      child: SizedBox(
-          height: 550.0,
-          child: FutureBuilder(
-              future: buildEquipoInformatico(),
-              builder: (context, snapshot) {
-                if (aEquipoInformatico.isNotEmpty) {
-                  return GridView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1.1,
-                      crossAxisSpacing: 30,
-                      mainAxisSpacing: 30,
-                    ),
-                    padding: const EdgeInsets.only(
-                      left: 28,
-                      right: 28,
-                      bottom: 58,
-                    ),
-                    itemCount: aEquipoInformatico.length,
-                    itemBuilder: (context, index) {
-                      HomeOptions homeOption = aEquipoInformatico[index];
-                      return InkWell(
-                        splashColor: Colors.white10,
-                        highlightColor: Colors.white10,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: const DecorationImage(
-                              image:
-                                  AssetImage("assets/icons/botones 1-02.png"),
-                              fit: BoxFit.cover,
-                            ),
-                            color: homeOption.color,
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color.fromARGB(255, 241, 240, 240)
-                                    .withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3),
-                              ),
+        child: Container(
+            height: 500,
+            color: Colors.white,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 2.0, vertical: 15.0),
+            child: FutureBuilder(
+                future: getResumenParqueInformatico(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  return isLoadingEquipos
+                      ? SfDataGridTheme(
+                          data: SfDataGridThemeData(
+                            headerColor: Colors.blue,
+                          ),
+                          child: SfDataGrid(
+                            source: _resumenParqueInformatico,
+                            columnWidthMode: ColumnWidthMode.auto,
+                            gridLinesVisibility: GridLinesVisibility.both,
+                            headerGridLinesVisibility: GridLinesVisibility.both,
+                            columns: [
+                              GridColumn(
+                                  columnName: 'equipo',
+                                  label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'EQUIPO',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ))),
+                              GridColumn(
+                                  columnName: 'estado',
+                                  label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      alignment: Alignment.centerLeft,
+                                      child: const Text(
+                                        'ESTADO',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ))),
+                              GridColumn(
+                                  columnName: 'cantidad',
+                                  label: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      alignment: Alignment.centerRight,
+                                      child: const Text(
+                                        'CANTIDAD',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ))),
                             ],
                           ),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 5),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                    top: 12,
-                                    bottom: 8,
-                                  ),
-                                  child: Hero(
-                                    tag: homeOption.image!,
-                                    child: Image.asset(
-                                      homeOption.image!,
-                                      fit: BoxFit.contain,
-                                      width: 80,
-                                      height: 70,
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(1),
-                                  child: Center(
-                                    child: Text(
-                                      homeOption.name!,
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 11.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
                           ),
-                        ),
-                        onTap: () async {
-                          var oEquipoInformatico = aEquipoInformatico[index];
-                          String sType = '';
-                          if (oEquipoInformatico.code == 'OPT2001') {
-                            sType = 'CPU';
-                          } else if (oEquipoInformatico.code == 'OPT2002') {
-                            sType = 'LAPTOP';
-                          } else if (oEquipoInformatico.code == 'OPT2003') {
-                            sType = 'PROYECTOR';
-                          } else if (oEquipoInformatico.code == 'OPT2005') {
-                            sType = 'IMPRESORA';
-                          }
-                          var aEquipoSelect = aEquipos
-                              .where((o) => o.categoria!.toUpperCase() == sType)
-                              .toList();
-                          if (aEquipoSelect.isNotEmpty) {
-                            aEquipoSelect
-                                .sort((a, b) => a.tambo!.compareTo(b.tambo!));
-
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  buildSuccessDialog2(
-                                context,
-                                title: "DETALLE EQUIPO INFORMATICO",
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: aEquipoSelect.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    var oEquipoSelect = aEquipoSelect[index];
-                                    return Column(
-                                      children: [
-                                        Text(
-                                          oEquipoSelect.descripcion ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                const TextSpan(
-                                                  text: "TAMBO: ",
-                                                  style: TextStyle(
-                                                    color: color_01,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      oEquipoSelect.tambo ?? '',
-                                                  style: const TextStyle(
-                                                    color: color_01,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                const TextSpan(
-                                                  text: "FECHA: ",
-                                                  style: TextStyle(
-                                                    color: color_01,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: oEquipoSelect
-                                                          .fechaContabilidad ??
-                                                      '',
-                                                  style: const TextStyle(
-                                                    color: color_01,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                const TextSpan(
-                                                  text: "ESTADO: ",
-                                                  style: TextStyle(
-                                                    color: color_01,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: oEquipoSelect.estado ??
-                                                      '',
-                                                  style: const TextStyle(
-                                                    color: color_01,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const Divider(color: colorI),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    },
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              })),
-    );
+                        );
+                })));
   }
 
   Widget cardHeader() {
@@ -1698,6 +1666,199 @@ class _HomeTambookState extends State<HomeTambook>
                   )
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            INFORMACIÓN DE TAMBOS POR REGIÓN
+ * -----------------------------------------------
+ */
+  Padding cardTambosRegion() {
+    var heading = 'TAMBOS POR REGIÓN Y SU POBLACIÓN OBJETIVO';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -1),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var tambos in aTambosRegion)
+                          Column(
+                            children: [
+                              Text(
+                                tambos.nombre ?? '',
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              ListTile(
+                                leading: const ImageIcon(
+                                  AssetImage("assets/icons/convenio.png"),
+                                  size: 40,
+                                  color: Colors.black,
+                                ),
+                                iconColor: const Color.fromARGB(255, 0, 0, 0),
+                                title: ListTile(
+                                  title: Text(
+                                    "TAMBOS EN SERVICIO: ${tambos.cantidad}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    "POBLACIÓN OBJETIVO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /*
+ * -----------------------------------------------
+ *            INFORMACIÓN RESUMEN DE EQUIPOS INFORMÁTICOS
+ * -----------------------------------------------
+ */
+  Padding cardResumenEquipos() {
+    var heading = 'ESTADO DE EQUIPOS INFORMÁTICOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -1),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var equipo in aequiposResumen)
+                          Column(
+                            children: [
+                              Text(
+                                equipo.equipo ?? '',
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              ListTile(
+                                leading: ImageIcon(
+                                  AssetImage(equipo!.imagen),
+                                  size: 80,
+                                  color: Colors.black,
+                                ),
+                                iconColor: const Color.fromARGB(255, 0, 0, 0),
+                                title: ListTile(
+                                  title: Text(
+                                    "BUENO: ${equipo.bueno}\nREGULAR: ${equipo.regular}\nMALO: ${equipo.malo}\nBAJA: ${equipo.baja}\nTOTAL: ${equipo.total}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -2987,7 +3148,10 @@ class _HomeTambookState extends State<HomeTambook>
     Widget? child,
   }) {
     return AlertDialog(
-      title: Text(title!),
+      title: Text(
+        title!,
+        textAlign: TextAlign.center,
+      ),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       actions: const <Widget>[],
@@ -3498,4 +3662,54 @@ class ChartDataAvance {
   final String x;
   final double? y;
   final double? y1;
+}
+
+class ResumenParqueDataSource extends DataGridSource {
+  ResumenParqueDataSource({required List<ResumenParqueInformatico> parque}) {
+    dataGridRows = parque
+        .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
+              DataGridCell<String>(
+                  columnName: 'equipo', value: dataGridRow.descripcion),
+              DataGridCell<String>(
+                  columnName: 'estado', value: dataGridRow.estado),
+              DataGridCell<int>(
+                  columnName: 'cantidad', value: dataGridRow.cantidad),
+            ]))
+        .toList();
+  }
+
+  List<DataGridRow> dataGridRows = [];
+
+  @override
+  List<DataGridRow> get rows => dataGridRows;
+
+  @override
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+        cells: row.getCells().map<Widget>((dataGridCell) {
+      return Container(
+          alignment: (dataGridCell.columnName == 'id' ||
+                  dataGridCell.columnName == 'cantidad')
+              ? Alignment.center
+              : Alignment.centerLeft,
+          width: (dataGridCell.columnName == 'equipo') ? 400 : 100,
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: Text(
+            dataGridCell.value.toString(),
+            overflow: TextOverflow.clip,
+          ));
+    }).toList());
+  }
+}
+
+class EquiposInformaticosResumen {
+  String equipo;
+  int total;
+  int bueno;
+  int regular;
+  int malo;
+  int baja;
+  String imagen;
+  EquiposInformaticosResumen(this.equipo, this.total, this.bueno, this.regular,
+      this.malo, this.baja, this.imagen);
 }
