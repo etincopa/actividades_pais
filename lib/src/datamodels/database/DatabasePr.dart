@@ -14,6 +14,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Distritos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/IncidentesNovedadesPias.dart';
 import 'package:actividades_pais/src/datamodels/Clases/InfoTelefono.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LoginClass.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LugarPrestacion.dart';
@@ -164,7 +165,31 @@ class DatabasePr {
             "CREATE TABLE centros_poblados (centro_poblado_ubigeo, centro_poblado_descripcion)");
         db.execute(
             "CREATE TABLE intentos_registros_fallecidos (id INTEGER PRIMARY KEY, id_plataforma, id_programacion, dni, id_usuario_reg, fecha_reg, ipmaq_reg, id_usuario_act, fecha_act, ipmaq_act, id_usuario_del, fecha_del, ipmaq_del)");
+
+        db.execute('''CREATE TABLE accion (id INTEGER PRIMARY KEY AUTOINCREMENT,
+           usuario TEXT, 
+           sector TEXT, 
+           programa TEXT, 
+           categoria TEXT,
+           subcategoria TEXT,
+           actividad TEXT,
+           servicio TEXT,
+           id_gobierno TEXT,
+           id_categoria TEXT,
+           id_sector TEXT,
+           id_subcategoria TEXT,
+           id_entidad TEXT,
+           id_actividad TEXT,
+           id_servicio TEXT,
+           descripcion_entidad TEXT
+       )''');
       },
+    );
+  }
+
+  Future eliminarAccion()async{
+   return await _db!.execute(
+      "DELETE FROM accion",
     );
   }
 
@@ -299,6 +324,11 @@ class DatabasePr {
 //////////////////////
   //Distritos
 
+  Future<int> insertEntidadAccion(Accion accion) async {
+    await DatabasePr.db.initDB();
+    return _db!.insert("accion", accion.toMap());
+  }
+
   Future<void> insertarDistritos(Distrito distrito) async {
     await DatabasePr.db.initDB();
     print(_db!.insert("distritos", distrito.toMap()));
@@ -314,8 +344,6 @@ class DatabasePr {
       idProgramacion, idEntidad) async {
     await DatabasePr.db.initDB();
 
-    print(
-        "SELECT DISTINCT * from participanteEjecucion a where id_programacion = $idProgramacion and id_entidad = $idEntidad");
     final res = await _db?.rawQuery(
         "SELECT DISTINCT * from participanteEjecucion a where id_programacion = $idProgramacion and id_entidad = $idEntidad");
     List<ParticipanteEjecucion> list = res!.isNotEmpty
@@ -324,28 +352,40 @@ class DatabasePr {
     return list;
   }
 
-  Future<List<IntentosRegistrosFallecidos>> ListarIntentosRegistrosFallecidos(
-     ) async {
+  Future<List<Accion>> ListarEntidadesReg() async {
     await DatabasePr.db.initDB();
-    final res = await _db?.rawQuery(
-        "SELECT * from intentos_registros_fallecidos");
+    final res = await _db?.rawQuery("SELECT * from accion");
+    List<Accion> list =
+        res!.isNotEmpty ? res.map((e) => Accion.fromMap(e)).toList() : [];
+    return list;
+  }
+
+  Future<List<IntentosRegistrosFallecidos>>
+      ListarIntentosRegistrosFallecidos() async {
+    await DatabasePr.db.initDB();
+    final res =
+        await _db?.rawQuery("SELECT * from intentos_registros_fallecidos");
     List<IntentosRegistrosFallecidos> list = res!.isNotEmpty
         ? res.map((e) => IntentosRegistrosFallecidos.fromMap(e)).toList()
         : [];
     return list;
   }
+
   Future eliminarIntentoFallecido(id) async {
     _log.i(id);
     await DatabasePr.db.initDB();
-    final res = await _db?.rawQuery("DELETE FROM intentos_registros_fallecidos where id = $id");
+    final res = await _db
+        ?.rawQuery("DELETE FROM intentos_registros_fallecidos where id = $id");
     return res;
   }
 
   Future eliminarIntentoFallecidos() async {
     await DatabasePr.db.initDB();
-    final res = await _db?.rawQuery("DELETE FROM intentos_registros_fallecidos");
+    final res =
+        await _db?.rawQuery("DELETE FROM intentos_registros_fallecidos");
     return res;
   }
+
   Future eliminarTodoParticipanteEjecucion() async {
     await DatabasePr.db.initDB();
     final res = await _db?.rawQuery("DELETE FROM participanteEjecucion");
@@ -701,9 +741,8 @@ class DatabasePr {
     await DatabasePr.db.initDB();
     final res = await _db?.rawQuery(
         "SELECT dni FROM funcionarios where dni = '$dni' and idProgramacion =  $idProgramacion");
-    List<Funcionarios> list = res!.isNotEmpty
-        ? res.map((e) => Funcionarios.fromMap(e)).toList()
-        : [];
+    List<Funcionarios> list =
+        res!.isNotEmpty ? res.map((e) => Funcionarios.fromMap(e)).toList() : [];
 
     return list;
   }
@@ -840,6 +879,11 @@ class DatabasePr {
 
     final res = await _db?.rawQuery("DELETE FROM asistencia where id = $i;");
 
+    return res;
+  }
+  Future eliminarPoridAccion(i) async {
+    await DatabasePr.db.initDB();
+    final res = await _db?.rawQuery("DELETE FROM accion where id = $i;");
     return res;
   }
 
@@ -1117,9 +1161,15 @@ class DatabasePr {
     return list;
   }
 
-  traerSnip()async{
+  traerSnip() async {
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
     return abc[0].snip;
+  }
+
+  traerConfiguracionInicio() async {
+    var abc = await DatabasePr.db.getAllTasksConfigInicio();
+   // return abc[].unidTerritoriales;
+    return abc;
   }
 /*  Future<void> insertUnidadesOrganicas(
       UnidadesOrganicas regitroCalificada) async {
