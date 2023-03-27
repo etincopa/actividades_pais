@@ -7,6 +7,7 @@ class TamboCentroPobladoFld {
   static String yCcpp = 'yccpp';
   static String altitudCcpp = 'altitudCcpp';
   static String regionCatural = 'regionCatural';
+  static String distrito = 'distrito';
 }
 
 class TamboCentroPobladoDto {
@@ -18,6 +19,7 @@ class TamboCentroPobladoDto {
   String? yCcpp;
   String? altitudCcpp;
   String? regionCatural;
+  String? distrito;
 
   TamboCentroPobladoDto.empty() {}
 
@@ -28,6 +30,7 @@ class TamboCentroPobladoDto {
     this.viviendasCcpp,
     this.xCcpp,
     this.yCcpp,
+    this.distrito,
     this.altitudCcpp,
     this.regionCatural,
   });
@@ -42,6 +45,7 @@ class TamboCentroPobladoDto {
       yCcpp: json[TamboCentroPobladoFld.yCcpp],
       altitudCcpp: json[TamboCentroPobladoFld.altitudCcpp],
       regionCatural: json[TamboCentroPobladoFld.regionCatural],
+      distrito: json[TamboCentroPobladoFld.distrito],
     );
   }
 }

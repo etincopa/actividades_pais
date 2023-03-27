@@ -67,9 +67,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     "INFORMACIÓN DEL PERSONAL",
     "METAS",
     "PLAN DE MANTENIMIENTO",
-    "INTERNET",
+    "SERVICIOS DEL TAMBO",
     "EQUIPOS INFORMÁTICOS",
-    "COMBUSTIBLE",
     "ACTIVIDADES",
     "CLIMA",
     "COMO LLEGAR AL TAMBO",
@@ -185,7 +184,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     });
 
     currentTitle = titleList[0];
-    _tabControllerTitle = TabController(length: 11, vsync: this);
+    _tabControllerTitle = TabController(length: 10, vsync: this);
     _tabControllerTitle.addListener(changeTitle);
 
     super.initState();
@@ -215,7 +214,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     obtenerDatosClima();
     getMetasGeneral();
     incidenciasInternet(oTambo.nSnip ?? 0);
-    getCombustibleTambo();
+    //getCombustibleTambo();
     getProgIntervencionTambo();
 
     getPlanMantenimientoInformatico(oTambo.ut.toString());
@@ -223,7 +222,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     getPlanMantenimientoInfraestructura(oTambo.nSnip.toString());
     getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
     buildEquipoInformatico(oTambo.nSnip.toString());
-    getHistorialGestores(oTambo.nSnip.toString());
+    //getHistorialGestores(oTambo.nSnip.toString());
 
     setState(() {});
   }
@@ -871,7 +870,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 11,
+              length: 10,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -1000,7 +999,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                               Tab(
                                 icon: ImageIcon(
-                                  AssetImage('assets/wifi.png'),
+                                  AssetImage('assets/SERVICIOS.png'),
                                   size: 55,
                                 ),
                               ),
@@ -1010,12 +1009,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   size: 55,
                                 ),
                               ),
-                              Tab(
+                              /*Tab(
                                 icon: ImageIcon(
                                   AssetImage('assets/grifo.png'),
                                   size: 55,
                                 ),
-                              ),
+                              ),*/
                               Tab(
                                 icon: ImageIcon(
                                   AssetImage('assets/calendario.png'),
@@ -1103,8 +1102,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           */
                         cardNuestroGestor(),
                         const SizedBox(height: 10),
-                        cardHistorialGestores(),
-                        const SizedBox(height: 10),
+                        //cardHistorialGestores(),
+                        //const SizedBox(height: 10),
                         cardVigilante(),
                         const SizedBox(height: 10),
 
@@ -1164,12 +1163,12 @@ class _DetalleTambookState extends State<DetalleTambook>
 
 //const TabScreen("COMBUSTIBLE"),
 
-                    ListView(
+                    /*ListView(
                       children: [
                         cardCombustible(),
                         const SizedBox(height: 40),
                       ],
-                    ),
+                    ),*/
 
                     //const TabScreen("ACTIVIDADES PROGRAMADAS"),
 
@@ -1314,7 +1313,7 @@ class _DetalleTambookState extends State<DetalleTambook>
               );
             },
           ),
-          FabItem(
+          /*FabItem(
             "Ficha técnica",
             Icons.picture_as_pdf_sharp,
             onPress: () async {
@@ -1336,7 +1335,7 @@ class _DetalleTambookState extends State<DetalleTambook>
               } catch (oError) {}
               BusyIndicator.hide(context);
             },
-          ),
+          ),*/
         ],
         animation: _animation!,
         onPress: () {
@@ -1903,6 +1902,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                           title: const Text('USUARIOS'),
                           subtitle: Text('${oDatoGeneral.beneficiarios}'),
                         ),
+                        const SizedBox(height: 10),
+                        Text(
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -2165,32 +2168,26 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           title: const Text('N° DE HOGARES'),
-                          subtitle: Text(
-                              double.parse(oTambo.hogaresAnteriores ?? '0')
-                                  .toInt()
-                                  .toString()),
+                          subtitle: Text(formatoDecimal(
+                              double.parse(oTambo.hogaresAnteriores ?? '0'))),
                         ),
                         ListTile(
                           title: const Text('N° DE VIVIENDAS'),
-                          subtitle: Text(
-                              double.parse(oTambo.viviendasAnterior ?? '0')
-                                  .toInt()
-                                  .toString()),
+                          subtitle: Text(formatoDecimal(
+                              double.parse(oTambo.viviendasAnterior ?? '0'))),
                         ),
                         ListTile(
                           title: const Text('POBLACIÓN'),
-                          subtitle: Text(
-                              double.parse(oTambo.poblacionAnterior ?? '0')
-                                  .toInt()
-                                  .toString()),
+                          subtitle: Text(formatoDecimal(
+                              double.parse(oTambo.poblacionAnterior ?? '0'))),
                         ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: INEI'),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Text('FUENTE: INEI'),
-                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -2256,7 +2253,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('MONTO CONTRATADO'),
-                          subtitle: Text(oTambo.montoAdjudicado ?? ''),
+                          subtitle: Text(formatoDecimal(
+                              double.parse(oTambo.montoAdjudicado ?? '0'))),
                         ),
                       ],
                     ),
@@ -2324,7 +2322,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             iconColor: const Color.fromARGB(255, 0, 0, 0),
                             title: Text(oCentro.nombreCcpp!),
                             subtitle: Text(
-                                '( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
+                                'DISTRITO: ${oCentro.distrito} \n( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
                           ),
                       ],
                     ),
@@ -3196,6 +3194,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Column(
           children: [
             ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
               initiallyExpanded: true,
               title: ListTile(
                 visualDensity: const VisualDensity(vertical: -4),
@@ -3205,6 +3204,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
+                ),
+                leading: const ImageIcon(
+                  AssetImage("assets/wifi.png"),
+                  size: 40,
+                  color: Colors.black,
                 ),
               ),
               children: <Widget>[

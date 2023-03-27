@@ -345,7 +345,7 @@ class _MapTambookState extends State<MapaTambo>
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 10),
         ],
       ),
     );
