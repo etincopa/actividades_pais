@@ -6,6 +6,7 @@ import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -95,8 +96,10 @@ class _MapTambookState extends State<MapTambook>
           point: latlng,
           builder: (ctx) => GestureDetector(
             onTap: () async {
+              BusyIndicator.show(ctx);
               await rutaTambo(point.snip!);
 
+              BusyIndicator.hide(context);
               // ignore: use_build_context_synchronously
               showDialog(
                 context: context,

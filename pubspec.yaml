@@ -170,6 +170,7 @@ flutter:
     - assets/design_course/
     - assets/icons/
     - assets/iconos_card/
+    - assets/iconos_equipos/
     - assets/paislogo.png
     - assets/unidadesOrganicas.json
     - assets/unidadesTerritoriales.json
