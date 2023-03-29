@@ -13,7 +13,7 @@ class GuardarIntervencion {
   String? idPlataforma;
   bool? progOtroTambo;
 
-   List<Accion>? accion;
+  List<Accion>? accion;
 
   GuardarIntervencion({
     this.fecha,
@@ -29,7 +29,7 @@ class GuardarIntervencion {
     this.idUnidadesTerritoriales,
     this.idPlataforma,
     this.progOtroTambo,
-     this.accion
+    this.accion
   });
 
   GuardarIntervencion.fromJson(Map<String, dynamic> json) {
@@ -46,7 +46,7 @@ class GuardarIntervencion {
     idUnidadesTerritoriales = json['id_unidades_territoriales'];
     idPlataforma = json['id_plataforma'];
     progOtroTambo = json['prog_otro_tambo'];
-      if (json['accion'] != null) {
+    if (json['accion'] != null) {
       accion = <Accion>[];
       json['accion'].forEach((v) {
         accion!.add(new Accion.fromJson(v));
@@ -69,7 +69,7 @@ class GuardarIntervencion {
     data['id_unidades_territoriales'] = this.idUnidadesTerritoriales;
     data['id_plataforma'] = this.idPlataforma;
     data['prog_otro_tambo'] = this.progOtroTambo;
-      if (this.accion != null) {
+    if (this.accion != null) {
       data['accion'] = this.accion!.map((v) => v.toJson()).toList();
     }
     return data;
@@ -93,24 +93,32 @@ class Accion {
   String? idActividad;
   String? idServicio;
   String? descripcionEntidad;
+  String? idTipoGobierno;
+  String? idAccionProgramacion;
+  String? idSubCategoria;
+  String? idTipoActividad;
 
-  Accion(
-      {this.id,
-      this.usuario,
-      this.sector,
-      this.programa,
-      this.categoria,
-      this.subcategoria,
-      this.actividad,
-      this.servicio,
-      this.idGobierno,
-      this.idCategoria,
-      this.idSector,
-      this.idSubcategoria,
-      this.idEntidad,
-      this.idActividad,
-      this.idServicio,
-      this.descripcionEntidad});
+
+  Accion({this.id,
+    this.usuario,
+    this.sector,
+    this.programa,
+    this.categoria,
+    this.subcategoria,
+    this.actividad,
+    this.servicio,
+    this.idGobierno,
+    this.idCategoria,
+    this.idSector,
+    this.idSubcategoria,
+    this.idEntidad,
+    this.idActividad,
+    this.idServicio,
+    this.descripcionEntidad,
+    this.idTipoGobierno,
+    this.idAccionProgramacion,
+    this.idSubCategoria,
+    this.idTipoActividad,});
 
   Accion.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -129,6 +137,25 @@ class Accion {
     idActividad = json['id_actividad'];
     idServicio = json['id_servicio'].cast<String>();
     descripcionEntidad = json['descripcion_entidad'];
+  }
+
+  Accion.fromJsonCargarlista(Map<String, dynamic> json) {
+    idAccionProgramacion = json['id_accion_programacion'];
+    idTipoGobierno = json['id_tipo_gobierno'];
+    idSector = json['id_sector'];
+    idEntidad = json['id_entidad'];
+    idCategoria = json['id_categoria'];
+    idSubCategoria = json['id_sub_categoria'];
+    idTipoActividad = json['id_tipo_actividad'];
+    idServicio = json['id_servicio'];
+    descripcionEntidad = json['descripcion_entidad'];
+    usuario = json['usuario'];
+    sector = json['sector'];
+    programa = json['programa'];
+    categoria = json['categoria'];
+    subcategoria = json['subcategoria'];
+    actividad = json['actividad'];
+    servicio = json['servicio'];
   }
 
   Map<String, dynamic> toJson() {
@@ -172,8 +199,9 @@ class Accion {
     };
   }
 
-  factory Accion.fromMap(Map<String, dynamic> json) => Accion(
-        id: json['id'].toString()??'',
+  factory Accion.fromMap(Map<String, dynamic> json) =>
+      Accion(
+        id: json['id'].toString() ?? '',
         usuario: json['usuario'],
         sector: json['sector'],
         programa: json['programa'],

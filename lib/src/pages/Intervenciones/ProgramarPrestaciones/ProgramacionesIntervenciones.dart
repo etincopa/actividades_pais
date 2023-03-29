@@ -42,7 +42,8 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
 
   bool otroTambo = false;
   bool _ismostar = false;
- //var valor = 255;
+
+  //var valor = 255;
   var controllerNumeroPersonas = TextEditingController();
 
   var controllerDescripcion = TextEditingController();
@@ -83,6 +84,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
           return Theme(data: ThemeData.dark(), child: child!);
         });
   }
+
   void _onTextChanged() {
     setState(() {
       _currentLength = controllerDescripcion.text.length;
@@ -489,7 +491,6 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                       labelText:
                           'N° DE PERSONAS CONVOCADAS A PARTICIPAR EN EL EVENTO',
                     ),
-
                   ),
                   TextFormField(
                     validator: (value) {
@@ -500,20 +501,15 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                     },
                     controller: controllerDescripcion,
                     maxLines: 8,
-
-                    //maxLength: valor,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       hintText:
                           "¿QUÉ SE HIZO? ¿CUÁL ES LA FINALIDAD? ¿QUIÉN LO HIZO? ¿A QUIÉN ESTA DIRIGIDO? ",
                       labelText: 'DESCRIPCIÓN DEL EVENTO',
                       counterText: "$_currentLength",
-
                     ),
-
                     onChanged: (value) {
-                       _currentLength = value.length;
-                      setState(() {
-                      });
+                      _currentLength = value.length;
+                      setState(() {});
                     },
                   ),
                   const SizedBox(
@@ -557,7 +553,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                                 BusyIndicator.show(context);
                                 var respu = await ProviderRegistarInterv()
                                     .getGuardarIntervencions(
-                                    jsonEncode(guardarIntervencion));
+                                        jsonEncode(guardarIntervencion));
 
                                 if (respu.estado == true) {
                                   await DatabasePr.db.eliminarAccion();
@@ -569,8 +565,6 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
 
                                 print("respu ${respu.mensaje}");
                               }
-
-
                             },
                             label: const Text('GUARDAR PROGRMACION'),
                           ))

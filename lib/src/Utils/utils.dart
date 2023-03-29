@@ -1,3 +1,5 @@
+import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -149,6 +151,9 @@ class utils {
     );
   }
 
+  ConfgAppBar({titulo, leading}){
+    return AppBar(title: Text("$titulo"), backgroundColor: AppConfig.primaryColor,leading: Util().iconbuton(leading),centerTitle: true,);
+  }
   tieneNtieneDni({titulo, valor, color, oncalbakc, selectedOption}) {
     return RadioListTile(
 

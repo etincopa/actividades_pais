@@ -3,16 +3,19 @@ import 'package:actividades_pais/src/datamodels/Clases/Actividad.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Categoria.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Convenios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Entidad.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DatosPlanMensual.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DetalleIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroDatosPlanesMensual.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroIntervencionesTambos.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/HistorialObservaciones.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListaTipoGobierno.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LugarIntervencion.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/RespuestaApi.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Sector.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Servicio.dart';
@@ -33,8 +36,9 @@ class ProviderRegistarInterv {
   List<TipoGobierno> tipoGobierno = [];
   List<TipoDocumentoAcredita> tipoDocumentoAcredita = [];
 
-  Future cargarEventos(FiltroIntervencionesTambos filtroIntervencionesTambos) async {
-      print(jsonEncode(filtroIntervencionesTambos));
+  Future cargarEventos(
+      FiltroIntervencionesTambos filtroIntervencionesTambos) async {
+    print(jsonEncode(filtroIntervencionesTambos));
     http.Response response = await http.post(
         Uri.parse(AppConfig.backendsismonitor + '/programaciongit/filtro'),
         headers: await headerss(),
@@ -136,7 +140,6 @@ class ProviderRegistarInterv {
   }
 
   Future getListaLugarIntervenciona() async {
-
     http.Response response = await http.get(
       Uri.parse(AppConfig.backendsismonitor +
           '/programaciongit/lista-lugar-intervencion'),
@@ -155,12 +158,12 @@ class ProviderRegistarInterv {
   }
 
   Future getlistaSector(tpUsuario) async {
-     http.Response response = await http.get(
+    http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/lista-sector/$tpUsuario'),
-        headers:  await headerss());
+        headers: await headerss());
 
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       print(jsonList.length);
       return jsonList.map((json) => Sector.fromJson(json)).toList();
@@ -170,36 +173,37 @@ class ProviderRegistarInterv {
   }
 
   Future getListarEntidadFuncionario(sector) async {
-     http.Response response = await http.get(
+    http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/lista-entidad/$sector'),
-        headers:  await headerss());
-     if (response.statusCode == 200) {
+        headers: await headerss());
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Entidad.fromJson(json)).toList();
     } else {
       return List.empty();
     }
-
   }
+
   Future getListarCategoria(pro) async {
-     http.Response response = await http.get(
+    http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/lista-categoria/$pro'),
-        headers:  await headerss());
-     if (response.statusCode == 200) {
+        headers: await headerss());
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Categoria.fromJson(json)).toList();
     } else {
       return List.empty();
     }
   }
+
   Future getListarSubcategoria(pro) async {
-     http.Response response = await http.get(
+    http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/lista-subcategoria/$pro'),
-        headers:  await headerss());
-     if (response.statusCode == 200) {
+        headers: await headerss());
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Subcategoria.fromJson(json)).toList();
     } else {
@@ -208,11 +212,11 @@ class ProviderRegistarInterv {
   }
 
   Future getActividad(pro) async {
-     http.Response response = await http.get(
+    http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/lista-actividad/$pro'),
-        headers:  await headerss());
-     if (response.statusCode == 200) {
+        headers: await headerss());
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Actividad.fromJson(json)).toList();
     } else {
@@ -220,28 +224,29 @@ class ProviderRegistarInterv {
     }
   }
 
-  Future <List<Servicio>>getServicio(actividad) async {
+  Future<List<Servicio>> getServicio(actividad) async {
     print("actividad $actividad");
-     http.Response response = await http.get(
+    http.Response response = await http.get(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/lista-servicios2/$actividad'),
-        headers:  await headerss());
+        headers: await headerss());
     print(response.body);
 
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Servicio.fromJson(json)).toList();
     } else {
       return List.empty();
     }
   }
+
   //  ListarConvenios(): Observable<any> { return this.http.get(`${environment.backendUrl}programaciongit/listar-convenios`, { headers: Headers() }); }
-  Future <List<Convenios>>getListarConvenios() async {
-     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/lista-convenios'),
+  Future<List<Convenios>> getListarConvenios() async {
+    http.Response response = await http.get(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programaciongit/lista-convenios'),
         headers: await headerss());
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return jsonList.map((json) => Convenios.fromJson(json)).toList();
     } else {
@@ -249,24 +254,92 @@ class ProviderRegistarInterv {
     }
   }
 
-  Future <RespuestaApi> getGuardarIntervencions(jsona) async {
+  Future<RespuestaApi> getGuardarIntervencions(jsona) async {
     print(json);
-     http.Response response = await http.post(
+    http.Response response = await http.post(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/guardar-intervencion-movil'),
-        headers: await headerss(), body: jsona);
-     print(response.body);
-     print(response.statusCode);
-     if (response.statusCode == 200) {
-       final jsonResponse = json.decode(response.body);
-
-
+        headers: await headerss(),
+        body: jsona);
+    print(response.body);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
       return RespuestaApi.fromJson(jsonResponse);
     } else {
       return RespuestaApi();
     }
   }
 
+  Future getntervencionDetalle(idIntervencion) async {
+    print(json);
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/intervencion-detalle/$idIntervencion'),
+        headers: await headerss());
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      print(jsonResponse[0]);
+      return jsonResponse[0];
+    } else {
+      return RespuestaApi();
+    }
+  }
+
+  Future<List<Accion>> getListaAcciones(idIntervencion) async {
+    print(idIntervencion);
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/lista-acciones/$idIntervencion'),
+        headers: await headerss());
+    print(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      print("jsonList: ${jsonList.length}");
+      return jsonList.map((json) => Accion.fromJsonCargarlista(json)).toList();
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future<List<Funcionarios>> getListaFuncionarios(
+      idIntervencion) async {
+    print(idIntervencion);
+    http.Response response = await http.get(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/listar-funcionarios_BD/$idIntervencion'),
+        headers: await headerss(),
+      );
+    print(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      print("jsonList: ${jsonList.length}");
+      return jsonList.map((json) => Funcionarios.fromJsonTabla(json)).toList();
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future<List<Participantes>> getListaParticipantes( idIntervencion, pageIndex, pageSize) async {
+    print(idIntervencion);
+    http.Response response = await http.post(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/listar-participantes_BD'),
+        headers: await headerss(), body:'''{
+    "id": "792034",
+    "pageIndex": 1,
+    "pageSize": 15
+  }
+  ''');
+    print("aqaqaqaaqa ${response.body}");
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      print("jsonList: ${jsonList.length}");
+      return jsonList.map((json) => Participantes.fromJson(json)).toList();
+    } else {
+      return List.empty();
+    }
+  }
 
   headerss() async {
     var logUser = await DatabasePr.db.loginUser();

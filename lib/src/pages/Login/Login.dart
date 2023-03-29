@@ -220,7 +220,7 @@ class __FormState extends State<_Form> {
           CustomInput(
             icon: Icons.supervised_user_circle,
             placeholder: 'Ingrese su DNI',
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.number,
             textController: emailCtrl,
           ),
           CustomInput(

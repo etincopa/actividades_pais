@@ -4,6 +4,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDepe
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
+import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/CalificarIntervencion.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/PlanesDeTrabajo.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ProgramacionesIntervenciones.dart';
@@ -13,11 +14,14 @@ import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../datamodels/database/DatabasePr.dart';
 import '../util/utils.dart';
+import 'ProgramacionPrestacion.dart';
 
 class ListaIntervecionesProgramadas extends StatefulWidget {
   @override
@@ -60,7 +64,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
   DateTime _selectedDay = DateTime.now();
   List<Evento> _selectedEvents = [];
 
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
 
   List<Evento> eventos = [];
@@ -495,6 +499,22 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
       ]),
       frontLayer: Column(
         children: [
+      /*    Container(height:23,
+            child: Expanded(
+                child:Stack(
+                  children: [
+                    Positioned(
+                     // top: 50.0,
+                      left: 20.0,
+                      child: Text(
+                        'This is a floating text widget!',
+                        style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      ),
+                    ),
+                    // Add your other widgets here
+                  ],
+                )),
+          ),*/
           _isLoading
               ? Container(
                   color: Colors.white,
@@ -513,7 +533,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                     ),
                   ),
                 )
-              : Text(""),
+              : Container(),
           TableCalendar(
             calendarBuilders: CalendarBuilders(
               singleMarkerBuilder: (context, date, _) {
@@ -590,19 +610,52 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
 
                   return Container(
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
+                      horizontal: 15.0,
                       vertical: 4.0,
+
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(),
-                      borderRadius: BorderRadius.circular(12.0),
+                      borderRadius: BorderRadius.circular(14.0),
                     ),
                     child: InkWell(
-                        onTap: () {
-                          print(event.idProgramacion);
-                          print(event.descripcion);
-                          print(event.plataformaDescripcion);
-                          print(event.estadoProgramacion);
+                        onTap: () async{
+                          /*       "${event.estadoProgramacion == '1' ? 'PROGRAMADO' : ''}"
+                                            "${event.estadoProgramacion == '2' ? 'POR APROBAR' : ''}"
+                                            "${event.estadoProgramacion == '3' ? 'OBSERVADO' : ''}"
+                                            "${event.estadoProgramacion == '4' ? 'APROBADA' : ''}"
+                                            "${event.estadoProgramacion == '0' ? 'ELIMINADO' : ''}",*/
+                          print("event.estadoProgramacion ${event.estadoProgramacion}");
+
+                          switch  (event.estadoProgramacion){
+                            case '1':
+                              var res = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProgramacionPrestacion(event),
+                                ),
+                              );
+
+                              break;
+                            case '2':
+                              var res = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CalificarIntervencion(event),
+                                ),
+                              );
+                              break;
+
+                            case '0':
+                              var res = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProgramacionPrestacion(event),
+                                ),
+                              );
+                              break;
+                          }
+
                         },
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -656,10 +709,10 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                                   ? Colors.grey
                                                   : event.tipoProgramacion ==
                                                           '2'
-                                                      ? Colors.blue
+                                                      ? Colors.green
                                                       : event.tipoProgramacion ==
                                                               '3'
-                                                          ? Colors.green
+                                                          ? Colors. blue
                                                           : Colors.black),
                                           SizedBox(
                                             width: 5,

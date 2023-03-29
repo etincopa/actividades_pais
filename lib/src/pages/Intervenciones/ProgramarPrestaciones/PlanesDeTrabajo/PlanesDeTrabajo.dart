@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,12 @@ class PlanesDeTrabajo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(appBar: AppBar(title: Text("PLANES DE TRABAJO"),),);
+    return Scaffold(
+      appBar: utils().ConfgAppBar(
+          titulo: "PLANES DE TRABAJO",
+          leading: () {
+            Navigator.pop(context);
+          }),
+    );
   }
 }

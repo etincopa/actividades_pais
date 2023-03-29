@@ -19,7 +19,7 @@ class Funcionarios {
   String nombres;
   String apellidoPaterno;
   String apellidoMaterno;
-  String  dni;
+  String dni;
   String ubigeoCcpp;
   int idActividad;
   int idEntidad;
@@ -46,59 +46,71 @@ class Funcionarios {
 
   //String cargo;
   int estado;
-  String estado_registro="";
-  Funcionarios(
-      {this.id = 0,
-      this.flgReniec = '',
-      this.tipo = '',
-      this.dni = '',
-      this.pais = '',
-      this.datos = '',
-      this.entidad = '',
-      this.nombreCargo = '',
-      this.telefono = '',
-      this.apellidoMaterno = '',
-      this.nombres = '',
-      this.apellidoPaterno = '',
-      this.idProgramacion = 0,
-      this.cargo = '',
-      this.estado = 0,
-      this.idActividad = 0,
-      this.idEntidad = 0,
-      this.idPais = 0,
-      this.idTipoDocumento = 0,
-      this.idUsuario = 0,
-      this.numDocExtranjero = '',
-      this.txtIpmaq = '',
-      this.ubigeoCcpp = '',
-      this.tipoDocumento = '', this.estado_registro =""});
+  String estado_registro = "";
+
+  String? idProgramacionFuncionario="";
+  String? idFuncionario="";
+  String? apellidopaterno="";
+  String? apellidomaterno="";
+
+  Funcionarios({
+    this.id = 0,
+    this.flgReniec = '',
+    this.tipo = '',
+    this.dni = '',
+    this.pais = '',
+    this.datos = '',
+    this.entidad = '',
+    this.nombreCargo = '',
+    this.telefono = '',
+    this.apellidoMaterno = '',
+    this.nombres = '',
+    this.apellidoPaterno = '',
+    this.idProgramacion = 0,
+    this.cargo = '',
+    this.estado = 0,
+    this.idActividad = 0,
+    this.idEntidad = 0,
+    this.idPais = 0,
+    this.idTipoDocumento = 0,
+    this.idUsuario = 0,
+    this.numDocExtranjero = '',
+    this.txtIpmaq = '',
+    this.ubigeoCcpp = '',
+    this.tipoDocumento = '',
+    this.estado_registro = "",
+    this.idProgramacionFuncionario = "",
+    this.idFuncionario = "",
+    this.apellidopaterno = "",
+    this.apellidomaterno = "",
+  });
 
   factory Funcionarios.fromJson(Map<String, dynamic> json) {
     return Funcionarios(
-        estado: json['estado']??0,
-        id: json['id']??0,
-        flgReniec: json['flgReniec']??'',
-        tipo: json['tipo']??'',
-        dni: json['dni']??'',
-        pais: json['pais']??'',
-        datos: json['datos']??'',
-        entidad: json['entidad']??'',
-        nombreCargo: json['nombreCargo']??'',
-        telefono: json['telefono']??'',
-        apellidoPaterno: json['apellidoPaterno']??'',
-        nombres: json['nombres']??'',
-        apellidoMaterno: json['apellidoMaterno']??'',
-        idProgramacion: json['idProgramacion']??0,
-        cargo: json['cargo']??'',
-        idActividad: json['idActividad']??0,
-        idEntidad: json['idEntidad']??0,
-        idPais: json['idPais']??0,
-        idTipoDocumento: json['idTipoDocumento']??0,
-        tipoDocumento: json['tipoDocumento']??'',
-        idUsuario: json['idUsuario']??0,
-        numDocExtranjero: json['numDocExtranjero']??'',
-        txtIpmaq: json['txtIpmaq']??'',
-        ubigeoCcpp: json['ubigeoCcpp']??'');
+        estado: json['estado'] ?? 0,
+        id: json['id'] ?? 0,
+        flgReniec: json['flgReniec'] ?? '',
+        tipo: json['tipo'] ?? '',
+        dni: json['dni'] ?? '',
+        pais: json['pais'] ?? '',
+        datos: json['datos'] ?? '',
+        entidad: json['entidad'] ?? '',
+        nombreCargo: json['nombreCargo'] ?? '',
+        telefono: json['telefono'] ?? '',
+        apellidoPaterno: json['apellidoPaterno'] ?? '',
+        nombres: json['nombres'] ?? '',
+        apellidoMaterno: json['apellidoMaterno'] ?? '',
+        idProgramacion: json['idProgramacion'] ?? 0,
+        cargo: json['cargo'] ?? '',
+        idActividad: json['idActividad'] ?? 0,
+        idEntidad: json['idEntidad'] ?? 0,
+        idPais: json['idPais'] ?? 0,
+        idTipoDocumento: json['idTipoDocumento'] ?? 0,
+        tipoDocumento: json['tipoDocumento'] ?? '',
+        idUsuario: json['idUsuario'] ?? 0,
+        numDocExtranjero: json['numDocExtranjero'] ?? '',
+        txtIpmaq: json['txtIpmaq'] ?? '',
+        ubigeoCcpp: json['ubigeoCcpp'] ?? '');
   }
 
   factory Funcionarios.fromJsonReniec(Map<String, dynamic> json) {
@@ -109,6 +121,26 @@ class Funcionarios {
       dni: json['dni'],
     );
   }
+
+  factory Funcionarios.fromJsonTabla(Map<String, dynamic> json) {
+    return Funcionarios(
+      idProgramacionFuncionario : json['id_programacion_funcionario'],
+      idProgramacion : int.parse(json['id_programacion']),
+      idFuncionario : json['id_funcionario'],
+      entidad : json['entidad'],
+      telefono : json['telefono'],
+      nombres : json['nombres'],
+      dni : json['dni'],
+      apellidopaterno : json['apellidopaterno'],
+      apellidomaterno : json['apellidomaterno'],
+      numDocExtranjero : json['num_doc_extranjero'],
+      pais : json['pais'],
+      tipoDocumento : json['tipo_documento'],
+      cargo : json['cargo'],
+    );
+  }
+
+
 
   factory Funcionarios.fromMap(Map<String, dynamic> json) {
     return Funcionarios(
