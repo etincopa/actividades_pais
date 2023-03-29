@@ -9,6 +9,8 @@ class CCPPFld {
   static String altitud = 'altitud_ccpp';
   static String region = 'region_natural';
   static String rango = 'rango_region_natural';
+  static String distancia_m = 'distancia_metros';
+  static String distancia_km = 'distancia_km';
 }
 
 class CCPPModel {
@@ -22,6 +24,8 @@ class CCPPModel {
   double? altitud;
   String? region;
   String? rango;
+  String? distancia_m;
+  String? distancia_km;
 
   CCPPModel.empty() {}
 
@@ -35,7 +39,9 @@ class CCPPModel {
       this.longitud,
       this.altitud,
       this.region,
-      this.rango});
+      this.rango,
+      this.distancia_m,
+      this.distancia_km});
 
   factory CCPPModel.fromJson(Map<String, dynamic> json) {
     return CCPPModel(
@@ -49,6 +55,8 @@ class CCPPModel {
       altitud: json[CCPPFld.altitud],
       region: json[CCPPFld.region],
       rango: json[CCPPFld.rango],
+      distancia_m: json[CCPPFld.distancia_m],
+      distancia_km: json[CCPPFld.distancia_km],
     );
   }
 }

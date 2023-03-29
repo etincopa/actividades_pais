@@ -8,6 +8,8 @@ class TamboCentroPobladoFld {
   static String altitudCcpp = 'altitudCcpp';
   static String regionCatural = 'regionCatural';
   static String distrito = 'distrito';
+  static String distanciaM = 'distancia_m';
+  static String distanciaKm = 'distancia_km';
 }
 
 class TamboCentroPobladoDto {
@@ -20,20 +22,23 @@ class TamboCentroPobladoDto {
   String? altitudCcpp;
   String? regionCatural;
   String? distrito;
+  String? distanciaM;
+  String? distanciaKm;
 
   TamboCentroPobladoDto.empty() {}
 
-  TamboCentroPobladoDto({
-    this.nombreCcpp,
-    this.idTambo,
-    this.poblacionCcpp,
-    this.viviendasCcpp,
-    this.xCcpp,
-    this.yCcpp,
-    this.distrito,
-    this.altitudCcpp,
-    this.regionCatural,
-  });
+  TamboCentroPobladoDto(
+      {this.nombreCcpp,
+      this.idTambo,
+      this.poblacionCcpp,
+      this.viviendasCcpp,
+      this.xCcpp,
+      this.yCcpp,
+      this.distrito,
+      this.altitudCcpp,
+      this.regionCatural,
+      this.distanciaM,
+      this.distanciaKm});
 
   factory TamboCentroPobladoDto.fromJson(Map<String, dynamic> json) {
     return TamboCentroPobladoDto(
@@ -46,6 +51,8 @@ class TamboCentroPobladoDto {
       altitudCcpp: json[TamboCentroPobladoFld.altitudCcpp],
       regionCatural: json[TamboCentroPobladoFld.regionCatural],
       distrito: json[TamboCentroPobladoFld.distrito],
+      distanciaM: json[TamboCentroPobladoFld.distanciaM],
+      distanciaKm: json[TamboCentroPobladoFld.distanciaKm],
     );
   }
 }
