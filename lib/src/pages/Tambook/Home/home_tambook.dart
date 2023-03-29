@@ -162,8 +162,7 @@ class _HomeTambookState extends State<HomeTambook>
   Future<void> getCantidadTambosPIAS() async {
     List<TamboPias> aTamboPias = await mainCtr.getCantidadTambosPIAS();
     TamboPias oTamboPias = aTamboPias[0];
-    banerTambosPias =
-        '${oTamboPias.tambos} TAMBOS Y ${oTamboPias.pias} PIAS OPERANDO';
+    banerTambosPias = '${oTamboPias.tambos} TAMBOS OPERANDO';
   }
 
   Future<void> getTambosRegion() async {
@@ -189,13 +188,13 @@ class _HomeTambookState extends State<HomeTambook>
       for (var equipo in equipamiento[tipoEquipos[i].toString()] as List) {
         totalequipos = totalequipos + equipo.cantidad as int;
         if (equipo.estado == 'BUENO') {
-          bueno = bueno + equipo.cantidad as int;
+          bueno = equipo.cantidad as int;
         } else if (equipo.estado == 'REGULAR') {
-          regular = regular + equipo.cantidad as int;
+          regular = equipo.cantidad as int;
         } else if (equipo.estado == 'MALO') {
-          malo = malo + equipo.cantidad as int;
+          malo = equipo.cantidad as int;
         } else {
-          baja = baja + equipo.cantidad as int;
+          baja = equipo.cantidad as int;
         }
       }
 
@@ -207,6 +206,11 @@ class _HomeTambookState extends State<HomeTambook>
           malo,
           baja,
           'assets/iconos_equipos/${tipoEquipos[i].toString()}.png'));
+      totalequipos = 0;
+      bueno = 0;
+      regular = 0;
+      malo = 0;
+      baja = 0;
     }
 
     isLoadingEquipos = true;
@@ -982,21 +986,27 @@ class _HomeTambookState extends State<HomeTambook>
 
                 String sPersonalCode = '';
                 String tipoPersonal = '';
+                String tipoDescripcion = '';
+
                 if (oOption.code == 'OPT3001') {
                   sPersonalCode = 'JUT';
                   tipoPersonal = 'JEFES DE UNIDADES TERRITORIALES';
+                  tipoDescripcion = 'UT: ';
                 }
                 if (oOption.code == 'OPT3002') {
                   sPersonalCode = 'MO';
                   tipoPersonal = 'MONITORES';
+                  tipoDescripcion = 'CANTIDAD: ';
                 }
                 if (oOption.code == 'OPT3003') {
                   sPersonalCode = 'GIT';
                   tipoPersonal = 'GESTORES INSTITUCIONALES';
+                  tipoDescripcion = 'CANTIDAD: ';
                 }
                 if (oOption.code == 'OPT3004') {
                   sPersonalCode = 'GU';
                   tipoPersonal = 'GUARDIANES';
+                  tipoDescripcion = 'CANTIDAD: ';
                 }
                 if (oOption.code == 'OPT3005') {
                   sPersonalCode = 'ST';
@@ -1019,12 +1029,10 @@ class _HomeTambookState extends State<HomeTambook>
                         var oEquipoSelect = aPersonalDetTambo[index];
                         return Column(
                           children: [
-                            Text(
-                              oEquipoSelect.nombres ?? '',
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                              ),
-                              textAlign: TextAlign.left,
+                            ListTile(
+                              title: Text(oEquipoSelect.nombres ?? ''),
+                              subtitle: Text(
+                                  "${tipoDescripcion} ${oEquipoSelect.descripcion ?? ''}"),
                             ),
                             const Divider(color: colorI),
                           ],
@@ -1408,7 +1416,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta física:",
+                                "META FÍSICA:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1422,7 +1430,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Ejecución física :",
+                                "EJECUCIÓN FÍSICA :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1451,6 +1459,13 @@ class _HomeTambookState extends State<HomeTambook>
                               ],
                             ),*/
                           ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
                         ),
                       ],
                     ),
@@ -1571,7 +1586,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta física:",
+                                "META FÍSICA:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1585,7 +1600,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Ejecución física :",
+                                "EJECUCIÓN FÍSICA :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1614,6 +1629,13 @@ class _HomeTambookState extends State<HomeTambook>
                               ],
                             ),*/
                           ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
                         ),
                       ],
                     ),
@@ -1982,7 +2004,7 @@ class _HomeTambookState extends State<HomeTambook>
                       // Renders line chart
 
                       ColumnSeries<ChartDataAvance, String>(
-                          name: 'Meta física',
+                          name: 'META FÍSICA',
                           dataSource: chartData1,
                           dataLabelSettings: const DataLabelSettings(
                             isVisible: true,
@@ -1990,7 +2012,7 @@ class _HomeTambookState extends State<HomeTambook>
                           xValueMapper: (ChartDataAvance data, _) => data.x,
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
-                          name: 'Ejecución física',
+                          name: 'EJECUCIÓN FÍSICA',
                           dataSource: chartData1,
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true),
@@ -1998,6 +2020,13 @@ class _HomeTambookState extends State<HomeTambook>
                           yValueMapper: (ChartDataAvance data, _) => data.y1),
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  const SizedBox(
+                    height: 1,
                   ),
                 ],
               ),
@@ -2081,7 +2110,7 @@ class _HomeTambookState extends State<HomeTambook>
                     series: <CartesianSeries>[
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
-                          name: 'Meta física',
+                          name: 'META FÍSICA',
                           dataSource: chartData1,
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true),
@@ -2089,7 +2118,7 @@ class _HomeTambookState extends State<HomeTambook>
                           yValueMapper: (ChartDataAvance data, _) => data.y),
                       ColumnSeries<ChartDataAvance, String>(
                           animationDuration: 2500,
-                          name: 'Ejecución física',
+                          name: 'EJECUCIÓN FÍSICA',
                           dataSource: chartData1,
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true),
@@ -2097,6 +2126,13 @@ class _HomeTambookState extends State<HomeTambook>
                           yValueMapper: (ChartDataAvance data, _) => data.y1),
                     ],
                     tooltipBehavior: TooltipBehavior(enable: true),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  const SizedBox(
+                    height: 1,
                   ),
                 ],
               ),

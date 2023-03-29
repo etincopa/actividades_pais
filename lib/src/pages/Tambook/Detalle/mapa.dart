@@ -43,10 +43,9 @@ class _MapTambookState extends State<MapaTambo>
   int panBuffer = 0;
 
   MainController mainCtr = MainController();
-  late List<TambosMapaModel> oTambo = [];
   late List<LatLng> mapPoints = [];
   late Future<List<Marker>> marcadores;
-
+  late TamboModel oTambo = TamboModel.empty();
   late ClimaModel clima = ClimaModel.empty();
   late List<RutaTamboModel> aRuta = [];
   bool isLoadingRuta = false;
@@ -75,7 +74,6 @@ class _MapTambookState extends State<MapaTambo>
   }
 
   Future<void> obtenerDatosClima(int idTambo) async {
-    late TamboModel oTambo = TamboModel.empty();
     oTambo = await mainCtr.getTamboDatoGeneral((idTambo).toString());
 
     String url =
@@ -101,154 +99,184 @@ class _MapTambookState extends State<MapaTambo>
           height: 80.0,
           point: latlng,
           builder: (ctx) => GestureDetector(
-            onTap: () async {
-              //await rutaTambo(point.snip!);
-              // ignore: use_build_context_synchronously
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => buildSuccessDialog(
-                  context,
-                  title: 'C.P. : ${point.nombre!}',
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.group,
-                                  size: 15,
+              onTap: () async {
+                //await rutaTambo(point.snip!);
+                // ignore: use_build_context_synchronously
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => buildSuccessDialog(
+                    context,
+                    title: 'C.P. : ${point.nombre!}',
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child: Icon(
+                                    Icons.group,
+                                    size: 15,
+                                  ),
                                 ),
-                              ),
-                              const TextSpan(
-                                text: " POBLACIÓN: ",
-                                style: TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
+                                const TextSpan(
+                                  text: " POBLACIÓN: ",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: point.poblacion.toString(),
-                                style: const TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                TextSpan(
+                                  text: point.poblacion.toString(),
+                                  style: const TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.house,
-                                  size: 15,
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child: Icon(
+                                    Icons.house,
+                                    size: 15,
+                                  ),
                                 ),
-                              ),
-                              const TextSpan(
-                                text: " VIVIENDAS: ",
-                                style: TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
+                                const TextSpan(
+                                  text: " VIVIENDAS: ",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: point.viviendas.toString(),
-                                style: const TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                TextSpan(
+                                  text: point.viviendas.toString(),
+                                  style: const TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.map,
-                                  size: 15,
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child: Icon(
+                                    Icons.map,
+                                    size: 15,
+                                  ),
                                 ),
-                              ),
-                              const TextSpan(
-                                text: " REGIÓN NATURAL: ",
-                                style: TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
+                                const TextSpan(
+                                  text: " REGIÓN NATURAL: ",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: point.region ?? '',
-                                style: const TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                TextSpan(
+                                  text: point.region ?? '',
+                                  style: const TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.document_scanner_outlined,
-                                  size: 15,
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child: Icon(
+                                    Icons.document_scanner_outlined,
+                                    size: 15,
+                                  ),
                                 ),
-                              ),
-                              const TextSpan(
-                                text: " UBIGEO: ",
-                                style: TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
+                                const TextSpan(
+                                  text: " UBIGEO: ",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: point.ubigeo!,
-                                style: const TextStyle(
-                                  color: color_01,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                TextSpan(
+                                  text: point.ubigeo!,
+                                  style: const TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child: Icon(
+                                    Icons.map,
+                                    size: 15,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: " DISTANCIA AL TAMBO: ",
+                                  style: TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: "${point.distancia_km!} km",
+                                  style: const TextStyle(
+                                    color: color_01,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.location_on,
-              size: 30,
-              color: Colors.blueAccent,
-            ),
-          ),
+                );
+              },
+              child: (point.distancia_m != "0")
+                  ? const Icon(Icons.location_on,
+                      size: 30, color: Colors.blueAccent)
+                  : const Icon(Icons.location_on, size: 30, color: Colors.red)),
         ),
       );
     }

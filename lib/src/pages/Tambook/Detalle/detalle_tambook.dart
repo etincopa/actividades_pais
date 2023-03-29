@@ -620,168 +620,227 @@ class _DetalleTambookState extends State<DetalleTambook>
           ),
           itemCount: aEquipoInformatico.length,
           itemBuilder: (context, index) {
-            HomeOptions homeOption = aEquipoInformatico[index];
-            return InkWell(
-              splashColor: Colors.white10,
-              highlightColor: Colors.white10,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/icons/botones 1-02.png"),
-                    fit: BoxFit.cover,
-                  ),
-                  color: homeOption.color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 241, 240, 240)
-                          .withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
+            if (aEquipoInformatico.isNotEmpty) {
+              HomeOptions homeOption = aEquipoInformatico[index];
+              return InkWell(
+                splashColor: Colors.white10,
+                highlightColor: Colors.white10,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: const DecorationImage(
+                      image: AssetImage("assets/icons/botones 1-02.png"),
+                      fit: BoxFit.cover,
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 5),
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 12,
-                          bottom: 8,
-                        ),
-                        child: Hero(
-                          tag: homeOption.image!,
-                          child: Image.asset(
-                            homeOption.image!,
-                            fit: BoxFit.contain,
-                            width: 80,
-                            height: 70,
-                            alignment: Alignment.center,
-                          ),
-                        ),
+                    color: homeOption.color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 241, 240, 240)
+                            .withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(1),
-                        child: Center(
-                          child: Text(
-                            homeOption.name!,
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w700,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 11.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
                     ],
                   ),
-                ),
-              ),
-              onTap: () async {
-                var oEquipoInformatico = aEquipoInformatico[index];
-                /*String sType = '';
-                if (oEquipoInformatico.code == 'OPT2001') {
-                  sType = 'CPU';
-                } else if (oEquipoInformatico.code == 'OPT2002') {
-                  sType = 'LAPTOP';
-                } else if (oEquipoInformatico.code == 'OPT2003') {
-                  sType = 'PROYECTOR';
-                } else if (oEquipoInformatico.code == 'OPT2005') {
-                  sType = 'IMPRESORA';
-                }*/
-
-                var aEquipoSelect = aEquipos
-                    .where((o) =>
-                        o.categoria!.toUpperCase() == oEquipoInformatico.name2)
-                    .toList();
-                if (aEquipoSelect.isNotEmpty) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => buildSuccessDialog2(
-                      context,
-                      title: "DETALLE DE EQUIPOS",
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: aEquipoSelect.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var oEquipoSelect = aEquipoSelect[index];
-                          return Column(
-                            children: [
-                              Text(
-                                oEquipoSelect.descripcion ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 5),
+                        Container(
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            bottom: 8,
+                          ),
+                          child: Hero(
+                            tag: homeOption.image!,
+                            child: Image.asset(
+                              homeOption.image!,
+                              fit: BoxFit.contain,
+                              width: 80,
+                              height: 70,
+                              alignment: Alignment.center,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(1),
+                          child: Center(
+                            child: Text(
+                              homeOption.name!,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.w700,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 11.0,
                               ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      const TextSpan(
-                                        text: "FECHA DE ADQUISICIÓN: ",
-                                        style: TextStyle(
-                                          color: color_01,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: oEquipoSelect.fechaContabilidad ??
-                                            '',
-                                        style: const TextStyle(
-                                          color: color_01,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      const TextSpan(
-                                        text: "ESTADO: ",
-                                        style: TextStyle(
-                                          color: color_01,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: oEquipoSelect.estado ?? '',
-                                        style: const TextStyle(
-                                          color: color_01,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const Divider(color: colorI),
-                            ],
-                          );
-                        },
-                      ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  );
-                }
-              },
-            );
+                  ),
+                ),
+                onTap: () async {
+                  var oEquipoInformatico = aEquipoInformatico[index];
+
+                  var aEquipoSelect = aEquipos
+                      .where((o) =>
+                          o.categoria!.toUpperCase() ==
+                          oEquipoInformatico.name2)
+                      .toList();
+                  if (aEquipoSelect.isNotEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => buildSuccessDialog2(
+                        context,
+                        title: "DETALLE DE EQUIPOS",
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: aEquipoSelect.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var oEquipoSelect = aEquipoSelect[index];
+                            return Column(
+                              children: [
+                                Text(
+                                  oEquipoSelect.descripcion ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: "FECHA DE ADQUISICIÓN: ",
+                                          style: TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              oEquipoSelect.fechaContabilidad ??
+                                                  '',
+                                          style: const TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: "ESTADO: ",
+                                          style: TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: oEquipoSelect.estado ?? '',
+                                          style: const TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: "CÓDIGO PATRIMONIAL: ",
+                                          style: TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              oEquipoSelect.codigoPatrimonial ??
+                                                  '',
+                                          style: const TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: "MARCA: ",
+                                          style: TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: oEquipoSelect.marca ?? '',
+                                          style: const TextStyle(
+                                            color: color_01,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Divider(color: colorI),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
+            } else {
+              Center(
+                child: Text(
+                  'SIN EQUIPOS ASIGNADOS',
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 30.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
           },
         ),
       ),
@@ -1318,7 +1377,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       floatingActionButton: ExpandedAnimationFab(
         items: [
           FabItem(
-            "Ubicación Tambo",
+            "Centros poblados",
             Icons.map_outlined,
             onPress: () async {
               Navigator.of(context).push(
@@ -1398,7 +1457,8 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardNuestroGestor() {
     var heading = 'NUESTRO GESTOR';
     var subheading =
-        '${oTambo.gestorNombre ?? ''} ${oTambo.gestorApellidos ?? ''}';
+        '${oTambo.gestorNombre ?? ''} ${oTambo.gestorApellidos ?? ''}'
+            .toUpperCase();
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
@@ -1433,9 +1493,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
                 subtitle: Text(
                   subheading,
@@ -1468,17 +1528,22 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   children: [
                                     ListTile(
                                       title: const Text('CARRERA'),
-                                      subtitle:
-                                          Text(oTambo.gestorProfession ?? ''),
+                                      subtitle: Text(oTambo.gestorProfession!
+                                              .toUpperCase() ??
+                                          ''),
                                     ),
                                     ListTile(
                                       title: const Text('GRADO'),
-                                      subtitle: Text(
-                                          oTambo.gestorGradoAcademico ?? ''),
+                                      subtitle: Text(oTambo
+                                              .gestorGradoAcademico!
+                                              .toUpperCase() ??
+                                          ''),
                                     ),
                                     ListTile(
                                       title: const Text('SEXO'),
-                                      subtitle: Text(oTambo.gestorSexo ?? ''),
+                                      subtitle: Text(
+                                          oTambo.gestorSexo!.toUpperCase() ??
+                                              ''),
                                     ),
                                     ListTile(
                                       title: const Text('ESTADO CIVIL'),
@@ -1537,7 +1602,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardVigilante() {
     var heading = 'GUARDIÁN';
     var subheading =
-        "${oGuardia.empleadoNombre ?? ''} ${oGuardia.empleadoApellidoPaterno ?? ''} ${oGuardia.empleadoApellidoMaterno ?? ''}";
+        "${oGuardia.empleadoNombre!.toUpperCase() ?? ''} ${oGuardia.empleadoApellidoPaterno!.toUpperCase() ?? ''} ${oGuardia.empleadoApellidoMaterno!.toUpperCase() ?? ''}";
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -1573,9 +1638,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
                 subtitle: Text(
                   subheading,
@@ -1601,11 +1666,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('SEXO'),
-                          subtitle: Text(oGuardia.sexo ?? ''),
+                          subtitle: Text(oGuardia.sexo!.toUpperCase() ?? ''),
                         ),
                         ListTile(
                           title: const Text('TIPO CONTRATO'),
-                          subtitle: Text(oGuardia.tipoContrato ?? ''),
+                          subtitle:
+                              Text(oGuardia.tipoContrato!.toUpperCase() ?? ''),
                         ),
                         ListTile(
                           title: const Text('FECHA INICIO CONTRATO'),
@@ -1827,9 +1893,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -1898,9 +1964,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -1927,6 +1993,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                         Text(
                             'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
                         const SizedBox(height: 10),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
+                        ),
                       ],
                     ),
                   ),
@@ -1942,7 +2012,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   Padding cardNuestroJefeUnidad() {
     var heading = 'NUESTRO JEFE DE UNIDAD TERRITORIAL';
     var subheading =
-        "${oJUT.nombresJut ?? ''} ${oJUT.apellidoPaternoJut ?? ''} ${oJUT.apellidoMaternoJut ?? ''}";
+        "${oJUT.nombresJut!.toUpperCase() ?? ''} ${oJUT.apellidoPaternoJut!.toUpperCase() ?? ''} ${oJUT.apellidoMaternoJut!.toUpperCase() ?? ''}";
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -1977,9 +2047,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
                 subtitle: Text(
                   subheading,
@@ -2014,7 +2084,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('SEXO'),
-                          subtitle: Text(oJUT.genero ?? ''),
+                          subtitle: Text(oJUT.genero!.toUpperCase() ?? ''),
                         ),
                         ListTile(
                           title: const Text('FECHA DE NACIMIENTO'),
@@ -2088,9 +2158,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -2177,9 +2247,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -2256,9 +2326,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -2332,9 +2402,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   '$heading ( ${oTambo.aCentroPoblado!.length} )',
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -2350,7 +2420,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             iconColor: const Color.fromARGB(255, 0, 0, 0),
                             title: Text(oCentro.nombreCcpp!),
                             subtitle: Text(
-                                'DISTRITO: ${oCentro.distrito} \n( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )'),
+                                'DISTRITO: ${oCentro.distrito} \n( ALTITUD: ${oCentro.altitudCcpp} - REGION: ${oCentro.regionCatural} )\nDISTANCIA AL TAMBO: ${oCentro.distanciaKm} km'),
                           ),
                       ],
                     ),
@@ -2400,9 +2470,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -2546,7 +2616,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta física:",
+                                "META FÍSICA:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2560,7 +2630,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Ejecución física :",
+                                "EJECUCIÓN FÍSICA :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2589,6 +2659,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ],
                             ),*/
                           ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
                         ),
                       ],
                     ),
@@ -2711,7 +2788,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "Meta física:",
+                                "META FÍSICA:",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2725,7 +2802,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "Ejecución física :",
+                                "EJECUCIÓN FÍSICA :",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -2754,6 +2831,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ],
                             ),*/
                           ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
                         ),
                       ],
                     ),
@@ -2809,9 +2893,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -2969,9 +3053,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -3002,7 +3086,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         ListTile(
                                           title: const Text('SITUACIÓN:'),
                                           subtitle: Text(
-                                              '${aPlanMantenimientoInfraestructura[index].situacion}'),
+                                              '${aPlanMantenimientoInfraestructura[index].situacion!.toUpperCase()}'),
                                         ),
                                         if (aPlanMantenimientoInfraestructura[
                                                 index]
@@ -3237,9 +3321,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
                 leading: const ImageIcon(
                   AssetImage("assets/wifi.png"),
@@ -3288,7 +3372,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 //DOWNLOAD Mbps
                 const ListTile(
                   title: Text(
-                    'Velocidad de bajada Mbps',
+                    'VELOCIDAD DE BAJADA Mbps',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -3332,7 +3416,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
                 const ListTile(
                   title: Text(
-                    'Velocidad de subida Mbps',
+                    'VELOCIDAD DE SUBIDA Mbps',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -3440,9 +3524,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -4253,9 +4337,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -4386,9 +4470,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
@@ -4401,7 +4485,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('Temperatura:'),
+                          title: const Text('TEMPERATURA:'),
                           subtitle: Text(
                             '${clima.temp} °',
                             style: const TextStyle(
@@ -4410,7 +4494,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('Velocidad del viento:'),
+                          title: const Text('VELOCIDAD DEL VIENTO:'),
                           subtitle: Text(
                             '${clima.speed} km/h',
                             style: const TextStyle(
@@ -4419,7 +4503,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('Dirección del viento:'),
+                          title: const Text('DIRECCIÓN DEL VIENTO:'),
                           subtitle: Text(
                             '${clima.direction}',
                             style: const TextStyle(
@@ -4479,9 +4563,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                 title: Text(
                   heading,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
               ),
               children: <Widget>[
