@@ -62,6 +62,18 @@ class Participantes {
   int? idParticipante;
 
   String? estado;
+
+  String? correlativo;
+  String? id_programacion_participante;
+  String? nombre;
+  String? nombre2;
+  String? fecha_nacimiento;
+  String? pais_nombre;
+  String? tipo_documento_siglas;
+  String? nombre_programa;
+  String? estado_padron;
+  String? total;
+
   Participantes(
       {this.id = 0,
       this.idProgramacion = 0,
@@ -94,7 +106,17 @@ class Participantes {
       this.txtIpmaq = '',
       this.tipo = '',
       this.tipoParticipante = 0,
-      this.idParticipante = 0,this.estado = ""});
+      this.idParticipante = 0,this.estado = "",
+        this.correlativo,
+        this.id_programacion_participante,
+        this.nombre,
+        this.nombre2,
+        this.fecha_nacimiento,
+        this.pais_nombre,
+        this.tipo_documento_siglas,
+        this.nombre_programa,
+        this.estado_padron,
+        this.total,});
 
   Participantes.fromJsonSERICIO(Map<String, dynamic> json) {
     id = json['id']??0;
@@ -216,6 +238,30 @@ class Participantes {
       txtIpmaq: json['txtIpmaq'],
       tipo: json['tipo'],
       tipoParticipante: json['tipoParticipante']);
+
+  factory Participantes.fromJsonListaTabla(Map<String, dynamic> json) {
+    return Participantes(
+      correlativo: json['correlativo'] ?? '',
+      id_programacion_participante: json['id_programacion_participante'] ?? '',
+      idProgramacion: int.tryParse(json['id_programacion'].toString()) ?? 0,
+      idParticipante: int.tryParse(json['id_participante'].toString()) ?? 0,
+      nombreResidencia: json['nombre_residencia'] ?? '',
+      nombre: json['nombre'] ?? '',
+      nombre2: json['nombre2'] ?? '',
+      apellidoPaterno: json['apellidoPaterno'] ?? '',
+      apellidoMaterno: json['apellidoMaterno'] ?? '',
+      dni: json['dni'] ?? '',
+      edad: int.tryParse(json['edad'].toString()) ?? 0,
+      fechaNacimiento: json['fecha_nacimiento'] ?? '',
+      sexo: json['sexo'] ?? '',
+      pais_nombre: json['pais_nombre'] ?? '',
+      tipo_documento_siglas: json['tipo_documento_siglas'] ?? '',
+      nombre_programa: json['nombre_programa'] ?? '',
+      estado_padron: json['estado_padron'] ?? '',
+      servicio: json['servicio'] ?? '',
+      total: json['total'] ?? '',
+    );
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = new Map<String, dynamic>();
