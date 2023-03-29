@@ -81,7 +81,6 @@ class _HomePagePais extends State<HomePagePais> {
   }
 
   perfil() async {
-
     /*  cantidadDB = 1;
     var res = await ProviderServicios().loadPerfiles();
     if (res!.isNotEmpty) {
@@ -147,11 +146,12 @@ class _HomePagePais extends State<HomePagePais> {
   Future mostrarNombre() async {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
-    dniPrueba = abc[0].numeroDni;
+
     _prefs = await SharedPreferences.getInstance();
     token = _prefs!.getString("token");
 
     if (abc.isNotEmpty) {
+      dniPrueba = abc[0].numeroDni;
       cargo = true;
       setState(() {
         _nombrePersona = abc[abc.length - 1].nombres.toUpperCase();
@@ -245,7 +245,7 @@ class _HomePagePais extends State<HomePagePais> {
           );
           break;
         case '115':
-          if(tipoPlataforma!='PIAS'){
+          if (tipoPlataforma != 'PIAS') {
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1003',
@@ -262,8 +262,8 @@ class _HomePagePais extends State<HomePagePais> {
             String sImagePias = modalidad == '1'
                 ? icon2
                 : modalidad == '2'
-                ? icon3
-                : icon1;
+                    ? icon3
+                    : icon1;
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1004',
@@ -281,8 +281,8 @@ class _HomePagePais extends State<HomePagePais> {
             String sImagePias = modalidad == '1'
                 ? icon2
                 : modalidad == '2'
-                ? icon3
-                : icon1;
+                    ? icon3
+                    : icon1;
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1004',
@@ -397,7 +397,7 @@ class _HomePagePais extends State<HomePagePais> {
       }*/
     }
 
-   /* if (tipoPlataforma == 'PIAS' &&
+    /* if (tipoPlataforma == 'PIAS' &&
         (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
       String sImagePias = modalidad == '1'
           ? icon2
@@ -738,7 +738,9 @@ class _HomePagePais extends State<HomePagePais> {
           AppBarPais(
             datoUt: token == null ? unidadTerritorial : '',
             plataforma: variable,
-            nombre: '$_nombrePersona $_apellidosPersona',
+            nombre: (_nombrePersona.isNotEmpty)
+                ? '$_nombrePersona  $_apellidosPersona'
+                : 'USUARIO INVITADO',
           ),
           listPages[currenIndex]
         ],

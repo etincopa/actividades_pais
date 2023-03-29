@@ -163,7 +163,7 @@ class _HomeTambookState extends State<HomeTambook>
     List<TamboPias> aTamboPias = await mainCtr.getCantidadTambosPIAS();
     TamboPias oTamboPias = aTamboPias[0];
     banerTambosPias =
-        '${oTamboPias.tambos} Tambos operativos y ${oTamboPias.pias} PIAS operando';
+        '${oTamboPias.tambos} TAMBOS Y ${oTamboPias.pias} PIAS OPERANDO';
   }
 
   Future<void> getTambosRegion() async {
@@ -177,13 +177,6 @@ class _HomeTambookState extends State<HomeTambook>
     _resumenParqueInformatico = ResumenParqueDataSource(parque: aResumenParque);
 
     var equipamiento = groupBy(aResumenParque, (obj) => obj.descripcion);
-
-    String icon1 = 'assets/icons/computadora.png';
-    String icon2 = 'assets/icons/laptop.png';
-    String icon3 = 'assets/icons/proyector.png';
-    String icon4 = 'assets/icons/wifi.png';
-    String icon5 = 'assets/icons/impresora.png';
-    String icon6 = 'assets/icons/parlante.png';
 
     int totalequipos = 0;
     int bueno = 0;
@@ -206,53 +199,14 @@ class _HomeTambookState extends State<HomeTambook>
         }
       }
 
-      if (tipoEquipos[i].toString() == "IMPRESORA MATRICIAL" ||
-          tipoEquipos[i].toString() == "IMPRESORA LASER" ||
-          tipoEquipos[i].toString() == "IMPRESORA MULTIFUNCIONAL" ||
-          tipoEquipos[i].toString() == "PLOTTERS") {
-        aequiposResumen.add(EquiposInformaticosResumen(
-            tipoEquipos[i].toString(),
-            totalequipos,
-            bueno,
-            regular,
-            malo,
-            baja,
-            icon5));
-      }
-
-      if (tipoEquipos[i].toString() == "LAPTOP") {
-        aequiposResumen.add(EquiposInformaticosResumen(
-            tipoEquipos[i].toString(),
-            totalequipos,
-            bueno,
-            regular,
-            malo,
-            baja,
-            icon2));
-      }
-
-      if (tipoEquipos[i].toString() == "PROYECTOR") {
-        aequiposResumen.add(EquiposInformaticosResumen(
-            tipoEquipos[i].toString(),
-            totalequipos,
-            bueno,
-            regular,
-            malo,
-            baja,
-            icon3));
-      }
-
-      if (tipoEquipos[i].toString() == "CPU" ||
-          tipoEquipos[i].toString() == "All In One") {
-        aequiposResumen.add(EquiposInformaticosResumen(
-            tipoEquipos[i].toString(),
-            totalequipos,
-            bueno,
-            regular,
-            malo,
-            baja,
-            icon1));
-      }
+      aequiposResumen.add(EquiposInformaticosResumen(
+          tipoEquipos[i].toString(),
+          totalequipos,
+          bueno,
+          regular,
+          malo,
+          baja,
+          'assets/iconos_equipos/${tipoEquipos[i].toString()}.png'));
     }
 
     isLoadingEquipos = true;
@@ -1069,8 +1023,8 @@ class _HomeTambookState extends State<HomeTambook>
                               oEquipoSelect.nombres ?? '',
                               style: const TextStyle(
                                 fontSize: 14.0,
-                                fontWeight: FontWeight.w700,
                               ),
+                              textAlign: TextAlign.left,
                             ),
                             const Divider(color: colorI),
                           ],
@@ -1407,7 +1361,7 @@ class _HomeTambookState extends State<HomeTambook>
               height: 10,
             ),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
             const SizedBox(
               height: 10,
             ),
@@ -1570,7 +1524,7 @@ class _HomeTambookState extends State<HomeTambook>
               height: 10,
             ),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
             const SizedBox(
               height: 10,
             ),
@@ -1843,7 +1797,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 iconColor: const Color.fromARGB(255, 0, 0, 0),
                                 title: ListTile(
                                   title: Text(
-                                    "BUENO: ${equipo.bueno}\nREGULAR: ${equipo.regular}\nMALO: ${equipo.malo}\nBAJA: ${equipo.baja}\nTOTAL: ${equipo.total}",
+                                    "BUENO: ${formatoDecimal(equipo.bueno)}\nREGULAR: ${formatoDecimal(equipo.regular)}\nMALO: ${formatoDecimal(equipo.malo)}\nTOTAL: ${formatoDecimal(equipo.total)}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       color: Colors.black,
@@ -2006,7 +1960,7 @@ class _HomeTambookState extends State<HomeTambook>
             const Divider(color: colorI),
             const SizedBox(height: 10),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
             const SizedBox(height: 10),
             Container(
               alignment: Alignment.centerLeft,
@@ -2106,7 +2060,7 @@ class _HomeTambookState extends State<HomeTambook>
             const Divider(color: colorI),
             const SizedBox(height: 10),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
             const SizedBox(height: 10),
             Container(
               alignment: Alignment.centerLeft,
@@ -3157,6 +3111,7 @@ class _HomeTambookState extends State<HomeTambook>
       actions: const <Widget>[],
       content: SingleChildScrollView(
         child: Container(
+          alignment: Alignment.centerLeft,
           width: double.maxFinite,
           child: Column(
             mainAxisSize: MainAxisSize.min,

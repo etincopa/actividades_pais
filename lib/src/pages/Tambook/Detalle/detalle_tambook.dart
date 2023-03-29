@@ -517,7 +517,23 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     var equipamiento = groupBy(aEquipos, (obj) => obj.categoria);
 
-    String icon1 = 'assets/icons/computadora.png';
+    var tipoEquipos = equipamiento.keys.toList();
+
+    for (int i = 0; i < tipoEquipos.length; i++) {
+      aEquipoInformatico.add(
+        HomeOptions(
+          code: 'OPT200${i + 1}',
+          name:
+              '${tipoEquipos[i].toString()}\n(${equipamiento[tipoEquipos[i].toString()]!.length})',
+          name2: tipoEquipos[i].toString(),
+          types: const ['Ver'],
+          image: 'assets/iconos_equipos/${tipoEquipos[i].toString()}.png',
+          color: Colors.white,
+        ),
+      );
+    }
+
+    /*String icon1 = 'assets/icons/computadora.png';
     String icon2 = 'assets/icons/laptop.png';
     String icon3 = 'assets/icons/proyector.png';
     String icon4 = 'assets/icons/wifi.png';
@@ -556,7 +572,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         color: Colors.white,
       ),
     );
-    /*aEquipoInformatico.add(
+    aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2004',
         name: 'ANTENA WIFI \n(1047)',
@@ -564,7 +580,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         image: icon4,
         color: Colors.white,
       ),
-    );*/
+    );
     aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2005',
@@ -574,7 +590,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         color: Colors.white,
       ),
     );
-    /*aEquipoInformatico.add(
+    aEquipoInformatico.add(
       HomeOptions(
         code: 'OPT2006',
         name: 'PARLANTES \n(1047)',
@@ -667,7 +683,7 @@ class _DetalleTambookState extends State<DetalleTambook>
               ),
               onTap: () async {
                 var oEquipoInformatico = aEquipoInformatico[index];
-                String sType = '';
+                /*String sType = '';
                 if (oEquipoInformatico.code == 'OPT2001') {
                   sType = 'CPU';
                 } else if (oEquipoInformatico.code == 'OPT2002') {
@@ -676,9 +692,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                   sType = 'PROYECTOR';
                 } else if (oEquipoInformatico.code == 'OPT2005') {
                   sType = 'IMPRESORA';
-                }
+                }*/
+
                 var aEquipoSelect = aEquipos
-                    .where((o) => o.categoria!.toUpperCase() == sType)
+                    .where((o) =>
+                        o.categoria!.toUpperCase() == oEquipoInformatico.name2)
                     .toList();
                 if (aEquipoSelect.isNotEmpty) {
                   showDialog(
@@ -1307,13 +1325,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                 MaterialPageRoute(
                   builder: (context) => MapaTambo(
                       snip: oTambo.nSnip ?? 0,
-                      latitud: double.parse(oTambo.yCcpp!),
-                      longitud: double.parse(oTambo.xCcpp!)),
+                      latitud: double.parse(oTambo.yCcpp ?? '0'),
+                      longitud: double.parse(oTambo.xCcpp ?? '0')),
                 ),
               );
             },
           ),
-          /*FabItem(
+          FabItem(
             "Ficha técnica",
             Icons.picture_as_pdf_sharp,
             onPress: () async {
@@ -1335,7 +1353,7 @@ class _DetalleTambookState extends State<DetalleTambook>
               } catch (oError) {}
               BusyIndicator.hide(context);
             },
-          ),*/
+          ),
         ],
         animation: _animation!,
         onPress: () {
@@ -1496,7 +1514,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 20, 20, 20),
                                 child: const Text(
-                                  'Tambo sin gestor',
+                                  'TAMBO SIN GESTOR',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -1829,6 +1847,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                               title:
                                   Text(priorizacion.nombrePriorizacion ?? ''),
                             ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: UPS'),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -1904,7 +1925,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         const SizedBox(height: 10),
                         Text(
-                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2105,6 +2126,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                           title: const Text('ALTITUD'),
                           subtitle: Text("${oTambo.altitudCcpp ?? ''} msnm"),
                         ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: INEI'),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -2251,11 +2275,15 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ? ''
                               : oTambo.nSnip.toString()),
                         ),
-                        ListTile(
-                          title: const Text('MONTO CONTRATADO'),
-                          subtitle: Text(formatoDecimal(
-                              double.parse(oTambo.montoAdjudicado ?? '0'))),
-                        ),
+                        if (oTambo.montoAdjudicado != "")
+                          ListTile(
+                            title: const Text('MONTO CONTRATADO'),
+                            subtitle: Text(
+                                "${formatoDecimal(double.parse(oTambo.montoAdjudicado ?? '0'))}"),
+                          ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: UPS'),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
@@ -2473,7 +2501,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const Divider(color: colorI),
             const SizedBox(height: 10),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -2523,7 +2551,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalMetaTipo1.toDouble())}',
+                                '${formatoDecimal(totalMetaTipo1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2537,7 +2565,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalAvance1.toDouble())}',
+                                '${formatoDecimal(totalAvance1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2638,7 +2666,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const Divider(color: colorI),
             const SizedBox(height: 10),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -2688,7 +2716,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalMetaTipo1.toDouble())}',
+                                '${formatoDecimal(totalMetaTipo1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2702,7 +2730,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalAvance1.toDouble())}',
+                                '${formatoDecimal(totalAvance1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2976,17 +3004,25 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           subtitle: Text(
                                               '${aPlanMantenimientoInfraestructura[index].situacion}'),
                                         ),
-                                        ListTile(
-                                          title: const Text(
-                                              'MANTENIMIENTO DE INFRAESTRUCTURA'),
-                                          subtitle: Text(
-                                              "S/.  ${aPlanMantenimientoInfraestructura[index].montoMantenimientoInfraestructura ?? ''}"),
-                                        ),
-                                        ListTile(
-                                          title: const Text('POZO A TIERRA'),
-                                          subtitle: Text(
-                                              "S/. ${aPlanMantenimientoInfraestructura[index].pozoTierra ?? ''}"),
-                                        ),
+                                        if (aPlanMantenimientoInfraestructura[
+                                                index]
+                                            .montoMantenimientoInfraestructura!
+                                            .isNotEmpty)
+                                          ListTile(
+                                            title: const Text(
+                                                'MANTENIMIENTO DE INFRAESTRUCTURA'),
+                                            subtitle: Text(
+                                                "S/.  ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].montoMantenimientoInfraestructura ?? '0'))}"),
+                                          ),
+                                        if (aPlanMantenimientoInfraestructura[
+                                                index]
+                                            .pozoTierra!
+                                            .isNotEmpty)
+                                          ListTile(
+                                            title: const Text('POZO A TIERRA'),
+                                            subtitle: Text(
+                                                "S/. ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].pozoTierra ?? '0'))}"),
+                                          ),
                                         /*ListTile(
                                           title:
                                               const Text('CAMBIO DE BATERIAS'),
@@ -3015,7 +3051,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   padding:
                                       const EdgeInsets.fromLTRB(20, 20, 20, 20),
                                   child: const Text(
-                                    'No hay datos para mostrar',
+                                    'TAMBO NO CONSIDERADO DENTRO DEL PLAN DE MANTENIMIENTO',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,

@@ -195,7 +195,7 @@ class _MapTambookState extends State<MapaTambo>
                                 ),
                               ),
                               TextSpan(
-                                text: point.region!,
+                                text: point.region ?? '',
                                 style: const TextStyle(
                                   color: color_01,
                                   fontSize: 13,
