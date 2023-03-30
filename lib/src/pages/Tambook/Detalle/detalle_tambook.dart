@@ -1074,46 +1074,120 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/SERVICIOS.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'INFORMACIÓN DE SERVICIOS DEL TAMBO',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/SERVICIOS.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/computadora.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'INFORMACIÓN DE EQUIPOS INFORMÁTICOS',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/computadora.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
+
                               /*Tab(
                                 icon: ImageIcon(
                                   AssetImage('assets/grifo.png'),
                                   size: 55,
                                 ),
                               ),*/
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/calendario.png'),
-                                  size: 55,
+
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: ' ACTIVIDADES PROGRAMADAS',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/calendario.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/lluvioso.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'INFORMACIÓN DEL CLIMA',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/lluvioso.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/iconos_card/rutas.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'COMO LLEGAR AL TAMBO',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/iconos_card/rutas.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
-                              Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/intervenciones.png'),
-                                  size: 55,
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'INTERVENCIONES',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/intervenciones.png'),
+                                    size: 55,
+                                  ),
                                 ),
                               ),
                             ],
@@ -1669,6 +1743,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text(oGuardia.sexo!.toUpperCase() ?? ''),
                         ),
                         ListTile(
+                          title: const Text('CELULAR'),
+                          subtitle: Text(oGuardia.celular!.toUpperCase() ?? ''),
+                        ),
+                        ListTile(
                           title: const Text('TIPO CONTRATO'),
                           subtitle:
                               Text(oGuardia.tipoContrato!.toUpperCase() ?? ''),
@@ -2103,7 +2181,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text(oUT.nombreUt ?? ''),
                         ),
                         ListTile(
-                          title: const Text('UT DIRECCION'),
+                          title: const Text('UT DIRECCIÓN'),
                           subtitle: Text(oUT.unidadTerritorialDireccion ?? ''),
                         ),
                         ListTile(
@@ -2352,7 +2430,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 "${formatoDecimal(double.parse(oTambo.montoAdjudicado ?? '0'))}"),
                           ),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: UPS'),
+                        const Text('FUENTE: BANCO DE INVERSIONES'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -3096,7 +3174,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                             title: const Text(
                                                 'MANTENIMIENTO DE INFRAESTRUCTURA'),
                                             subtitle: Text(
-                                                "S/.  ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].montoMantenimientoInfraestructura ?? '0'))}"),
+                                                "S/.  ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].montoMantenimientoInfraestructura ?? '0').roundToDouble())}"),
                                           ),
                                         if (aPlanMantenimientoInfraestructura[
                                                 index]
@@ -3105,7 +3183,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           ListTile(
                                             title: const Text('POZO A TIERRA'),
                                             subtitle: Text(
-                                                "S/. ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].pozoTierra ?? '0'))}"),
+                                                "S/. ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].pozoTierra ?? '0').roundToDouble())}"),
                                           ),
                                         /*ListTile(
                                           title:

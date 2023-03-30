@@ -219,10 +219,11 @@ class _HomeTambookState extends State<HomeTambook>
   Future<void> buildPersonalTambo() async {
     List<PersonalPuestoModel> aPersonal = await mainCtr.getPersonalPuesto();
 
-    String icon1 = 'assets/icons/persona1.png';
-    String icon2 = 'assets/icons/persona2.png';
-    String icon3 = 'assets/icons/persona3.png';
-    String icon4 = 'assets/icons/persona2.png';
+    String icon1 = 'assets/icons/JUT.png';
+    String icon2 = 'assets/icons/MONITOR.png';
+    String icon3 = 'assets/icons/GESTORES.png';
+    String icon4 = 'assets/icons/GUARDIAN.png';
+    String icon5 = 'assets/icons/persona2.png';
 
     aPersonalTambo.add(
       HomeOptions(
@@ -271,7 +272,7 @@ class _HomeTambookState extends State<HomeTambook>
           name: 'SOPORTE \n TÉCNICO DE UTI',
           name2: aPersonal[0].st.toString() ?? '0',
           types: const ['Ver'],
-          image: icon4,
+          image: icon5,
           color: Colors.white),
     );
   }
@@ -1711,9 +1712,10 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.left,
                               ),
                               ListTile(
-                                leading: const ImageIcon(
-                                  AssetImage("assets/icons/convenio.png"),
-                                  size: 40,
+                                leading: ImageIcon(
+                                  AssetImage(
+                                      "assets/regiones/${tambos.nombre}.png"),
+                                  size: 45,
                                   color: Colors.black,
                                 ),
                                 iconColor: const Color.fromARGB(255, 0, 0, 0),
@@ -1736,7 +1738,10 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                               const Divider(color: colorI),
                             ],
-                          )
+                          ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: INEI'),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),
