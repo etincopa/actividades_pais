@@ -39,7 +39,8 @@ class _IntervencionesState extends State<Intervenciones> {
   var todoParticiw = 0;
   var cargarBarra = 0;
   var isInternet = false;
-  var isTab= true;
+  var isTab = true;
+
   @override
   void initState() {
     CalcularParticipantes();
@@ -127,6 +128,49 @@ class _IntervencionesState extends State<Intervenciones> {
         ),
       ),
     );
+    /* WillPopScope(
+      onWillPop: systemBackButtonPressed,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: AppConfig.primaryColor,
+          leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePagePais()),
+              )),
+          title: Text(
+            "EJECUCION INTERVENCION",
+            style: TextStyle(color: AppConfig.letrasColor, fontSize: 12),
+          ),
+          actions: [accionesBotones()],
+        ),
+        body: FutureBuilder<List<TramaIntervencion>>(
+          future: DatabasePr.db.listarInterciones(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<TramaIntervencion>> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.hasData == false) {
+                return Center(
+                  child: Text("¡No existen registros"),
+                );
+              } else {
+                final listaPersonalAux = snapshot.data;
+
+                if (listaPersonalAux!.length == 0) {
+                  return esperadecara(
+                      'Espere un momento... \nEl aplicativo esta recuperando las '
+                      'intervenciones de su tambo...');
+                } else {
+                  return lista(listaPersonalAux);
+                }
+              }
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
+      ),
+    );*/
   }
 
   Widget esperadecara(texto) {
@@ -168,7 +212,7 @@ class _IntervencionesState extends State<Intervenciones> {
     );
   }
 
-  eliminarArchivoParticipantes() async {
+/*  eliminarArchivoParticipantes() async {
     var ar = [];
     showAlertDialogBarra(context, titulo: 'Participantes', presse: () async {
       loadPart = true;
@@ -194,9 +238,35 @@ class _IntervencionesState extends State<Intervenciones> {
     if (ar.length > 1) {
       loadPart = false;
     }
+  }*/
+  eliminarArchivoParticipantes() async {
+    var ar = [];
+    showAlertDialogBarra(context, titulo: 'Participantes', presse: () async {
+      loadPart = true;
+      Navigator.pop(context);
+      setState(() {});
+      var chc = await ProviderLogin().checkInternetConnection();
+      if (chc == true) {
+        ar = await ProviderDatos()
+            .getInsertParticipantesIntervencionesMovilMundo(
+                widget.unidadTerritorial);
+      }
+      setState(() {
+        cargardialog = false;
+      });
+      loadPart = false;
+    }, pressno: () {
+      Navigator.pop(context);
+    },
+        texto:
+            '¿Estas seguro de eliminar los datos existentes para sincronizar nuevos participantes',
+        a: cargardialog);
+    if (ar.length > 1) {
+      loadPart = false;
+    }
   }
 
-  cargarDatosIntervenciones() async {
+  /* cargarDatosIntervenciones() async {
     var chc = await ProviderLogin().checkInternetConnection();
     if (chc == true) {
       setState(() {
@@ -222,7 +292,40 @@ class _IntervencionesState extends State<Intervenciones> {
         _isloading = false;
       });
     }
+  }*/
+
+  cargarDatosIntervenciones() async {
+    var hasInternet = await ProviderLogin().checkInternetConnection();
+    if (!hasInternet) {
+      setState(() {
+        _isloading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isloading = true;
+    });
+
+    await DatabasePr.db.eliminarProvincias();
+    var data = await DatabasePr.db.getAllTasksConfigInicio();
+    if (data[0].unidTerritoriales != null) {
+      await ProviderDatos()
+          .getInsertParticipantesIntervencionesMovil(data[0].unidTerritoriales);
+      await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
+      await ProviderDatos().getInsertPersonasFallecidas();
+      await CalcularParticipantes();
+      await cargarIntervenciones();
+      await ProviderDatos().guardarProvincia(data[0].snip);
+      setState(() {
+        _isloading = false;
+      });
+    }
+
+
   }
+
+/*
 
   cargarIntervenciones() async {
     var chc = await ProviderLogin().checkInternetConnection();
@@ -242,6 +345,36 @@ class _IntervencionesState extends State<Intervenciones> {
           setState(() {});
         }
         if (a.length > 0) {
+          await DatabasePr.db.listarInterciones();
+          _isloading = false;
+          isTab = true;
+          setState(() {});
+        }
+      }
+    } else {
+      setState(() {
+        _isloading = false;
+        isTab = true;
+      });
+    }
+  }
+
+*/
+  cargarIntervenciones() async {
+    var isConnected = await ProviderLogin().checkInternetConnection();
+    if (isConnected) {
+      setState(() => _isloading = true);
+      // await eliminarintervenciones();
+
+      var data = await DatabasePr.db.getAllTasksConfigInicio();
+      for (var i = 0; i < data.length; i++) {
+        var a = await provider.getListaTramaIntervencion(data[i].snip);
+
+        if (a.isEmpty) {
+          _isloading = false;
+          isTab = true;
+          setState(() {});
+        } else {
           await DatabasePr.db.listarInterciones();
           _isloading = false;
           isTab = true;
@@ -347,18 +480,16 @@ class _IntervencionesState extends State<Intervenciones> {
         SizedBox(
           width: 10,
         ),
-     isTab ?   InkWell(
-       child: Icon(Icons.cloud_download_sharp),
-       onTap: () async {
-         isTab = false;
-         setState(() {
-         });
-         await cargarIntervenciones();
-
-
-
-       },
-     ):new Container(),
+        isTab
+            ? InkWell(
+                child: Icon(Icons.cloud_download_sharp),
+                onTap: () async {
+                  isTab = false;
+                  setState(() {});
+                  await cargarIntervenciones();
+                },
+              )
+            : new Container(),
         SizedBox(
           width: 20,
         ),
@@ -378,7 +509,7 @@ class _IntervencionesState extends State<Intervenciones> {
     );
   }
 
-  lista(listaPersonalAux) {
+/*  lista(listaPersonalAux) {
     return Container(
       child: RefreshIndicator(
           child: ListView.builder(
@@ -421,6 +552,53 @@ class _IntervencionesState extends State<Intervenciones> {
           ),
           onRefresh: refreshList),
     );
+  }*/
+  lista(List<TramaIntervencion> listaPersonalAux) {
+    return RefreshIndicator(
+      onRefresh: refreshList,
+      child: ListView.separated(
+        itemCount: listaPersonalAux.length,
+        separatorBuilder: (context, index) => Divider(),
+        itemBuilder: (context, i) {
+          final personal = listaPersonalAux[i];
+          return Dismissible(
+            key: UniqueKey(),
+            child: listas.cardIntervenciones(
+              personal,
+              () => _navigateToEjecucionProgramacionPage(personal),
+            ),
+            background: buildSwipeActionLeft(),
+            secondaryBackground: buildSwipeActionRigth(),
+            onDismissed: (direction) {
+              // switch (direction) {
+              //   case DismissDirection.endToStart:
+              //     break;
+              //   case DismissDirection.startToEnd:
+              //     break;
+              // }
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _navigateToEjecucionProgramacionPage(
+      TramaIntervencion personal) async {
+    final respt = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EjecucionProgramacionPage(
+          idProgramacion: int.parse(personal.codigoIntervencion!),
+          descripcionEvento: personal.descripcionEvento!,
+          programa: personal.programa!,
+          tramaIntervencion: personal,
+        ),
+      ),
+    );
+    if (respt == 'ok') {
+      refreshList();
+    }
   }
 
   showAlertDialogBarra(BuildContext context,
