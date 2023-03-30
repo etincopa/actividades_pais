@@ -171,6 +171,7 @@ flutter:
     - assets/icons/
     - assets/iconos_card/
     - assets/iconos_equipos/
+    - assets/regiones/
     - assets/paislogo.png
     - assets/unidadesOrganicas.json
     - assets/unidadesTerritoriales.json

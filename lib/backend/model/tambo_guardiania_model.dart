@@ -12,6 +12,7 @@ class GuardianiaTamboFld {
   static String idGenero = 'idGenero';
   static String fechaNacimiento = 'fechaNacimiento';
   static String sexo = 'sexo';
+  static String celular = 'celular';
   static String modalidadContratoSiglas = 'modalidadContratoSiglas';
   static String tipoContrato = 'tipoContrato';
   static String fecInicioContrato = 'fecInicioContrato';
@@ -32,6 +33,7 @@ class GuardianiaTamboModel {
   String? idGenero = '';
   String? fechaNacimiento = '';
   String? sexo = '';
+  String? celular = '';
   String? modalidadContratoSiglas = '';
   String? tipoContrato = '';
   String? fecInicioContrato = '';
@@ -53,6 +55,7 @@ class GuardianiaTamboModel {
     this.idGenero,
     this.fechaNacimiento,
     this.sexo,
+    this.celular,
     this.modalidadContratoSiglas,
     this.tipoContrato,
     this.fecInicioContrato,
@@ -73,6 +76,7 @@ class GuardianiaTamboModel {
     String? idGenero,
     String? fechaNacimiento,
     String? sexo,
+    String? celular,
     String? modalidadContratoSiglas,
     String? tipoContrato,
     String? fecInicioContrato,
@@ -95,6 +99,7 @@ class GuardianiaTamboModel {
         idGenero: idGenero ?? this.idGenero,
         fechaNacimiento: fechaNacimiento ?? this.fechaNacimiento,
         sexo: sexo ?? this.sexo,
+        celular: celular ?? this.celular,
         modalidadContratoSiglas:
             modalidadContratoSiglas ?? this.modalidadContratoSiglas,
         tipoContrato: tipoContrato ?? this.tipoContrato,
@@ -121,6 +126,7 @@ class GuardianiaTamboModel {
       idGenero: _getString(json[GuardianiaTamboFld.idGenero]),
       fechaNacimiento: _getString(json[GuardianiaTamboFld.fechaNacimiento]),
       sexo: _getString(json[GuardianiaTamboFld.sexo]),
+      celular: _getString(json[GuardianiaTamboFld.celular]),
       modalidadContratoSiglas:
           _getString(json[GuardianiaTamboFld.modalidadContratoSiglas]),
       tipoContrato: _getString(json[GuardianiaTamboFld.tipoContrato]),
