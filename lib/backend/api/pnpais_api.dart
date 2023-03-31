@@ -701,21 +701,12 @@ class PnPaisApi {
     int snip,
   ) async {
     return await _http.request<List<IncidentesInternetModel>>(
-      '${basePathApp4}listadarBandejaTambosInternet',
+      '${basePathApp3}tamboIncidenciaInternet/${snip}/2023',
       method: "GET",
       parser: (data) {
-        if (data[2] is List) {
-          var incidencias = (data[2] as List)
-              .where((o) => ((o['estado'] == 'FINALIZADO' ||
-                      o['estado'] == 'EN PROCESO') &&
-                  o['snip_tambo'] == snip))
-              .toList();
-          return (incidencias as List)
-              .map((e) => IncidentesInternetModel.fromJson(e))
-              .toList();
-        }
-
-        return [];
+        return (data as List)
+            .map((e) => IncidentesInternetModel.fromJson(e))
+            .toList();
       },
     );
   }

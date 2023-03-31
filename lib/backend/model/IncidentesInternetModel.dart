@@ -1,45 +1,53 @@
 class IncidenciasField {
-  static String snip = "snip_tambo";
-  static String idIncidencia = "id_incidencia";
-  static String fechaAveria = "fec_averia";
+  static String idTambo = "idTambo";
+  static String nomTambo = "nomTambo";
+  static String snip = "snip";
+  static String idIncidencia = "idIncidencia";
+  static String fechaAveria = "fechaAveria";
+  static String diasPasados = "diasPasados";
+  static String idIncidenciaEstado = "idIncidenciaEstado";
+  static String nomEstado = "nombreEstado";
   static String ticket = "ticket";
-  static String estado = "estado";
-  static String diasPasados = "dias_pasados";
-  static String observacion = "observacion";
-  static String tipoAveria = "tipo_averia";
+  static String estadoInternet = "estadoInternet";
 }
 
 class IncidentesInternetModel {
-  int? snip;
-  int? idIncidencia;
+  String? idTambo;
+  String? nomTambo;
+  String? snip;
+  String? idIncidencia;
   String? fechaAveria;
+  String? diasPasados;
+  String? idIncidenciaEstado;
+  String? nomEstado;
   String? ticket;
-  String? estado;
-  int? diasPasados;
-  String? observacion;
-  String? tipoAveria;
+  String? estadoInternet;
 
   IncidentesInternetModel.empty() {}
 
   IncidentesInternetModel(
-      {this.snip,
+      {this.idTambo,
+      this.nomTambo,
+      this.snip,
       this.idIncidencia,
       this.fechaAveria,
-      this.ticket,
-      this.estado,
       this.diasPasados,
-      this.observacion,
-      this.tipoAveria});
+      this.idIncidenciaEstado,
+      this.nomEstado,
+      this.ticket,
+      this.estadoInternet});
 
   factory IncidentesInternetModel.fromJson(Map<String, dynamic> json) {
     return IncidentesInternetModel(
+        idTambo: json[IncidenciasField.idTambo],
+        nomTambo: json[IncidenciasField.nomTambo],
         snip: json[IncidenciasField.snip],
         idIncidencia: json[IncidenciasField.idIncidencia],
         fechaAveria: json[IncidenciasField.fechaAveria],
-        ticket: json[IncidenciasField.ticket],
-        estado: json[IncidenciasField.estado],
         diasPasados: json[IncidenciasField.diasPasados],
-        observacion: json[IncidenciasField.observacion],
-        tipoAveria: json[IncidenciasField.tipoAveria]);
+        idIncidenciaEstado: json[IncidenciasField.idIncidenciaEstado],
+        nomEstado: json[IncidenciasField.nomEstado],
+        ticket: json[IncidenciasField.ticket],
+        estadoInternet: json[IncidenciasField.estadoInternet]);
   }
 }

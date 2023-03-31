@@ -1031,7 +1031,9 @@ class _HomeTambookState extends State<HomeTambook>
                         return Column(
                           children: [
                             ListTile(
-                              title: Text(oEquipoSelect.nombres ?? ''),
+                              title: Text(
+                                oEquipoSelect.nombres ?? '',
+                              ),
                               subtitle: Text(
                                   "${tipoDescripcion} ${oEquipoSelect.descripcion ?? ''}"),
                             ),
@@ -1417,7 +1419,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "META FÍSICA:",
+                                "META FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1431,7 +1433,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "EJECUCIÓN FÍSICA :",
+                                "EJECUCIÓN FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1587,7 +1589,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "META FÍSICA:",
+                                "META FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1601,7 +1603,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "EJECUCIÓN FÍSICA :",
+                                "EJECUCIÓN FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1703,32 +1705,25 @@ class _HomeTambookState extends State<HomeTambook>
                         for (var tambos in aTambosRegion)
                           Column(
                             children: [
-                              Text(
-                                tambos.nombre ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
                               ListTile(
-                                leading: ImageIcon(
-                                  AssetImage(
-                                      "assets/regiones/${tambos.nombre}.png"),
-                                  size: 45,
-                                  color: Colors.black,
-                                ),
+                                leading: SizedBox(
+                                    height: 150.0,
+                                    child: Image.asset(
+                                        "assets/regiones/${tambos.departamentoID}.png")),
+
+                                // AssetImage("assets/regiones/AYACUCHO.png"),
+
                                 iconColor: const Color.fromARGB(255, 0, 0, 0),
                                 title: ListTile(
                                   title: Text(
-                                    "TAMBOS EN SERVICIO: ${tambos.cantidad}",
+                                    tambos.nombre ?? '',
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   subtitle: Text(
-                                    "POBLACIÓN OBJETIVO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
+                                    "TAMBOS EN SERVICIO: ${tambos.cantidad}\nPOBLACIÓN OBJETIVO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       color: Colors.black,
@@ -1740,7 +1735,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ],
                           ),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: INEI'),
+                        const Text('FUENTE: INEI - PAIS'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -1812,25 +1807,33 @@ class _HomeTambookState extends State<HomeTambook>
                                 style: const TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w700,
+                                  decoration: TextDecoration.underline,
                                 ),
                                 textAlign: TextAlign.left,
                               ),
                               ListTile(
                                 leading: ImageIcon(
                                   AssetImage(equipo!.imagen),
-                                  size: 80,
+                                  size: 120,
                                   color: Colors.black,
                                 ),
                                 iconColor: const Color.fromARGB(255, 0, 0, 0),
-                                title: ListTile(
-                                  title: Text(
-                                    "BUENO: ${formatoDecimal(equipo.bueno)}\nREGULAR: ${formatoDecimal(equipo.regular)}\nMALO: ${formatoDecimal(equipo.malo)}\nTOTAL: ${formatoDecimal(equipo.total)}",
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
+                                title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "BUENO: ${formatoDecimal(equipo.bueno)}\nREGULAR: ${formatoDecimal(equipo.regular)}\nMALO: ${formatoDecimal(equipo.malo)}",
+                                        textAlign: TextAlign.justify,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                          "TOTAL: ${formatoDecimal(equipo.total)}",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w900))
+                                    ]),
                               ),
                               const Divider(color: colorI),
                             ],
