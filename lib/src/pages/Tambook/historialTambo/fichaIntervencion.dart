@@ -25,6 +25,12 @@ class FichaIntervencion extends StatefulWidget {
 }
 
 class _FichaIntervencionState extends State<FichaIntervencion> {
+  @override
+  void initState() {
+    print("aqyiii");
+    // TODO: implement initState
+    super.initState();
+  }
   //var file = File('');
   //String porcentaje = "";
    late String pdfFilePath="";
@@ -47,8 +53,10 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
         if (totalBytes != -1) {
           porcentaje =
               (receivedBytes / totalBytes * 100).toStringAsFixed(0);
-          setState(() {});
+
         }
+
+       // setState(() {});
       },
     );
 
