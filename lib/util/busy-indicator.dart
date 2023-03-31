@@ -32,19 +32,24 @@ class FullScreenLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(124, 105, 195, 255),
-        ),
-        //color: Colors.white.withOpacity(0.9),
-        child: const Center(
-          child: CircularProgressIndicator(
-            color: Color.fromARGB(255, 0, 102, 255),
+      child: Stack(children: <Widget>[
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(124, 105, 195, 255),
           ),
-        ), // Center
-      ),
+          //color: Colors.white.withOpacity(0.9),
+          child: const Center(
+            child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 0, 102, 255),
+            ),
+          ), // Center
+        ),
+        SizedBox(
+          height: 90,
+        ),
+      ]),
       onWillPop: () async => false,
     );
   }

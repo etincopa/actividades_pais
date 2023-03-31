@@ -2278,61 +2278,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         fontSize: 20),
                                   )));
                         }
-
-                        return Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(children: [
-                              Text(
-                                incidencias[index].tipoAveria.toString(),
-                                style: const TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w500,
-                                ), //Textstyle
-                              ), //Text
-                              const SizedBox(
-                                height: 10,
-                              ), //SizedBox
-                              Text(
-                                incidencias[index].observacion.toString(),
-                                textAlign: TextAlign.justify,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ), //Textstyle
-                              ), //Text
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              Wrap(spacing: 10, children: [
-                                Chip(
-                                  label: Text(
-                                    'Fecha de averia : ${incidencias[index].fechaAveria ?? ''}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  backgroundColor: Colors.blue,
-                                ),
-                                Chip(
-                                    label: Text(
-                                      'Ticket : ${incidencias[index].ticket ?? ''}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    padding: const EdgeInsets.all(1),
-                                    backgroundColor: Colors.blue),
-                                Chip(
-                                    label: Text(
-                                      '${incidencias[index].estado ?? ''}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    padding: const EdgeInsets.all(1),
-                                    backgroundColor: Colors.blue),
-                              ]),
-
-                              const Divider(color: colorI), //SizedBox
-                            ]));
                       }
                     })
               ],

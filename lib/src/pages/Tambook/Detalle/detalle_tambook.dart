@@ -850,14 +850,14 @@ class _DetalleTambookState extends State<DetalleTambook>
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(
-      title: const Text(
+      /*title const Text(
         "¡ BIENVENIDO A",
         style: TextStyle(
           color: Colors.white,
           fontSize: 16.0,
           fontWeight: FontWeight.w700,
         ),
-      ),
+      ),*/
       automaticallyImplyLeading: true,
       expandedHeight: 200,
       floating: false,
@@ -881,7 +881,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           padding: const EdgeInsets.all(10.0),
           child: Center(
             child: Text(
-              "${widget.listTambo?.nombreTambo} !",
+              "¡ BIENVENIDO A ${widget.listTambo?.nombreTambo} !",
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
@@ -1128,7 +1128,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
-                                message: ' ACTIVIDADES PROGRAMADAS',
+                                message: ' ACTIVIDADES PROGRAMADAS APROBADAS',
                                 child: Tab(
                                   icon: ImageIcon(
                                     AssetImage('assets/calendario.png'),
@@ -1284,7 +1284,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         const SizedBox(height: 10),
                         cardDatosMantenimientoInformatico(),
                         const SizedBox(height: 10),
-                        cardDatosMantenimientoInfraestructura(),
+                        if (aPlanMantenimientoInfraestructura.isNotEmpty)
+                          cardDatosMantenimientoInfraestructura(),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -1623,11 +1624,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       title: const Text('ESTADO CIVIL'),
                                       subtitle:
                                           Text(oTambo.gestorEstadoCivil ?? ''),
-                                    ),
-                                    ListTile(
-                                      title: const Text('FECHA DE NACIMIENTO'),
-                                      subtitle: Text(
-                                          oTambo.gestorFechaNacimiento ?? ''),
                                     ),
                                     ListTile(
                                       title: const Text('EMAIL'),
@@ -1992,7 +1988,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   Text(priorizacion.nombrePriorizacion ?? ''),
                             ),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: UPS'),
+                        const Text(
+                            'FUENTE: UNIDAD DE PLATAFORMA DE SERVCIOS - PNPAIS'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2163,10 +2160,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ListTile(
                           title: const Text('SEXO'),
                           subtitle: Text(oJUT.genero!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA DE NACIMIENTO'),
-                          subtitle: Text(oJUT.fechaNacimiento ?? ''),
                         ),
                         ListTile(
                           title: const Text('CELULAR'),
@@ -2430,7 +2423,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 "${formatoDecimal(double.parse(oTambo.montoAdjudicado ?? '0'))}"),
                           ),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: BANCO DE INVERSIONES'),
+                        const Text('FUENTE: BANCO DE INVERSIONES - MEF'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2694,12 +2687,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "META FÍSICA:",
+                                "META FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalMetaTipo1.toDouble() ?? 0)}',
+                                ' ${formatoDecimal(totalMetaTipo1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2708,12 +2701,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "EJECUCIÓN FÍSICA :",
+                                "EJECUCIÓN FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalAvance1.toDouble() ?? 0)}',
+                                ' ${formatoDecimal(totalAvance1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2866,12 +2859,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "META FÍSICA:",
+                                "META FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalMetaTipo1.toDouble() ?? 0)}',
+                                ' ${formatoDecimal(totalMetaTipo1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2880,12 +2873,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "EJECUCIÓN FÍSICA :",
+                                "EJECUCIÓN FÍSICA : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                '${formatoDecimal(totalAvance1.toDouble() ?? 0)}',
+                                ' ${formatoDecimal(totalAvance1.toDouble() ?? 0)}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2993,11 +2986,24 @@ class _DetalleTambookState extends State<DetalleTambook>
                         return Padding(
                             padding: const EdgeInsets.all(1.0),
                             child: Column(children: [
-                              //
                               ListTile(
-                                title: Text(
-                                    'MANTENIMIENTO PROGRAMADO PARA EL MES DE ${obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? '')} DEL AÑO ${aPlanMantenimientoInformatico[index].anio}.'),
-                              ),
+                                  title: Text.rich(TextSpan(
+                                      text:
+                                          'MANTENIMIENTO PROGRAMADO PARA EL MES DE ',
+                                      children: [
+                                    TextSpan(
+                                        text:
+                                            "${obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? '')}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(text: " DEL AÑO "),
+                                    TextSpan(
+                                        text:
+                                            "${aPlanMantenimientoInformatico[index].anio}",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(text: ".")
+                                  ]))),
                               const ListTile(
                                 title: Text('SOPORTE DE UTI ASIGNADO : '),
                               ),
@@ -3166,24 +3172,30 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           subtitle: Text(
                                               '${aPlanMantenimientoInfraestructura[index].situacion!.toUpperCase()}'),
                                         ),
-                                        if (aPlanMantenimientoInfraestructura[
-                                                index]
-                                            .montoMantenimientoInfraestructura!
-                                            .isNotEmpty)
+                                        if ((double.tryParse(
+                                                    aPlanMantenimientoInfraestructura[
+                                                                index]
+                                                            .montoMantenimientoInfraestructura ??
+                                                        '0') ??
+                                                0) !=
+                                            0)
                                           ListTile(
                                             title: const Text(
                                                 'MANTENIMIENTO DE INFRAESTRUCTURA'),
                                             subtitle: Text(
                                                 "S/.  ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].montoMantenimientoInfraestructura ?? '0').roundToDouble())}"),
                                           ),
-                                        if (aPlanMantenimientoInfraestructura[
-                                                index]
-                                            .pozoTierra!
-                                            .isNotEmpty)
+                                        if ((double.tryParse(
+                                                    aPlanMantenimientoInfraestructura[
+                                                                index]
+                                                            .pozoTierra ??
+                                                        '0') ??
+                                                0) !=
+                                            0)
                                           ListTile(
                                             title: const Text('POZO A TIERRA'),
                                             subtitle: Text(
-                                                "S/. ${formatoDecimal(double.parse(aPlanMantenimientoInfraestructura[index].pozoTierra ?? '0').roundToDouble())}"),
+                                                "S/. ${formatoDecimal(double.tryParse(aPlanMantenimientoInfraestructura[index].pozoTierra ?? '0') ?? 0.roundToDouble())}"),
                                           ),
                                         /*ListTile(
                                           title:
@@ -3431,7 +3443,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('ESTADO INTERNET'),
-                          subtitle: Text(oSrvInter.estadoInternet!),
+                          subtitle: (oSrvInter.estadoInternet! == 'INOPERATIVO')
+                              ? Text(
+                                  "${oSrvInter.estadoInternet!}\n(${(incidencias.isNotEmpty) ? incidencias![0].fechaAveria : ''})",
+                                  style: const TextStyle(color: Colors.red),
+                                )
+                              : Text(oSrvInter.estadoInternet!,
+                                  style: const TextStyle(color: Colors.green)),
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD BAJADA'),
@@ -3632,60 +3650,29 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   )));
                         }
 
-                        return Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(children: [
-                              Text(
-                                incidencias[index].tipoAveria.toString(),
-                                style: const TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w500,
-                                ), //Textstyle
-                              ), //Text
-                              const SizedBox(
-                                height: 10,
-                              ), //SizedBox
-                              Text(
-                                incidencias[index].observacion.toString(),
-                                textAlign: TextAlign.justify,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ), //Textstyle
-                              ), //Text
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              Wrap(spacing: 10, children: [
-                                Chip(
-                                  label: Text(
-                                    'Fecha de averia : ${incidencias[index].fechaAveria ?? ''}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  backgroundColor: Colors.blue,
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: ListTile(
+                                title: Text(
+                                  "N° TICKET : ${incidencias[index].ticket ?? ''}",
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Chip(
-                                    label: Text(
-                                      'Ticket : ${incidencias[index].ticket ?? ''}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    padding: const EdgeInsets.all(1),
-                                    backgroundColor: Colors.blue),
-                                Chip(
-                                    label: Text(
-                                      '${incidencias[index].estado ?? ''}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    padding: const EdgeInsets.all(1),
-                                    backgroundColor: Colors.blue),
-                              ]),
-
-                              const Divider(color: colorI), //SizedBox
-                            ]));
+                                subtitle: Text(
+                                  "FECHA DE AVERÍA: ${incidencias[index].fechaAveria ?? ''}\nDÍAS SIN INTERNET: ${incidencias[index].diasPasados ?? ''}\nESTADO: ${incidencias[index].nomEstado ?? ''}",
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Divider(color: colorI),
+                          ],
+                        );
                       }
                     })
               ],
@@ -4380,7 +4367,7 @@ class _DetalleTambookState extends State<DetalleTambook>
  * -----------------------------------------------
  */
   Padding cardActividadProgramada() {
-    var heading = 'ACTIVIDADES PROGRAMADAS';
+    var heading = 'ACTIVIDADES PROGRAMADAS APROBADAS';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -4467,13 +4454,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                                 Row(
                                   children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(right: 8.0),
-                                      child: Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                      ),
-                                    ),
                                     Chip(
                                       label: Text(
                                         'Fecha : ${aAvance[index].fecha ?? ''}',
