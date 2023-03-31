@@ -3642,7 +3642,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   padding:
                                       const EdgeInsets.fromLTRB(20, 20, 20, 20),
                                   child: const Text(
-                                    'No existe incidencias',
+                                    'NO EXISTE INCIDENCIAS',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -3662,7 +3662,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
-                                  "FECHA DE AVERÍA: ${incidencias[index].fechaAveria ?? ''}\nDÍAS SIN INTERNET: ${incidencias[index].diasPasados ?? ''}\nESTADO: ${incidencias[index].nomEstado ?? ''}",
+                                  "FECHA DE AVERÍA: ${incidencias[index].fechaAveria ?? ''}\nDÍAS SIN INTERNET: ${incidencias[index].diasPasados ?? ''}\nFECHA DE CIERRE: ${incidencias[index].fechaCierre ?? ''}\nESTADO: ${incidencias[index].nomEstado ?? ''}",
                                   textAlign: TextAlign.justify,
                                   style: const TextStyle(
                                     color: Colors.black,
@@ -4428,7 +4428,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 20, 20, 20),
                                 child: const Text(
-                                  'No existe actividades',
+                                  'NO EXISTE ACTIVIDADES',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,

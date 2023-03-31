@@ -10,6 +10,8 @@ import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
+import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
+import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -721,6 +723,30 @@ class MainRepo {
   Future<List<AvanceMetasModel>> getAvanceMetasMensualizada(String anio) async {
     List<AvanceMetasModel> aResp = [];
     final response = await _pnPaisApi.getAvanceMetasMensualizada(anio);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<IndicadorInternetModel>> getIndicadorInternet(
+      String idTipo) async {
+    List<IndicadorInternetModel> aResp = [];
+    final response = await _pnPaisApi.getIndicadorInternet(idTipo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<IndicadorCategorizacionModel>> getIndicadorCategorizacion(
+      String idTipo) async {
+    List<IndicadorCategorizacionModel> aResp = [];
+    final response = await _pnPaisApi.getIndicadorCategorizacion(idTipo);
     if (response.error == null) {
       aResp = response.data!;
     } else {
