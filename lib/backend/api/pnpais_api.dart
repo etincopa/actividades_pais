@@ -12,6 +12,8 @@ import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
+import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
+import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -512,6 +514,32 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => AvanceMetasModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<IndicadorInternetModel>>> getIndicadorInternet(
+      String itTipo) async {
+    return await _http.request<List<IndicadorInternetModel>>(
+      '${basePathApp3}obtenerTambosTipoProveedorInternet/${itTipo}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => IndicadorInternetModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<IndicadorCategorizacionModel>>>
+      getIndicadorCategorizacion(String itTipo) async {
+    return await _http.request<List<IndicadorCategorizacionModel>>(
+      '${basePathApp3}obtenerTambosTipoCategorizacion/${itTipo}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => IndicadorCategorizacionModel.fromJson(e))
+            .toList();
       },
     );
   }

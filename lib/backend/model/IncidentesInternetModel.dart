@@ -9,6 +9,7 @@ class IncidenciasField {
   static String nomEstado = "nombreEstado";
   static String ticket = "ticket";
   static String estadoInternet = "estadoInternet";
+  static String fechaCierre = "fechaCierre";
 }
 
 class IncidentesInternetModel {
@@ -22,6 +23,7 @@ class IncidentesInternetModel {
   String? nomEstado;
   String? ticket;
   String? estadoInternet;
+  String? fechaCierre;
 
   IncidentesInternetModel.empty() {}
 
@@ -35,7 +37,8 @@ class IncidentesInternetModel {
       this.idIncidenciaEstado,
       this.nomEstado,
       this.ticket,
-      this.estadoInternet});
+      this.estadoInternet,
+      this.fechaCierre});
 
   factory IncidentesInternetModel.fromJson(Map<String, dynamic> json) {
     return IncidentesInternetModel(
@@ -44,6 +47,7 @@ class IncidentesInternetModel {
         snip: json[IncidenciasField.snip],
         idIncidencia: json[IncidenciasField.idIncidencia],
         fechaAveria: json[IncidenciasField.fechaAveria],
+        fechaCierre: json[IncidenciasField.fechaCierre],
         diasPasados: json[IncidenciasField.diasPasados],
         idIncidenciaEstado: json[IncidenciasField.idIncidenciaEstado],
         nomEstado: json[IncidenciasField.nomEstado],

@@ -13,6 +13,8 @@ import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
+import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
+import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
@@ -1007,6 +1009,20 @@ class MainController extends GetxController {
   Future<List<AvanceMetasModel>> getAvanceMetasMensualizada(String anio) async {
     List<AvanceMetasModel> aResp =
         await Get.find<MainService>().getAvanceMetasMensualizada(anio);
+    return aResp;
+  }
+
+  Future<List<IndicadorInternetModel>> getIndicadorInternet(
+      String idTipo) async {
+    List<IndicadorInternetModel> aResp =
+        await Get.find<MainService>().getIndicadorInternet(idTipo);
+    return aResp;
+  }
+
+  Future<List<IndicadorCategorizacionModel>> getIndicadorCategorizacion(
+      String idTipo) async {
+    List<IndicadorCategorizacionModel> aResp =
+        await Get.find<MainService>().getIndicadorCategorizacion(idTipo);
     return aResp;
   }
 

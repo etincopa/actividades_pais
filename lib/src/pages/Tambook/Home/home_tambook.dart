@@ -3,6 +3,8 @@ import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiari
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
+import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
+import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
@@ -61,12 +63,16 @@ class _HomeTambookState extends State<HomeTambook>
 
   late List<EquiposInformaticosResumen> aequiposResumen = [];
 
+  List<IndicadorInternetModel> aIndicadorInternet = [];
+  List<IndicadorCategorizacionModel> aIndicadorCategorizacion = [];
+
   String sCurrentYear = DateTime.now().year.toString();
 
   List<EquipamientoInformaticoModel> aEquipos = [];
   List<HomeOptions> aEquipoInformatico = [];
   List<HomeOptions> aPersonalTambo = [];
   List<HomeOptions> aPlataforma = [];
+
   List<ChartData> chartData = [
     ChartData('PRESTA SERVICIO', 0, colorI),
     ChartData('NO PRESTA SERVICIO', 0, colorS),
@@ -98,6 +104,8 @@ class _HomeTambookState extends State<HomeTambook>
     buildPersonalTambo();
     getCantidadTambosPIAS();
     buildData();
+    obtenerIndicadorInternet();
+    obtenerIndicadorCategorizacion();
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
     getProgIntervencionTambo();
@@ -430,6 +438,14 @@ class _HomeTambookState extends State<HomeTambook>
     aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
   }
 
+  Future<void> obtenerIndicadorInternet() async {
+    aIndicadorInternet = await mainCtr.getIndicadorInternet("0");
+  }
+
+  Future<void> obtenerIndicadorCategorizacion() async {
+    aIndicadorCategorizacion = await mainCtr.getIndicadorCategorizacion("0");
+  }
+
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = Responsive.of(context);
@@ -456,7 +472,7 @@ class _HomeTambookState extends State<HomeTambook>
     );*/
 
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         backgroundColor: color_10o15,
         body: NestedScrollView(
@@ -582,6 +598,12 @@ class _HomeTambookState extends State<HomeTambook>
                         tabs: [
                           Tab(
                             icon: ImageIcon(
+                              AssetImage('assets/indicadores.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
                               AssetImage('assets/logros.png'),
                               size: 60,
                             ),
@@ -614,6 +636,16 @@ class _HomeTambookState extends State<HomeTambook>
           },
           body: TabBarView(
             children: <Widget>[
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardIndicadorInternet(),
+                  const SizedBox(height: 15),
+                  cardIndicadorCategorizacion(),
+                ],
+              )),
               SingleChildScrollView(
                   child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -1305,6 +1337,202 @@ class _HomeTambookState extends State<HomeTambook>
                 }
               },
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardIndicadorInternet() {
+    var heading = 'PROVEEDOR DE INTERNET $sCurrentYear';
+
+    final List<ChartDataAvanceIndicador> chartDataIndicador = [];
+
+    for (var indicador in aIndicadorInternet) {
+      chartDataIndicador.add(ChartDataAvanceIndicador(
+        indicador.nomOperadorInternet!,
+        int.parse(indicador.numAsignados!.toString()),
+      ));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading2
+                      ? Center(
+                          child: SfCircularChart(
+                              legend: Legend(
+                                  isVisible: true,
+                                  position: LegendPosition.bottom,
+                                  overflowMode: LegendItemOverflowMode.wrap),
+                              series: <CircularSeries>[
+                              PieSeries<ChartDataAvanceIndicador, String>(
+                                  dataSource: chartDataIndicador,
+                                  xValueMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.x,
+                                  yValueMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.y,
+                                  dataLabelSettings: const DataLabelSettings(
+                                      // Renders the data label
+                                      isVisible: true,
+                                      labelPosition:
+                                          ChartDataLabelPosition.outside,
+                                      textStyle: TextStyle(fontSize: 20)))
+                            ]))
+                      : const Center(child: CircularProgressIndicator()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardIndicadorCategorizacion() {
+    var heading = 'CATEGORIZACIÓN $sCurrentYear';
+
+    final List<ChartDataAvanceIndicador> chartDataIndicador = [];
+
+    for (var indicador in aIndicadorCategorizacion) {
+      chartDataIndicador.add(ChartDataAvanceIndicador(
+        indicador.nomPriorizacion!,
+        int.parse(indicador.numAsignados!.toString()),
+      ));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading2
+                      ? Center(
+                          child: SfCartesianChart(
+                              primaryXAxis: CategoryAxis(
+                                maximumLabelWidth: 100,
+                              ),
+                              primaryYAxis: NumericAxis(
+                                edgeLabelPlacement: EdgeLabelPlacement.shift,
+                                numberFormat: NumberFormat.decimalPattern(),
+                              ),
+                              series: <ChartSeries>[
+                              // Renders bar chart
+                              BarSeries<ChartDataAvanceIndicador, String>(
+                                  dataSource: chartDataIndicador,
+                                  xValueMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.x,
+                                  yValueMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.y,
+                                  dataLabelSettings: const DataLabelSettings(
+                                      // Renders the data label
+                                      isVisible: true,
+                                      labelPosition:
+                                          ChartDataLabelPosition.outside,
+                                      textStyle: TextStyle(fontSize: 17)))
+                            ]))
+                      : const Center(child: CircularProgressIndicator()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -3661,6 +3889,13 @@ class ChartDataAvance {
   final String x;
   final double? y;
   final double? y1;
+}
+
+class ChartDataAvanceIndicador {
+  ChartDataAvanceIndicador(this.x, this.y, [this.color]);
+  final String x;
+  final int y;
+  final Color? color;
 }
 
 class ResumenParqueDataSource extends DataGridSource {
