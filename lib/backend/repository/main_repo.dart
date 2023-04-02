@@ -37,6 +37,7 @@ import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
 import 'package:actividades_pais/backend/model/tambo_model.dart';
+import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
@@ -570,6 +571,21 @@ class MainRepo {
     List<UnidadTerritorialModel> aResp = [];
     final response = await _pnPaisApi.getUnidadTerritorial(
       ut,
+    );
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<SinIntervencionModel>> getSinIntervencion(
+    String? sOpcion,
+  ) async {
+    List<SinIntervencionModel> aResp = [];
+    final response = await _pnPaisApi.getSinIntervencion(
+      sOpcion,
     );
     if (response.error == null) {
       aResp = response.data!;

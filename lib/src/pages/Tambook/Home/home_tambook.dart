@@ -12,6 +12,7 @@ import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
+import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -51,6 +52,7 @@ class _HomeTambookState extends State<HomeTambook>
   late String numTambos = "";
   late String banerTambosPias = "---                 ----                ---";
 
+  TamboPias oTamboPias = TamboPias.empty();
   late ResumenParqueDataSource _resumenParqueInformatico;
 
   List<ProgIntervencionTamboModel> aAvance = [];
@@ -60,6 +62,7 @@ class _HomeTambookState extends State<HomeTambook>
   List<AtencionesModel> aAtencionResumen = [];
   List<AvanceMetasModel> aMetasMensualizada = [];
   late List<CantidadTamboRegion> aTambosRegion = [];
+  List<SinIntervencionModel> aSinIntervencion = [];
 
   late List<EquiposInformaticosResumen> aequiposResumen = [];
 
@@ -169,8 +172,14 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> getCantidadTambosPIAS() async {
     List<TamboPias> aTamboPias = await mainCtr.getCantidadTambosPIAS();
-    TamboPias oTamboPias = aTamboPias[0];
+    oTamboPias = aTamboPias[0];
     banerTambosPias = '${oTamboPias.tambos} TAMBOS OPERANDO';
+
+    /**
+     * Obtener tambos sin intervenciones
+     * */
+
+    aSinIntervencion = await mainCtr.SinIntervencion('ANIO');
   }
 
   Future<void> getTambosRegion() async {
@@ -644,6 +653,10 @@ class _HomeTambookState extends State<HomeTambook>
                   cardIndicadorInternet(),
                   const SizedBox(height: 15),
                   cardIndicadorCategorizacion(),
+                  const SizedBox(height: 15),
+                  cardTambosSinIntervencion(),
+                  const SizedBox(height: 15),
+                  cardTambosSinIntervencionDet(),
                 ],
               )),
               SingleChildScrollView(
@@ -1539,6 +1552,234 @@ class _HomeTambookState extends State<HomeTambook>
     );
   }
 
+  Padding cardTambosSinIntervencion() {
+    var heading = 'TAMBOS SIN INTERVENCIONES $sCurrentYear';
+
+    final List<ChartDataAvance> chartData1 = [];
+
+    int totalTamboSinIter = 0;
+    int totalTambo = int.parse(oTamboPias.tambos!);
+
+    if (aSinIntervencion.isNotEmpty) {
+      totalTamboSinIter = aSinIntervencion.length;
+    }
+
+    double totalPorcen1 = double.parse(((totalTamboSinIter / totalTambo) * 100)
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'\.?0*$'), ''));
+
+    late ValueNotifier<double> valueNotifier =
+        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading2
+                      ? Center(
+                          child: SimpleCircularProgressBar(
+                            size: 150,
+                            maxValue: 100,
+                            valueNotifier: valueNotifier,
+                            backColor: Colors.black.withOpacity(0.4),
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 10,
+                            mergeMode: true,
+                            onGetText: (double value) {
+                              return Text(
+                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : const CircularProgressIndicator(),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: [
+                            TableRow(children: [
+                              const Text(
+                                "TAMBOS TOTAL : ",
+                                style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
+                              ),
+                              Text(
+                                formatoDecimal(totalTambo),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              const Text(
+                                "INTERVECION TOTAL : ",
+                                style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
+                              ),
+                              Text(
+                                formatoDecimal(totalTamboSinIter),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ]),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardTambosSinIntervencionDet() {
+    var heading = 'LISTA TAMBOS SIN INTERVENCIONES $sCurrentYear';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -1),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var oItem in aSinIntervencion)
+                          Column(
+                            children: [
+                              ListTile(
+                                iconColor: const Color.fromARGB(255, 0, 0, 0),
+                                title: ListTile(
+                                  title: Text(
+                                    oItem.nomTambo ?? '',
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: INEI - PAIS'),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Padding cardAtenciones() {
     int totalAvance1 = 0;
     if (aAtenInterBene.isNotEmpty) {
@@ -2167,7 +2408,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding avanceMetas() {
-    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE LAS ATENCIONES 2023';
+    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE LAS ATENCIONES $sCurrentYear';
 
     final List<ChartDataAvance> chartData1 = [];
 
@@ -2274,7 +2515,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding avanceMetasUsuarios() {
-    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE USUARIOS - 2023';
+    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE USUARIOS - $sCurrentYear';
 
     final List<ChartDataAvance> chartData1 = [];
 
