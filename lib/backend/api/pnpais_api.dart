@@ -363,7 +363,7 @@ class PnPaisApi {
     String? sOpcion,
   ) async {
     return await _http.request<List<SinIntervencionModel>>(
-      '${basePathApp3}obtenerTambosNoIntervenciones$sOpcion',
+      '${basePathApp3}obtenerTambosNoIntervenciones/$sOpcion',
       method: "GET",
       parser: (data) {
         return (data as List)
