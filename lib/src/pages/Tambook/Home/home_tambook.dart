@@ -1741,35 +1741,32 @@ class _HomeTambookState extends State<HomeTambook>
               ),
               children: <Widget>[
                 const Divider(color: colorI),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (var oItem in aSinIntervencion)
-                          Column(
-                            children: [
-                              ListTile(
-                                iconColor: const Color.fromARGB(255, 0, 0, 0),
-                                title: ListTile(
-                                  title: Text(
-                                    oItem.nomTambo ?? '',
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var oItem in aSinIntervencion)
+                        Column(
+                          children: [
+                            ListTile(
+                              iconColor: const Color.fromARGB(255, 0, 0, 0),
+                              title: ListTile(
+                                title: Text(
+                                  oItem.nomTambo ?? '',
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              const Divider(color: colorI),
-                            ],
-                          ),
-                        const SizedBox(height: 10),
-                        const Text('FUENTE: INEI - PAIS'),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
+                            ),
+                            const Divider(color: colorI),
+                          ],
+                        ),
+                      const SizedBox(height: 10),
+                      const Text('FUENTE: INEI - PAIS'),
+                      const SizedBox(height: 10),
+                    ],
                   ),
                 ),
               ],
