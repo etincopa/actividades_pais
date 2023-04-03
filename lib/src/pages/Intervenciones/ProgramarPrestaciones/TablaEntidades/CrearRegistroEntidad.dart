@@ -1,12 +1,16 @@
 import 'package:actividades_pais/src/Utils/utils.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListaTipoGobierno.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
+import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/TablaEntidades/AgregarEntidad.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CrearRegistroEntidad extends StatefulWidget {
-  const CrearRegistroEntidad({Key? key}) : super(key: key);
+ // const CrearRegistroEntidad(bool ismostar, {Key? key}) : super(key: key);
+  bool ismostar=false;
+  CrearRegistroEntidad( this.ismostar);
 
   @override
   State<CrearRegistroEntidad> createState() => _CrearRegistroEntidadState();
@@ -17,44 +21,48 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
   void initState() {
     // TODO: implement initState
     cargarComboInicial();
+    cargarTabla();
+
     super.initState();
   }
+
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
-  //final _providerGuias = new ProviderProcesarGuias();
-  //List<DetalleRenCuenModel> list = [];
   double datoss = 0.0;
   bool activoBoton = false;
 
-  List<TipoGobierno> tipoGobierno=[];
-
- // String? _valueTipoUser = _itemTipoUser[0];
-
-  Future refreshList() async {
-    await Future.delayed(const Duration(seconds: 2));
-    //var a = await DatabaseDRC.db.getDtaGRC();
-   // setState(() {
-      traertota();
-
-      ///print(a);
-      ///list = a;
-   // });
-  }
-
+  List<TipoGobierno> tipoGobierno = [];
+  List<DataRow> dataRows = [];
+  bool _isActivo = true;
+  bool _ismostar= false;
   Future traertota() async {
     await Future.delayed(const Duration(seconds: 10));
     // var a = await DatabaseDRC.db.traersumatotal();
-
   }
 
-  cargarComboInicial()async{
+  cargarComboInicial() async {
     tipoGobierno = await ProviderRegistarInterv().getlistaTipoGobierno();
   }
+
+  cargarTabla() async {
+    setState(() {
+      dataRows = [];
+    });
+    var dataTable = await DatabasePr.db.ListarEntidadesReg();
+    if (dataTable.isNotEmpty) {
+      _isActivo = false;
+    } else {
+      _isActivo = true;
+    }
+    for (int i = 0; i < dataTable.length; i++) {
+      _dataRow(dataTable[i]);
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      refreshList();
-    });
     return Column(
       children: [
         Row(
@@ -64,25 +72,25 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
               "REGISTRO DE ENTIDADES:",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            IconButton(
-              icon: const Icon(Icons.add_circle_outline),
-              color: const Color.fromARGB(255, 69, 90, 210),
-              onPressed: () async {
+            _isActivo
+                ? IconButton(
+                    icon: const Icon(Icons.add_circle_outline),
+                    color: const Color.fromARGB(255, 69, 90, 210),
+                    onPressed: () async {
+                      var resp = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AgregarEntidad( widget.ismostar),
+                        ),
+                      );
+                      if (resp == 'OK') {
+                        cargarTabla();
+                      }
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AgregarEntidad(),
-                  ),
-                );
-             /*   await utils().showMyDialog(
-                  context,
-                  "AGREGAR ENTIDAD",wFormulario: regitroEntidades(),activo: activoBoton
-                );*/
-              },
-              // color: Colors.pink,
-            ),
+                    },
+                    // color: Colors.pink,
+                  )
+                : Container(),
           ],
         ),
         SingleChildScrollView(
@@ -90,96 +98,109 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              sortColumnIndex: 2,
-              sortAscending: true,
-              headingRowColor: MaterialStateProperty.all(Colors.green[100]),
-              columnSpacing: 40,
-              decoration: const BoxDecoration(
-                border: Border(
-                  right: BorderSide(
-                    color: Colors.grey,
-                    width: 0.5,
+                sortColumnIndex: 2,
+                sortAscending: true,
+                headingRowColor: MaterialStateProperty.all(Colors.green[100]),
+                columnSpacing: 40,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      color: Colors.grey,
+                      width: 0.5,
+                    ),
                   ),
                 ),
-              ),
-              columns: [
-                DataColumn(
-                    label: Container(
-                  width: 70,
-                  child: const Text('Usuario',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                )),
-                const DataColumn(
-                    label: Text('Sector',
+                columns: [
+                  DataColumn(
+                      label: Container(
+                    width: 70,
+                    child: const Text('Usuario',
                         style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold))),
-                const DataColumn(
-                    label: Text('Programa',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold))),
-                const DataColumn(
-                    label: Text('Categoria',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold))),
-                const DataColumn(
-                    label: Text('Sub Categoria',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold))),
-                const DataColumn(
-                    label: Text('Actividad',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold))),
-                const DataColumn(
-                    label: Text('Servicio',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold))),
-              ],
-              rows: [
-                /*     //_providerAsignacion.getSqlGuiaRem();
-                if (list = null)
-                  for (var i = 0; i < list.length; i++)
-                    DataRow(
+                            fontSize: 12, fontWeight: FontWeight.bold)),
+                  )),
+                  const DataColumn(
+                      label: Text('Sector',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                  const DataColumn(
+                      label: Text('Programa',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                  const DataColumn(
+                      label: Text('Categoria',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                  const DataColumn(
+                      label: Text('Sub Categoria',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                  const DataColumn(
+                      label: Text('Actividad',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                  const DataColumn(
+                      label: Text('Servicio',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                  const DataColumn(
+                      label: Text('Accion',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold))),
+                ],
+                rows: dataRows),
+          ),
+        ),
+      ],
+    );
+  }
 
-                      //selected: true,
-                        cells: [
-                          DataCell(
-                            Text(
-                              '${list[i].fecha}',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            // placeholder: true,
-                            //  showEditIcon: true)
-                          ),
-                          DataCell(Container(
-                            child: Text(
-                              '${list[i].proveedor}',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            width: 50,
-                          )),
-                          DataCell(Text(
-                            '${list[i].ndocumento}',
-                            style: TextStyle(fontSize: 10),
-                          )),
-                          DataCell(Text(
-                            '${list[i].concepto}',
-                            style: TextStyle(fontSize: 10),
-                          )),
-                          DataCell(Text(
-                            '${list[i].monto}',
-                            style: TextStyle(fontSize: 10),
-                          )),
-                          DataCell(Row(
-                            children: [
-                              accionesE(i),
-                              SizedBox(width: 10.0),
-                              accionesEl(list[i].id)
-                            ],
-                          )),
-                        ]),*/
-              ],
-            ),
+  _dataRow(Accion data) {
+    dataRows.add(
+      DataRow(
+        //  key: ValueKey(data.id),
+        cells: [
+          DataCell(Text(data.usuario!)),
+          DataCell(Text("${data.sector!}")),
+          DataCell(Text(data.programa!)),
+          DataCell(Text("${data.categoria!}")),
+          DataCell(Text(data.subcategoria!)),
+          DataCell(Text(data.actividad!)),
+          DataCell(Text(data.servicio!), onTap: () {
+          }),
+          DataCell(
+            accionesEl(data.id),
+
+          ),
+        ],
+      ),
+    );
+  }
+
+  alertDialog(BuildContext context, i) {
+    AlertDialog(
+      title: const Text('Eliminar'),
+      content: const Text('Desea Eliminar esta Guia'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              InkWell(
+                onTap: () async {
+                  await DatabasePr.db.eliminarPoridAccion(i);
+                  Navigator.pop(context);
+                  await cargarTabla();
+                },
+                child: const Text('Si'),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('No'),
+              )
+            ],
           ),
         ),
       ],
@@ -188,21 +209,23 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
 
   accionesEl(i) {
     return Material(
+
         elevation: 1.0,
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(50.0),
         color: Colors.red,
-        child: Container(
+        child: SizedBox(
           height: 20.0,
           width: 20.0,
           child: MaterialButton(
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+
             onPressed: () async {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Eliminar'),
-                  content: const Text('Desea Eliminar esta Guia'),
+                  content: const Text('Desea Eliminar esta Informacion'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {},
@@ -210,11 +233,10 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           InkWell(
-                            onTap: () {
-                              print(i);
-                              // DatabaseDRC.db.eliminarPorid(i);
-                              refreshList();
+                            onTap: () async {
+                              await DatabasePr.db.eliminarPoridAccion(i);
                               Navigator.pop(context);
+                              await cargarTabla();
                             },
                             child: const Text('Si'),
                           ),
@@ -231,90 +253,27 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
                 ),
               );
             },
-            child: const Text(
-              "Eliminar",
-              textAlign: TextAlign.center,
-              //    style:_providerGuias.style.copyWith(
-              //                     color: Colors.white, fontWeight: FontWeight.bold)
-            ),
+            /*child: Icon(
+              Icons.delete,
+              color: Color.fromARGB(255, 230, 51, 35),
+            ),*/
           ),
         ));
   }
 
-  Future<void> _showMyDialog(BuildContext context, String? title) async {
-    return showDialog<void>(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(title!), GestureDetector(
-                child: Icon(Icons.close),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-          content: Form(
-            // key: _formKey1,
-            child: Card(
-              color: Colors.transparent,
-              elevation: 0.0,
-          //    child: regitroEntidades(),
-            ),
-          ),
-          actions: [
-            Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                    ),
-                    child: const Text("Cancelar"),
-                  ),
-                  const Padding(padding: EdgeInsets.all(10)),
-                  ElevatedButton(
-                    onPressed: () async {},
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 26, 155, 86)),
-                    ),
-                    child: const Text("Agregar"),
-                  ),
-                ],
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-
-
   comboSeleccionar({String? labelTexts, items, onchanged}) {
     return DropdownButtonFormField<Object>(
-      decoration:   InputDecoration(
-        isCollapsed: false,
-        labelText: labelTexts,
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
+        decoration: InputDecoration(
+          isCollapsed: false,
+          labelText: labelTexts,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          border: const UnderlineInputBorder(),
         ),
-        border: const UnderlineInputBorder(),
-      ),
-      isExpanded: true,
-      items: items,
-      onChanged: onchanged
-    );
+        isExpanded: true,
+        items: items,
+        onChanged: onchanged);
   }
 
   accionesE(int i) {
@@ -329,7 +288,6 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             onPressed: () async {
-              print(i);
               /*  Navigator.push(
                 context,
                 MaterialPageRoute(

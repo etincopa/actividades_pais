@@ -1,33 +1,33 @@
-class ListarEntidadFuncionarios {
-  List<ListarEntidadFuncionario> items = [];
+class ListarEntidad {
+  List<Entidad> items = [];
 
-  ListarEntidadFuncionarios();
+  ListarEntidad();
 
-  ListarEntidadFuncionarios.fromJsonList(List<dynamic> jsonList) {
+  ListarEntidad.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
       final _listarasistenciaActual =
-          new ListarEntidadFuncionario.fromJson(item);
+      new Entidad.fromJson(item);
       items.add(_listarasistenciaActual);
     }
   }
 }
 
-class ListarEntidadFuncionario {
+class Entidad {
   int id = 0;
   int id_accion_programacion = 0;
   int id_tipo_actividad = 0;
   String nombre_tipo_actividad = '';
-  int id_entidad = 0;
+  String id_entidad = '';
   String nombre_programa = '';
   int id_programacion = 0;
 
-  ListarEntidadFuncionario({
+  Entidad({
     this.id = 0,
     this.id_accion_programacion = 0,
     this.id_tipo_actividad = 0,
     this.nombre_tipo_actividad = '',
-    this.id_entidad = 0,
+    this.id_entidad = '',
     this.nombre_programa = '',
     this.id_programacion =0,
   });
@@ -43,19 +43,19 @@ class ListarEntidadFuncionario {
     };
   }
 
-  factory ListarEntidadFuncionario.fromJson(Map<String, dynamic> parsedJson) =>
-      new ListarEntidadFuncionario(
+  factory Entidad.fromJson(Map<String, dynamic> parsedJson) =>
+      new Entidad(
 
         //id: parsedJson['id'],
         id_accion_programacion: parsedJson['id_accion_programacion'],
         id_tipo_actividad: parsedJson['id_tipo_actividad'],
         nombre_tipo_actividad: parsedJson['nombre_tipo_actividad'],
-        id_entidad: parsedJson['id_entidad']??0,
+        id_entidad: parsedJson['id_entidad']??'',
         nombre_programa: parsedJson['nombre_programa'],
         id_programacion: parsedJson['id_programacion'],
       );
 
-  ListarEntidadFuncionario.fromMap(Map<String, dynamic> map) {
+  Entidad.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     id_accion_programacion = map['id_accion_programacion'];
     id_tipo_actividad = map['id_tipo_actividad'];

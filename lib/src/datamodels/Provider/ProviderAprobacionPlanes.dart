@@ -5,6 +5,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroDato
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/HistorialObservaciones.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
+import 'package:actividades_pais/src/datamodels/Clases/TipoDocumentoAcredita.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:http/http.dart' as http;
 import 'package:actividades_pais/util/app-config.dart';
@@ -202,5 +203,4 @@ class ProviderAprobacionPlanes {
     return List.empty();
   }
 
-//https://www.pais.gob.pe/backendsismonitor/public
 }

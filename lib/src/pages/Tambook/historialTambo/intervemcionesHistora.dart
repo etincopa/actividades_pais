@@ -6,6 +6,7 @@ import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervenc
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class intervencionesHistoria extends StatefulWidget {
   const intervencionesHistoria({Key? key}) : super(key: key);
@@ -94,13 +95,19 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                                   listas.cardHistrialTambosInter(
                                 listaPersonalAux[i],
                                 () async {
+                                  var status = await Permission.storage.status;
+                                  if (status != PermissionStatus.granted) {
+                                    status = await Permission.storage.request();
+                                    setState(() {});
+                                  }
                                   await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               FichaIntervencion(
                                                   listaPersonalAux[i]
-                                                      .idProgramacion!)));
+                                                      .idProgramacion!, listaPersonalAux[i]
+                                                  .fecha!)));
                                 },
                               ),
                             ))),

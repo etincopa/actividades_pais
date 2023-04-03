@@ -4,8 +4,8 @@ class TamboPiasFld {
 }
 
 class TamboPias {
-  String? tambos;
-  String? pias;
+  String? tambos = '0';
+  String? pias = '0';
 
   TamboPias.empty() {}
 

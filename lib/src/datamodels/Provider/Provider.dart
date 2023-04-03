@@ -567,13 +567,14 @@ class ProviderDatos {
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listarEntidadesFuncionarios/$idProgramacion'),
     );
-
+    print(response.body);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
           new ListarEntidadFuncionarios.fromJsonList(jsonResponse["response"]);
 
       for (var i = 0; i < listadostraba.items.length; i++) {
+
         final rspt = ListarEntidadFuncionario(
           id_accion_programacion: listadostraba.items[i].id_accion_programacion,
           id_entidad: listadostraba.items[i].id_entidad,
@@ -595,6 +596,8 @@ class ProviderDatos {
   // ignore: non_constant_identifier_names
   Future<List<ParticipanteEjecucion>> participanteEjecucion(
       idProgramacion, idEntidad) async {
+    print( Uri.parse(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/app/participanteEjecucion/$idProgramacion/$idEntidad'));
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/participanteEjecucion/$idProgramacion/$idEntidad'),

@@ -1,3 +1,5 @@
+import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
+import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -85,16 +87,16 @@ class utils {
   }
 
   showMyDialog(BuildContext context, String? title,
-      {Widget? wFormulario, onPressed, activo}) async {
+      {Widget? wFormulario, onPressed1,onPressed2, texto1, texto2}) async {
     return showDialog<void>(
       context: context,
       builder: (context) {
         //    return   StatefulBuilder(builder: (context, setState) {
         return CupertinoAlertDialog(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(title!),
+             // Container(child: Text(title!),width: 150,),
               GestureDetector(
                 child: const Icon(Icons.close),
                 onTap: () {
@@ -108,7 +110,7 @@ class utils {
             child: Card(
               color: Colors.transparent,
               elevation: 0.0,
-              child: wFormulario,
+              child:  Container(child: Text(title!,style: TextStyle(color: Colors.black),),width: 150,),
             ),
           ),
           actions: [
@@ -119,28 +121,25 @@ class utils {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+                    onPressed: onPressed1,
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.red),
                     ),
-                    child: const Text("Cancelar"),
+                    child:   Text("$texto1"),
                   ),
                   const Padding(padding: EdgeInsets.all(10)),
-                  activo
-                      ? ElevatedButton(
-                          onPressed: onPressed,
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 26, 155, 86)),
-                          ),
-                          child: const Text(
-                            "Agregar",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
-                      : Container(),
+
+                  ElevatedButton(
+                    onPressed: onPressed2,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 26, 155, 86)),
+                    ),
+                    child:   Text(
+                      "$texto2",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
                 ],
               ),
             )
@@ -152,8 +151,12 @@ class utils {
     );
   }
 
+  ConfgAppBar({titulo, leading}){
+    return AppBar(title: Text("$titulo"), backgroundColor: AppConfig.primaryColor,leading: Util().iconbuton(leading),centerTitle: true,);
+  }
   tieneNtieneDni({titulo, valor, color, oncalbakc, selectedOption}) {
     return RadioListTile(
+
       activeColor: color,
       title: Text(titulo),
       value: valor,
@@ -161,4 +164,7 @@ class utils {
       onChanged: oncalbakc,
     ); //
   }
+
+
+
 }

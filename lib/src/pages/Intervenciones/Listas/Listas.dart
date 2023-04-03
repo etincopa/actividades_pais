@@ -1,4 +1,6 @@
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DatosPlanMensual.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
+import 'package:actividades_pais/src/datamodels/Clases/ParticipantesIntranet.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEquipos.dart';
 import 'package:actividades_pais/util/app-config.dart';
@@ -28,8 +30,8 @@ class Listas {
         backgroundColor: Colors.red[600],
       ), */
       title: Text('${band.nombres + ' ' + band.apellidoPaterno}',
-          style: TextStyle(fontSize: 13)),
-      subtitle: new Text('${band.dni}', style: TextStyle(fontSize: 10)),
+          style: const TextStyle(fontSize: 13)),
+      subtitle: new Text('${band.dni}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -37,19 +39,19 @@ class Listas {
             width: 70,
             child: Text(
               ' ${band.cargo}',
-              style: TextStyle(fontSize: 10),
+              style: const TextStyle(fontSize: 10),
             ),
           ),
           Container(
             width: 70,
-            child: Text(
+            child: const Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
           ),
           Text(
             ' ${band.telefono}',
-            style: TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10),
           ),
         ],
       ),
@@ -66,30 +68,69 @@ class Listas {
         ),
         backgroundColor: Colors.red[600],
       ), */
-      title: Text('${band.primerNombre! + ' ' + band.segundoNombre!}',
-          style: TextStyle(fontSize: 13)),
+      title: Text('${band.primerNombre! ==''?band.nombre:''} ${band.segundoNombre! ==''?band.nombre2:''}',
+          style: const TextStyle(fontSize: 13)),
       subtitle:
-          new Text('${band.fechaNacimiento}', style: TextStyle(fontSize: 10)),
+          new Text('${band.fechaNacimiento}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 70,
+            width: 80,
             child: Text(
-              ' ${band.entidad}',
-              style: TextStyle(fontSize: 10),
+              ' ${band.entidad==''?band.nombre_programa:''}',
+              style: const TextStyle(fontSize: 10),
             ),
           ),
           Container(
             width: 70,
-            child: Text(
+            child: const Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
           ),
           Text(
             ' ${band.dni}',
-            style: TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10),
+          ),
+        ],
+      ),
+      onTap: () {},
+    );
+  }
+  ListTile banTitleParticipantesIntranet(Data band) {
+    return ListTile(
+      /*    leading: CircleAvatar(
+        child: Text(
+          '${band.nombre.substring(0, 1)}',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red[600],
+      ), */
+      title: Text('${ band.nombre} ${ band.nombre2 }',
+          style: const TextStyle(fontSize: 13)),
+      subtitle:
+          new Text('${band.fechaNacimiento}', style: const TextStyle(fontSize: 10)),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 80,
+            child: Text(
+              ' ${band.nombrePrograma != null?'':''}',
+              style: const TextStyle(fontSize: 10),
+            ),
+          ),
+          Container(
+            width: 70,
+            child: const Text(
+              ' ',
+              style: TextStyle(fontSize: 10),
+            ),
+          ),
+          Text(
+            ' ${band.dni}',
+            style: const TextStyle(fontSize: 10),
           ),
         ],
       ),
@@ -107,9 +148,9 @@ class Listas {
         backgroundColor: Colors.red[600],
       ), */
       title: Text('${band.nombre + ' ' + band.nombre2}',
-          style: TextStyle(fontSize: 13)),
+          style: const TextStyle(fontSize: 13)),
       subtitle:
-          new Text('${band.fecha_nacimiento}', style: TextStyle(fontSize: 10)),
+          new Text('${band.fecha_nacimiento}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -117,19 +158,19 @@ class Listas {
             width: 70,
             child: Text(
               ' ${band.entidad}',
-              style: TextStyle(fontSize: 10),
+              style: const TextStyle(fontSize: 10),
             ),
           ),
           Container(
             width: 70,
-            child: Text(
+            child: const Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
           ),
           Text(
             ' ${band.dni}',
-            style: TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10),
           ),
         ],
       ),
@@ -140,7 +181,7 @@ class Listas {
   Card miCardLisPartExtrangeros(Participantes band) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
@@ -151,11 +192,11 @@ class Listas {
               width: 35.0,
               fit: BoxFit.contain,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.primerNombre! + ' ' + band.apellidoPaterno!}',
-                style: TextStyle(fontSize: 13, color: Colors.black)),
+                style: const TextStyle(fontSize: 13, color: Colors.black)),
             subtitle: new Text('${band.dni}',
-                style: TextStyle(fontSize: 12, color: Colors.black)),
+                style: const TextStyle(fontSize: 12, color: Colors.black)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -163,19 +204,19 @@ class Listas {
                   width: 70,
                   child: Text(
                     ' ${band.pais}',
-                    style: TextStyle(fontSize: 10, color: Colors.black),
+                    style: const TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ),
                 Container(
                   width: 70,
-                  child: Text(
+                  child: const Text(
                     ' ',
                     style: TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ),
                 Text(
                   ' ${band.tipoDocumento}',
-                  style: TextStyle(fontSize: 10, color: Colors.black),
+                  style: const TextStyle(fontSize: 10, color: Colors.black),
                 ),
               ],
             ),
@@ -189,7 +230,7 @@ class Listas {
   Card miCardLisReportPias(ReportesPias band, onpresses) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
@@ -200,11 +241,11 @@ class Listas {
                 width: 35.0,
                 fit: BoxFit.contain,
               ),
-              contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+              contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
               title: Text('${band.puntoAtencion}',
-                  style: TextStyle(fontSize: 13, color: Colors.black)),
+                  style: const TextStyle(fontSize: 13, color: Colors.black)),
               subtitle: new Text('${band.clima}',
-                  style: TextStyle(fontSize: 12, color: Colors.black)),
+                  style: const TextStyle(fontSize: 12, color: Colors.black)),
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -212,19 +253,19 @@ class Listas {
                     width: 70,
                     child: Text(
                       '${band.fechaParteDiario}',
-                      style: TextStyle(fontSize: 10, color: Colors.black),
+                      style: const TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ),
                   Container(
                     width: 70,
-                    child: Text(
+                    child: const Text(
                       ' ',
                       style: TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ),
                   Text(
                     ' ${band.plataforma}',
-                    style: TextStyle(fontSize: 10, color: Colors.black),
+                    style: const TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ],
               ),
@@ -240,7 +281,7 @@ class Listas {
   Card miCardParticipantes(Participantes band) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
@@ -251,15 +292,15 @@ class Listas {
               width: 35.0,
               fit: BoxFit.contain,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text(
                 '${band.primerNombre! + ' ' + band.segundoNombre! + ' ' + band.apellidoPaterno! + ' ' + band.apellidoMaterno!}',
-                style: TextStyle(fontSize: 13, color: Colors.black)),
+                style: const TextStyle(fontSize: 13, color: Colors.black)),
             // formatter.format(picked),
 
             subtitle: new Text(
                 '${formatter.format(DateTime.parse(band.fechaNacimiento!))}',
-                style: TextStyle(fontSize: 10)),
+                style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -269,13 +310,13 @@ class Listas {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Text(
                       'Edad: ${band.edad}',
-                      style: TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 10),
                     ),
                   ]),
                 ),
                 Container(
                   width: 70,
-                  child: Text(
+                  child: const Text(
                     ' ',
                     style: TextStyle(fontSize: 10),
                   ),
@@ -286,7 +327,7 @@ class Listas {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Text(
                       'Doc: ${band.dni}',
-                      style: TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 10),
                     ),
                   ]),
                 ),
@@ -308,7 +349,7 @@ class Listas {
     }
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
@@ -326,11 +367,11 @@ class Listas {
             ) */
             ,
             //new (band.dni == '')? Text('${band.dni}', style: TextStyle(fontSize: 12, color: Colors.black)) : new Container(),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.nombres + ' ' + band.apellidoPaterno}',
-                style: TextStyle(fontSize: 13, color: Colors.black)),
+                style: const TextStyle(fontSize: 13, color: Colors.black)),
             subtitle: new Text('${valordocumento}',
-                style: TextStyle(fontSize: 12, color: Colors.black)),
+                style: const TextStyle(fontSize: 12, color: Colors.black)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -338,19 +379,19 @@ class Listas {
                   width: 70,
                   child: Text(
                     ' ${band.cargo}',
-                    style: TextStyle(fontSize: 10, color: Colors.black),
+                    style: const TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ),
                 Container(
                   width: 70,
-                  child: Text(
+                  child: const Text(
                     ' ',
                     style: TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ),
                 Text(
                   ' ${band.telefono}',
-                  style: TextStyle(fontSize: 10, color: Colors.black),
+                  style: const TextStyle(fontSize: 10, color: Colors.black),
                 ),
               ],
             ),
@@ -364,15 +405,15 @@ class Listas {
   Card cardActividadesPias(ActividadesPias band) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.document_scanner),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            leading: const Icon(Icons.document_scanner),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.descripcion}',
-                style: TextStyle(fontSize: 13, color: Colors.black)),
+                style: const TextStyle(fontSize: 13, color: Colors.black)),
             subtitle: new Text(''),
             onTap: () {},
           )
@@ -384,15 +425,15 @@ class Listas {
   Card cardIncidentes(ActividadesPias band) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.document_scanner),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            leading: const Icon(Icons.document_scanner),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.descripcion}',
-                style: TextStyle(fontSize: 13, color: Colors.black)),
+                style: const TextStyle(fontSize: 13, color: Colors.black)),
             subtitle: new Text(''),
             onTap: () {},
           )
@@ -404,15 +445,15 @@ class Listas {
   Card cardIncidentesPias(IncidentesNovedadesPias band) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.document_scanner),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            leading: const Icon(Icons.document_scanner),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.incidentes}',
-                style: TextStyle(fontSize: 13, color: Colors.black)),
+                style: const TextStyle(fontSize: 13, color: Colors.black)),
             subtitle: new Text(''),
             onTap: () {},
           )
@@ -424,20 +465,20 @@ class Listas {
   Card cardIntervenciones(TramaIntervencion band, callback) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.text_snippet_sharp,
               color: Colors.black,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.tambo} \n ${band.codigoIntervencion}',
-                style: TextStyle(fontSize: 13)),
+                style: const TextStyle(fontSize: 13)),
             subtitle: new Text('${band.tipoGobierno}',
-                style: TextStyle(fontSize: 10)),
+                style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -445,19 +486,19 @@ class Listas {
                   width: 70,
                   child: Text(
                     ' ${band.fecha}',
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ),
                 Container(
                   width: 70,
-                  child: Text(
+                  child: const Text(
                     ' ',
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
                 Text(
                   ' ${band.estado}',
-                  style: TextStyle(fontSize: 10),
+                  style: const TextStyle(fontSize: 10),
                 ),
               ],
             ),
@@ -471,20 +512,20 @@ class Listas {
   Card cardSincronizarPias(ReportesPias band, callback) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.text_snippet_sharp,
               color: Colors.black,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.puntoAtencion} \n ${band.codigoUbigeo}',
-                style: TextStyle(fontSize: 13)),
+                style: const TextStyle(fontSize: 13)),
             subtitle:
-                new Text('${band.plataforma}', style: TextStyle(fontSize: 10)),
+                new Text('${band.plataforma}', style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -492,19 +533,19 @@ class Listas {
                   width: 70,
                   child: Text(
                     ' ${band.fechaParteDiario}',
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ),
                 Container(
                   width: 70,
-                  child: Text(
+                  child: const Text(
                     ' ',
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
                 Text(
                   ' ${band.clima}',
-                  style: TextStyle(fontSize: 10),
+                  style: const TextStyle(fontSize: 10),
                 ),
               ],
             ),
@@ -519,7 +560,7 @@ class Listas {
     bool light0 = true;
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
@@ -528,43 +569,43 @@ class Listas {
               child: Row(
                 children: [
                   (band.estado == 'INACTIVO')
-                      ? Icon(
+                      ? const Icon(
                           Icons.computer,
                           color: Colors.black,
                           size: 35,
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.computer,
                           color: Colors.black,
                           size: 35,
                         ),
                   //  SizedBox(height: 5),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Container(
                       width: 2.0,
                       height: 50.0,
                       padding: const EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(color: Colors.grey))
+                      decoration: const BoxDecoration(color: Colors.grey))
                 ],
               ),
               width: 49,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${band.descripcionEquipoInformatico}',
                     style:
-                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                SizedBox(
+                        const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                const SizedBox(
                   height: 5,
                 )
               ],
             ),
             subtitle: new Text(
                 '${band.descripcionMarca} - ${band.color} \nSERIE - ${band.serie}\n${band.descripcionModelo}\n',
-                style: TextStyle(fontSize: 10)),
+                style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -572,17 +613,17 @@ class Listas {
                 //  DateFormat('yyyy-MM-dd kk:mm:ss').format(now) + '.000';
                 Text(
                   ' ${band.codigoPatrimonial}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10,
                   ),
                   textAlign: TextAlign.end,
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 // Text(band.fecFinGarantiaProveedor!),
                 if (band.fecFinGarantiaProveedor != '') ...[
                   Text(
                     ' ${DateFormat('dd/MM/yy').format(DateTime.parse(band.fecFinGarantiaProveedor.toString()))}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                     ),
                     textAlign: TextAlign.end,
@@ -590,7 +631,7 @@ class Listas {
                 ],
 
                 ///   band.fecFinGarantiaProveedor!='' || band.fecFinGarantiaProveedor!=null?   :new Container(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 Container(
                   child: band.estado == "ACTIVO"
@@ -673,15 +714,15 @@ class Listas {
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       elevation: 7,
       child: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           ListTile(
-            contentPadding: EdgeInsets.fromLTRB(25, 5, 25, 10),
+            contentPadding: const EdgeInsets.fromLTRB(25, 5, 25, 10),
             title: Row(
               children: [
                 SizedBox(
@@ -698,16 +739,16 @@ class Listas {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 1,
                 ),
                 Container(
                   width: 240,
                   child: Text('${band.tambo}\n${band.idProgramacion}',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.blueAccent,
                   //color of divider
                   height: 5,
@@ -722,25 +763,25 @@ class Listas {
             ),
             subtitle: Column(
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                     textAlign: TextAlign.justify,
                     '${band.descripcion}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     )),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Image.network('${band.pathImagen}'),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 InkWell(
                   onTap: callback,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Icon(Icons.download, color: Colors.black),
+                        margin: const EdgeInsets.only(right: 10),
+                        child: const Icon(Icons.download, color: Colors.black),
                       )
                     ],
                   ),
@@ -758,20 +799,20 @@ class Listas {
       ListaEquiposInformaticosTicket band, callback) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.text_snippet_sharp,
               color: Colors.black,
             ),
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.idTicket} \n${band.usuarioAsignado}',
-                style: TextStyle(fontSize: 13)),
+                style: const TextStyle(fontSize: 13)),
             subtitle:
-                new Text('${band.material}', style: TextStyle(fontSize: 10)),
+                new Text('${band.material}', style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -779,19 +820,19 @@ class Listas {
                   width: 70,
                   child: Text(
                     '${band.material}',
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ),
                 Container(
                   width: 70,
                   child: Text(
                     '${band.repuesto}',
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10),
                   ),
                 ),
                 Text(
                   '${band.estado}',
-                  style: TextStyle(fontSize: 10),
+                  style: const TextStyle(fontSize: 10),
                 ),
               ],
             ),
@@ -802,19 +843,83 @@ class Listas {
     );
   }
 
+  Card cardAccion(Accion band, callback, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return Card(
+      color: AppConfig.primaryColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.all(0.1),
+      elevation: 7,
+      child: ListTile(
+        contentPadding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
+        leading: SizedBox(
+          width: 30,
+          height: 30,
+          child: CircleAvatar(
+            backgroundColor: Colors.white,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/icons/icon_account_balance.png',
+                width: 20,
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${band.usuario}\n${band.sector}\n',
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                Expanded(
+                  child: Text('${band.categoria}\n${band.subcategoria}\n',
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                ),
+                SizedBox(width: width / 5),
+              ],
+            ),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 5),
+            const Divider(
+              color: Colors.white,
+              height: 5,
+              thickness: 3,
+              indent: 0,
+              endIndent: 0,
+            ),
+            const SizedBox(height: 10),
+            Text('${band.actividad}',
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Text('${band.descripcionEntidad ?? ''}',
+                textAlign: TextAlign.justify,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+          ],
+        ),
+      ),
+    );
+  }
+
   Card cardAprobacionPlanTrabajo(DatosPlanMensual band, callback) {
     return Card(
       color: AppConfig.primaryColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       elevation: 7,
       child: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
           ListTile(
-            contentPadding: EdgeInsets.fromLTRB(25, 5, 25, 15),
+            contentPadding: const EdgeInsets.fromLTRB(25, 5, 25, 15),
             title: Row(
               children: [
                 SizedBox(
@@ -832,7 +937,7 @@ class Listas {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 2.5,
                 ),
                 Container(
@@ -842,7 +947,7 @@ class Listas {
                       '${band.idProgramacion}\n'
                       '${band.tipoPlan}\n',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
                 Container(
                   width: 120,
@@ -851,14 +956,14 @@ class Listas {
                       '${band.nombreSector}\n'
                       '${DateFormat('dd/MM/yy').format(DateTime.parse(band.fecha.toString()))}\n',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
             subtitle: Column(
               children: [
-                SizedBox(height: 5),
-                Divider(
+                const SizedBox(height: 5),
+                const Divider(
                   color: Colors.white,
                   //color of divider
                   height: 5,
@@ -869,19 +974,19 @@ class Listas {
                   //spacing at the start of divider
                   endIndent: 0, //spacing at the end of divider
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text('${band.nombrePrograma}',
                     style:
-                        TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                        const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
                 Text(
                     textAlign: TextAlign.justify,
                     '${band.descripcionIntervencion}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                     )),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 InkWell(
                   onTap: callback,
                   child: Row(
@@ -893,52 +998,52 @@ class Listas {
                                 <mat-icon style="color: rgb(128, 87, 206);" *ngIf="dataintervencion.id_evaluacion == '3'"> radio_button_checked</mat-icon>*/
                       if (band.idEvaluacion == "0") ...[
                         Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(Icons.radio_button_checked_outlined,
+                              const Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.red),
-                              Text(" PROGRAMADO")
+                              const Text(" PROGRAMADO")
                             ],
                           ),
                         ),
                       ] else if (band.idEvaluacion == "1") ...[
                         Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(Icons.radio_button_checked_outlined,
+                              const Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.green),
-                              Text(" APROBADO")
+                              const Text(" APROBADO")
                             ],
                           ),
                         ),
                       ] else if (band.idEvaluacion == "2") ...[
                         Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(Icons.radio_button_checked_outlined,
+                              const Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.black),
-                              Text(" OBSERVADO")
+                              const Text(" OBSERVADO")
                             ],
                           ),
                         ),
                       ] else if (band.idEvaluacion == "3") ...[
                         Container(
-                          margin: EdgeInsets.only(right: 10),
+                          margin: const EdgeInsets.only(right: 10),
                           child: Row(
                             children: [
-                              Icon(Icons.radio_button_checked_outlined,
+                              const Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.deepPurpleAccent),
-                              Text(" SUBSANADO")
+                              const Text(" SUBSANADO")
                             ],
                           ),
                         ),
                       ],
                       Container(
-                        margin: EdgeInsets.only(right: 10),
-                        child: Icon(Icons.fact_check_outlined,
+                        margin: const EdgeInsets.only(right: 10),
+                        child: const Icon(Icons.fact_check_outlined,
                             color: Colors.black),
                       )
                     ],

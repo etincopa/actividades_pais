@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:actividades_pais/src/Utils/utils.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Convenios.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
+import 'package:actividades_pais/src/datamodels/Clases/LugarIntervencion.dart';
+import 'package:actividades_pais/src/datamodels/Clases/TipoDocumentoAcredita.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TipoIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/TablaEntidades/CrearRegistroEntidad.dart';
 import 'package:actividades_pais/util/app-config.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,23 +26,45 @@ class ProgramacionIntervencion extends StatefulWidget {
 
 class _DateTimeFormState extends State<ProgramacionIntervencion> {
   final _formKey = GlobalKey<FormState>();
+  GuardarIntervencion guardarIntervencion = GuardarIntervencion();
   List<TipoIntervencion> tipoIntervencion = [];
+  List<TipoDocumentoAcredita> tipoDocumentoAcredita = [];
+  List<LugarIntervencion> lugarIntervencion = [];
   List<UnidadesTerritoriales> listUnidadesTerritoriales = [];
+  List<Convenios> listConvenipos = [];
   List<TambosDependientes> listTambosDependientes = [];
   var idUnidadTerr = 0;
   bool _value = false;
 
   bool paraOtroTamboChk = false;
+  bool isGestor = false;
   bool cargarPlataforma = false;
 
   bool otroTambo = false;
+  bool _ismostar = false;
+
+  //var valor = 255;
+  var controllerNumeroPersonas = TextEditingController();
+
+  var controllerDescripcion = TextEditingController();
+  List<Accion> listAcc = [];
+
+  int _currentLength = 0; // longitud actual del texto
 
   @override
   void initState() {
     // TODO: implement initState
+    controllerNumeroPersonas.text = 1.toString();
     cargarUnidades();
     taerDB();
+    cargarTabla();
     super.initState();
+  }
+
+  cargarTabla() async {
+    listAcc = await DatabasePr.db.ListarEntidadesReg();
+
+    setState(() {});
   }
 
   DateTime _selectedDate = DateTime.now();
@@ -45,6 +74,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
   TextEditingController controllerHoraFin = TextEditingController();
   var _curremtime = TimeOfDay.now();
   int _selectedOption = 0;
+  int _valorOption = 1;
 
   Future<TimeOfDay?> getTimePikerwidget() {
     return showTimePicker(
@@ -55,6 +85,12 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
         });
   }
 
+  void _onTextChanged() {
+    setState(() {
+      _currentLength = controllerDescripcion.text.length;
+    });
+  }
+
   cargarUnidades() async {
     setState(() {
       // _isLoading = true;
@@ -62,7 +98,13 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
     tipoIntervencion = await ProviderRegistarInterv().getTipoIntervencion();
     listUnidadesTerritoriales =
         (await ProviderAprobacionPlanes().ListarUnidadesTerritoriales())!;
+    listConvenipos = (await ProviderRegistarInterv().getListarConvenios());
 
+    tipoDocumentoAcredita =
+        (await ProviderRegistarInterv().listaTipoDocumentoAcredita())!;
+
+    lugarIntervencion =
+        (await ProviderRegistarInterv().getListaLugarIntervenciona())!;
     setState(() {
       //_isLoading = false;
     });
@@ -73,34 +115,30 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
     setState(() {
       cargarPlataforma = false;
     });
-    listTambosDependientes =
-    (await ProviderAprobacionPlanes()
-        .ListarTambosDependientes(
-        idUnidadesTerritoriales))!;
+    listTambosDependientes = (await ProviderAprobacionPlanes()
+        .ListarTambosDependientes(idUnidadesTerritoriales))!;
     setState(() {
       cargarPlataforma = true;
     });
-
   }
 
-  taerDB() async{
+  taerDB() async {
     setState(() {
-      otroTambo= false;
+      otroTambo = false;
     });
     var respuest = await DatabasePr.db.traerSnip();
-    print("respuest $respuest");
-    if(respuest==0){
+    if (respuest == 0) {
       setState(() {
         otroTambo = true;
       });
     }
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Intervención de prestaciones'),
+        title: const Text('Intervención de prestaciones'),
         backgroundColor: AppConfig.primaryColor,
       ),
       body: ListView(
@@ -112,42 +150,37 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  otroTambo ?  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Checkbox(
-                        activeColor: const Color(0xFF78b8cd),
-                        focusColor: const Color(0xFF78b8cd),
-                        onChanged: (value) {
-                          setState(() {
-                            _value = value!;
-                            if (_value == true) {
-                              paraOtroTamboChk = true;
-                              cargarPlataforma = false;
-                              /* nombreBoton = "Extrangero";
-
-                              setborrar();*/
-                            } else {
-                              paraOtroTamboChk = false;
-                             // cargarPlataforma = false;
-
-                              /*nombreBoton = "";
-                              visibilityTag = false;
-                              visibilitytipotex = false;
-                              visibilityTag = false;*/
-                            }
-                          });
-                        },
-                        value: _value,
-                      ),
-                      const Text(
-                        "PROGRAMACION PARA OTRO TAMBO",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                  ):Container(),
+                  otroTambo
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              activeColor: const Color(0xFF78b8cd),
+                              focusColor: const Color(0xFF78b8cd),
+                              onChanged: (value) {
+                                setState(() {
+                                  _value = value!;
+                                  if (_value == true) {
+                                    paraOtroTamboChk = true;
+                                    cargarPlataforma = false;
+                                  } else {
+                                    paraOtroTamboChk = false;
+                                  }
+                                  guardarIntervencion.progOtroTambo =
+                                      paraOtroTamboChk;
+                                });
+                              },
+                              value: _value,
+                            ),
+                            const Text(
+                              "PROGRAMACION PARA OTRO TAMBO",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        )
+                      : Container(),
                   paraOtroTamboChk
                       ? Column(
                           children: [
@@ -168,6 +201,8 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                               onChanged: (UnidadesTerritoriales? value) async {
                                 idUnidadTerr = int.parse(
                                     value!.idUnidadesTerritoriales.toString());
+                                guardarIntervencion.idUnidadesTerritoriales =
+                                    value.idUnidadesTerritoriales;
                                 crtamob(value.idUnidadesTerritoriales);
                               },
                             ),
@@ -178,7 +213,8 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                                     ),
                                     isExpanded: true,
                                     items: listTambosDependientes.map((user) {
-                                      return DropdownMenuItem<TambosDependientes>(
+                                      return DropdownMenuItem<
+                                          TambosDependientes>(
                                         value: user,
                                         child: Text(
                                           user.plataformaDescripcion!,
@@ -186,7 +222,10 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                                         ),
                                       );
                                     }).toList(),
-                                    onChanged: (TambosDependientes? value) {},
+                                    onChanged: (TambosDependientes? value) {
+                                      guardarIntervencion.idPlataforma =
+                                          value?.idPlataforma;
+                                    },
                                   )
                                 : Container(),
                           ],
@@ -194,7 +233,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                       : Container(),
                   TextFormField(
                     controller: controllerFecha,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Fecha',
                       hintText: 'Seleccione una fecha',
                       prefixIcon: Icon(Icons.calendar_today),
@@ -205,14 +244,16 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                         context: context,
                         initialDate: _selectedDate,
                         firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(Duration(days: 365)),
+                        lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
                       if (date != null) {
                         setState(() {
                           _selectedDate = date;
-                          var outputFormat = DateFormat('MM/dd/yyyy');
+                          var outputFormat = DateFormat('yyyy-MM-dd');
                           var outputDate = outputFormat.format(date);
                           controllerFecha.text = outputDate.toString();
+                          controllerFecha.text = outputDate.toString();
+                          guardarIntervencion.fecha = controllerFecha.text;
 
                           print(DateFormat("EEEE, d MMMM 'de' yyyy", 'es')
                               .format(_selectedDate));
@@ -226,10 +267,10 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   TextFormField(
                     controller: controllerHoraIni,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Hora Inicio',
                       hintText: 'Seleccione una hora',
                       prefixIcon: Icon(Icons.access_time),
@@ -239,7 +280,8 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                       var selectTime =
                           await getTimePikerwidget() ?? TimeOfDay.now();
 
-                      String formattedTime = DateFormat('HH:mm').format(DateTime(
+                      String formattedTime =
+                          DateFormat('HH:mm').format(DateTime(
                         DateTime.now().year,
                         DateTime.now().month,
                         DateTime.now().day,
@@ -247,6 +289,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                         selectTime.minute,
                       ));
                       controllerHoraIni.text = formattedTime;
+                      guardarIntervencion.horaInicio = controllerHoraIni.text;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -257,7 +300,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                   ),
                   TextFormField(
                     controller: controllerHoraFin,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Hora Fin',
                       hintText: 'Seleccione una hora',
                       prefixIcon: Icon(Icons.access_time),
@@ -266,7 +309,8 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                     onTap: () async {
                       var selectTime =
                           await getTimePikerwidget() ?? TimeOfDay.now();
-                      String formattedTime = DateFormat('HH:mm').format(DateTime(
+                      String formattedTime =
+                          DateFormat('HH:mm').format(DateTime(
                         DateTime.now().year,
                         DateTime.now().month,
                         DateTime.now().day,
@@ -274,7 +318,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                         selectTime.minute,
                       ));
                       controllerHoraFin.text = formattedTime;
-                      print("${formattedTime}");
+                      guardarIntervencion.horaFin = controllerHoraFin.text;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -287,9 +331,8 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                     decoration: const InputDecoration(
                       isCollapsed: false,
                       labelText: 'LA INTERVENCIONES PERTENECE A:',
-                      labelStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      labelStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                       border: UnderlineInputBorder(),
                     ),
                     isExpanded: true,
@@ -298,169 +341,252 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                         value: option,
                         child: Text(
                           option.nombreTipoIntervencion!,
-                          style: const TextStyle(fontSize: 12),
+                          style: const TextStyle(fontSize: 11),
                         ),
                       );
                     }).toList(),
                     onChanged: (value) {
-                      print(value!.idTipoIntervencion);
-                      // Manejar el cambio de valor seleccionado
+                      if (value!.idTipoIntervencion == 2 ||
+                          value.idTipoIntervencion == 3) {
+                        _ismostar = true;
+                      } else {
+                        _ismostar = false;
+                      }
+                      guardarIntervencion.tipoIntervencion =
+                          value.idTipoIntervencion;
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Debe seleccionar una opción';
+                      }
+                      return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Center(
+                  const Center(
                     child: Text("¿La intervención responde a un convenio?"),
                   ),
-
-              Column(
-                children: <Widget>[
-                 utils().tieneNtieneDni(
-                   selectedOption: _selectedOption,
-                    titulo: "SI",
-                    valor: 0,
-                    color: AppConfig.primaryColor,
-                    oncalbakc: (value) {
-                     /* setState(() {
-                        setborrar();
-                        _selectedOption = value;
-                        nombreBoton = "Validar DNI";
-                        visibilityTag = true;
-                        validarcontroles = false;
-                        participantes.tipoParticipante = 0;
-                      });*/
-                    },
-                  ),
-                  utils().tieneNtieneDni(
-                    selectedOption: _selectedOption,
+                  Column(children: <Widget>[
+                    utils().tieneNtieneDni(
+                      selectedOption: _selectedOption,
+                      titulo: "SI",
+                      valor: 1,
                       color: AppConfig.primaryColor,
                       oncalbakc: (value) {
-                       /* setState(() {
-                          setborrar();
+                        guardarIntervencion.vConvenio = value.toString();
+                        setState(() {
                           _selectedOption = value;
-                          nombreBoton = "Validar en el Padron";
-                          visibilityTag = true;
-                          validarcontroles = true;
-                          participantes.tipoParticipante = 1;
-                        });*/
+                        });
                       },
-                      titulo: "NO",
-                      valor: 1),]),
-
-                  CrearRegistroEntidad(),
-                  /*    FutureBuilder<List<UnidadesTerritoriales>>(
-                    future: ProviderAprobacionPlanes()
-                        .ListarUnidadesTerritoriales(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<UnidadesTerritoriales>> snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                      } else if (snapshot.hasError) {
-                        return const Text('Error al cargar las opciones');
-                      } else {
-                        List<UnidadesTerritoriales> options = snapshot.data!;
-                        options.insert(
-                            0,
-                            UnidadesTerritoriales(
-                                idUnidadesTerritoriales: 0,
-                                unidadTerritorialDescripcion: 'TODOS'));
-
-                        return Row(
-                          children: [
-                            const Icon(Icons.account_balance_wallet_outlined,
-                                size: 15, color: Colors.grey),
-                            const SizedBox(width: 13),
-                            Expanded(
-                              child: DropdownButtonFormField<
-                                  UnidadesTerritoriales>(
-                                decoration: const InputDecoration(
-                                  labelText: 'Unidad Territorial',
-                                ),
-                                isExpanded: true,
-                                items: options.map((user) {
-                                  return DropdownMenuItem<
-                                      UnidadesTerritoriales>(
-                                    value: user,
-                                    child: Text(
-                                      user.unidadTerritorialDescripcion!,
-                                      style: const TextStyle(fontSize: 10),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (UnidadesTerritoriales? value) {
-                                  seleccionarUnidadTerritorial =
-                                  value!.unidadTerritorialDescripcion!;
-                                  filtroDataPlanMensual.ut =
-                                      ((value.idUnidadesTerritoriales == 0)
-                                          ? "x"
-                                          : value.idUnidadesTerritoriales)
-                                          .toString();
-
-                                  isMostar = true;
-                                  seleccionarPlataformaDescripcion =
-                                  "Seleccionar plataforma";
-
-                                  setState(() {});
-                                },
-                                hint: Text(
-                                  seleccionarUnidadTerritorial,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
+                    ),
+                    utils().tieneNtieneDni(
+                        selectedOption: _selectedOption,
+                        color: AppConfig.primaryColor,
+                        oncalbakc: (value) {
+                          setState(() {
+                            guardarIntervencion.vConvenio = value.toString();
+                            _selectedOption = value;
+                          });
+                        },
+                        titulo: "NO",
+                        valor: 0),
+                  ]),
+                  _selectedOption == 1
+                      ? DropdownButtonFormField<Convenios>(
+                          decoration: const InputDecoration(
+                            isCollapsed: false,
+                            labelText: 'CONVENIO',
+                            labelStyle: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 13),
+                            border: UnderlineInputBorder(),
+                          ),
+                          isExpanded: true,
+                          items: listConvenipos.map((option) {
+                            return DropdownMenuItem<Convenios>(
+                              value: option,
+                              child: Text(
+                                option.nombrePrograma!,
+                                style: const TextStyle(fontSize: 11),
                               ),
-                            ),
-                          ],
-                        );
-                      }
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            guardarIntervencion.vConvenio =
+                                value!.idConvenio.toString();
+                          },
+                        )
+                      : Container(),
+                  CrearRegistroEntidad(_ismostar),
+                  DropdownButtonFormField<TipoDocumentoAcredita>(
+                    decoration: const InputDecoration(
+                      isCollapsed: false,
+                      labelText: 'DOCUMENTO QUE ACREDITA EL EVENTO',
+                      labelStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                      border: UnderlineInputBorder(),
+                    ),
+                    isExpanded: true,
+                    items: tipoDocumentoAcredita.map((option) {
+                      return DropdownMenuItem<TipoDocumentoAcredita>(
+                        value: option,
+                        child: Text(
+                          option.nombreDocumentoAcredita!,
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      guardarIntervencion.documento =
+                          value?.idDocumentoAcredita;
                     },
-                  ),*/
-                  SizedBox(height: 32.0),
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Debe seleccionar una opción';
+                      }
+                      return null;
+                    },
+                  ),
+                  DropdownButtonFormField<LugarIntervencion>(
+                    decoration: const InputDecoration(
+                      isCollapsed: false,
+                      labelText: ' ¿DÓNDE SE REALIZÓ EL EVENTO?',
+                      labelStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                      border: UnderlineInputBorder(),
+                    ),
+                    isExpanded: true,
+                    items: lugarIntervencion.map((option) {
+                      return DropdownMenuItem<LugarIntervencion>(
+                        value: option,
+                        child: Text(
+                          option.nombreLugarIntervencion!,
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      guardarIntervencion.realizo = value?.idLugarIntervencion;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Debe seleccionar una opción';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Por favor ingregse el numero de personas a participar';
+                      }
+                      return null;
+                    },
+                    controller: controllerNumeroPersonas,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      hintText: "",
+                      labelText:
+                          'N° DE PERSONAS CONVOCADAS A PARTICIPAR EN EL EVENTO',
+                    ),
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor ingrese la descripción del evento';
+                      }
+                      return null;
+                    },
+                    controller: controllerDescripcion,
+                    maxLines: 8,
+                    decoration: InputDecoration(
+                      hintText:
+                          "¿QUÉ SE HIZO? ¿CUÁL ES LA FINALIDAD? ¿QUIÉN LO HIZO? ¿A QUIÉN ESTA DIRIGIDO? ",
+                      labelText: 'DESCRIPCIÓN DEL EVENTO',
+                      counterText: "$_currentLength",
+                    ),
+                    onChanged: (value) {
+                      _currentLength = value.length;
+                      setState(() {});
+                    },
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  (paraOtroTamboChk || !otroTambo)
+                      ? Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.all(5),
+                          height: 38,
+                          //left: 10, right: 10, top: 10
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.save),
+                            style: ElevatedButton.styleFrom(
+                                primary: AppConfig.primaryColor,
+                                //   shadowColor:
+                                textStyle: const TextStyle(fontSize: 16),
+                                minimumSize: const Size.fromHeight(72),
+                                shape: const StadiumBorder()),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                if (_selectedOption != 1) {
+                                  guardarIntervencion.nConvenio = 0;
+                                }
+                                await cargarTabla();
+                                guardarIntervencion.convocadas =
+                                    int.parse(controllerNumeroPersonas.text);
+                                guardarIntervencion.descripcion =
+                                    controllerDescripcion.text;
+                                guardarIntervencion.vConvenio =
+                                    _selectedOption.toString();
+                                guardarIntervencion.accion = listAcc;
+
+                                /// guardarIntervencion.convocadas = 1;
+
+                                if (listAcc.length <= 0) {
+                                  //    _displaySnackBar(context, "Registrar Entidad");
+                                  return showAlertDialog(
+                                      context, "Entidad no Registrada");
+                                }
+                                BusyIndicator.show(context);
+                                var respu = await ProviderRegistarInterv()
+                                    .getGuardarIntervencions(
+                                        jsonEncode(guardarIntervencion));
+
+                                if (respu.estado == true) {
+                                  await DatabasePr.db.eliminarAccion();
+
+                                  BusyIndicator.hide(context);
+                                  _displaySnackBar(context, respu.mensaje);
+                                  Navigator.pop(context, "OK");
+                                }
+
+                                print("respu ${respu.mensaje}");
+                              }
+                            },
+                            label: const Text('GUARDAR PROGRMACION'),
+                          ))
+                      : new Container(),
                   Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(24),
+                      margin: const EdgeInsets.all(5),
                       height: 38,
                       //left: 10, right: 10, top: 10
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.settings_backup_restore),
                         style: ElevatedButton.styleFrom(
-                            primary:AppConfig.primaryColor,
+                            primary: AppConfig.primaryColor,
                             //   shadowColor:
-                            textStyle: TextStyle(fontSize: 24),
-                            minimumSize: Size.fromHeight(72),
-                            shape: StadiumBorder()),
+                            textStyle: const TextStyle(fontSize: 16),
+                            minimumSize: const Size.fromHeight(72),
+                            shape: const StadiumBorder()),
                         onPressed: () async {
-
-                        },  child: Text('Guardar'),
-
+                          Navigator.pop(context);
+                        },
+                        label: const Text('CANCELAR'),
                       )),
-                /*  Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          final dateTime = DateTime(
-                            _selectedDate.year,
-                            _selectedDate.month,
-                            _selectedDate.day,
-                            _selectedTime.hour,
-                            _selectedTime.minute,
-                          );
-                          final formData = FormData(
-                            date: _selectedDate,
-                            time: _selectedTime,
-                            dateTime: dateTime,
-                          );
-                          // Enviar objeto formData al servidor o realizar otra acción aquí
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Formulario enviado con éxito'),
-                            ),
-                          );
-                        }
-                      },
-                      child: Text('Guardar'),
-                    ),
-                  ),*/
                 ],
               ),
             ),
@@ -469,6 +595,48 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
       ),
     );
   }
+
+  _displaySnackBar(BuildContext context, mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$mensaje'),
+        /*  action: SnackBarAction(
+          label: 'Action',
+          onPressed: () {
+            // Code to execute.
+          },
+        ),*/
+      ),
+    );
+  }
+}
+
+showAlertDialog(BuildContext context, text) {
+  Widget okButton = TextButton(
+    child: const Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: const Text("PAIS"),
+    content: Text(text),
+    /*actions: [
+        okButton,
+      ],*/
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+
+  Future.delayed(const Duration(seconds: 1), () {
+    Navigator.of(context).pop();
+  });
 }
 
 class FormData {

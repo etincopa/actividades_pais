@@ -15,37 +15,36 @@ class IntervencionesHome extends StatefulWidget {
 }
 
 class _IntervencionesHomeState extends State<IntervencionesHome> {
-  int currenIndex = 0;
+  int currentIndex = 0;
 
-  String icon4 = 'assets/icons/icon_intervencion.png';
-
-  String icon7 = 'assets/icons/actividades.png';
+  String iconIntervencion = 'assets/icons/icon_intervencion.png';
+  String iconActividades = 'assets/icons/actividades.png';
   String tipoPlataforma = "";
   String unidadTerritorial = "";
-
   List<Perfil> idMenuPadre = [];
 
   @override
   void initState() {
     // TODO: implement initState
-    perfil();
+    _fetchData();
     mostrarTmbo();
     super.initState();
   }
-  perfil() async {
 
-
+  Future<void> _fetchData() async {
     var res = await DatabasePr.db.loginUser();
     if (res.isNotEmpty) {
-      for (int i = 0; i < res.length; i++) {
-        idMenuPadre.add(Perfil(idMenuPadre: res[i].rol));
-      }
-
-      return;
+      idMenuPadre.addAll(res.map((e) => Perfil(idMenuPadre: e.rol)));
     }
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
+    if (idMenuPadre.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     List<HomeOptions> aHomeOptions = [];
 
     final Responsive responsive = Responsive.of(context);
@@ -60,53 +59,68 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
     for (int i = 0; i < idMenuPadre.length; i++) {
       print(idMenuPadre[i].idMenuPadre);
       switch (idMenuPadre[i].idMenuPadre) {
-
-
         case '115':
           if (tipoPlataforma == "TAMBO") {
-            aHomeOptions.add(
+           /* aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1012',
                 name: 'PROGRAMAR PRESTACION'.tr,
                 types: const ['Ver'],
-                image: icon7,
+                image: iconActividades,
                 color: const Color(0xFF78b8cd),
               ),
-            );
+            );*/
 
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1003',
                 name: 'TileEjeIntervencion'.tr,
                 types: const ['Ver'],
-                image: icon4,
+                image: iconIntervencion,
                 color: const Color(0xFF78b8cd),
               ),
             );
-
           } else {
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1011',
                 name: 'PLAN DE TRABAJO MENSUAL'.tr,
                 types: const ['Ver'],
-                image: icon7,
+                image: iconActividades,
                 color: const Color(0xFF78b8cd),
               ),
             );
-
-
           }
+          break;
+        case '110':
+          /*aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1012',
+              name: 'PROGRAMAR PRESTACION'.tr,
+              types: const ['Ver'],
+              image: iconActividades,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+*/
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1011',
+              name: 'PLAN DE TRABAJO MENSUAL'.tr,
+              types: const ['Ver'],
+              image: iconActividades,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
 
           break;
-        case '110'  :
-
+        case '1':
           aHomeOptions.add(
             HomeOptions(
               code: 'OPT1012',
               name: 'PROGRAMAR PRESTACION'.tr,
               types: const ['Ver'],
-              image: icon7,
+              image: iconActividades,
               color: const Color(0xFF78b8cd),
             ),
           );
@@ -116,30 +130,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
               code: 'OPT1011',
               name: 'PLAN DE TRABAJO MENSUAL'.tr,
               types: const ['Ver'],
-              image: icon7,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
-
-        break;
-        case '1'  :
-
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1012',
-              name: 'PROGRAMAR PRESTACION'.tr,
-              types: const ['Ver'],
-              image: icon7,
-              color: const Color(0xFF78b8cd),
-            ),
-          );
-
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1011',
-              name: 'PLAN DE TRABAJO MENSUAL'.tr,
-              types: const ['Ver'],
-              image: icon7,
+              image: iconActividades,
               color: const Color(0xFF78b8cd),
             ),
           );
@@ -147,7 +138,6 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
           break;
       }
     }
-
 
     List listPages = [
       Column(
@@ -252,10 +242,10 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                           ),
                         );
                         break;
-                        case 'OPT1012':
+                      case 'OPT1012':
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) =>   ListaIntervecionesProgramadas(),
+                            builder: (_) => ListaIntervecionesProgramadas(),
                           ),
                         );
                         break;
@@ -285,33 +275,31 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
               bottom: Radius.circular(20),
             ),
           ),
-          centerTitle: true),
-      body: Stack(
-        children: <Widget>[listPages[currenIndex]],
+          centerTitle: true
       ),
+      body: listPages[currentIndex],
     );
+
   }
 
-  Future traerDatosDeUsuario() async {
-    DatabasePr.db.initDB();
+  Future<void> traerDatosDeUsuario() async {
+    await DatabasePr.db.initDB();
     var usuario = await DatabasePr.db.getAllConfigPersonal();
 
     if (usuario.isNotEmpty) {
       print("usuario[0].rol ${usuario[0].rol}");
-    } else {}
+    }
   }
 
   mostrarTmbo() async {
-    DatabasePr.db.initDB();
+    await DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
     if (abc.isNotEmpty) {
-      setState(() {
-        traerDatosDeUsuario();
-        if (abc.isNotEmpty) {
-          tipoPlataforma = abc[0].tipoPlataforma;
-          unidadTerritorial = abc[0].unidTerritoriales;
-        }
-      });
+      tipoPlataforma = abc[0].tipoPlataforma;
+      unidadTerritorial = abc[0].unidTerritoriales;
+      await traerDatosDeUsuario();
+      setState(() {});
     }
   }
+
 }

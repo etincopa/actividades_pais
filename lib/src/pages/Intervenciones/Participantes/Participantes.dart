@@ -606,8 +606,8 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                               onChanged: (ListarEntidadFuncionario? newVal) {
                                 entidad = newVal!.nombre_programa;
                                 id_entidad = newVal.id_entidad;
-                                DatabasePr.db.ListarParticipanteEjecucion(
-                                    widget.idProgramacion, id_entidad);
+                              /*  DatabasePr.db.ListarParticipanteEjecucion(
+                                    widget.idProgramacion, id_entidad);*/
                                 setState(() {});
                               },
                               hint: Text('$entidad'),
