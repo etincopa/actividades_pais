@@ -3443,13 +3443,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('ESTADO INTERNET'),
-                          subtitle: (oSrvInter.estadoInternet! == 'INOPERATIVO')
-                              ? Text(
-                                  "${oSrvInter.estadoInternet!}\n(${(incidencias.isNotEmpty) ? incidencias![0].fechaAveria : ''})",
+                          subtitle: (oSrvInter.estadoInternet! == 'OPERATIVO')
+                              ? Text(oSrvInter.estadoInternet!,
+                                  style: const TextStyle(color: Colors.green))
+                              : Text(
+                                  "${oSrvInter.estadoInternet!}\n${(incidencias.isNotEmpty) ? "(${incidencias![0].fechaAveria})" : ''}",
                                   style: const TextStyle(color: Colors.red),
-                                )
-                              : Text(oSrvInter.estadoInternet!,
-                                  style: const TextStyle(color: Colors.green)),
+                                ),
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD BAJADA'),
@@ -3646,7 +3646,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                                        fontSize: 16),
                                   )));
                         }
 
