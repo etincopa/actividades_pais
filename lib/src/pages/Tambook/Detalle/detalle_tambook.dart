@@ -134,6 +134,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   DateFormat oDFormat2 = DateFormat('HHmmss');
   DateTime now = DateTime.now();
   String sCurrentYear = "";
+  String sCurrentMonth = "";
   String sCurrentTime = "0";
   String sCurrentLogo = "assets/sol.png";
 
@@ -155,6 +156,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   @override
   void initState() {
     sCurrentYear = now.year.toString();
+    sCurrentMonth = now.month < 10 ? '0${now.month}' : now.month.toString();
     sCurrentTime = oDFormat2.format(now);
 
     sCurrentLogo =
@@ -259,7 +261,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     aAvance = await mainCtr.progIntervencionTambo(
       '${oTambo.idTambo}',
       sCurrentYear,
-      '03',
+      sCurrentMonth,
       'X',
       'X',
       'X',
@@ -270,6 +272,8 @@ class _DetalleTambookState extends State<DetalleTambook>
      * Solo filtral registros cuyo estados esten en 
      * 4 : FINALIZADO/APROBADOS
      */
+    
+    // aAvance = aAvance.where((e) => e.estadoProgramacion == 1).toList();
     aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
     //aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
   }

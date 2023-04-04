@@ -1655,12 +1655,12 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "TAMBOS TOTAL : ",
+                                "TAMBOS SIN INTERVECIONES: ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                formatoDecimal(totalTambo),
+                                formatoDecimal(totalTamboSinIter),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -1669,12 +1669,12 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "INTERVECION TOTAL : ",
+                                "TOTAL : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                formatoDecimal(totalTamboSinIter),
+                                formatoDecimal(totalTambo),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
