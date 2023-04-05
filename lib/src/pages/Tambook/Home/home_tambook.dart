@@ -3,9 +3,11 @@ import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiari
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
+import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
 import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
 import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
+import 'package:actividades_pais/backend/model/lista_tambos_estado_internet.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
@@ -14,6 +16,7 @@ import 'package:actividades_pais/backend/model/programacion_intervenciones_tambo
 import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
 import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
+import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -68,6 +71,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   List<IndicadorInternetModel> aIndicadorInternet = [];
   List<IndicadorCategorizacionModel> aIndicadorCategorizacion = [];
+  List<TambosEstadoInternetModel> aIndicadorEstadoInternet = [];
 
   String sCurrentYear = DateTime.now().year.toString();
 
@@ -108,6 +112,7 @@ class _HomeTambookState extends State<HomeTambook>
     getCantidadTambosPIAS();
     buildData();
     obtenerIndicadorInternet();
+    obtenerIndicadorEstadoInternet();
     obtenerIndicadorCategorizacion();
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
@@ -451,6 +456,10 @@ class _HomeTambookState extends State<HomeTambook>
     aIndicadorInternet = await mainCtr.getIndicadorInternet("0");
   }
 
+  Future<void> obtenerIndicadorEstadoInternet() async {
+    aIndicadorEstadoInternet = await mainCtr.getIndicadorEstadoInternet();
+  }
+
   Future<void> obtenerIndicadorCategorizacion() async {
     aIndicadorCategorizacion = await mainCtr.getIndicadorCategorizacion("0");
   }
@@ -651,6 +660,10 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   const SizedBox(height: 15),
                   cardIndicadorInternet(),
+                  const SizedBox(height: 15),
+                  cardIndicadorEstadoInternet(),
+                  const SizedBox(height: 15),
+                  cardResumenProveedor(),
                   const SizedBox(height: 15),
                   cardIndicadorCategorizacion(),
                   const SizedBox(height: 15),
@@ -1363,9 +1376,10 @@ class _HomeTambookState extends State<HomeTambook>
 
     for (var indicador in aIndicadorInternet) {
       chartDataIndicador.add(ChartDataAvanceIndicador(
-        indicador.nomOperadorInternet!,
-        int.parse(indicador.numAsignados!.toString()),
-      ));
+          indicador.idOperadorInternet.toString()!,
+          indicador.nomOperadorInternet!,
+          int.parse(indicador.numAsignados!.toString()),
+          obtenerColores(indicador.idOperadorInternet.toString())));
     }
 
     return Padding(
@@ -1421,6 +1435,63 @@ class _HomeTambookState extends State<HomeTambook>
                                   overflowMode: LegendItemOverflowMode.wrap),
                               series: <CircularSeries>[
                               PieSeries<ChartDataAvanceIndicador, String>(
+                                  onPointTap:
+                                      (ChartPointDetails details) async {
+                                    String idProveedor = chartDataIndicador[
+                                            details.pointIndex ?? 0]
+                                        .id;
+
+                                    String proveedor = chartDataIndicador[
+                                            details.pointIndex ?? 0]
+                                        .x;
+
+                                    BusyIndicator.show(context);
+
+                                    List<IndicadorInternetModel>
+                                        indicadorInternet =
+                                        await mainCtr.getIndicadorInternet(
+                                            idProveedor.toString());
+
+                                    BusyIndicator.hide(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          buildSuccessDialog2(
+                                        context,
+                                        title:
+                                            "LISTA DE TAMBOS (${indicadorInternet.length})\n${proveedor}",
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: indicadorInternet.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            var oIndicadorInternet =
+                                                indicadorInternet[index];
+                                            return Column(
+                                              children: [
+                                                ListTile(
+                                                  leading: Text("${index + 1}"),
+                                                  title: Text(
+                                                    oIndicadorInternet
+                                                            .nomTambo ??
+                                                        '',
+                                                  ),
+                                                  subtitle: Text(
+                                                      oIndicadorInternet
+                                                          .region!),
+                                                  onTap: () {},
+                                                ),
+                                                const Divider(color: colorI),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  selectionBehavior:
+                                      SelectionBehavior(enable: true),
                                   dataSource: chartDataIndicador,
                                   xValueMapper:
                                       (ChartDataAvanceIndicador data, _) =>
@@ -1428,6 +1499,9 @@ class _HomeTambookState extends State<HomeTambook>
                                   yValueMapper:
                                       (ChartDataAvanceIndicador data, _) =>
                                           data.y,
+                                  pointColorMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.color,
                                   dataLabelSettings: const DataLabelSettings(
                                       // Renders the data label
                                       isVisible: true,
@@ -1452,6 +1526,265 @@ class _HomeTambookState extends State<HomeTambook>
     );
   }
 
+  Padding cardIndicadorEstadoInternet() {
+    var heading = 'TAMBOS POR ESTADO DE INTERNET $sCurrentYear';
+
+    final List<ChartDataAvanceIndicador> chartDataIndicador = [];
+
+    for (var indicador in aIndicadorEstadoInternet) {
+      chartDataIndicador.add(ChartDataAvanceIndicador(
+          indicador.codigo!,
+          indicador.estado!,
+          int.parse(indicador.cantidad!.toString()),
+          obtenerColores(indicador.codigo!)));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading2
+                      ? Center(
+                          child: SfCircularChart(
+                              legend: Legend(
+                                  isVisible: true,
+                                  position: LegendPosition.bottom,
+                                  overflowMode: LegendItemOverflowMode.wrap),
+                              series: <CircularSeries>[
+                              PieSeries<ChartDataAvanceIndicador, String>(
+                                  onPointTap:
+                                      (ChartPointDetails details) async {
+                                    String idEstado = chartDataIndicador[
+                                            details.pointIndex ?? 0]
+                                        .id;
+
+                                    String estado = chartDataIndicador[
+                                            details.pointIndex ?? 0]
+                                        .x;
+
+                                    BusyIndicator.show(context);
+
+                                    List<ListaTambosEstadoInternetModel>
+                                        indicadorInternet = await mainCtr
+                                            .getListaTambosEstadoInternet(
+                                                idEstado);
+
+                                    BusyIndicator.hide(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          buildSuccessDialog2(
+                                        context,
+                                        title:
+                                            "LISTA DE TAMBOS (${indicadorInternet.length})\n${estado}",
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: indicadorInternet.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            var oIndicadorInternet =
+                                                indicadorInternet[index];
+                                            return Column(
+                                              children: [
+                                                ListTile(
+                                                  leading:
+                                                      Text("${(index + 1)}"),
+                                                  title: Text(
+                                                    oIndicadorInternet
+                                                            .nomTambo ??
+                                                        '',
+                                                  ),
+                                                  subtitle: Text(
+                                                      "${oIndicadorInternet.region}\n${oIndicadorInternet.proveedor}"),
+                                                  onTap: () {},
+                                                ),
+                                                const Divider(color: colorI),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  selectionBehavior:
+                                      SelectionBehavior(enable: true),
+                                  dataSource: chartDataIndicador,
+                                  xValueMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.x,
+                                  yValueMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.y,
+                                  pointColorMapper:
+                                      (ChartDataAvanceIndicador data, _) =>
+                                          data.color,
+                                  dataLabelSettings: const DataLabelSettings(
+                                      // Renders the data label
+                                      isVisible: true,
+                                      labelPosition:
+                                          ChartDataLabelPosition.outside,
+                                      textStyle: TextStyle(fontSize: 20)))
+                            ]))
+                      : const Center(child: CircularProgressIndicator()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardResumenProveedor() {
+    var heading = 'RESUMEN DE PROVEEDOR DE INTERNET';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -1),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var indicador in aIndicadorInternet)
+                          Column(
+                            children: [
+                              Text(
+                                indicador.nomOperadorInternet ?? '',
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w700,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              ListTile(
+                                leading: SizedBox(
+                                    width: 70.0,
+                                    child: Image.asset(
+                                        "assets/Operador/${indicador.idOperadorInternet}.png")),
+                                iconColor: const Color.fromARGB(255, 0, 0, 0),
+                                title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "OPERATIVO: ${indicador.operativos ?? ''}\nINOPERATIVOS: ${indicador.inoperativos ?? ''}\nEN PROCESO DE INST. : ${indicador.enproceso ?? ''}",
+                                        textAlign: TextAlign.justify,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                          "TOTAL: ${indicador.numAsignados ?? ''}",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w900))
+                                    ]),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Padding cardIndicadorCategorizacion() {
     var heading = 'CATEGORIZACIÓN $sCurrentYear';
 
@@ -1459,9 +1792,10 @@ class _HomeTambookState extends State<HomeTambook>
 
     for (var indicador in aIndicadorCategorizacion) {
       chartDataIndicador.add(ChartDataAvanceIndicador(
-        indicador.nomPriorizacion!,
-        int.parse(indicador.numAsignados!.toString()),
-      ));
+          indicador.idPriorizacion.toString()!,
+          indicador.nomPriorizacion!,
+          int.parse(indicador.numAsignados!.toString()),
+          Colors.blue));
     }
 
     return Padding(
@@ -1521,6 +1855,64 @@ class _HomeTambookState extends State<HomeTambook>
                               series: <ChartSeries>[
                               // Renders bar chart
                               BarSeries<ChartDataAvanceIndicador, String>(
+                                  onPointTap:
+                                      (ChartPointDetails details) async {
+                                    String idCategoria = chartDataIndicador[
+                                            details.pointIndex ?? 0]
+                                        .id;
+
+                                    String categoria = chartDataIndicador[
+                                            details.pointIndex ?? 0]
+                                        .x;
+
+                                    BusyIndicator.show(context);
+
+                                    List<CategorizacionTambosModel>
+                                        indicadorCategorizacion =
+                                        await mainCtr.getCategorizacionTambos(
+                                            idCategoria.toString());
+                                    print(indicadorCategorizacion[0]
+                                        .nomCategoria);
+
+                                    BusyIndicator.hide(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          buildSuccessDialog2(
+                                        context,
+                                        title:
+                                            "LISTA DE TAMBOS (${indicadorCategorizacion.length})\n${categoria}",
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              indicadorCategorizacion.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            var oIndicadorCategoria =
+                                                indicadorCategorizacion[index];
+                                            return Column(
+                                              children: [
+                                                ListTile(
+                                                  leading: Text("${index + 1}"),
+                                                  title: Text(
+                                                    oIndicadorCategoria
+                                                            .nomTambo ??
+                                                        '',
+                                                  ),
+                                                  subtitle: Text(
+                                                      oIndicadorCategoria
+                                                          .region!),
+                                                  onTap: () {},
+                                                ),
+                                                const Divider(color: colorI),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   dataSource: chartDataIndicador,
                                   xValueMapper:
                                       (ChartDataAvanceIndicador data, _) =>
@@ -1655,7 +2047,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             TableRow(children: [
                               const Text(
-                                "TAMBOS SIN INTERVECIONES: ",
+                                "TOTAL : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1669,7 +2061,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "TOTAL : ",
+                                "SIN INTERVECIONES : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
@@ -1703,7 +2095,8 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding cardTambosSinIntervencionDet() {
-    var heading = 'LISTA TAMBOS SIN INTERVENCIONES $sCurrentYear';
+    var heading = 'LISTA DE TAMBOS SIN INTERVENCIONES $sCurrentYear';
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -1758,6 +2151,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
+                                subtitle: Text("${oItem.region ?? ''}"),
                               ),
                             ),
                             const Divider(color: colorI),
@@ -3999,6 +4393,36 @@ class _HomeTambookState extends State<HomeTambook>
     }
     return nombreMes;
   }
+
+  Color obtenerColores(String id) {
+    Color color = Colors.blue;
+    switch (id) {
+      case "1":
+        color = Colors.blue;
+        break;
+
+      case "2":
+        color = Colors.green;
+        break;
+
+      case "3":
+        color = Colors.red;
+        break;
+
+      case "007":
+        color = Colors.red;
+        break;
+
+      case "008":
+        color = Colors.green;
+        break;
+
+      case "012":
+        color = Colors.yellow;
+        break;
+    }
+    return color;
+  }
 }
 
 class AvancesData {
@@ -4130,7 +4554,8 @@ class ChartDataAvance {
 }
 
 class ChartDataAvanceIndicador {
-  ChartDataAvanceIndicador(this.x, this.y, [this.color]);
+  ChartDataAvanceIndicador(this.id, this.x, this.y, this.color);
+  final String id;
   final String x;
   final int y;
   final Color? color;

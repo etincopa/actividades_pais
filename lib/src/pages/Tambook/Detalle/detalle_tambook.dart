@@ -2337,18 +2337,21 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           title: const Text('N° DE HOGARES'),
-                          subtitle: Text(formatoDecimal(
-                              double.parse(oTambo.hogaresAnteriores ?? '0'))),
+                          subtitle: Text(formatoDecimal(double.tryParse(
+                                  oTambo.hogaresAnteriores ?? '0') ??
+                              0)),
                         ),
                         ListTile(
                           title: const Text('N° DE VIVIENDAS'),
-                          subtitle: Text(formatoDecimal(
-                              double.parse(oTambo.viviendasAnterior ?? '0'))),
+                          subtitle: Text(formatoDecimal(double.tryParse(
+                                  oTambo.viviendasAnterior ?? '0') ??
+                              0)),
                         ),
                         ListTile(
                           title: const Text('POBLACIÓN'),
-                          subtitle: Text(formatoDecimal(
-                              double.parse(oTambo.poblacionAnterior ?? '0'))),
+                          subtitle: Text(formatoDecimal(double.tryParse(
+                                  oTambo.poblacionAnterior ?? '0') ??
+                              0)),
                         ),
                         const SizedBox(height: 10),
                         const Text('FUENTE: INEI'),
@@ -3514,6 +3517,54 @@ class _DetalleTambookState extends State<DetalleTambook>
                     innerCirclePadding: 15,
                   ),
                 ),
+
+                //VELOCIDAD DE BAJADA ASEGURADA
+                const ListTile(
+                  title: Text(
+                    'PORCENTAJE  ASEGURADO',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    fractionDigits: 0,
+                    minSpeed: 0,
+                    maxSpeed: 100,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: (getNumber(oSrvInter.veloMinBajaPtje ?? '0') / 100),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: const [0, 5, 10],
+                    alertColorArray: const [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement:
+                        "%", //getText(oSrvInter.veloBaja ?? "Mbps"),
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
+                Divider(
+                  height: 4,
+                ),
                 const ListTile(
                   title: Text(
                     'VELOCIDAD DE SUBIDA Mbps',
@@ -3549,6 +3600,51 @@ class _DetalleTambookState extends State<DetalleTambook>
                     duration: const Duration(seconds: 6),
                     unitOfMeasurement:
                         "Mbps", //getText(oSrvInter.veloSube ?? "Mbps"),
+                    unitOfMeasurementTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    gaugeWidth: 15,
+                    innerCirclePadding: 15,
+                  ),
+                ),
+
+                //VELOCIDAD DE SUBIDA ASEGURADA
+                const ListTile(
+                  title: Text(
+                    'PORCENTAJE  ASEGURADO',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  height: 200,
+                  padding: const EdgeInsets.all(10),
+                  child: KdGaugeView(
+                    fractionDigits: 0,
+                    minSpeed: 0.0,
+                    maxSpeed: 100.0,
+                    minMaxTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                    speed: (getNumber(oSrvInter.veloMinSubePtje ?? '0') / 100),
+                    speedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    animate: true,
+                    alertSpeedArray: const [0, 5, 10],
+                    alertColorArray: const [colorP, colorI, colorS],
+                    duration: const Duration(seconds: 6),
+                    unitOfMeasurement:
+                        "%", //getText(oSrvInter.veloBaja ?? "Mbps"),
                     unitOfMeasurementTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,

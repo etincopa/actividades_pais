@@ -3,6 +3,7 @@ import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
+import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
 import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/dropdown_dto.dart';
 import 'package:actividades_pais/backend/model/dto/login_dto.dart';
@@ -15,6 +16,7 @@ import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
 import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
 import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
+import 'package:actividades_pais/backend/model/lista_tambos_estado_internet.dart';
 import 'package:actividades_pais/backend/model/lista_trama_monitoreo_detail.dart';
 import 'package:actividades_pais/backend/model/listar_combo_item.dart';
 import 'package:actividades_pais/backend/model/listar_informacion_tambos.dart';
@@ -43,6 +45,7 @@ import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart'
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
+import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
@@ -1150,10 +1153,30 @@ class MainService {
     return aResp;
   }
 
+  Future<List<ListaTambosEstadoInternetModel>> getListaTambosEstadoInternet(
+      String idEstado) async {
+    List<ListaTambosEstadoInternetModel> aResp =
+        await Get.find<MainRepo>().getListaTambosEstadoInternet(idEstado);
+    return aResp;
+  }
+
+  Future<List<TambosEstadoInternetModel>> getIndicadorEstadoInternet() async {
+    List<TambosEstadoInternetModel> aResp =
+        await Get.find<MainRepo>().getIndicadorEstadoInternet();
+    return aResp;
+  }
+
   Future<List<IndicadorCategorizacionModel>> getIndicadorCategorizacion(
       String idTipo) async {
     List<IndicadorCategorizacionModel> aResp =
         await Get.find<MainRepo>().getIndicadorCategorizacion(idTipo);
+    return aResp;
+  }
+
+  Future<List<CategorizacionTambosModel>> getCategorizacionTambos(
+      String idTipo) async {
+    List<CategorizacionTambosModel> aResp =
+        await Get.find<MainRepo>().getCategorizacionTambos(idTipo);
     return aResp;
   }
 
