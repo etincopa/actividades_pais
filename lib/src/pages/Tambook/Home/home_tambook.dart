@@ -52,6 +52,9 @@ class _HomeTambookState extends State<HomeTambook>
   bool isLoadingEI = true;
   bool isLoadingEquipos = false;
 
+  bool isLoadingSinInterAnio = false;
+  bool isLoadingSinInterMes = false;
+
   late String numTambos = "";
   late String banerTambosPias = "---                 ----                ---";
 
@@ -66,6 +69,7 @@ class _HomeTambookState extends State<HomeTambook>
   List<AvanceMetasModel> aMetasMensualizada = [];
   late List<CantidadTamboRegion> aTambosRegion = [];
   List<SinIntervencionModel> aSinIntervencion = [];
+  List<SinIntervencionModel> aSinIntervencionMes = [];
 
   late List<EquiposInformaticosResumen> aequiposResumen = [];
 
@@ -110,6 +114,8 @@ class _HomeTambookState extends State<HomeTambook>
     getTambosRegion();
     buildPersonalTambo();
     getCantidadTambosPIAS();
+    getTambosSinIntervencionAnio();
+    getTambosSinIntervencionMes();
     buildData();
     obtenerIndicadorInternet();
     obtenerIndicadorEstadoInternet();
@@ -183,8 +189,18 @@ class _HomeTambookState extends State<HomeTambook>
     /**
      * Obtener tambos sin intervenciones
      * */
+  }
 
+  Future<void> getTambosSinIntervencionAnio() async {
     aSinIntervencion = await mainCtr.SinIntervencion('ANIO');
+    setState(() {});
+    isLoadingSinInterAnio = true;
+  }
+
+  Future<void> getTambosSinIntervencionMes() async {
+    aSinIntervencionMes = await mainCtr.SinIntervencion('MES');
+    setState(() {});
+    isLoadingSinInterMes = true;
   }
 
   Future<void> getTambosRegion() async {
@@ -669,7 +685,7 @@ class _HomeTambookState extends State<HomeTambook>
                   const SizedBox(height: 15),
                   cardTambosSinIntervencion(),
                   const SizedBox(height: 15),
-                  cardTambosSinIntervencionDet(),
+                  cardTambosSinIntervencionMes(),
                 ],
               )),
               SingleChildScrollView(
@@ -1945,7 +1961,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding cardTambosSinIntervencion() {
-    var heading = 'TAMBOS SIN INTERVENCIONES $sCurrentYear';
+    var heading = 'TAMBOS SIN INTERVENCIONES DEL AÑO $sCurrentYear';
 
     final List<ChartDataAvance> chartData1 = [];
 
@@ -2010,7 +2026,7 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  isLoading2
+                  isLoadingSinInterAnio
                       ? Center(
                           child: SimpleCircularProgressBar(
                             size: 150,
@@ -2074,6 +2090,246 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                             ]),
                           ],
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            primary: Colors.blue,
+                          ),
+                          onPressed: () {
+                            BusyIndicator.show(context);
+
+                            BusyIndicator.hide(context);
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  buildSuccessDialog2(
+                                context,
+                                title:
+                                    "LISTA DE TAMBOS (${aSinIntervencion.length})",
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: aSinIntervencion.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    var oIndicadorInter =
+                                        aSinIntervencion[index];
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          leading: Text("${index + 1}"),
+                                          title: Text(
+                                            oIndicadorInter.nomTambo ?? '',
+                                          ),
+                                          subtitle:
+                                              Text(oIndicadorInter.region!),
+                                          onTap: () {},
+                                        ),
+                                        const Divider(color: colorI),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          child:
+                              const Text('LISTA DE TAMBOS SIN INTERVENCIONES'),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(
+                          height: 1,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardTambosSinIntervencionMes() {
+    var heading = 'TAMBOS SIN INTERVENCIONES DEL PRESENTE MES';
+
+    final List<ChartDataAvance> chartData1 = [];
+
+    int totalTamboSinIter = 0;
+    int totalTambo = int.parse(oTamboPias.tambos!);
+
+    if (aSinIntervencionMes.isNotEmpty) {
+      totalTamboSinIter = aSinIntervencionMes.length;
+    }
+
+    double totalPorcen1 = double.parse(((totalTamboSinIter / totalTambo) * 100)
+        .toStringAsFixed(2)
+        .replaceFirst(RegExp(r'\.?0*$'), ''));
+
+    late ValueNotifier<double> valueNotifier =
+        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoadingSinInterMes
+                      ? Center(
+                          child: SimpleCircularProgressBar(
+                            size: 150,
+                            maxValue: 100,
+                            valueNotifier: valueNotifier,
+                            backColor: Colors.black.withOpacity(0.4),
+                            progressStrokeWidth: 10,
+                            backStrokeWidth: 10,
+                            mergeMode: true,
+                            onGetText: (double value) {
+                              return Text(
+                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : const CircularProgressIndicator(),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    width: double.maxFinite,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Table(
+                          children: [
+                            TableRow(children: [
+                              const Text(
+                                "TOTAL : ",
+                                style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
+                              ),
+                              Text(
+                                formatoDecimal(totalTambo),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              const Text(
+                                "SIN INTERVECIONES : ",
+                                style: TextStyle(fontSize: 15.0),
+                                textAlign: TextAlign.right,
+                              ),
+                              Text(
+                                formatoDecimal(totalTamboSinIter),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ]),
+                          ],
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            primary: Colors.blue,
+                          ),
+                          onPressed: () {
+                            BusyIndicator.show(context);
+
+                            BusyIndicator.hide(context);
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  buildSuccessDialog2(
+                                context,
+                                title:
+                                    "LISTA DE TAMBOS (${aSinIntervencionMes.length})",
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: aSinIntervencionMes.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    var oIndicadorInter =
+                                        aSinIntervencionMes[index];
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          leading: Text("${index + 1}"),
+                                          title: Text(
+                                            oIndicadorInter.nomTambo ?? '',
+                                          ),
+                                          subtitle:
+                                              Text(oIndicadorInter.region!),
+                                          onTap: () {},
+                                        ),
+                                        const Divider(color: colorI),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          child:
+                              const Text('LISTA DE TAMBOS SIN INTERVENCIONES'),
                         ),
                         const SizedBox(
                           height: 20,
