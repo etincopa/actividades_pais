@@ -261,7 +261,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     aAvance = await mainCtr.progIntervencionTambo(
       '${oTambo.idTambo}',
       sCurrentYear,
-      '03',
+      'X', //mes
       'X',
       'X',
       'X',
