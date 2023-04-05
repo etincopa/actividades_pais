@@ -137,6 +137,8 @@ class _DetalleTambookState extends State<DetalleTambook>
   String sCurrentTime = "0";
   String sCurrentLogo = "assets/sol.png";
 
+  String dropdownValue = 'Dog';
+
   CombustibleTamboModel oCombustible = CombustibleTamboModel.empty();
   List<ProgIntervencionTamboModel> aAvance = [];
   List<MetasTamboModel> aMetasTipo1 = [];
@@ -1326,6 +1328,43 @@ class _DetalleTambookState extends State<DetalleTambook>
 
                     ListView(
                       children: [
+                        /*DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            filled: true,
+                            fillColor: Colors.blueAccent,
+                          ),
+                          dropdownColor: Colors.blueAccent,
+
+                          // Step 3.
+                          value: dropdownValue,
+                          // Step 4.
+                          items: <String>['Dog', 'Cat', 'Tiger', 'Lion']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(fontSize: 30),
+                              ),
+                            );
+                          }).toList(),
+                          // Step 5.
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            });
+                          },
+                        ),*/
                         cardActividadProgramada(),
                         const SizedBox(height: 40),
                       ],
@@ -1368,7 +1407,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   0,
                                   const Center(
                                     child: Text(
-                                      "Intervención de Ámbito Directo",
+                                      "PRESTACIÓN DE SERVICIO",
                                       style: TextStyle(
                                         color: colorS,
                                         fontWeight: FontWeight.w700,
@@ -1383,7 +1422,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   1,
                                   const Center(
                                     child: Text(
-                                      "Intervención de Soporte a Entidades",
+                                      "EJECUCIÓN DE SOPORTE",
                                       style: TextStyle(
                                         color: colorI,
                                         fontWeight: FontWeight.w700,
@@ -1398,7 +1437,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   2,
                                   const Center(
                                     child: Text(
-                                      "Coordinaciones",
+                                      "COORDINACIONES Y ACTIVIDADES",
                                       style: TextStyle(
                                         color: colorP,
                                         fontWeight: FontWeight.w700,
