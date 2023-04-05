@@ -684,8 +684,8 @@ class _HomeTambookState extends State<HomeTambook>
                   cardIndicadorCategorizacion(),
                   const SizedBox(height: 15),
                   cardTambosSinIntervencion(),
-                  const SizedBox(height: 15),
-                  cardTambosSinIntervencionMes(),
+                  // const SizedBox(height: 15),
+                  //cardTambosSinIntervencionMes(),
                 ],
               )),
               SingleChildScrollView(
@@ -2026,6 +2026,9 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text(
+                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                  SizedBox(height: 15),
                   isLoadingSinInterAnio
                       ? Center(
                           child: SimpleCircularProgressBar(
