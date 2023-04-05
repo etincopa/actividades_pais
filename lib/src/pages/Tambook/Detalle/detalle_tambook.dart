@@ -3530,9 +3530,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                   height: 200,
                   padding: const EdgeInsets.all(10),
                   child: KdGaugeView(
-                    fractionDigits: 2,
-                    minSpeed: 0.0,
-                    maxSpeed: 100.0,
+                    fractionDigits: 0,
+                    minSpeed: 0,
+                    maxSpeed: 100,
                     minMaxTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 10,
@@ -3622,7 +3622,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   height: 200,
                   padding: const EdgeInsets.all(10),
                   child: KdGaugeView(
-                    fractionDigits: 2,
+                    fractionDigits: 0,
                     minSpeed: 0.0,
                     maxSpeed: 100.0,
                     minMaxTextStyle: const TextStyle(
