@@ -1,9 +1,13 @@
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
+import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
 import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
@@ -18,6 +22,7 @@ import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart'
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
+import 'package:actividades_pais/src/pages/Tambook/Detalle/detalle_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -71,18 +76,26 @@ class _HomeTambookState extends State<HomeTambook>
   List<SinIntervencionModel> aSinIntervencion = [];
   List<SinIntervencionModel> aSinIntervencionMes = [];
 
+  List<AtencionesUsuariosTotalModel> aAtencionUsuarios = [];
+
   late List<EquiposInformaticosResumen> aequiposResumen = [];
+
+  late List<ActividadesDiariasResumenModel> aActividadesResumen = [];
 
   List<IndicadorInternetModel> aIndicadorInternet = [];
   List<IndicadorCategorizacionModel> aIndicadorCategorizacion = [];
   List<TambosEstadoInternetModel> aIndicadorEstadoInternet = [];
 
   String sCurrentYear = DateTime.now().year.toString();
-
+  String fechaActual = DateFormat("dd-MM-yyyy").format(DateTime.now());
   List<EquipamientoInformaticoModel> aEquipos = [];
   List<HomeOptions> aEquipoInformatico = [];
   List<HomeOptions> aPersonalTambo = [];
   List<HomeOptions> aPlataforma = [];
+
+  DateTime currentDate = DateTime.now();
+
+  String fechaActividades = "";
 
   List<ChartData> chartData = [
     ChartData('PRESTA SERVICIO', 0, colorI),
@@ -114,6 +127,8 @@ class _HomeTambookState extends State<HomeTambook>
     getTambosRegion();
     buildPersonalTambo();
     getCantidadTambosPIAS();
+    getCantidadTotalMetas();
+    getActividadesDiariasResumen("0");
     getTambosSinIntervencionAnio();
     getTambosSinIntervencionMes();
     buildData();
@@ -191,10 +206,43 @@ class _HomeTambookState extends State<HomeTambook>
      * */
   }
 
+  Future<void> getCantidadTotalMetas() async {
+    aAtencionUsuarios = await mainCtr.getCantidadTotalMetas(sCurrentYear);
+  }
+
   Future<void> getTambosSinIntervencionAnio() async {
     aSinIntervencion = await mainCtr.SinIntervencion('ANIO');
     setState(() {});
     isLoadingSinInterAnio = true;
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    BusyIndicator.show(context);
+
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050),
+        helpText: "SELECCIONAR FECHA DE ACTIVIDAD",
+        cancelText: "CANCELAR",
+        confirmText: "SELECCIONAR");
+
+    aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
+        DateFormat("yyyy-MM-dd").format(pickedDate!));
+
+    if (aActividadesResumen.isNotEmpty) {
+      fechaActividades = aActividadesResumen[0].fecha.toString();
+    } else {
+      fechaActividades = "";
+    }
+
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        currentDate = pickedDate;
+      });
+
+    BusyIndicator.hide(context);
   }
 
   Future<void> getTambosSinIntervencionMes() async {
@@ -205,6 +253,20 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> getTambosRegion() async {
     aTambosRegion = await mainCtr.getCantidadTambosRegion();
+    setState(() {});
+  }
+
+  Future<void> getActividadesDiariasResumen(String fecha) async {
+    aActividadesResumen = await mainCtr.getActividadesDiariasResumen(fecha);
+    if (aActividadesResumen.isNotEmpty) {
+      fechaActividades = aActividadesResumen[0].fecha.toString();
+      setState(() {
+        currentDate = DateTime.parse(
+            DateFormat("yyyy-MM-dd").format(DateTime.parse(fechaActividades)));
+      });
+    } else {
+      fechaActividades = "";
+    }
     setState(() {});
   }
 
@@ -506,7 +568,7 @@ class _HomeTambookState extends State<HomeTambook>
     );*/
 
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         backgroundColor: color_10o15,
         body: NestedScrollView(
@@ -638,6 +700,12 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                           Tab(
                             icon: ImageIcon(
+                              AssetImage('assets/calendario.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
                               AssetImage('assets/logros.png'),
                               size: 60,
                             ),
@@ -686,6 +754,20 @@ class _HomeTambookState extends State<HomeTambook>
                   cardTambosSinIntervencion(),
                   // const SizedBox(height: 15),
                   //cardTambosSinIntervencionMes(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('SELECCIONAR FECHA DE ACTIVIDAD'),
+                  ),
+                  const SizedBox(height: 10),
+                  cardActividadesDiarias(),
+                  const SizedBox(height: 15),
+                  //cardPlataforma(),
                 ],
               )),
               SingleChildScrollView(
@@ -1445,13 +1527,86 @@ class _HomeTambookState extends State<HomeTambook>
                   isLoading2
                       ? Center(
                           child: SfCircularChart(
+                              onLegendTapped: (LegendTapArgs args) async {
+                                String idProveedor =
+                                    chartDataIndicador[args.pointIndex ?? 0].id;
+
+                                String proveedor =
+                                    chartDataIndicador[args.pointIndex ?? 0].x;
+
+                                BusyIndicator.show(context);
+
+                                List<IndicadorInternetModel> indicadorInternet =
+                                    await mainCtr.getIndicadorInternet(
+                                        idProveedor.toString());
+
+                                BusyIndicator.hide(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      buildSuccessDialog2(
+                                    context,
+                                    title:
+                                        "LISTA DE TAMBOS (${indicadorInternet.length})\n${proveedor}",
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: indicadorInternet.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var oIndicadorInternet =
+                                            indicadorInternet[index];
+                                        return Column(
+                                          children: [
+                                            ListTile(
+                                              leading: Text("${index + 1}"),
+                                              title: Text(
+                                                oIndicadorInternet.nomTambo ??
+                                                    '',
+                                              ),
+                                              subtitle: Text(
+                                                  oIndicadorInternet.region!),
+                                              onTap: () async {
+                                                BusyIndicator.show(context);
+
+                                                List<BuscarTamboDto> aTamboId =
+                                                    await mainCtr
+                                                        .getDatosTamboGestor(
+                                                            oIndicadorInternet
+                                                                    .idTambo
+                                                                    .toString() ??
+                                                                '0');
+
+                                                BusyIndicator.hide(context);
+
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        DetalleTambook(
+                                                            listTambo:
+                                                                aTamboId[0]),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const Divider(color: colorI),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
                               legend: Legend(
                                   isVisible: true,
+                                  toggleSeriesVisibility: false,
                                   position: LegendPosition.bottom,
                                   overflowMode: LegendItemOverflowMode.wrap),
                               series: <CircularSeries>[
                               PieSeries<ChartDataAvanceIndicador, String>(
-                                  onPointTap:
+                                  /*onPointTap:
                                       (ChartPointDetails details) async {
                                     String idProveedor = chartDataIndicador[
                                             details.pointIndex ?? 0]
@@ -1505,7 +1660,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         ),
                                       ),
                                     );
-                                  },
+                                  },*/
                                   selectionBehavior:
                                       SelectionBehavior(enable: true),
                                   dataSource: chartDataIndicador,
@@ -1530,6 +1685,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
+                  Text("ACTUALIZADO AL ${fechaActual}"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -1602,67 +1758,86 @@ class _HomeTambookState extends State<HomeTambook>
                   isLoading2
                       ? Center(
                           child: SfCircularChart(
+                              onLegendTapped: (LegendTapArgs args) async {
+                                String idEstado =
+                                    chartDataIndicador[args.pointIndex ?? 0].id;
+
+                                String estado =
+                                    chartDataIndicador[args.pointIndex ?? 0].x;
+
+                                BusyIndicator.show(context);
+
+                                List<ListaTambosEstadoInternetModel>
+                                    indicadorInternet = await mainCtr
+                                        .getListaTambosEstadoInternet(idEstado);
+
+                                BusyIndicator.hide(context);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      buildSuccessDialog2(
+                                    context,
+                                    title:
+                                        "LISTA DE TAMBOS (${indicadorInternet.length})\n${estado}",
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: indicadorInternet.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var oIndicadorInternet =
+                                            indicadorInternet[index];
+                                        return Column(
+                                          children: [
+                                            ListTile(
+                                              leading: Text("${(index + 1)}"),
+                                              title: Text(
+                                                oIndicadorInternet.nomTambo ??
+                                                    '',
+                                              ),
+                                              subtitle: Text(
+                                                  "${oIndicadorInternet.region}\n${oIndicadorInternet.proveedor}"),
+                                              onTap: () async {
+                                                BusyIndicator.show(context);
+
+                                                List<BuscarTamboDto> aTamboId =
+                                                    await mainCtr
+                                                        .getDatosTamboGestor(
+                                                            oIndicadorInternet
+                                                                    .idTambo
+                                                                    .toString() ??
+                                                                '0');
+
+                                                BusyIndicator.hide(context);
+
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        DetalleTambook(
+                                                            listTambo:
+                                                                aTamboId[0]),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const Divider(color: colorI),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
                               legend: Legend(
-                                  isVisible: true,
-                                  position: LegendPosition.bottom,
-                                  overflowMode: LegendItemOverflowMode.wrap),
+                                isVisible: true,
+                                toggleSeriesVisibility: false,
+                                position: LegendPosition.bottom,
+                                overflowMode: LegendItemOverflowMode.wrap,
+                              ),
                               series: <CircularSeries>[
                               PieSeries<ChartDataAvanceIndicador, String>(
-                                  onPointTap:
-                                      (ChartPointDetails details) async {
-                                    String idEstado = chartDataIndicador[
-                                            details.pointIndex ?? 0]
-                                        .id;
-
-                                    String estado = chartDataIndicador[
-                                            details.pointIndex ?? 0]
-                                        .x;
-
-                                    BusyIndicator.show(context);
-
-                                    List<ListaTambosEstadoInternetModel>
-                                        indicadorInternet = await mainCtr
-                                            .getListaTambosEstadoInternet(
-                                                idEstado);
-
-                                    BusyIndicator.hide(context);
-
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          buildSuccessDialog2(
-                                        context,
-                                        title:
-                                            "LISTA DE TAMBOS (${indicadorInternet.length})\n${estado}",
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: indicadorInternet.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            var oIndicadorInternet =
-                                                indicadorInternet[index];
-                                            return Column(
-                                              children: [
-                                                ListTile(
-                                                  leading:
-                                                      Text("${(index + 1)}"),
-                                                  title: Text(
-                                                    oIndicadorInternet
-                                                            .nomTambo ??
-                                                        '',
-                                                  ),
-                                                  subtitle: Text(
-                                                      "${oIndicadorInternet.region}\n${oIndicadorInternet.proveedor}"),
-                                                  onTap: () {},
-                                                ),
-                                                const Divider(color: colorI),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
                                   selectionBehavior:
                                       SelectionBehavior(enable: true),
                                   dataSource: chartDataIndicador,
@@ -1687,6 +1862,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
+                  Text("ACTUALIZADO AL ${fechaActual}"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -1767,7 +1943,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "OPERATIVO: ${indicador.operativos ?? ''}\nINOPERATIVOS: ${indicador.inoperativos ?? ''}\nEN PROCESO DE INST. : ${indicador.enproceso ?? ''}",
+                                        "OPERATIVO: ${indicador.operativos ?? ''}\nINOPERATIVO: ${indicador.inoperativos ?? ''}\nEN PROCESO DE INST. : ${indicador.enproceso ?? ''}",
                                         textAlign: TextAlign.justify,
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -1786,6 +1962,7 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 10,
                         ),
                         const Text('FUENTE: PNPAIS'),
+                        Text("ACTUALIZADO AL ${fechaActual}"),
                         const SizedBox(
                           height: 1,
                         ),
@@ -1860,94 +2037,139 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   isLoading2
                       ? Center(
-                          child: SfCartesianChart(
-                              primaryXAxis: CategoryAxis(
-                                maximumLabelWidth: 100,
-                              ),
-                              primaryYAxis: NumericAxis(
-                                edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                numberFormat: NumberFormat.decimalPattern(),
-                              ),
-                              series: <ChartSeries>[
-                              // Renders bar chart
-                              BarSeries<ChartDataAvanceIndicador, String>(
-                                  onPointTap:
-                                      (ChartPointDetails details) async {
-                                    String idCategoria = chartDataIndicador[
-                                            details.pointIndex ?? 0]
-                                        .id;
+                          child: Container(
+                              height: 450,
+                              child: SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(
+                                    maximumLabelWidth: 100,
+                                  ),
+                                  primaryYAxis: NumericAxis(
+                                    edgeLabelPlacement:
+                                        EdgeLabelPlacement.shift,
+                                    numberFormat: NumberFormat.decimalPattern(),
+                                  ),
+                                  series: <ChartSeries>[
+                                    // Renders bar chart
+                                    BarSeries<ChartDataAvanceIndicador, String>(
+                                        onPointTap:
+                                            (ChartPointDetails details) async {
+                                          String idCategoria =
+                                              chartDataIndicador[
+                                                      details.pointIndex ?? 0]
+                                                  .id;
 
-                                    String categoria = chartDataIndicador[
-                                            details.pointIndex ?? 0]
-                                        .x;
+                                          String categoria = chartDataIndicador[
+                                                  details.pointIndex ?? 0]
+                                              .x;
 
-                                    BusyIndicator.show(context);
+                                          BusyIndicator.show(context);
 
-                                    List<CategorizacionTambosModel>
-                                        indicadorCategorizacion =
-                                        await mainCtr.getCategorizacionTambos(
-                                            idCategoria.toString());
-                                    print(indicadorCategorizacion[0]
-                                        .nomCategoria);
+                                          List<CategorizacionTambosModel>
+                                              indicadorCategorizacion =
+                                              await mainCtr
+                                                  .getCategorizacionTambos(
+                                                      idCategoria.toString());
 
-                                    BusyIndicator.hide(context);
+                                          BusyIndicator.hide(context);
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          buildSuccessDialog2(
-                                        context,
-                                        title:
-                                            "LISTA DE TAMBOS (${indicadorCategorizacion.length})\n${categoria}",
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              indicadorCategorizacion.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            var oIndicadorCategoria =
-                                                indicadorCategorizacion[index];
-                                            return Column(
-                                              children: [
-                                                ListTile(
-                                                  leading: Text("${index + 1}"),
-                                                  title: Text(
-                                                    oIndicadorCategoria
-                                                            .nomTambo ??
-                                                        '',
-                                                  ),
-                                                  subtitle: Text(
-                                                      oIndicadorCategoria
-                                                          .region!),
-                                                  onTap: () {},
-                                                ),
-                                                const Divider(color: colorI),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  dataSource: chartDataIndicador,
-                                  xValueMapper:
-                                      (ChartDataAvanceIndicador data, _) =>
-                                          data.x,
-                                  yValueMapper:
-                                      (ChartDataAvanceIndicador data, _) =>
-                                          data.y,
-                                  dataLabelSettings: const DataLabelSettings(
-                                      // Renders the data label
-                                      isVisible: true,
-                                      labelPosition:
-                                          ChartDataLabelPosition.outside,
-                                      textStyle: TextStyle(fontSize: 17)))
-                            ]))
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                buildSuccessDialog2(
+                                              context,
+                                              title:
+                                                  "LISTA DE TAMBOS (${indicadorCategorizacion.length})\n${categoria}",
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    indicadorCategorizacion
+                                                        .length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  var oIndicadorCategoria =
+                                                      indicadorCategorizacion[
+                                                          index];
+                                                  return Column(
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "${index + 1}"),
+                                                        title: Text(
+                                                          oIndicadorCategoria
+                                                                  .nomTambo ??
+                                                              '',
+                                                        ),
+                                                        subtitle: Text(
+                                                            oIndicadorCategoria
+                                                                .region!),
+                                                        onTap: () async {
+                                                          BusyIndicator.show(
+                                                              context);
+
+                                                          List<BuscarTamboDto>
+                                                              aTamboId =
+                                                              await mainCtr.getDatosTamboGestor(
+                                                                  oIndicadorCategoria
+                                                                          .idTambo
+                                                                          .toString() ??
+                                                                      '0');
+
+                                                          BusyIndicator.hide(
+                                                              context);
+
+                                                          Navigator
+                                                              .pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  DetalleTambook(
+                                                                      listTambo:
+                                                                          aTamboId[
+                                                                              0]),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      const Divider(
+                                                          color: colorI),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        dataSource: chartDataIndicador,
+                                        xValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.x,
+                                        yValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.y,
+                                        // Width of the bars
+                                        width: 0.9,
+                                        // Spacing between the bars
+                                        spacing: 0.2,
+                                        dataLabelSettings:
+                                            const DataLabelSettings(
+                                                // Renders the data label
+                                                isVisible: true,
+                                                labelPosition:
+                                                    ChartDataLabelPosition
+                                                        .outside,
+                                                textStyle:
+                                                    TextStyle(fontSize: 17)))
+                                  ])))
                       : const Center(child: CircularProgressIndicator()),
                   const SizedBox(
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
+                  Text("ACTUALIZADO AL ${fechaActual}"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -2071,7 +2293,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                formatoDecimal(totalTamboSinIter),
+                                formatoDecimal(totalTambo),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2080,12 +2302,12 @@ class _HomeTambookState extends State<HomeTambook>
                             ]),
                             TableRow(children: [
                               const Text(
-                                "SIN INTERVECIONES : ",
+                                "SIN INTERVENCIONES : ",
                                 style: TextStyle(fontSize: 15.0),
                                 textAlign: TextAlign.right,
                               ),
                               Text(
-                                formatoDecimal(totalTambo),
+                                formatoDecimal(totalTamboSinIter),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -2126,7 +2348,29 @@ class _HomeTambookState extends State<HomeTambook>
                                           ),
                                           subtitle:
                                               Text(oIndicadorInter.region!),
-                                          onTap: () {},
+                                          onTap: () async {
+                                            BusyIndicator.show(context);
+
+                                            List<BuscarTamboDto> aTamboId =
+                                                await mainCtr
+                                                    .getDatosTamboGestor(
+                                                        oIndicadorInter.idTambo
+                                                                .toString() ??
+                                                            '0');
+
+                                            BusyIndicator.hide(context);
+
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        DetalleTambook(
+                                                            listTambo:
+                                                                aTamboId[0]),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         const Divider(color: colorI),
                                       ],
@@ -2143,6 +2387,7 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 20,
                         ),
                         const Text('FUENTE: PNPAIS'),
+                        Text("ACTUALIZADO AL ${fechaActual}"),
                         const SizedBox(
                           height: 1,
                         ),
@@ -2432,9 +2677,8 @@ class _HomeTambookState extends State<HomeTambook>
 
   Padding cardAtenciones() {
     int totalAvance1 = 0;
-    if (aAtenInterBene.isNotEmpty) {
-      totalAvance1 =
-          aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!);
+    if (aAtencionUsuarios.isNotEmpty) {
+      totalAvance1 = int.parse(aAtencionUsuarios[0]!.atenciones ?? '0');
     }
 
     final totalMetaTipo1 =
@@ -2603,9 +2847,8 @@ class _HomeTambookState extends State<HomeTambook>
 
   Padding cardBeneficiarios() {
     int totalAvance1 = 0;
-    if (aAtenInterBene.isNotEmpty) {
-      totalAvance1 =
-          aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!);
+    if (aAtencionUsuarios.isNotEmpty) {
+      totalAvance1 = int.parse(aAtencionUsuarios[0]!.usuuarios ?? '0');
     }
     final totalMetaTipo1 =
         aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
@@ -2773,11 +3016,233 @@ class _HomeTambookState extends State<HomeTambook>
 
 /*
  * -----------------------------------------------
+ *            INFORMACIÓN DE ACTIVIDADES DIARIAS
+ * -----------------------------------------------
+ */
+  Padding cardActividadesDiarias() {
+    var heading = 'ACTIVIDADES DIARIAS DE LOS TAMBOS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -1),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "FECHA DE ACTIVIDADES : ${fechaActividades}",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Divider(
+                          height: 10,
+                        ),
+                        for (var tambos in aActividadesResumen)
+                          Column(children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 120,
+                                  child: Image.asset(
+                                      "assets/regiones/${tambos.idUt}.png",
+                                      fit: BoxFit.cover),
+                                ),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        tambos.region ?? '',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.blue,
+                                        ),
+                                        onPressed: () async {
+                                          BusyIndicator.show(context);
+
+                                          List<ActividadesDiariasModel>
+                                              aActividadesDiarias =
+                                              await mainCtr
+                                                  .getActividadesDiarias(
+                                                      DateFormat("yyyy-MM-dd")
+                                                          .format(currentDate!)
+                                                          .toString(),
+                                                      'Si',
+                                                      tambos.idUt!);
+
+                                          BusyIndicator.hide(context);
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                buildSuccessDialog2(
+                                              context,
+                                              title:
+                                                  "TAMBOS CON ACTIVIDADES\n${tambos.region!}\n(${aActividadesDiarias.length})",
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    aActividadesDiarias.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  var oActividadDiaria =
+                                                      aActividadesDiarias[
+                                                          index];
+                                                  return Column(
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "${index + 1}"),
+                                                        title: Text(
+                                                          "${oActividadDiaria.nomTambo ?? ''}\n\n${oActividadDiaria.actividad ?? ''}",
+                                                        ),
+                                                        subtitle: Text(
+                                                            "LUGAR : ${oActividadDiaria.lugar!}\nTIPO DE INT. : ${oActividadDiaria.tipoIntervencion!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
+                                                        onTap: () {},
+                                                      ),
+                                                      const Divider(
+                                                          color: colorI),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                            'CON ACTIVIDADES : ${tambos.conActividades}'),
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.blue,
+                                        ),
+                                        onPressed: () async {
+                                          BusyIndicator.show(context);
+
+                                          List<ActividadesDiariasModel>
+                                              aActividadesDiarias =
+                                              await mainCtr
+                                                  .getActividadesDiarias(
+                                                      DateFormat("yyyy-MM-dd")
+                                                          .format(currentDate!)
+                                                          .toString(),
+                                                      'No',
+                                                      tambos.idUt!);
+
+                                          BusyIndicator.hide(context);
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                buildSuccessDialog2(
+                                              context,
+                                              title:
+                                                  "TAMBOS SIN ACTIVIDADES\n${tambos.region!}\n(${aActividadesDiarias.length})",
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    aActividadesDiarias.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  var oActividadDiaria =
+                                                      aActividadesDiarias[
+                                                          index];
+                                                  return Column(
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "${index + 1}"),
+                                                        title: Text(
+                                                          "${oActividadDiaria.nomTambo ?? ''}",
+                                                        ),
+                                                        subtitle: Text(
+                                                            "MOTIVO : ${oActividadDiaria.motivo!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
+                                                        onTap: () {},
+                                                      ),
+                                                      const Divider(
+                                                          color: colorI),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                            'SIN ACTIVIDADES : ${tambos.sinActividades}'),
+                                      ),
+                                    ]),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            const Divider(color: colorI),
+                          ]),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: INEI - PAIS'),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
  *            INFORMACIÓN DE TAMBOS POR REGIÓN
  * -----------------------------------------------
  */
   Padding cardTambosRegion() {
-    var heading = 'TAMBOS POR REGIÓN Y SU POBLACIÓN OBJETIVO';
+    var heading = 'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -2855,6 +3320,7 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                         const SizedBox(height: 10),
                         const Text('FUENTE: INEI - PAIS'),
+                        Text("ACTUALIZADO AL ${fechaActual}"),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2956,7 +3422,10 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                               const Divider(color: colorI),
                             ],
-                          )
+                          ),
+                        const SizedBox(height: 10),
+                        const Text("FUENTE: PNPAIS"),
+                        Text("ACTUALIZADO AL ${fechaActual}"),
                       ],
                     ),
                   ),

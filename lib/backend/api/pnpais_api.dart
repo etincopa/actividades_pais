@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
@@ -623,6 +626,19 @@ class PnPaisApi {
     );
   }
 
+  Future<HttpResponse<List<AtencionesUsuariosTotalModel>>>
+      getCantidadTotalMetas(String anio) async {
+    return await _http.request<List<AtencionesUsuariosTotalModel>>(
+      '${basePathApp3}obtenerEjecucionAnualTambo/${anio}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => AtencionesUsuariosTotalModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
   Future<HttpResponse<List<ResumenParqueInformatico>>>
       getResumenParqueInformatico() async {
     return await _http.request<List<ResumenParqueInformatico>>(
@@ -645,6 +661,43 @@ class PnPaisApi {
         return (data as List)
             .map((e) => CantidadTamboRegion.fromJson(e))
             .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ActividadesDiariasResumenModel>>>
+      getActividadesDiariasResumen(String fecha) async {
+    return await _http.request<List<ActividadesDiariasResumenModel>>(
+      '${basePathApp3}obtenerActividadesDiariasTamboResumen/${fecha}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ActividadesDiariasResumenModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ActividadesDiariasModel>>> getActividadesDiarias(
+      String fecha, String tipo, String idUt) async {
+    return await _http.request<List<ActividadesDiariasModel>>(
+      '${basePathApp3}obtenerActividadesDiariasTambo/${fecha}/${tipo}/${idUt}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ActividadesDiariasModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<BuscarTamboDto>>> getDatosTamboGestor(
+      String idTambo) async {
+    return await _http.request<List<BuscarTamboDto>>(
+      '${basePathApp3}buscarTamboOrGestorID/${idTambo}',
+      method: "GET",
+      parser: (data) {
+        return (data as List).map((e) => BuscarTamboDto.fromJson(e)).toList();
       },
     );
   }

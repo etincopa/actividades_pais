@@ -10,7 +10,6 @@ import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/intro/splash_intro_page.dart';
 import 'package:actividades_pais/resource/Internationalization.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/src/pages/Home/home.dart';
@@ -51,12 +50,14 @@ class MyApp extends StatelessWidget {
     return OverlaySupport.global(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Registo',
+        title: 'SISTEMA DE INFORMACIÓN PNPAIS',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+
         home: SplashPage(), //PdfPage(), //Card6(),
+
         locale: MyTraslation.locale,
         fallbackLocale: MyTraslation.fallbackLocale,
         translations: MyTraslation(),

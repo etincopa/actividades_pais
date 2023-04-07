@@ -49,6 +49,7 @@ import 'package:lecle_bubble_timeline/models/timeline_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import "package:collection/collection.dart";
+import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
 
 class DetalleTambook extends StatefulWidget {
   const DetalleTambook({super.key, this.listTambo});
@@ -139,6 +140,8 @@ class _DetalleTambookState extends State<DetalleTambook>
   String sCurrentLogo = "assets/sol.png";
 
   String dropdownValue = 'Dog';
+
+  DateTime currentDate = DateTime.now();
 
   CombustibleTamboModel oCombustible = CombustibleTamboModel.empty();
   List<ProgIntervencionTamboModel> aAvance = [];
@@ -274,10 +277,39 @@ class _DetalleTambookState extends State<DetalleTambook>
      * Solo filtral registros cuyo estados esten en 
      * 4 : FINALIZADO/APROBADOS
      */
-    
+
     // aAvance = aAvance.where((e) => e.estadoProgramacion == 1).toList();
     aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList();
     //aAvance.sort((a, b) => a.fecha!.compareTo(b.fecha!));
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    BusyIndicator.show(context);
+    isLoading = true;
+    final pickedDate = await showMonthPicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2050),
+    );
+
+    if (pickedDate != null && pickedDate != currentDate) {
+      aAvance = await mainCtr.progIntervencionTambo(
+        '${oTambo.idTambo}',
+        DateFormat("yyyy").format(pickedDate!),
+        DateFormat("MM").format(pickedDate!),
+        'X',
+        'X',
+        'X',
+        'X',
+      );
+
+      setState(() =>
+          aAvance = aAvance.where((e) => e.estadoProgramacion == 4).toList());
+    }
+
+    BusyIndicator.hide(context);
+    isLoading = false;
   }
 
   Future<void> getAtenInterBeneResumen() async {
@@ -930,7 +962,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             maxScale: 2,
             child: ImageUtil.ImageUrl(
               oTambo.tamboPathImage ?? '',
-              fit: BoxFit.fitHeight,
+              //fit: BoxFit.fitHeight,
             ),
           ),
         ),
@@ -1332,43 +1364,14 @@ class _DetalleTambookState extends State<DetalleTambook>
 
                     ListView(
                       children: [
-                        /*DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Colors.blueAccent,
-                          ),
-                          dropdownColor: Colors.blueAccent,
-
-                          // Step 3.
-                          value: dropdownValue,
-                          // Step 4.
-                          items: <String>['Dog', 'Cat', 'Tiger', 'Lion']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(fontSize: 30),
-                              ),
-                            );
-                          }).toList(),
-                          // Step 5.
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownValue = newValue!;
-                            });
-                          },
-                        ),*/
+                        const SizedBox(height: 15),
+                        Column(children: [
+                          ElevatedButton(
+                            onPressed: () => _selectDate(context),
+                            child: Text('SELECCIONAR MES DE ACTIVIDADES'),
+                          )
+                        ]),
+                        const SizedBox(height: 10),
                         cardActividadProgramada(),
                         const SizedBox(height: 40),
                       ],

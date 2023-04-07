@@ -2,7 +2,10 @@ import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
@@ -831,6 +834,18 @@ class MainRepo {
     return aResp;
   }
 
+  Future<List<AtencionesUsuariosTotalModel>> getCantidadTotalMetas(
+      String anio) async {
+    List<AtencionesUsuariosTotalModel> aResp = [];
+    final response = await _pnPaisApi.getCantidadTotalMetas(anio);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
   Future<List<ResumenParqueInformatico>> getResumenParqueInformatico() async {
     List<ResumenParqueInformatico> aResp = [];
     final response = await _pnPaisApi.getResumenParqueInformatico();
@@ -845,6 +860,41 @@ class MainRepo {
   Future<List<CantidadTamboRegion>> getCantidadTambosRegion() async {
     List<CantidadTamboRegion> aResp = [];
     final response = await _pnPaisApi.getCantidadTambosRegion();
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ActividadesDiariasResumenModel>> getActividadesDiariasResumen(
+      String fecha) async {
+    List<ActividadesDiariasResumenModel> aResp = [];
+    final response = await _pnPaisApi.getActividadesDiariasResumen(fecha);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ActividadesDiariasModel>> getActividadesDiarias(
+      String fecha, String tipo, String idUt) async {
+    List<ActividadesDiariasModel> aResp = [];
+    final response = await _pnPaisApi.getActividadesDiarias(fecha, tipo, idUt);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<BuscarTamboDto>> getDatosTamboGestor(String idTambo) async {
+    List<BuscarTamboDto> aResp = [];
+    final response = await _pnPaisApi.getDatosTamboGestor(idTambo);
     if (response.error == null) {
       aResp = response.data!;
     } else {

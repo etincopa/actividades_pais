@@ -52,9 +52,8 @@ class ImageUtil {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             alignment: alignment ?? Alignment.center,
-            height: height ?? 100.0,
-            width: width ?? 100.0,
-            child: Image.asset(imgDefault ?? 'assets/Monitor/logo.png'),
+            height: 50.0,
+            child: Image.asset('assets/Monitor/logo.png'),
           );
         },
       );

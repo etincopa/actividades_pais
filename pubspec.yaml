@@ -100,6 +100,8 @@ dependencies:
   cached_network_image: ^3.2.3
   lecle_downloads_path_provider: ^0.0.2+8
 
+  mat_month_picker_dialog: ^1.1.1
+
 flutter_icons:
   android: "launcher_icon"
   ios: true

@@ -1,7 +1,10 @@
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
+import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
@@ -1070,6 +1073,13 @@ class MainController extends GetxController {
     return aResp;
   }
 
+  Future<List<AtencionesUsuariosTotalModel>> getCantidadTotalMetas(
+      String anio) async {
+    List<AtencionesUsuariosTotalModel> aResp =
+        await Get.find<MainService>().getCantidadTotalMetas(anio);
+    return aResp;
+  }
+
   Future<List<ResumenParqueInformatico>> getResumenParqueInformatico() async {
     List<ResumenParqueInformatico> aResp =
         await Get.find<MainService>().getResumenParqueInformatico();
@@ -1079,6 +1089,26 @@ class MainController extends GetxController {
   Future<List<CantidadTamboRegion>> getCantidadTambosRegion() async {
     List<CantidadTamboRegion> aResp =
         await Get.find<MainService>().getCantidadTambosRegion();
+    return aResp;
+  }
+
+  Future<List<ActividadesDiariasResumenModel>> getActividadesDiariasResumen(
+      String fecha) async {
+    List<ActividadesDiariasResumenModel> aResp =
+        await Get.find<MainService>().getActividadesDiariasResumen(fecha);
+    return aResp;
+  }
+
+  Future<List<ActividadesDiariasModel>> getActividadesDiarias(
+      String fecha, String tipo, String idUt) async {
+    List<ActividadesDiariasModel> aResp =
+        await Get.find<MainService>().getActividadesDiarias(fecha, tipo, idUt);
+    return aResp;
+  }
+
+  Future<List<BuscarTamboDto>> getDatosTamboGestor(String idTambo) async {
+    List<BuscarTamboDto> aResp =
+        await Get.find<MainService>().getDatosTamboGestor(idTambo);
     return aResp;
   }
 
