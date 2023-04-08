@@ -144,6 +144,8 @@ class _DetalleTambookState extends State<DetalleTambook>
   String sCurrentTime = "0";
   String sCurrentLogo = "assets/sol.png";
 
+  String fechaActual = DateFormat("dd-MM-yyyy").format(DateTime.now());
+
   String dropdownValue = 'Dog';
 
   DateTime currentDate = DateTime.now();
@@ -185,7 +187,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
 
-    _tabController = TabController(vsync: this, length: 3);
+    _tabController = TabController(vsync: this, length: 2);
 
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
@@ -206,7 +208,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     tamboDatoGeneral();
     obtenerAvanceMetasPorMes();
-    //TamboIntervencionAtencionIncidencia();
+    TamboIntervencionAtencionIncidencia();
 
     //incidenciasInternet();
   }
@@ -495,6 +497,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
       setState(() {});
     } catch (oError) {
+      print("errro");
       statusLoadActividad = 2;
     }
   }
@@ -1379,6 +1382,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     SingleChildScrollView(
                         child: Column(
                       children: [
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(height: 2),
+                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        const SizedBox(height: 10),
                         const SizedBox(height: 15),
                         cardEquipoTecnologico(),
                         const SizedBox(height: 40),
@@ -1411,12 +1419,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     ),*/
 
-                    ListView(
-                      children: [
-                        const SizedBox(height: 10),
-                        cardActividadesDiarias(),
-                        const SizedBox(height: 40),
-                      ],
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          cardActividadesDiarias(),
+                          const SizedBox(height: 40),
+                        ],
+                      ),
                     ),
 
                     //const TabScreen("Clima"),
@@ -1439,7 +1449,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
                     //const TabScreen("INTERVENCIONES"),
                     DefaultTabController(
-                      length: 3,
+                      length: 2,
                       child: Column(
                         children: <Widget>[
                           Material(
@@ -1482,7 +1492,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                 ),
-                                _getTab(
+                                /*_getTab(
                                   2,
                                   const Center(
                                     child: Text(
@@ -1496,7 +1506,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
@@ -1517,12 +1527,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     const SizedBox(height: 40),
                                   ],
                                 ),
-                                ListView(
+                                /*ListView(
                                   children: [
                                     cardDatosIntervencionCod4(),
                                     const SizedBox(height: 40),
                                   ],
-                                ),
+                                ),*/
                               ],
                             ),
                           ),
@@ -1744,6 +1754,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       fontSize: 20),
                                 )))
                     : const CircularProgressIndicator(),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -1847,6 +1862,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -2273,6 +2293,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -2588,6 +2613,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -2654,6 +2684,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -3176,7 +3211,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                             ]));
                       }
-                    })
+                    }),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -3309,6 +3349,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 10),
+                                const Text('FUENTE: PNPAIS'),
+                                const SizedBox(height: 2),
+                                Text("ACTUALIZADO AL ${fechaActual}"),
+                                const SizedBox(height: 10),
                               ]));
                         } else {
                           return Center(
@@ -3544,11 +3589,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD BAJADA'),
-                          subtitle: Text(oSrvInter.veloBaja!),
+                          subtitle: Text(
+                              "${oSrvInter.veloBaja!} (${oSrvInter.veloMinBajaPtje ?? '0'})"),
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD SUBIDA'),
-                          subtitle: Text(oSrvInter.veloSube!),
+                          subtitle: Text(
+                              "${oSrvInter.veloSube!} (${oSrvInter.veloMinSubePtje ?? '0'})"),
                         ),
                       ],
                     ),
@@ -3602,50 +3649,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ),
                 ),
 
-                //VELOCIDAD DE BAJADA ASEGURADA
-                const ListTile(
-                  title: Text(
-                    'PORCENTAJE  ASEGURADO',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 200,
-                  height: 200,
-                  padding: const EdgeInsets.all(10),
-                  child: KdGaugeView(
-                    fractionDigits: 0,
-                    minSpeed: 0,
-                    maxSpeed: 100,
-                    minMaxTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 10,
-                    ),
-                    speed: (getNumber(oSrvInter.veloMinBajaPtje ?? '0') / 100),
-                    speedTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    animate: true,
-                    alertSpeedArray: const [0, 5, 10],
-                    alertColorArray: const [colorP, colorI, colorS],
-                    duration: const Duration(seconds: 6),
-                    unitOfMeasurement:
-                        "%", //getText(oSrvInter.veloBaja ?? "Mbps"),
-                    unitOfMeasurementTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    gaugeWidth: 15,
-                    innerCirclePadding: 15,
-                  ),
-                ),
                 Divider(
                   height: 4,
                 ),
@@ -3693,53 +3696,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                     innerCirclePadding: 15,
                   ),
                 ),
-
-                //VELOCIDAD DE SUBIDA ASEGURADA
-                const ListTile(
-                  title: Text(
-                    'PORCENTAJE  ASEGURADO',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 200,
-                  height: 200,
-                  padding: const EdgeInsets.all(10),
-                  child: KdGaugeView(
-                    fractionDigits: 0,
-                    minSpeed: 0.0,
-                    maxSpeed: 100.0,
-                    minMaxTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 10,
-                    ),
-                    speed: (getNumber(oSrvInter.veloMinSubePtje ?? '0') / 100),
-                    speedTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    animate: true,
-                    alertSpeedArray: const [0, 5, 10],
-                    alertColorArray: const [colorP, colorI, colorS],
-                    duration: const Duration(seconds: 6),
-                    unitOfMeasurement:
-                        "%", //getText(oSrvInter.veloBaja ?? "Mbps"),
-                    unitOfMeasurementTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    gaugeWidth: 15,
-                    innerCirclePadding: 15,
-                  ),
-                ),
               ],
             ),
+            const SizedBox(height: 10),
+            const Text('FUENTE: PNPAIS'),
+            const SizedBox(height: 2),
+            Text("ACTUALIZADO AL ${fechaActual}"),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -3855,6 +3818,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                             ),
                             const Divider(color: colorI),
+                            const SizedBox(height: 10),
+                            const Text('FUENTE: PNPAIS'),
+                            const SizedBox(height: 2),
+                            Text("ACTUALIZADO AL ${fechaActual}"),
+                            const SizedBox(height: 10),
                           ],
                         );
                       }
@@ -3881,6 +3849,11 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
         child: Column(
           children: [
+            const SizedBox(height: 10),
+            const Text('FUENTE: PNPAIS'),
+            const SizedBox(height: 2),
+            Text("ACTUALIZADO AL ${fechaActual}"),
+            const SizedBox(height: 10),
             if (aInterAmbDir.isEmpty && statusLoadActividad == 0)
               ListTile(
                 title: const Text("CARGANDO..."),
@@ -4079,6 +4052,11 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
         child: Column(
           children: [
+            const SizedBox(height: 10),
+            const Text('FUENTE: PNPAIS'),
+            const SizedBox(height: 2),
+            Text("ACTUALIZADO AL ${fechaActual}"),
+            const SizedBox(height: 10),
             if (aInterSopEnt.isEmpty && statusLoadActividad == 0)
               ListTile(
                 title: const Text("CARGANDO..."),
@@ -4129,6 +4107,11 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
         child: Column(
           children: [
+            const SizedBox(height: 10),
+            const Text('FUENTE: PNPAIS'),
+            const SizedBox(height: 2),
+            Text("ACTUALIZADO AL ${fechaActual}"),
+            const SizedBox(height: 10),
             if (aCoordinacio.isEmpty && statusLoadActividad == 0)
               ListTile(
                 title: const Text("CARGANDO..."),
@@ -4710,6 +4693,123 @@ class _DetalleTambookState extends State<DetalleTambook>
                   color: Colors.black,
                 ),
                 title: Text(
+                  '$heading',
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Card(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (aActividadesDiarias.isEmpty)
+                          Center(
+                            child: const Text("SIN REGISTROS"),
+                          ),
+                        for (var actividades in aActividadesDiarias!)
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                if (actividades.gitLaborando! == 'Si')
+                                  Text(
+                                    "ACTIVIDAD: ${actividades.actividad.toString()}\n\nLUGAR: ${actividades.lugar.toString()}\n\nTIPO INTERVENCIÓN: ${actividades.tipoIntervencion.toString()}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ), //Textstyle
+                                  ),
+                                if (actividades.gitLaborando! == 'No')
+                                  Text(
+                                    "SIN ACTIVIDAD\n\nMOTIVO: ${actividades.motivo.toString()}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ), //Textstyle
+                                  ), //Text
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Chip(
+                                      label: Text(
+                                        'Fecha : ${actividades.fechaActividad ?? ''}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        horizontal: 10,
+                                      ),
+                                      backgroundColor:
+                                          (actividades.gitLaborando! == 'Si')
+                                              ? Colors.blue
+                                              : Colors.red,
+                                    ),
+                                  ],
+                                ),
+
+                                const Divider(color: colorI), //SizedBox
+                              ],
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    /*var heading = 'ACTIVIDADES DIARIAS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/actividades.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
+                title: Text(
                   heading,
                   style: const TextStyle(
                       fontSize: 16,
@@ -4718,6 +4818,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
               children: <Widget>[
+                const Divider(color: colorI),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
                 const Divider(color: colorI),
                 Container(
                   alignment: Alignment.centerLeft,
@@ -4812,7 +4918,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           ],
         ),
       ),
-    );
+    );*/
   }
 
 /*
@@ -4900,6 +5006,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text('FUENTE: OPEN-METEO'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL ${fechaActual}"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -5000,7 +5111,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ),
                               const Divider(color: colorI),
                             ],
-                          )
+                          ),
+                        const SizedBox(height: 10),
+                        const Text('FUENTE: PNPAIS'),
+                        const SizedBox(height: 2),
+                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),

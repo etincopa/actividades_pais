@@ -260,8 +260,8 @@ class _HomeTambookState extends State<HomeTambook>
     if (aActividadesResumen.isNotEmpty) {
       fechaActividades = aActividadesResumen[0].fecha.toString();
       setState(() {
-        currentDate = DateTime.parse(
-            DateFormat("yyyy-MM-dd").format(DateTime.parse(fechaActividades)));
+        currentDate = DateTime.parse(DateFormat("yyyy-MM-dd")
+            .format(DateFormat("dd-MM-yyyy").parse(fechaActividades)));
       });
     } else {
       fechaActividades = "";
