@@ -71,7 +71,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     "PLAN DE MANTENIMIENTO",
     "SERVICIOS DEL TAMBO",
     "EQUIPOS INFORMÁTICOS",
-    "ACTIVIDADES APROBADAS",
+    //"ACTIVIDADES APROBADAS",
     "ACTIVIDADES DIARIAS",
     "CLIMA",
     "COMO LLEGAR AL TAMBO",
@@ -196,7 +196,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     });
 
     currentTitle = titleList[0];
-    _tabControllerTitle = TabController(length: 11, vsync: this);
+    _tabControllerTitle = TabController(length: 10, vsync: this);
     _tabControllerTitle.addListener(changeTitle);
 
     super.initState();
@@ -206,7 +206,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
     tamboDatoGeneral();
     obtenerAvanceMetasPorMes();
-    TamboIntervencionAtencionIncidencia();
+    //TamboIntervencionAtencionIncidencia();
 
     //incidenciasInternet();
   }
@@ -1000,7 +1000,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 11,
+              length: 10,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -1119,7 +1119,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
-                                message: 'Plan de mantenimiento',
+                                message: 'PLAN DE MANTENIMIENTO',
                                 child: Tab(
                                   icon: ImageIcon(
                                     AssetImage('assets/mantenimiento.png'),
@@ -1171,7 +1171,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                               ),*/
 
-                              Tooltip(
+                              /*Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
                                 padding: EdgeInsets.all(5),
@@ -1188,7 +1188,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     size: 55,
                                   ),
                                 ),
-                              ),
+                              ),*/
+
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -1395,7 +1396,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
                     //const TabScreen("ACTIVIDADES PROGRAMADAS"),
 
-                    ListView(
+                    /*ListView(
                       children: [
                         const SizedBox(height: 15),
                         Column(children: [
@@ -1408,7 +1409,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         cardActividadProgramada(),
                         const SizedBox(height: 40),
                       ],
-                    ),
+                    ),*/
 
                     ListView(
                       children: [

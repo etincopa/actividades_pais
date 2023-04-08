@@ -229,9 +229,10 @@ class _HomeTambookState extends State<HomeTambook>
         confirmText: "SELECCIONAR");
 
     if (pickedDate != null && pickedDate != currentDate) {
+      aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
+          DateFormat("yyyy-MM-dd").format(pickedDate!));
+
       if (aActividadesResumen.isNotEmpty) {
-        aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
-            DateFormat("yyyy-MM-dd").format(pickedDate!));
         fechaActividades = aActividadesResumen[0].fecha.toString();
       } else {
         fechaActividades = "";
@@ -343,7 +344,8 @@ class _HomeTambookState extends State<HomeTambook>
         color: Colors.white,
       ),
     );
-    aPersonalTambo.add(
+
+    /*aPersonalTambo.add(
       HomeOptions(
         code: 'OPT3003',
         name: 'GESTORES \nTAMBOS',
@@ -372,7 +374,7 @@ class _HomeTambookState extends State<HomeTambook>
           types: const ['Ver'],
           image: icon5,
           color: Colors.white),
-    );
+    );*/
   }
 
   Future<void> buildEquipoInformatico() async {
@@ -792,6 +794,8 @@ class _HomeTambookState extends State<HomeTambook>
                   child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const SizedBox(height: 15),
+                  Text("ACTUALIZADO AL ${fechaActual}"),
                   const SizedBox(height: 15),
                   cardPersonalTambo(),
                 ],
@@ -3084,7 +3088,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        tambos.region ?? '',
+                                        "U.T.: ${tambos.region ?? ''}",
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -3275,7 +3279,7 @@ class _HomeTambookState extends State<HomeTambook>
                             const Divider(color: colorI),
                           ]),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: INEI - PAIS'),
+                        const Text('FUENTE: PNPAIS'),
                         const SizedBox(height: 10),
                       ],
                     ),
