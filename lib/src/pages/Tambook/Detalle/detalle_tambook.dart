@@ -2162,7 +2162,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                       children: [
                         ListTile(
                           title: const Text('ATENCIONES'),
-                          subtitle: Text('${oDatoGeneral.atenciones}'),
+                          subtitle: Text(
+                              '${aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!)}'),
                         ),
                         ListTile(
                           title: const Text('INTERVENCIONES'),
@@ -2170,7 +2171,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         ListTile(
                           title: const Text('USUARIOS'),
-                          subtitle: Text('${oDatoGeneral.beneficiarios}'),
+                          subtitle: Text(
+                              '${aAtenInterBene.fold(0, (sum, item) => sum + item.beneficiarios!)}'),
                         ),
                         const SizedBox(height: 10),
                         Text(
