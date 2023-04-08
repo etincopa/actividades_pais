@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
     return OverlaySupport.global(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'SISTEMA DE INFORMACIÓN PNPAIS',
+        title: 'SIF PNPAIS',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,

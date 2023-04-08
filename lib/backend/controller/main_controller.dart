@@ -1100,9 +1100,9 @@ class MainController extends GetxController {
   }
 
   Future<List<ActividadesDiariasModel>> getActividadesDiarias(
-      String fecha, String tipo, String idUt) async {
-    List<ActividadesDiariasModel> aResp =
-        await Get.find<MainService>().getActividadesDiarias(fecha, tipo, idUt);
+      String fecha, String tipo, String idUt, String snip) async {
+    List<ActividadesDiariasModel> aResp = await Get.find<MainService>()
+        .getActividadesDiarias(fecha, tipo, idUt, snip);
     return aResp;
   }
 

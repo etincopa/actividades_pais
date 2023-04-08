@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
@@ -70,7 +71,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     "PLAN DE MANTENIMIENTO",
     "SERVICIOS DEL TAMBO",
     "EQUIPOS INFORMÁTICOS",
-    "ACTIVIDADES",
+    "ACTIVIDADES APROBADAS",
+    "ACTIVIDADES DIARIAS",
     "CLIMA",
     "COMO LLEGAR AL TAMBO",
     "INTERVENCIONES"
@@ -110,9 +112,12 @@ class _DetalleTambookState extends State<DetalleTambook>
   late List<HistorialGestorModel> aHistorialGestor = [];
   late List<HistorialJUTModel> aHistorialJUT = [];
 
+  late List<ActividadesDiariasModel> aActividadesDiarias = [];
+
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
   bool isLoadingTambo = false;
+  bool isLoadingActividades = false;
   bool isLoadingRuta = false;
   bool isLoadingMantenimientoEquipos = true;
   bool isLoadingMantenimientoMeses = true;
@@ -191,7 +196,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     });
 
     currentTitle = titleList[0];
-    _tabControllerTitle = TabController(length: 10, vsync: this);
+    _tabControllerTitle = TabController(length: 11, vsync: this);
     _tabControllerTitle.addListener(changeTitle);
 
     super.initState();
@@ -227,6 +232,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     getPlanMantenimientoInformatico(oTambo.ut.toString());
 
     getPlanMantenimientoInfraestructura(oTambo.nSnip.toString());
+
+    getActividadesDiarias(oTambo.nSnip.toString());
     getPriorizacionTambo(oTambo.idTambo.toString() ?? "0");
     buildEquipoInformatico(oTambo.nSnip.toString());
     //getHistorialGestores(oTambo.nSnip.toString());
@@ -533,6 +540,14 @@ class _DetalleTambookState extends State<DetalleTambook>
     isLoadingPriorizacion = false;
     aPriorizacion = await mainCtr.priorizacionTambo(idTambo);
     isLoadingPriorizacion = true;
+    setState(() {});
+  }
+
+  Future<void> getActividadesDiarias(String snip) async {
+    isLoadingActividades = true;
+    aActividadesDiarias =
+        await mainCtr.getActividadesDiarias('X', 'X', 'X', snip);
+    isLoadingActividades = false;
     setState(() {});
   }
 
@@ -985,7 +1000,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         child: Stack(
           children: [
             DefaultTabController(
-              length: 10,
+              length: 11,
               child: NestedScrollView(
                 controller: scrollCtr,
                 headerSliverBuilder:
@@ -1167,6 +1182,24 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
                                 message: ' ACTIVIDADES PROGRAMADAS APROBADAS',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/calendario.png'),
+                                    size: 55,
+                                  ),
+                                ),
+                              ),
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'ACTIVIDADES DIARIAS',
                                 child: Tab(
                                   icon: ImageIcon(
                                     AssetImage('assets/calendario.png'),
@@ -1373,6 +1406,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ]),
                         const SizedBox(height: 10),
                         cardActividadProgramada(),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+
+                    ListView(
+                      children: [
+                        const SizedBox(height: 10),
+                        cardActividadesDiarias(),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -4608,6 +4649,150 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         horizontal: 10,
                                       ),
                                       backgroundColor: Colors.blue,
+                                    ),
+                                  ],
+                                ),
+
+                                const Divider(color: colorI), //SizedBox
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            ACTIVIDADES DIARIAS
+ * -----------------------------------------------
+ */
+  Padding cardActividadesDiarias() {
+    var heading = 'ACTIVIDADES DIARIAS';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/actividades.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
+              ),
+              children: <Widget>[
+                const Divider(color: colorI),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: SizedBox(
+                    height: 420,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: isLoadingActividades
+                          ? 4
+                          : (aActividadesDiarias.isEmpty
+                              ? 1
+                              : aActividadesDiarias.length),
+                      itemBuilder: (context, index) {
+                        if (isLoadingActividades) {
+                          return ShinyWidget();
+                        } else {
+                          if (aActividadesDiarias.isEmpty) {
+                            return Center(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                child: const Text(
+                                  'NO EXISTE ACTIVIDADES',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            );
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                if (aActividadesDiarias[index].gitLaborando! ==
+                                    'Si')
+                                  Text(
+                                    "ACTIVIDAD: ${aActividadesDiarias[index].actividad.toString()}\n\nLUGAR: ${aActividadesDiarias[index].lugar.toString()}\n\nTIPO INTERVENCIÓN: ${aActividadesDiarias[index].tipoIntervencion.toString()}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ), //Textstyle
+                                  ),
+                                if (aActividadesDiarias[index].gitLaborando! ==
+                                    'No')
+                                  Text(
+                                    "SIN ACTIVIDAD\n\nMOTIVO: ${aActividadesDiarias[index].motivo.toString()}",
+                                    textAlign: TextAlign.justify,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ), //Textstyle
+                                  ), //Text
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Chip(
+                                      label: Text(
+                                        'Fecha : ${aActividadesDiarias[index].fechaActividad ?? ''}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 5,
+                                        horizontal: 10,
+                                      ),
+                                      backgroundColor:
+                                          (aActividadesDiarias[index]
+                                                      .gitLaborando! ==
+                                                  'Si')
+                                              ? Colors.blue
+                                              : Colors.red,
                                     ),
                                   ],
                                 ),

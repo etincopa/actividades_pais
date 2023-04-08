@@ -228,20 +228,18 @@ class _HomeTambookState extends State<HomeTambook>
         cancelText: "CANCELAR",
         confirmText: "SELECCIONAR");
 
-    aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
-        DateFormat("yyyy-MM-dd").format(pickedDate!));
-
-    if (aActividadesResumen.isNotEmpty) {
-      fechaActividades = aActividadesResumen[0].fecha.toString();
-    } else {
-      fechaActividades = "";
-    }
-
-    if (pickedDate != null && pickedDate != currentDate)
+    if (pickedDate != null && pickedDate != currentDate) {
+      if (aActividadesResumen.isNotEmpty) {
+        aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
+            DateFormat("yyyy-MM-dd").format(pickedDate!));
+        fechaActividades = aActividadesResumen[0].fecha.toString();
+      } else {
+        fechaActividades = "";
+      }
       setState(() {
         currentDate = pickedDate;
       });
-
+    }
     BusyIndicator.hide(context);
   }
 
@@ -2101,8 +2099,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            oIndicadorCategoria
-                                                                .region!),
+                                                            "${oIndicadorCategoria.region ?? ''}\n${oIndicadorCategoria.nomCategoria ?? ''} "),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -3110,7 +3107,8 @@ class _HomeTambookState extends State<HomeTambook>
                                                           .format(currentDate!)
                                                           .toString(),
                                                       'Si',
-                                                      tambos.idUt!);
+                                                      tambos.idUt!,
+                                                      '0');
 
                                           BusyIndicator.hide(context);
 
@@ -3137,11 +3135,38 @@ class _HomeTambookState extends State<HomeTambook>
                                                         leading: Text(
                                                             "${index + 1}"),
                                                         title: Text(
-                                                          "${oActividadDiaria.nomTambo ?? ''}\n\n${oActividadDiaria.actividad ?? ''}",
+                                                          "${oActividadDiaria.nomTambo ?? ''}\n${oActividadDiaria.actividad ?? ''}",
                                                         ),
                                                         subtitle: Text(
                                                             "LUGAR : ${oActividadDiaria.lugar!}\nTIPO DE INT. : ${oActividadDiaria.tipoIntervencion!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
-                                                        onTap: () {},
+                                                        onTap: () async {
+                                                          BusyIndicator.show(
+                                                              context);
+
+                                                          List<BuscarTamboDto>
+                                                              aTamboId =
+                                                              await mainCtr.getDatosTamboGestor(
+                                                                  oActividadDiaria
+                                                                          .idTambo
+                                                                          .toString() ??
+                                                                      '0');
+
+                                                          BusyIndicator.hide(
+                                                              context);
+
+                                                          Navigator
+                                                              .pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  DetalleTambook(
+                                                                      listTambo:
+                                                                          aTamboId[
+                                                                              0]),
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
                                                       const Divider(
                                                           color: colorI),
@@ -3170,7 +3195,8 @@ class _HomeTambookState extends State<HomeTambook>
                                                           .format(currentDate!)
                                                           .toString(),
                                                       'No',
-                                                      tambos.idUt!);
+                                                      tambos.idUt!,
+                                                      '0');
 
                                           BusyIndicator.hide(context);
 
@@ -3201,7 +3227,34 @@ class _HomeTambookState extends State<HomeTambook>
                                                         ),
                                                         subtitle: Text(
                                                             "MOTIVO : ${oActividadDiaria.motivo!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
-                                                        onTap: () {},
+                                                        onTap: () async {
+                                                          BusyIndicator.show(
+                                                              context);
+
+                                                          List<BuscarTamboDto>
+                                                              aTamboId =
+                                                              await mainCtr.getDatosTamboGestor(
+                                                                  oActividadDiaria
+                                                                          .idTambo
+                                                                          .toString() ??
+                                                                      '0');
+
+                                                          BusyIndicator.hide(
+                                                              context);
+
+                                                          Navigator
+                                                              .pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  DetalleTambook(
+                                                                      listTambo:
+                                                                          aTamboId[
+                                                                              0]),
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
                                                       const Divider(
                                                           color: colorI),

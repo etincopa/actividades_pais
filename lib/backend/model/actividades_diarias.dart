@@ -1,7 +1,7 @@
 class ActividadesDiariasField {
   static String idUt = "idUt";
   static String region = "region";
-  static String nomTambo = "tambo";
+  static String nomTambo = "nomTambo";
   static String idTambo = "idTambo";
   static String fechaActividad = "fechaActividad";
   static String gitLaborando = "gitLaborando";

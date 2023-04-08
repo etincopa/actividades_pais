@@ -679,9 +679,9 @@ class PnPaisApi {
   }
 
   Future<HttpResponse<List<ActividadesDiariasModel>>> getActividadesDiarias(
-      String fecha, String tipo, String idUt) async {
+      String fecha, String tipo, String idUt, String snip) async {
     return await _http.request<List<ActividadesDiariasModel>>(
-      '${basePathApp3}obtenerActividadesDiariasTambo/${fecha}/${tipo}/${idUt}',
+      '${basePathApp3}obtenerActividadesDiariasTambo/${fecha}/${tipo}/${idUt}/${snip}',
       method: "GET",
       parser: (data) {
         return (data as List)

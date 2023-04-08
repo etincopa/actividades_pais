@@ -881,9 +881,10 @@ class MainRepo {
   }
 
   Future<List<ActividadesDiariasModel>> getActividadesDiarias(
-      String fecha, String tipo, String idUt) async {
+      String fecha, String tipo, String idUt, String snip) async {
     List<ActividadesDiariasModel> aResp = [];
-    final response = await _pnPaisApi.getActividadesDiarias(fecha, tipo, idUt);
+    final response =
+        await _pnPaisApi.getActividadesDiarias(fecha, tipo, idUt, snip);
     if (response.error == null) {
       aResp = response.data!;
     } else {
