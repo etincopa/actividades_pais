@@ -1687,7 +1687,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             SizedBox(
                               height: 150.0,
                               child: ImageUtil.ImageUrl(
-                                oTambo.gestorPathImage ?? '',
+                                "https://www.pais.gob.pe/backendsismonitor/public/storage/${oTambo.gestorFotoExtencion ?? ''}",
                                 width: 150,
                                 imgDefault: 'assets/icons/user-male-2.png',
                               ),
@@ -4719,7 +4719,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
                               children: [
-                                if (actividades.gitLaborando! == 'Si')
+                                if (actividades.gitLaborando!.toUpperCase() ==
+                                    'SI')
                                   Text(
                                     "ACTIVIDAD: ${actividades.actividad.toString()}\n\nLUGAR: ${actividades.lugar.toString()}\n\nTIPO INTERVENCIÓN: ${actividades.tipoIntervencion.toString()}",
                                     textAlign: TextAlign.justify,
@@ -4727,7 +4728,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       fontSize: 15,
                                     ), //Textstyle
                                   ),
-                                if (actividades.gitLaborando! == 'No')
+                                if (actividades.gitLaborando!.toUpperCase() ==
+                                    'NO')
                                   Text(
                                     "SIN ACTIVIDAD\n\nMOTIVO: ${actividades.motivo.toString()}",
                                     textAlign: TextAlign.justify,
@@ -4751,10 +4753,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         vertical: 5,
                                         horizontal: 10,
                                       ),
-                                      backgroundColor:
-                                          (actividades.gitLaborando! == 'Si')
-                                              ? Colors.blue
-                                              : Colors.red,
+                                      backgroundColor: (actividades
+                                                  .gitLaborando!
+                                                  .toString() ==
+                                              'SI')
+                                          ? Colors.blue
+                                          : Colors.red,
                                     ),
                                   ],
                                 ),

@@ -27,6 +27,7 @@ import 'package:actividades_pais/src/pages/configuracion/pantallainicio.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'appbar/AppBar.dart';
 
@@ -72,12 +73,14 @@ class _HomePagePais extends State<HomePagePais> {
     if (_nombrePersona != '') {
       _nombrePersona = "Un momento por favor";
     }
+
     perfil();
     mostrarTmbo();
     traerdato();
     verificargps();
     datosParaPerfil();
     mostrarNombre();
+    initPlatform();
   }
 
   perfil() async {
@@ -746,5 +749,29 @@ class _HomePagePais extends State<HomePagePais> {
         ],
       ),
     );
+  }
+
+  Future<void> initPlatform() async {
+    var res = await DatabasePr.db.loginUser();
+
+    print("USUARIO ID ${res[0].id ?? ''}");
+    await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
+
+    await OneSignal.shared
+        .getDeviceState()
+        .then((value) => {print("IDS ${value!.userId}")});
+
+    /*OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {});
+    await OneSignal.shared
+        .getDeviceState()
+        .then((value) => {print("IDS ${value!.userId}")});*/
+
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) async {
+      String onesignalUserId = changes.to.userId ?? '';
+      print('Player ID CHANGED: ' + onesignalUserId);
+    });
   }
 }
