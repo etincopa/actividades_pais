@@ -31,6 +31,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter 
+
   flutter_cached_pdfview: ^0.4.1
   image:
   archive:
@@ -54,7 +58,7 @@ dependencies:
   overlay_support: ^2.0.1
   pin_code_text_field: ^1.8.0
   country_code_picker: ^3.0.0
-  intl: ^0.18.0
+  intl: ^0.17.0
   # Http client.
   dio: ^5.0.0
   get_it: ^7.2.0
@@ -91,7 +95,7 @@ dependencies:
   timelines: ^0.1.0
 
   backdrop: ^0.8.1
-  table_calendar: ^3.0.9
+  table_calendar: ^3.0.8
 
   #NOTIFICATIONS
   onesignal_flutter: ^3.5.0

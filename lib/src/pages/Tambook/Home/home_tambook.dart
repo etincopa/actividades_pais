@@ -87,7 +87,7 @@ class _HomeTambookState extends State<HomeTambook>
   List<TambosEstadoInternetModel> aIndicadorEstadoInternet = [];
 
   String sCurrentYear = DateTime.now().year.toString();
-  String fechaActual = DateFormat("dd-MM-yyyy").format(DateTime.now());
+  String fechaActual = DateFormat("MM-yyyy").format(DateTime.now());
   List<EquipamientoInformaticoModel> aEquipos = [];
   List<HomeOptions> aEquipoInformatico = [];
   List<HomeOptions> aPersonalTambo = [];
@@ -224,6 +224,7 @@ class _HomeTambookState extends State<HomeTambook>
         initialDate: currentDate,
         firstDate: DateTime(2015),
         lastDate: DateTime(2050),
+        locale: const Locale("es", "ES"),
         helpText: "SELECCIONAR FECHA DE ACTIVIDAD",
         cancelText: "CANCELAR",
         confirmText: "SELECCIONAR");

@@ -144,7 +144,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   String sCurrentTime = "0";
   String sCurrentLogo = "assets/sol.png";
 
-  String fechaActual = DateFormat("dd-MM-yyyy").format(DateTime.now());
+  String fechaActual = DateFormat("MM-yyyy").format(DateTime.now());
 
   String dropdownValue = 'Dog';
 
@@ -1628,7 +1628,7 @@ class _DetalleTambookState extends State<DetalleTambook>
  * -----------------------------------------------
  */
   Padding cardNuestroGestor() {
-    var heading = 'NUESTRO GESTOR';
+    var heading = 'GESTOR(A)';
     var subheading =
         '${oTambo.gestorNombre ?? ''} ${oTambo.gestorApellidos ?? ''}'
             .toUpperCase();
@@ -2195,7 +2195,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Padding cardNuestroJefeUnidad() {
-    var heading = 'NUESTRO JEFE DE UNIDAD TERRITORIAL';
+    var heading = 'JEFE(A) DE UNIDAD TERRITORIAL';
     var subheading =
         "${oJUT.nombresJut!.toUpperCase() ?? ''} ${oJUT.apellidoPaternoJut!.toUpperCase() ?? ''} ${oJUT.apellidoMaternoJut!.toUpperCase() ?? ''}";
     return Padding(

@@ -18,10 +18,11 @@ import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 //late ObjectBoxDbPnPais OBoxDbPnPais;
 void main() async {
-  await initializeDateFormatting('es', 'es_ES');
+  //await initializeDateFormatting('es', 'es_ES');
   DependencyInjection.initialize("DEV");
   //GlobalBindings().dependencies();
 
@@ -51,6 +52,14 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'SIF PNPAIS',
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('es', 'ES'),
+        ],
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
