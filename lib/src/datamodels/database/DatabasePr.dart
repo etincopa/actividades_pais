@@ -39,6 +39,7 @@ import 'package:actividades_pais/src/datamodels/Clases/porcentajesEnvio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/tipoPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabaseParticipantes.dart';
 import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/incidentesNovedades.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -644,13 +645,25 @@ class DatabasePr {
     var abc = await getAllTasksConfigInicio();
 
     for (var i = 0; i < abc.length; i++) {
-      final res = await _db?.rawQuery(
-          "SELECT DISTINCT * from tramaIntervenciones a where snip ='${abc[i].snip}' and a.codigoIntervencion NOT IN (SELECT b.codigoIntervencion from tramaIntervencionesUs b) ORDER by codigoIntervencion DESC;");
-      List<TramaIntervencion> list = res!.isNotEmpty
-          ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
-          : [];
 
-      return list;
+
+
+      if(abc[i].snip==0){
+        final res = await _db?.rawQuery(
+            "SELECT DISTINCT * from tramaIntervenciones a where snip ='$snip' and a.codigoIntervencion NOT IN (SELECT b.codigoIntervencion from tramaIntervencionesUs b) ORDER by codigoIntervencion DESC;");
+        List<TramaIntervencion> list = res!.isNotEmpty
+            ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
+            : [];
+        return list;
+      } else{
+        final res = await _db?.rawQuery(
+            "SELECT DISTINCT * from tramaIntervenciones a where snip ='${abc[i].snip}' and a.codigoIntervencion NOT IN (SELECT b.codigoIntervencion from tramaIntervencionesUs b) ORDER by codigoIntervencion DESC;");
+        List<TramaIntervencion> list = res!.isNotEmpty
+            ? res.map((e) => TramaIntervencion.fromMap(e)).toList()
+            : [];
+        return list;
+      }
+
     }
     return List.empty();
   }

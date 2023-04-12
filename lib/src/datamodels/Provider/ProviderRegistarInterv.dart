@@ -16,6 +16,7 @@ import 'package:actividades_pais/src/datamodels/Clases/ListaTipoGobierno.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LugarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
+import 'package:actividades_pais/src/datamodels/Clases/ParticipantesIntranet.dart';
 import 'package:actividades_pais/src/datamodels/Clases/RespuestaApi.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Sector.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Servicio.dart';
@@ -115,6 +116,9 @@ class ProviderRegistarInterv {
                 estadoProgramacion: (json['estado_programacion']),
                 puntos: json['puntos'],
                 idUnidadesTerritoriales: json['id_unidades_territoriales'],
+                plataformaCodigoSnip: json['plataforma_codigo_snip'],
+                unidadTerritorialDescripcion:
+                    json['unidad_territorial_descripcion'],
               ))
           .toList();
     } else {
@@ -302,14 +306,13 @@ class ProviderRegistarInterv {
     }
   }
 
-  Future<List<Funcionarios>> getListaFuncionarios(
-      idIntervencion) async {
+  Future<List<Funcionarios>> getListaFuncionarios(idIntervencion) async {
     print(idIntervencion);
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/listar-funcionarios_BD/$idIntervencion'),
-        headers: await headerss(),
-      );
+      Uri.parse(AppConfig.backendsismonitor +
+          '/programaciongit/listar-funcionarios_BD/$idIntervencion'),
+      headers: await headerss(),
+    );
     print(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -320,24 +323,80 @@ class ProviderRegistarInterv {
     }
   }
 
-  Future<List<Participantes>> getListaParticipantes( idIntervencion, pageIndex, pageSize) async {
-    print(idIntervencion);
+  Future<PariticipantesIntranet> getListaParticipantes(
+      idIntervencion, pageIndex, pageSize) async {
     http.Response response = await http.post(
         Uri.parse(AppConfig.backendsismonitor +
             '/programaciongit/listar-participantes_BD'),
-        headers: await headerss(), body:'''{
-    "id": "792034",
-    "pageIndex": 1,
-    "pageSize": 15
+        headers: await headerss(),
+        body: '''{
+    "id": "$idIntervencion",
+    "pageIndex": $pageIndex,
+    "pageSize": $pageSize
   }
   ''');
     print("aqaqaqaaqa ${response.body}");
     if (response.statusCode == 200) {
-      final List<dynamic> jsonList = json.decode(response.body);
-      print("jsonList: ${jsonList.length}");
-      return jsonList.map((json) => Participantes.fromJson(json)).toList();
+      final jsonList = json.decode(response.body);
+      final listadostraba = new PariticipantesIntranet.fromJson(jsonList);
+      return listadostraba;
+      // print("jsonList: ${jsonList.length}");
+      //  return jsonList.map((json) => PariticipantesIntranet.fromJson(json)).toList();
+    } else {
+      return PariticipantesIntranet();
+    }
+  }
+
+  Future<List<Archivo>> getListaImagenes(idIntervencion) async {
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.backendsismonitor +
+          '/programaciongit/detalle-imagenes/$idIntervencion'),
+      headers: await headerss(),
+    );
+    print("aqaqaqaaqa ${response.body}");
+    if (response.statusCode == 200) {
+      //  var jsonList = json.decode(response.body);
+      List<Archivo> archivos = (jsonDecode(response.body) as List)
+          .map((archivoJson) => Archivo.fromJson(archivoJson))
+          .toList();
+      return archivos;
     } else {
       return List.empty();
+    }
+  }
+
+  Future Observar(
+      {idProgramacion,
+      observacion,
+      tipoIntervencion,
+      descripcion,
+      horaInicio,
+      horaFin}) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+    http.Response response = await http.post(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programaciongit/observacion-jut'),
+        headers: headers,
+        body: '''{
+    "tipoIntervencion": $tipoIntervencion,
+    "descripcion": "$descripcion",
+    "horaInicio": "$horaInicio",
+    "horaFin": "$horaFin",
+    "observacion": null,
+    "observacion_del_jut": null,
+    "respuesta_git": null,
+    "id_programacion": "$idProgramacion",
+    "observacionfinal": "$observacion"
+}'''
+            '{"id_programacion": "$idProgramacion"');
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return response.statusCode;
     }
   }
 
@@ -348,5 +407,129 @@ class ProviderRegistarInterv {
       'Content-Type': 'application/json'
     };
     return headers;
+  }
+
+  Future suspender(idProgramacion, observacion) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+    print("response 11122121");
+    http.Response response = await http.post(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/suspender-programacion-actividad'),
+        headers: headers,
+        body: ''' {
+                      "id_programacion": "$idProgramacion",
+                      "observacion": "$observacion"
+                    }''');
+
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return response.statusCode;
+    }
+  }
+
+  Future guardarFecha(
+      {id_programacion, fecha, horaInicio, horaFin, lugar_evento}) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+    print("response 11122121");
+    http.Response response = await http.post(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programaciongit/reprogramar-plan'),
+        headers: headers,
+        body: ''' {
+    "fecha": "$fecha",
+    "horaInicio": "$horaInicio",
+    "horaFin": "$horaFin",
+    "tipoIntervencion": "",
+    "descripcion": "",
+    "documento": "",
+    "realizo": "",
+    "convocadas": "",
+    "lugar_evento": "$lugar_evento",
+    "id_programacion": "$id_programacion"
+}''');
+
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return response.statusCode;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchActividades() async {
+    final response = await http.get(
+        Uri.parse(
+            'http://192.168.1.45/backendsismonitor/public/programaciongit/lista-tipo-actividad-proggit'),
+        headers: await ProviderRegistarInterv().headerss());
+
+    if (response.statusCode == 200) {
+      final List<dynamic> decoded = jsonDecode(response.body);
+      final List<Map<String, dynamic>> actividades =
+          decoded.cast<Map<String, dynamic>>();
+      return actividades;
+    } else {
+      throw Exception('Failed to fetch data');
+    }
+  }
+  Future<List<Map<String, dynamic>>> fetchServicios(idActividad) async {
+    final response = await http.get(
+        Uri.parse(
+            AppConfig.backendsismonitor +'/programaciongit/lista-servicios-proggit/$idActividad'),
+        headers: await ProviderRegistarInterv().headerss());
+print("response.bodyy::: ${response.body}");
+    if (response.statusCode == 200) {
+      final List<dynamic> decoded = jsonDecode(response.body);
+      final List<Map<String, dynamic>> actividades =
+      decoded.cast<Map<String, dynamic>>();
+      return actividades;
+    } else {
+      throw Exception('Failed to fetch data');
+    }
+  }
+  Future<List<Map<String, dynamic>>> fetchTipogobiernos(idActividad) async {
+    final response = await http.get(
+        Uri.parse(
+            AppConfig.backendsismonitor +'/programaciongit/lista-tipogobiernos-proggit/$idActividad'),
+        headers: await ProviderRegistarInterv().headerss());
+
+    if (response.statusCode == 200) {
+      final List<dynamic> decoded = jsonDecode(response.body);
+      final List<Map<String, dynamic>> actividades =
+      decoded.cast<Map<String, dynamic>>();
+      return actividades;
+    } else {
+      throw Exception('Failed to fetch data');
+    }
+  }
+}
+
+class Archivo {
+  final String idArchivo;
+  final String idProgramacion;
+  final String nombre;
+  final String directorio;
+
+  Archivo({
+    required this.idArchivo,
+    required this.idProgramacion,
+    required this.nombre,
+    required this.directorio,
+  });
+
+  factory Archivo.fromJson(Map<String, dynamic> json) {
+    return Archivo(
+      idArchivo: json['id_archivo'],
+      idProgramacion: json['id_programacion'],
+      nombre: json['nombre'],
+      directorio: json['directorio'],
+    );
   }
 }

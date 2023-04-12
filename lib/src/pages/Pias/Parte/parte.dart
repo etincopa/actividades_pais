@@ -46,6 +46,7 @@ class _ParteState extends State<Parte> {
   String seleccionarTablaPlataforma = "SELECCIONAR";
   String seleccionarCamapania = "SELECCIONAR";
   var idUnidTerritoriales = 0;
+  final _focusNode = FocusNode();
 
   TextEditingController fecha = TextEditingController();
   DateTime? nowfec = new DateTime.now();
@@ -76,6 +77,11 @@ class _ParteState extends State<Parte> {
     traerUltimo();
   }
 
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
   consultarTambo() async {
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
     setState(() {
@@ -676,6 +682,7 @@ class _ParteState extends State<Parte> {
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: TextField(
+                        focusNode: _focusNode,
                         textCapitalization: TextCapitalization.sentences,
                         controller: controllerSismonitor,
                         onChanged: (value) {
@@ -717,6 +724,7 @@ class _ParteState extends State<Parte> {
                 ],
               ),
               onPressed: () async {
+                _focusNode.unfocus();
                 if (acnuevo == 0) {
                   await DatabasePias.db.insertReportePias(reportePias);
                   traerUltimo();
@@ -724,11 +732,23 @@ class _ParteState extends State<Parte> {
                 } else {
                   await DatabasePias.db.updateTask(reportePias);
                 }
+                _displaySnackBar(context, "Se registro el parte, por favor de seguir registrando");
               },
             ),
           ),
         ],
       ),
     ));
+  }
+  _displaySnackBar(BuildContext context, mensaje, {call}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$mensaje'),
+        /* action: SnackBarAction(
+          label: 'Action',
+          onPressed: call,
+        ),*/
+      ),
+    );
   }
 }

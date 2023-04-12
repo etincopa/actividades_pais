@@ -39,10 +39,10 @@ class ProviderServiciosRest {
 
   Future<List<PuntoAtencionPias>> listarPuntoAtencionPias(
       String idCampania, int idPlataforma, int idPeriodo) async {
-    http.Response response = await http.get(
-      Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/listarPuntoAtencionPiasMovil/$idCampania/$idPlataforma/0'),
-    );
+
+    final url = '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarPuntoAtencionPiasMovil/$idCampania/$idPlataforma/0';
+
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       await DatabasePias.db.deletePuntoAtencionPias();
@@ -50,26 +50,27 @@ class ProviderServiciosRest {
       final jsonResponse = json.decode(response.body);
       if (jsonResponse["codResultado"] != 2) {
         final listadostraba =
-            new ListaPuntoAtencionPias.fromJsonList(jsonResponse["response"]);
-        for (var i = 0; i < listadostraba.items.length; i++) {
+        ListaPuntoAtencionPias.fromJsonList(jsonResponse["response"]);
+        listadostraba.items.forEach((item) async {
           final rspt = PuntoAtencionPias(
-            longitud: listadostraba.items[i].longitud,
-            puntoAtencion: listadostraba.items[i].puntoAtencion,
-            codigoUbigeo: listadostraba.items[i].codigoUbigeo,
-            anio: listadostraba.items[i].anio,
-            idCampania: listadostraba.items[i].idCampania,
-            idPias: listadostraba.items[i].idPias,
-            latitud: listadostraba.items[i].latitud,
-            pias: listadostraba.items[i].pias,
+            longitud: item.longitud,
+            puntoAtencion: item.puntoAtencion,
+            codigoUbigeo: item.codigoUbigeo,
+            anio: item.anio,
+            idCampania: item.idCampania,
+            idPias: item.idPias,
+            latitud: item.latitud,
+            pias: item.pias,
           );
           await DatabasePias.db.insertPuntoAtencionPias(rspt);
-        }
+        });
         return listadostraba.items;
       } else {
-        return List.empty();
+        return [];
       }
-    } else if (response.statusCode == 400) {}
-    return List.empty();
+    }
+    // si la respuesta no es 200, lanzar una excepción
+    throw Exception('Error al obtener los puntos de atención Pias');
   }
 
   Future<int> guardar(ReportesPias reportePias) async {

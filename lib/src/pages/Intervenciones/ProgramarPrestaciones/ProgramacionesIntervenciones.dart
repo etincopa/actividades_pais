@@ -516,66 +516,13 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                     height: 5,
                   ),
                   (paraOtroTamboChk || !otroTambo)
-                      ? Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.all(5),
-                          height: 38,
-                          //left: 10, right: 10, top: 10
-                          child: ElevatedButton.icon(
-                            icon: const Icon(Icons.save),
-                            style: ElevatedButton.styleFrom(
-                                primary: AppConfig.primaryColor,
-                                //   shadowColor:
-                                textStyle: const TextStyle(fontSize: 16),
-                                minimumSize: const Size.fromHeight(72),
-                                shape: const StadiumBorder()),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                if (_selectedOption != 1) {
-                                  guardarIntervencion.nConvenio = 0;
-                                }
-                                await cargarTabla();
-                                guardarIntervencion.convocadas =
-                                    int.parse(controllerNumeroPersonas.text);
-                                guardarIntervencion.descripcion =
-                                    controllerDescripcion.text;
-                                guardarIntervencion.vConvenio =
-                                    _selectedOption.toString();
-                                guardarIntervencion.accion = listAcc;
-
-                                /// guardarIntervencion.convocadas = 1;
-
-                                if (listAcc.length <= 0) {
-                                  //    _displaySnackBar(context, "Registrar Entidad");
-                                  return showAlertDialog(
-                                      context, "Entidad no Registrada");
-                                }
-                                BusyIndicator.show(context);
-                                var respu = await ProviderRegistarInterv()
-                                    .getGuardarIntervencions(
-                                        jsonEncode(guardarIntervencion));
-
-                                if (respu.estado == true) {
-                                  await DatabasePr.db.eliminarAccion();
-
-                                  BusyIndicator.hide(context);
-                                  _displaySnackBar(context, respu.mensaje);
-                                  Navigator.pop(context, "OK");
-                                }
-
-                                print("respu ${respu.mensaje}");
-                              }
-                            },
-                            label: const Text('GUARDAR PROGRMACION'),
-                          ))
-                      : new Container(),
-                  Container(
+                      ?Container(
                       alignment: Alignment.center,
                       margin: const EdgeInsets.all(5),
                       height: 38,
                       //left: 10, right: 10, top: 10
                       child: ElevatedButton.icon(
-                        icon: const Icon(Icons.settings_backup_restore),
+                        icon: const Icon(Icons.save),
                         style: ElevatedButton.styleFrom(
                             primary: AppConfig.primaryColor,
                             //   shadowColor:
@@ -583,10 +530,59 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                             minimumSize: const Size.fromHeight(72),
                             shape: const StadiumBorder()),
                         onPressed: () async {
-                          Navigator.pop(context);
+                          if (_formKey.currentState!.validate()) {
+                            if (_selectedOption != 1) {
+                              guardarIntervencion.nConvenio = 0;
+                            }
+                            await cargarTabla();
+                            guardarIntervencion.convocadas =
+                                int.parse(controllerNumeroPersonas.text);
+                            guardarIntervencion.descripcion =
+                                controllerDescripcion.text;
+                            guardarIntervencion.vConvenio =
+                                _selectedOption.toString();
+                            guardarIntervencion.accion = listAcc;
+
+                            if (listAcc.length <= 0) {
+                               return showSimpleDialogWithText(
+                                  context, "Entidad no Registrada");
+                            }
+                            BusyIndicator.show(context);
+                            var respu = await ProviderRegistarInterv()
+                                .getGuardarIntervencions(
+                                jsonEncode(guardarIntervencion));
+
+                            if (respu.estado == true) {
+                              await DatabasePr.db.eliminarAccion();
+
+                              BusyIndicator.hide(context);
+                              _displaySnackBar(context, respu.mensaje);
+                              Navigator.pop(context, "OK");
+                            }
+
+                            print("respu ${respu.mensaje}");
+                          }
                         },
-                        label: const Text('CANCELAR'),
-                      )),
+                        label: const Text('GUARDAR PROGRMACION'),
+                      ))
+                      : new Container(),
+                  Container(
+                    margin: const EdgeInsets.all(5),
+                    height: 38,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.settings_backup_restore),
+                      label: const Text('CANCELAR'),
+                      style: ElevatedButton.styleFrom(
+                        primary: AppConfig.primaryColor,
+                        textStyle: const TextStyle(fontSize: 16),
+                        minimumSize: const Size.fromHeight(72),
+                        shape: const StadiumBorder(),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -611,42 +607,26 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
   }
 }
 
-showAlertDialog(BuildContext context, text) {
-  Widget okButton = TextButton(
-    child: const Text("OK"),
+showSimpleDialogWithText(BuildContext context, String text) {
+  Widget acceptButton = TextButton(
+    child: const Text("Aceptar"),
     onPressed: () {
       Navigator.pop(context);
     },
   );
 
-  AlertDialog alert = AlertDialog(
+  AlertDialog dialog = AlertDialog(
     title: const Text("PAIS"),
     content: Text(text),
-    /*actions: [
-        okButton,
-      ],*/
+    actions: [
+      acceptButton,
+    ],
   );
 
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return alert;
+      return dialog;
     },
   );
-
-  Future.delayed(const Duration(seconds: 1), () {
-    Navigator.of(context).pop();
-  });
-}
-
-class FormData {
-  final DateTime date;
-  final TimeOfDay time;
-  final DateTime dateTime;
-
-  FormData({
-    required this.date,
-    required this.time,
-    required this.dateTime,
-  });
 }

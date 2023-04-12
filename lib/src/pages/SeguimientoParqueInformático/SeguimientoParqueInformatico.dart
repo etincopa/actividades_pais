@@ -298,85 +298,22 @@ class _SeguimientoParqueInformaticoState
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          hintText: 'CODIGO PATRIMONIAL',
-                          icon: Icon(Icons.note_add, size: 15)),
-                      style: const TextStyle(fontSize: 10),
+                    _buildTextFormField(
+                      labelText: 'CODIGO PATRIMONIAL',
+                      icon: Icon(Icons.note_add, size: 15),
                       onChanged: (value) {
                         filtroParqueInformatico.codigoPatrimonial = value;
                       },
                     ),
-                    TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                          hintText: 'DENOMINACION',
-                          icon: Icon(Icons.note_add, size: 15)),
-                      style: const TextStyle(fontSize: 10),
+                    _buildTextFormField(
+                      labelText: 'DENOMINACION',
+                      icon: Icon(Icons.note_add, size: 15),
                       onChanged: (value) {
                         filtroParqueInformatico.denominacion = value;
                       },
                     ),
+                    _buildMarcaDropdownButtonFormField(),
 
-                    Container(
-                      margin: const EdgeInsets.only(),
-                      child: FutureBuilder<List<Marca>>(
-                        future: ProviderSeguimientoParqueInformatico()
-                            .listaMarcas(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Marca>> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                          } else if (snapshot.hasError) {
-                            return Text('Error al cargar las opciones');
-                          } else {
-                            return Row(
-                              children: [
-                                const Icon(
-                                    Icons.account_balance_wallet_outlined,
-                                    size: 15,
-                                    color: Colors.grey),
-                                SizedBox(width: 13),
-                                Expanded(
-                                  child: Container(
-                                    child: StatefulBuilder(builder:
-                                        (BuildContext context,
-                                        StateSetter dropDownState) {
-                                      return DropdownButtonFormField<Marca>(
-                                        isExpanded: true,
-                                        items: snapshot.data?.map((user) {
-                                          return new DropdownMenuItem<Marca>(
-                                            value: user,
-                                            child: new Text(
-                                              user.descripcionMarca!,
-                                              style:
-                                              const TextStyle(fontSize: 10),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (Marca? value) {
-                                          dropDownState(() {
-                                            seleccionarMarca =
-                                            value!.descripcionMarca!;
-                                            filtroParqueInformatico.idMarca =
-                                                value.idMarca.toString();
-                                          });
-                                        },
-                                        hint: Text(
-                                          seleccionarMarca,
-                                          style: const TextStyle(fontSize: 10),
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                    ),
                     Container(
                       margin: const EdgeInsets.only(),
                       child: FutureBuilder<List<Modelo>>(
@@ -538,7 +475,21 @@ class _SeguimientoParqueInformaticoState
           );
         },
       );
-
+  Widget _buildTextFormField({
+    required String labelText,
+    required Icon icon,
+    required Function(String) onChanged,
+  }) {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: labelText,
+        icon: icon,
+      ),
+      style: const TextStyle(fontSize: 10),
+      onChanged: onChanged,
+    );
+  }
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -601,5 +552,55 @@ class _SeguimientoParqueInformaticoState
       ProviderSeguimientoParqueInformatico()
           .listaParqueInformatico(filtroParqueInformatico);
     });
+  }
+
+  Widget _buildMarcaDropdownButtonFormField() {
+    return FutureBuilder<List<Marca>>(
+      future: ProviderSeguimientoParqueInformatico().listaMarcas(),
+      builder: (BuildContext context, AsyncSnapshot<List<Marca>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return const Text('Error al cargar las opciones');
+        } else {
+          return Row(
+            children: [
+              const Icon(Icons.account_balance_wallet_outlined,
+                  size: 15, color: Colors.grey),
+              const SizedBox(width: 13),
+              Expanded(
+                child: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter dropDownState) {
+                    return DropdownButtonFormField<Marca>(
+                      isExpanded: true,
+                      items: snapshot.data?.map((user) {
+                        return DropdownMenuItem<Marca>(
+                          value: user,
+                          child: Text(
+                            user.descripcionMarca!,
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (Marca? value) {
+                        dropDownState(() {
+                          seleccionarMarca = value!.descripcionMarca!;
+                          filtroParqueInformatico.idMarca =
+                              value.idMarca.toString();
+                        });
+                      },
+                      hint: Text(
+                        seleccionarMarca,
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        }
+      },
+    );
   }
 }

@@ -3,6 +3,8 @@ import 'package:actividades_pais/src/datamodels/Provider/ProviderTambok.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
+import 'package:actividades_pais/util/app-config.dart';
+import 'package:backdrop/backdrop.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/util/Constants.dart';
@@ -20,6 +22,12 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
   bool isLoading = false;
   var pageIndexQ = 1;
   var pageSizeQ = 2;
+  var tipoIntervencions = [
+    {"value": '1', "descripcion": 'Intervención de Ámbito Directo'},
+    {"value": '2', "descripcion": 'Intervención de Soporte a Entidades'},
+    {"value": '3', "descripcion": 'Coordinaciones'},
+  ];
+  final GlobalKey<BackdropScaffoldState> _backdropKey = GlobalKey();
 
   @override
   void initState() {
@@ -58,14 +66,50 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
     setState(() {});
   }
 
+  String? tipoIntervencion = '1';
+
   @override
   Widget build(BuildContext context) {
     Listas listas = Listas();
-    return Scaffold(
-      backgroundColor: color_10o15,
-      body: FutureBuilder<List<TamboServicioIntervencionesGeneral>>(
+    return BackdropScaffold(
+       key: _backdropKey,
+      appBar: BackdropAppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        // backgroundColor: AppConfig.primaryColor,
+        leading:     InkWell(
+          child: const Icon(
+            Icons.restart_alt_sharp,
+            color: Colors.black,
+          ),
+          onTap: () async {
+            pageSizeQ = 10;
+            tipoIntervencion = '1';
+
+            setState(() {
+            });
+          },
+        ),
+        automaticallyImplyLeading: false,
+        title: const Text(
+          "INTERVENCIONES",
+          style: TextStyle(fontSize: 15, color: Colors.black),
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          const BackdropToggleButton(
+            color: Colors.black,
+            icon: AnimatedIcons.list_view,
+          ),
+
+        ],
+      ),
+      frontLayerBackgroundColor: Colors.white,
+      //frontLayerBorderRadius: BorderRadius.horizontal(),
+      backLayerBackgroundColor: Colors.white60,
+      frontLayer: FutureBuilder<List<TamboServicioIntervencionesGeneral>>(
         future: ProviderTambok().listaTamboServicioIntervencionesGeneral(
-            pag: 1, sizePag: pageSizeQ),
+            pag: 1, sizePag: pageSizeQ,tipo: tipoIntervencion),
         builder: (BuildContext context,
             AsyncSnapshot<List<TamboServicioIntervencionesGeneral>> snapshot) {
           if (snapshot.hasData) {
@@ -125,7 +169,70 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
           );
         },
       ),
-    );
+      backLayer:ListView(
+        children: [
+          Container(
+            margin: const EdgeInsets.all(20),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+
+                  Row(
+                    children: [
+                      const Icon(Icons.account_balance_wallet_outlined,
+                          size: 15, color: Colors.grey),
+                      const SizedBox(width: 13),
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          value: tipoIntervencion,
+                          onChanged: (String? newValue) {
+                            tipoIntervencion = newValue;
+
+                          /*  setState(() {
+
+                            });*/
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Tipo Intervencion',
+                          ),
+                          items: tipoIntervencions.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item["value"],
+                              child: Text(
+                                item["descripcion"]!,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                   const SizedBox(height: 15),
+                  Container(
+                    //  decoration: Servicios().myBoxDecoration(),
+                      margin: const EdgeInsets.only(right: 10, left: 10),
+                      height: 40.0,
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: AppConfig.primaryColor,
+                        ),
+                        onPressed: () async {
+
+                         await  ProviderTambok().listaTamboServicioIntervencionesGeneral(
+                              pag: 1, sizePag: pageSizeQ,tipo: tipoIntervencion);
+                         _backdropKey.currentState!.fling();
+                           setState(() {
+                           });
+                          //_loadData();
+                        },
+                        child: const Text("FILTRAR"),
+                      )),
+        ],
+      ),))]
+    ));
   }
 
   Widget buildSwipeActionRigth() => Container(

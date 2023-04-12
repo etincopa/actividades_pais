@@ -52,7 +52,25 @@ class _ReporteDiarioState extends State<ReporteDiario> {
     print(art[0].latitude);
     setState(() {});
   }
-
+  @override
+  void dispose() {
+    // Guardar los datos de la pantalla actual antes de cambiar a otra
+    switch (currenIndex) {
+      case 0:
+      // Guardar los datos de la pantalla de inicio
+       // _guardarDatosPantallaInicio();
+        break;
+      case 1:
+      // Guardar los datos de la pantalla de búsqueda
+   //     _guardarDatosPantallaBusqueda();
+        break;
+      case 2:
+      // Guardar los datos de la pantalla de configuración
+     //   _guardarDatosPantallaConfiguracion();
+        break;
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +90,7 @@ class _ReporteDiarioState extends State<ReporteDiario> {
     ];
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(55.0),
+          preferredSize: const Size.fromHeight(55.0),
           child: AppBar(
             leading: Util().iconbuton(() => Navigator.of(context).pop()),
             backgroundColor:AppConfig.primaryColor,
@@ -81,11 +99,11 @@ class _ReporteDiarioState extends State<ReporteDiario> {
             ),
             actions: [
               InkWell(
-                  child: Icon(Icons.check),
+                  child: const Icon(Icons.check),
                   onTap: () {
                     Navigator.pop(context, "OK");
                   }),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               )
             
@@ -101,28 +119,28 @@ class _ReporteDiarioState extends State<ReporteDiario> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-              icon: Icon(Icons.pending_actions_rounded),
+              icon: const Icon(Icons.pending_actions_rounded),
               title: Text("PARTE",  style: TextStyle(color:AppConfig.letrasColor),),
               activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Icons.home_rounded),
-              title: Text("Actividades"),
+              icon: const Icon(Icons.home_rounded),
+              title: const Text("Actividades"),
               activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Add_home.hand_holding_medical),
-              title: Text("Atenciones Realizadas"),
+              icon: const Icon(Add_home.hand_holding_medical),
+              title: const Text("Atenciones Realizadas"),
               activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Icons.handyman),
-              title: Text("Incidentes"),
+              icon: const Icon(Icons.handyman),
+              title: const Text("Incidentes"),
               activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Icons.child_friendly),
-              title: Text("Nacimientos"),
+              icon: const Icon(Icons.child_friendly),
+              title: const Text("Nacimientos"),
               activeColor: AppConfig.primaryColor,
               inactiveColor: Colors.black),
         ],

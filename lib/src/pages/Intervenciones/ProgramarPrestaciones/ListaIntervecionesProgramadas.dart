@@ -4,6 +4,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDepe
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
+import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ActividadesGit/ActividadesGit.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/CalificarIntervencion.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/PlanesDeTrabajo.dart';
@@ -83,7 +84,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
   Future<void> _loadEventsForDay() async {
     DateTime day = DateTime.now();
     // Simular una carga asíncrona de eventos para el día especificado
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       _selectedEvents =
           eventos.where((evento) => isSameDay(evento.fecha, day)).toList();
@@ -499,29 +500,13 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
       ]),
       frontLayer: Column(
         children: [
-      /*    Container(height:23,
-            child: Expanded(
-                child:Stack(
-                  children: [
-                    Positioned(
-                     // top: 50.0,
-                      left: 20.0,
-                      child: Text(
-                        'This is a floating text widget!',
-                        style: TextStyle(fontSize: 16.0, color: Colors.black),
-                      ),
-                    ),
-                    // Add your other widgets here
-                  ],
-                )),
-          ),*/
           _isLoading
               ? Container(
                   color: Colors.white,
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         SizedBox(height: 20),
                         CircularProgressIndicator(),
                         SizedBox(height: 20),
@@ -612,36 +597,41 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                     margin: const EdgeInsets.symmetric(
                       horizontal: 15.0,
                       vertical: 4.0,
-
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(),
                       borderRadius: BorderRadius.circular(14.0),
                     ),
                     child: InkWell(
-                        onTap: () async{
+                        onTap: () async {
                           /*       "${event.estadoProgramacion == '1' ? 'PROGRAMADO' : ''}"
                                             "${event.estadoProgramacion == '2' ? 'POR APROBAR' : ''}"
                                             "${event.estadoProgramacion == '3' ? 'OBSERVADO' : ''}"
                                             "${event.estadoProgramacion == '4' ? 'APROBADA' : ''}"
                                             "${event.estadoProgramacion == '0' ? 'ELIMINADO' : ''}",*/
-                          print("event.estadoProgramacion ${event.estadoProgramacion}");
+                          print(
+                              "event.estadoProgramacion ${event.estadoProgramacion}");
 
-                          switch  (event.estadoProgramacion){
+                          switch (event.estadoProgramacion) {
                             case '1':
                               var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProgramacionPrestacion(event),
+                                  builder: (context) =>
+                                      ProgramacionPrestacion(event),
                                 ),
                               );
-
+                              if (res == 'refrescar') {
+                                print("aqui lege ");
+                                await cargarEventos();
+                              }
                               break;
                             case '2':
                               var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CalificarIntervencion(event),
+                                  builder: (context) =>
+                                      CalificarIntervencion(event),
                                 ),
                               );
                               break;
@@ -650,17 +640,26 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                               var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProgramacionPrestacion(event),
+                                  builder: (context) =>
+                                      ProgramacionPrestacion(event),
+                                ),
+                              );
+                              break;
+                              case '5':
+                              var res = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProgramacionPrestacion(event),
                                 ),
                               );
                               break;
                           }
-
                         },
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                                 height: 10,
                               ),
@@ -669,20 +668,20 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                   height: 45,
                                   width: 33),
                               Container(
-                                margin: EdgeInsets.only(
+                                margin: const EdgeInsets.only(
                                     right: 13.0, left: 3, top: 3),
                                 child: Column(
                                   children: [
                                     Text(
                                       elementos2[0],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
                                       elementos2[1].trim(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -692,7 +691,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                               ),
                               Expanded(
                                 child: Container(
-                                  margin: EdgeInsets.only(
+                                  margin: const EdgeInsets.only(
                                       right: 10.0, top: 3),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -712,30 +711,30 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                                       ? Colors.green
                                                       : event.tipoProgramacion ==
                                                               '3'
-                                                          ? Colors. blue
+                                                          ? Colors.blue
                                                           : Colors.black),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 5,
                                           ),
-                                          Icon(
-                                            event.estadoProgramacion == '1'
-                                                ? Icons.check
-                                                : event.estadoProgramacion ==
-                                                        '2'
-                                                    ? Icons.check
-                                                    : event.estadoProgramacion ==
-                                                            '3'
-                                                        ? Icons.cancel
-                                                        : event.estadoProgramacion ==
-                                                                '4'
-                                                            ? Icons.star
-                                                            : event.estadoProgramacion ==
-                                                                    '0'
-                                                                ? Icons.block
-                                                                : Icons
-                                                                    .next_plan,
-                                          ),
-                                          SizedBox(
+                                          Icon(event.estadoProgramacion == '1'
+                                              ? Icons.check
+                                              : event.estadoProgramacion == '2'
+                                                  ? Icons.check
+                                                  : event.estadoProgramacion ==
+                                                          '3'
+                                                      ? Icons.cancel
+                                                      : event.estadoProgramacion ==
+                                                              '4'
+                                                          ? Icons.star
+                                                          : event.estadoProgramacion ==
+                                                                  '0'
+                                                              ? Icons.block
+                                                              : event.estadoProgramacion ==
+                                                                      '5'
+                                                                  ? Icons.stop
+                                                                  : Icons
+                                                                      .remove),
+                                          const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
@@ -744,6 +743,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                             "${event.estadoProgramacion == '2' ? 'POR APROBAR' : ''}"
                                             "${event.estadoProgramacion == '3' ? 'OBSERVADO' : ''}"
                                             "${event.estadoProgramacion == '4' ? 'APROBADA' : ''}"
+                                            "${event.estadoProgramacion == '5' ? 'SUSPENDIDO' : ''}"
                                             "${event.estadoProgramacion == '0' ? 'ELIMINADO' : ''}",
                                             style: TextStyle(
                                                 fontSize: 13.0,
@@ -755,7 +755,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                           )
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Row(
@@ -766,7 +766,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                             child: Text(
                                               textAlign: TextAlign.start,
                                               "$tamboNm - ${elementos3[1]}",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 13.2,
                                               ),
                                             ),
@@ -844,32 +844,39 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
       onOpen: () => print('OPENING DIAL'),
       onClose: () => print('DIAL CLOSED'),
       elevation: 8.0,
-      shape: CircleBorder(),
+      shape: const CircleBorder(),
       children: [
         SpeedDialChild(
-          child: Icon(Icons.playlist_add_check),
+          child: const Icon(Icons.playlist_add_check),
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue,
           label: 'EJECUCION DE SOPORTE',
-          labelStyle: TextStyle(fontSize: 18.0),
+          labelStyle: const TextStyle(fontSize: 18.0),
           onTap: () async {},
           onLongPress: () => print('THIRD CHILD LONG PRESS'),
         ),
         SpeedDialChild(
-          child: Icon(Icons.language),
+          child: const Icon(Icons.language),
           foregroundColor: Colors.white,
           backgroundColor: Colors.green,
           label: 'ACTIVIDADES - GIT',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () async {},
+          labelStyle: const TextStyle(fontSize: 18.0),
+          onTap: () async {
+            var res = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ActividadesGit(),
+              ),
+            );
+          },
           onLongPress: () => print('THIRD CHILD LONG PRESS'),
         ),
         SpeedDialChild(
-          child: Icon(Icons.supervisor_account),
+          child: const Icon(Icons.supervisor_account),
           backgroundColor: Colors.grey,
           foregroundColor: Colors.white,
           label: 'PRESTACION DE SERVICIOS',
-          labelStyle: TextStyle(fontSize: 18.0),
+          labelStyle: const TextStyle(fontSize: 18.0),
           onTap: () async {
             utils().showMyDialog(
                 context, "¿La intervención pertenece a algún Plan de Trabajo?",
@@ -879,18 +886,19 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
               var res = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProgramacionIntervencion(),
+                  builder: (context) => const ProgramacionIntervencion(),
                 ),
               );
               if (res == 'OK') {
-                cargarEventos();
+                await cargarEventos();
+                setState(() {});
               }
             }, onPressed1: () async {
               Navigator.pop(context);
               var res = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlanesDeTrabajo(),
+                  builder: (context) => const PlanesDeTrabajo(),
                 ),
               );
               if (res == 'OK') {

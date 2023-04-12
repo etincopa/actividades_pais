@@ -20,9 +20,10 @@ class Intervenciones extends StatefulWidget {
 //  int snip;
   // List<int> snips =[];
   String unidadTerritorial;
+  String snip="";
   bool anterior = false;
 
-  Intervenciones(this.unidadTerritorial);
+  Intervenciones(this.unidadTerritorial,{this.snip=""});
 
   @override
   State<Intervenciones> createState() => _IntervencionesState();
@@ -101,7 +102,7 @@ class _IntervencionesState extends State<Intervenciones> {
           actions: [accionesBotones()],
         ),
         body: FutureBuilder<List<TramaIntervencion>>(
-          future: DatabasePr.db.listarInterciones(),
+          future: DatabasePr.db.listarInterciones(snip: widget.snip),
           builder: (BuildContext context,
               AsyncSnapshot<List<TramaIntervencion>> snapshot) {
             if (snapshot.hasData) {
@@ -311,12 +312,12 @@ class _IntervencionesState extends State<Intervenciones> {
     var data = await DatabasePr.db.getAllTasksConfigInicio();
     if (data[0].unidTerritoriales != null) {
       await ProviderDatos()
-          .getInsertParticipantesIntervencionesMovil(data[0].unidTerritoriales);
+          .getInsertParticipantesIntervencionesMovil(data[0].unidTerritoriales, ut: widget.unidadTerritorial);
       await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
       await ProviderDatos().getInsertPersonasFallecidas();
       await CalcularParticipantes();
       await cargarIntervenciones();
-      await ProviderDatos().guardarProvincia(data[0].snip);
+      await ProviderDatos().guardarProvincia(data[0].snip, snippre: widget.snip);
       setState(() {
         _isloading = false;
       });
@@ -368,7 +369,7 @@ class _IntervencionesState extends State<Intervenciones> {
 
       var data = await DatabasePr.db.getAllTasksConfigInicio();
       for (var i = 0; i < data.length; i++) {
-        var a = await provider.getListaTramaIntervencion(data[i].snip);
+        var a = await provider.getListaTramaIntervencion(data[i].snip,snippre:  widget.snip);
 
         if (a.isEmpty) {
           _isloading = false;

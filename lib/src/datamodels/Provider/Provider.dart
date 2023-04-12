@@ -235,7 +235,14 @@ class ProviderDatos {
     return pst;
   }*/
 
-  Future<List<TramaIntervencion>> getListaTramaIntervencion(snip) async {
+  Future<List<TramaIntervencion>> getListaTramaIntervencion(snip,
+      {snippre}) async {
+
+    if (snip == 0) {
+      snip = snippre;
+    }
+    print("snip $snip");
+    print("snippre $snippre");
     var eliminado = await DatabasePr.db.deleteIntervenciones();
     print("eliminado : $eliminado");
     if (eliminado >= 0) {
@@ -574,7 +581,6 @@ class ProviderDatos {
           new ListarEntidadFuncionarios.fromJsonList(jsonResponse["response"]);
 
       for (var i = 0; i < listadostraba.items.length; i++) {
-
         final rspt = ListarEntidadFuncionario(
           id_accion_programacion: listadostraba.items[i].id_accion_programacion,
           id_entidad: listadostraba.items[i].id_entidad,
@@ -596,6 +602,39 @@ class ProviderDatos {
   // ignore: non_constant_identifier_names
   Future<List<ParticipanteEjecucion>> participanteEjecucion(
       idProgramacion, idEntidad) async {
+    final url =
+        '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/participanteEjecucion/$idProgramacion/$idEntidad';
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final listadostraba =
+            ParticipanteEjecucions.fromJsonList(jsonResponse["response"]);
+
+        for (var i = 0; i < listadostraba.items.length; i++) {
+          final rspt = ParticipanteEjecucion(
+              id_programacion: listadostraba.items[i].id_programacion,
+              id_entidad: listadostraba.items[i].id_entidad,
+              id_servicio: listadostraba.items[i].id_servicio,
+              nombre_servicio: listadostraba.items[i].nombre_servicio);
+          await _guardarParticipanteEjecucionEnDB(rspt);
+        }
+        return listadostraba.items;
+      } else {
+        throw Exception('Error al obtener los participantes de la ejecución');
+      }
+    } catch (e) {
+      throw Exception('Error al obtener los participantes de la ejecución: $e');
+    }
+  }
+
+  Future<void> _guardarParticipanteEjecucionEnDB(
+      ParticipanteEjecucion participante) async {
+    await DatabasePr.db.insertParticipanteEjecucion(participante);
+  }
+
+  /*  Future<List<ParticipanteEjecucion>> participanteEjecucion(
+      idProgramacion, idEntidad) async {
     print( Uri.parse(AppConfig.urlBackndServicioSeguro +
         '/api-pnpais/app/participanteEjecucion/$idProgramacion/$idEntidad'));
     http.Response response = await http.get(
@@ -605,7 +644,7 @@ class ProviderDatos {
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
-          new ParticipanteEjecucions.fromJsonList(jsonResponse["response"]);
+      new ParticipanteEjecucions.fromJsonList(jsonResponse["response"]);
 
       for (var i = 0; i < listadostraba.items.length; i++) {
         final rspt = ParticipanteEjecucion(
@@ -618,7 +657,7 @@ class ProviderDatos {
       return listadostraba.items;
     } else if (response.statusCode == 400) {}
     return List.empty();
-  }
+  }*/
 
   bool fileExists = false;
 
@@ -648,7 +687,10 @@ class ProviderDatos {
   }
 
   Future<List<ParticipantesIntervenciones>>
-      getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL) async {
+      getInsertParticipantesIntervencionesMovil(UNIDAD_TERRITORIAL, {ut}) async {
+    if(UNIDAD_TERRITORIAL==""){
+      UNIDAD_TERRITORIAL = ut;
+    }
     late File jsonFile;
     late Directory dir;
     String fileName = "myJSONFile.json";
@@ -976,7 +1018,10 @@ class ProviderDatos {
     return List.empty();
   }
 */
-  guardarProvincia(snip) async {
+  guardarProvincia(snip, {snippre}) async {
+    if(snip==0){
+     snip= snippre;
+    }
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
           '/api-pnpais/app/listaProvinciaporSnp/${snip}'),

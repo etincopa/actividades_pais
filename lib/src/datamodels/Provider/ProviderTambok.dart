@@ -27,18 +27,21 @@ class ProviderTambok {
     }
   }
   Future<List<TamboServicioIntervencionesGeneral>>?
-  listaTamboServicioIntervencionesGeneral({pag, sizePag}) async {
+  listaTamboServicioIntervencionesGeneral({tipo,pag, sizePag}) async {
     print("pag $pag, sizePag $sizePag");
+    print(Uri.parse(AppConfig.urlBackndServicioSeguro +
+        '/api-pnpais/tambook/app/tamboServicioIntervencionesGeneral/$tipo/1/$sizePag'));
     http.Response response = await http.get(
       Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/tambook/app/tamboServicioIntervencionesGeneral/1/1/$sizePag'),
+          '/api-pnpais/tambook/app/tamboServicioIntervencionesGeneral/$tipo/$pag/$sizePag'),
     );
     print(response.body);
     if (response.statusCode == 200) {
       List.empty();
       final jsonResponse = json.decode(response.body);
 
-      final lista = new ListarTamboServicioIntervencionesGeneral.fromJsonList(jsonResponse["response"]);
+      var lista = ListarTamboServicioIntervencionesGeneral();
+          lista =new ListarTamboServicioIntervencionesGeneral.fromJsonList(jsonResponse["response"]);
 
       return lista.items;
     } else if (response.statusCode == 400) {}

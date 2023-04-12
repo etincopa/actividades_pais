@@ -643,7 +643,7 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor: [Colors.green],
+                          activeBgColor: Colors.green,
                           changeOnTap: false,
                           fontSize: 7.5,
                           labels: ['INACTIVO', 'ACTIVO'],
@@ -660,7 +660,7 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor: [Colors.red],
+                          activeBgColor:Colors.red,
                           changeOnTap: false,
                           fontSize: 7.5,
                           labels: ['INACTIVO', 'ACTIVO'],
@@ -744,9 +744,9 @@ class Listas {
                 ),
                 Container(
                   width: 240,
-                  child: Text('${band.tambo}\n${band.idProgramacion}',
+                  child: Text('Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Region: ${band.departamento}',
                       style:
-                          const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                          const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold)),
                 ),
                 const Divider(
                   color: Colors.blueAccent,

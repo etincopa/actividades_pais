@@ -12,10 +12,12 @@ class Evento {
   final String descripcion;
   final String idPlataforma;
   final String plataformaDescripcion;
+  final String plataformaCodigoSnip;
   final String tipoProgramacion;
   final String estadoProgramacion;
   final String puntos;
   final String idUnidadesTerritoriales;
+  final String unidadTerritorialDescripcion;
 
   Evento({
     required this.idProgramacion,
@@ -23,23 +25,27 @@ class Evento {
     required this.descripcion,
     required this.idPlataforma,
     required this.plataformaDescripcion,
+    required this.plataformaCodigoSnip,
     required this.tipoProgramacion,
     required this.estadoProgramacion,
     required this.puntos,
     required this.idUnidadesTerritoriales,
+    required this.unidadTerritorialDescripcion,
   });
 
   factory Evento.fromJson(Map<String, dynamic> json) {
     return Evento(
       idProgramacion: json['id_programacion'],
       fecha: DateTime.parse(json['fecha']),
-      descripcion: json['descripcion'],
-      idPlataforma: json['id_plataforma'],
-      plataformaDescripcion: json['plataforma_descripcion'],
-      tipoProgramacion: json['tipo_programacion'],
-      estadoProgramacion: json['estado_programacion'],
-      puntos: json['puntos'],
-      idUnidadesTerritoriales: json['id_unidades_territoriales'],
+      descripcion : json['descripcion'],
+      idPlataforma : json['id_plataforma'],
+      plataformaDescripcion : json['plataforma_descripcion'],
+      plataformaCodigoSnip : json['plataforma_codigo_snip'],
+      tipoProgramacion : json['tipo_programacion'],
+      estadoProgramacion : json['estado_programacion'],
+      puntos : json['puntos'],
+      idUnidadesTerritoriales : json['id_unidades_territoriales'],
+      unidadTerritorialDescripcion : json['unidad_territorial_descripcion'],
     );
   }
 }

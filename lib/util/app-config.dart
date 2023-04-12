@@ -12,9 +12,9 @@ class AppConfig {
 
   ///Desarrollo
 /*
-  static String urlBackndServicioSeguro = 'http://192.168.1.45:8075';
+  static String urlBackndServicioSeguro = 'http://192.168.20.35:8075';
   static String backendsismonitor =
-   'http://192.168.1.45/backendsismonitor/public';
+   'http://192.168.20.35/backendsismonitor/public';
 */
   static var letrasColorAppBar =Color(0xFFFFFFFF);
   static var letrasColor =Color(0xFF000000);

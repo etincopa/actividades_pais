@@ -61,7 +61,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
       switch (idMenuPadre[i].idMenuPadre) {
         case '115':
           if (tipoPlataforma == "TAMBO") {
-           /* aHomeOptions.add(
+             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1012',
                 name: 'PROGRAMAR PRESTACION'.tr,
@@ -69,7 +69,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                 image: iconActividades,
                 color: const Color(0xFF78b8cd),
               ),
-            );*/
+            );
 
             aHomeOptions.add(
               HomeOptions(
@@ -93,7 +93,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
           }
           break;
         case '110':
-          /*aHomeOptions.add(
+          aHomeOptions.add(
             HomeOptions(
               code: 'OPT1012',
               name: 'PROGRAMAR PRESTACION'.tr,
@@ -102,7 +102,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
               color: const Color(0xFF78b8cd),
             ),
           );
-*/
+
           aHomeOptions.add(
             HomeOptions(
               code: 'OPT1011',
@@ -242,13 +242,13 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                           ),
                         );
                         break;
-                      case 'OPT1012':
+                      /*case 'OPT1012':
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => ListaIntervecionesProgramadas(),
                           ),
                         );
-                        break;
+                        break;*/
                       default:
                     }
                   },

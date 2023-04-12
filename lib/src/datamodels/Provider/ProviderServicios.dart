@@ -296,7 +296,22 @@ class ProviderServicios {
 
     return listadoDepart.items;
   }
+  Future listarPorIdUt(idUnidadterritorial) async {
+    String jsonString = await servicios.loadunidadesTerritoriales();
+    final jsonResponse = json.decode(jsonString);
+    final listadoDepart = new ListarUnidadesTerritoriales.fromJsonList(jsonResponse);
 
+    for (var i = 0; i < listadoDepart.items.length; i++) {
+
+      if(listadoDepart.items[i].id_UnidadesTerritoriales==idUnidadterritorial){
+        print(  "9+++++++ ${ listadoDepart.items[i]}");
+        return listadoDepart.items[i].unidadTerritorial;
+      }
+    }
+    return listadoDepart.items[0].unidadTerritorial;
+
+
+  }
   Future<List<Unidad>> getUnidad() async {
     await DatabasePr.db.deletesexo();
 
