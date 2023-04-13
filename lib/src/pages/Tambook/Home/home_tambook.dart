@@ -18,6 +18,7 @@ import 'package:actividades_pais/backend/model/personal_puesto_model.dart';
 import 'package:actividades_pais/backend/model/personal_tambo.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
+import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
@@ -84,6 +85,8 @@ class _HomeTambookState extends State<HomeTambook>
 
   List<IndicadorInternetModel> aIndicadorInternet = [];
   List<IndicadorCategorizacionModel> aIndicadorCategorizacion = [];
+  List<ServiciosBasicosResumenModel> aIndicadorServiciosAgua = [];
+  List<ServiciosBasicosResumenModel> aIndicadorServiciosLuz = [];
   List<TambosEstadoInternetModel> aIndicadorEstadoInternet = [];
 
   String sCurrentYear = DateTime.now().year.toString();
@@ -135,6 +138,8 @@ class _HomeTambookState extends State<HomeTambook>
     obtenerIndicadorInternet();
     obtenerIndicadorEstadoInternet();
     obtenerIndicadorCategorizacion();
+    obtenerResumenAgua();
+    obtenerResumenLuz();
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
     getProgIntervencionTambo();
@@ -543,6 +548,16 @@ class _HomeTambookState extends State<HomeTambook>
     aIndicadorCategorizacion = await mainCtr.getIndicadorCategorizacion("0");
   }
 
+  Future<void> obtenerResumenAgua() async {
+    aIndicadorServiciosAgua =
+        await mainCtr.getIndicadorResumenServiciosBasicos("AGUA", "0");
+  }
+
+  Future<void> obtenerResumenLuz() async {
+    aIndicadorServiciosLuz =
+        await mainCtr.getIndicadorResumenServiciosBasicos("LUZ", "0");
+  }
+
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = Responsive.of(context);
@@ -751,6 +766,10 @@ class _HomeTambookState extends State<HomeTambook>
                   cardResumenProveedor(),
                   const SizedBox(height: 15),
                   cardIndicadorCategorizacion(),
+                  const SizedBox(height: 15),
+                  cardIndicadorResumenAgua(),
+                  const SizedBox(height: 15),
+                  cardIndicadorResumenLuz(),
                   const SizedBox(height: 15),
                   cardTambosSinIntervencion(),
                   // const SizedBox(height: 15),
@@ -2113,6 +2132,406 @@ class _HomeTambookState extends State<HomeTambook>
                                                               aTamboId =
                                                               await mainCtr.getDatosTamboGestor(
                                                                   oIndicadorCategoria
+                                                                          .idTambo
+                                                                          .toString() ??
+                                                                      '0');
+
+                                                          BusyIndicator.hide(
+                                                              context);
+
+                                                          Navigator
+                                                              .pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  DetalleTambook(
+                                                                      listTambo:
+                                                                          aTamboId[
+                                                                              0]),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      const Divider(
+                                                          color: colorI),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        dataSource: chartDataIndicador,
+                                        xValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.x,
+                                        yValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.y,
+                                        // Width of the bars
+                                        width: 0.9,
+                                        // Spacing between the bars
+                                        spacing: 0.2,
+                                        dataLabelSettings:
+                                            const DataLabelSettings(
+                                                // Renders the data label
+                                                isVisible: true,
+                                                labelPosition:
+                                                    ChartDataLabelPosition
+                                                        .outside,
+                                                textStyle:
+                                                    TextStyle(fontSize: 17)))
+                                  ])))
+                      : const Center(child: CircularProgressIndicator()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardIndicadorResumenLuz() {
+    var heading = 'TIPO DE CONEXIÓN DE ENERGÍA ELÉCTRICA';
+
+    final List<ChartDataAvanceIndicador> chartDataIndicador = [];
+
+    for (var indicador in aIndicadorServiciosLuz) {
+      chartDataIndicador.add(ChartDataAvanceIndicador(
+          indicador.idTipoConexion.toString()!,
+          indicador.nomTipoConexion!,
+          int.parse(indicador.cantidad!.toString()),
+          Colors.blue));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading2
+                      ? Center(
+                          child: Container(
+                              height: 450,
+                              child: SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(
+                                    maximumLabelWidth: 100,
+                                  ),
+                                  primaryYAxis: NumericAxis(
+                                    edgeLabelPlacement:
+                                        EdgeLabelPlacement.shift,
+                                    numberFormat: NumberFormat.decimalPattern(),
+                                  ),
+                                  series: <ChartSeries>[
+                                    // Renders bar chart
+                                    BarSeries<ChartDataAvanceIndicador, String>(
+                                        onPointTap:
+                                            (ChartPointDetails details) async {
+                                          String idCategoria =
+                                              chartDataIndicador[
+                                                      details.pointIndex ?? 0]
+                                                  .id;
+
+                                          String categoria = chartDataIndicador[
+                                                  details.pointIndex ?? 0]
+                                              .x;
+
+                                          BusyIndicator.show(context);
+
+                                          List<ServiciosBasicosResumenModel>
+                                              indicadorLuz = await mainCtr
+                                                  .getIndicadorResumenServiciosBasicos(
+                                                      "LUZ",
+                                                      idCategoria.toString());
+
+                                          BusyIndicator.hide(context);
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                buildSuccessDialog2(
+                                              context,
+                                              title:
+                                                  "LISTA DE TAMBOS (${indicadorLuz.length})\n${categoria}",
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: indicadorLuz.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  var oIndicadorLuz =
+                                                      indicadorLuz[index];
+                                                  return Column(
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "${index + 1}"),
+                                                        title: Text(
+                                                          oIndicadorLuz
+                                                                  .nomTambo ??
+                                                              '',
+                                                        ),
+                                                        subtitle: Text(
+                                                            "${oIndicadorLuz.region ?? ''}"),
+                                                        onTap: () async {
+                                                          BusyIndicator.show(
+                                                              context);
+
+                                                          List<BuscarTamboDto>
+                                                              aTamboId =
+                                                              await mainCtr.getDatosTamboGestor(
+                                                                  oIndicadorLuz
+                                                                          .idTambo
+                                                                          .toString() ??
+                                                                      '0');
+
+                                                          BusyIndicator.hide(
+                                                              context);
+
+                                                          Navigator
+                                                              .pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  DetalleTambook(
+                                                                      listTambo:
+                                                                          aTamboId[
+                                                                              0]),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      const Divider(
+                                                          color: colorI),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        dataSource: chartDataIndicador,
+                                        xValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.x,
+                                        yValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.y,
+                                        // Width of the bars
+                                        width: 0.9,
+                                        // Spacing between the bars
+                                        spacing: 0.2,
+                                        dataLabelSettings:
+                                            const DataLabelSettings(
+                                                // Renders the data label
+                                                isVisible: true,
+                                                labelPosition:
+                                                    ChartDataLabelPosition
+                                                        .outside,
+                                                textStyle:
+                                                    TextStyle(fontSize: 17)))
+                                  ])))
+                      : const Center(child: CircularProgressIndicator()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('FUENTE: PNPAIS'),
+                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  const SizedBox(
+                    height: 1,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding cardIndicadorResumenAgua() {
+    var heading = 'TIPO DE CONEXIÓN DE AGUA';
+
+    final List<ChartDataAvanceIndicador> chartDataIndicador = [];
+
+    for (var indicador in aIndicadorServiciosAgua) {
+      chartDataIndicador.add(ChartDataAvanceIndicador(
+          indicador.idTipoConexion.toString()!,
+          indicador.nomTipoConexion!,
+          int.parse(indicador.cantidad!.toString()),
+          Colors.blue));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage("assets/icons/botones 1-02.png"),
+            fit: BoxFit.cover,
+          ),
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+        ),
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          title: ListTile(
+            visualDensity: const VisualDensity(vertical: -4),
+            title: Text(
+              heading,
+              style: const TextStyle(
+                fontSize: 16,
+                color: color_01,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          children: <Widget>[
+            const Divider(color: colorI),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  isLoading2
+                      ? Center(
+                          child: Container(
+                              height: 450,
+                              child: SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(
+                                    maximumLabelWidth: 100,
+                                  ),
+                                  primaryYAxis: NumericAxis(
+                                    edgeLabelPlacement:
+                                        EdgeLabelPlacement.shift,
+                                    numberFormat: NumberFormat.decimalPattern(),
+                                  ),
+                                  series: <ChartSeries>[
+                                    // Renders bar chart
+                                    BarSeries<ChartDataAvanceIndicador, String>(
+                                        onPointTap:
+                                            (ChartPointDetails details) async {
+                                          String idCategoria =
+                                              chartDataIndicador[
+                                                      details.pointIndex ?? 0]
+                                                  .id;
+
+                                          String categoria = chartDataIndicador[
+                                                  details.pointIndex ?? 0]
+                                              .x;
+
+                                          BusyIndicator.show(context);
+
+                                          List<ServiciosBasicosResumenModel>
+                                              indicadorAgua = await mainCtr
+                                                  .getIndicadorResumenServiciosBasicos(
+                                                      "AGUA",
+                                                      idCategoria.toString());
+
+                                          BusyIndicator.hide(context);
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                buildSuccessDialog2(
+                                              context,
+                                              title:
+                                                  "LISTA DE TAMBOS (${indicadorAgua.length})\n${categoria}",
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: indicadorAgua.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  var oIndicadorAgua =
+                                                      indicadorAgua[index];
+                                                  return Column(
+                                                    children: [
+                                                      ListTile(
+                                                        leading: Text(
+                                                            "${index + 1}"),
+                                                        title: Text(
+                                                          oIndicadorAgua
+                                                                  .nomTambo ??
+                                                              '',
+                                                        ),
+                                                        subtitle: Text(
+                                                            "${oIndicadorAgua.region ?? ''}"),
+                                                        onTap: () async {
+                                                          BusyIndicator.show(
+                                                              context);
+
+                                                          List<BuscarTamboDto>
+                                                              aTamboId =
+                                                              await mainCtr.getDatosTamboGestor(
+                                                                  oIndicadorAgua
                                                                           .idTambo
                                                                           .toString() ??
                                                                       '0');

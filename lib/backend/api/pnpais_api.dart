@@ -39,6 +39,7 @@ import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
+import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -586,6 +587,19 @@ class PnPaisApi {
       parser: (data) {
         return (data as List)
             .map((e) => IndicadorCategorizacionModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ServiciosBasicosResumenModel>>>
+      getIndicadorResumenServiciosBasicos(String opcion, String tipo) async {
+    return await _http.request<List<ServiciosBasicosResumenModel>>(
+      '${basePathApp3}obtenerTipoServicioBasicoAguaLuz/${opcion}/${tipo}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ServiciosBasicosResumenModel.fromJson(e))
             .toList();
       },
     );

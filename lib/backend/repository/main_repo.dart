@@ -38,6 +38,7 @@ import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
+import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -792,6 +793,19 @@ class MainRepo {
       String idTipo) async {
     List<IndicadorCategorizacionModel> aResp = [];
     final response = await _pnPaisApi.getIndicadorCategorizacion(idTipo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ServiciosBasicosResumenModel>>
+      getIndicadorResumenServiciosBasicos(String opcion, String tipo) async {
+    List<ServiciosBasicosResumenModel> aResp = [];
+    final response =
+        await _pnPaisApi.getIndicadorResumenServiciosBasicos(opcion, tipo);
     if (response.error == null) {
       aResp = response.data!;
     } else {

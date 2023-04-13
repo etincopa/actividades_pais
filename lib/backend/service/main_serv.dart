@@ -40,6 +40,7 @@ import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dar
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
 import 'package:actividades_pais/backend/model/programacion_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/resumen_parque_informatico.dart';
+import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_activida_model.dart';
 import 'package:actividades_pais/backend/model/tambo_combustible_model.dart';
 import 'package:actividades_pais/backend/model/tambo_guardiania_model.dart';
@@ -1173,6 +1174,13 @@ class MainService {
       String idTipo) async {
     List<IndicadorCategorizacionModel> aResp =
         await Get.find<MainRepo>().getIndicadorCategorizacion(idTipo);
+    return aResp;
+  }
+
+  Future<List<ServiciosBasicosResumenModel>>
+      getIndicadorResumenServiciosBasicos(String opcion, String tipo) async {
+    List<ServiciosBasicosResumenModel> aResp = await Get.find<MainRepo>()
+        .getIndicadorResumenServiciosBasicos(opcion, tipo);
     return aResp;
   }
 

@@ -4722,7 +4722,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 if (actividades.gitLaborando!.toUpperCase() ==
                                     'SI')
                                   Text(
-                                    "ACTIVIDAD: ${actividades.actividad.toString()}\n\nLUGAR: ${actividades.lugar.toString()}\n\nTIPO INTERVENCIÓN: ${actividades.tipoIntervencion.toString()}",
+                                    "ACTIVIDAD: ${actividades.actividad.toString().toUpperCase()}\n\nLUGAR: ${actividades.lugar.toString().toUpperCase()}\n\nTIPO INTERVENCIÓN: ${actividades.tipoIntervencion.toString().toUpperCase()}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       fontSize: 15,
@@ -4731,7 +4731,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 if (actividades.gitLaborando!.toUpperCase() ==
                                     'NO')
                                   Text(
-                                    "SIN ACTIVIDAD\n\nMOTIVO: ${actividades.motivo.toString()}",
+                                    "SIN ACTIVIDAD\n\nMOTIVO: ${actividades.motivo.toString().toUpperCase()}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       fontSize: 15,
