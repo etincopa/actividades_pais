@@ -3592,12 +3592,12 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ListTile(
                           title: const Text('VELOCIDAD BAJADA'),
                           subtitle: Text(
-                              "${oSrvInter.veloBaja!} (${oSrvInter.veloMinBajaPtje ?? '0'})"),
+                              "${oSrvInter.veloBaja!} (${(oSrvInter.veloMinBajaPtje != "") ? formatoDecimal((int.parse(oSrvInter.veloMinBajaPtje!.replaceAll(new RegExp(r'[^0-9]'), '')) ?? 0) / 100) : ''} %)"),
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD SUBIDA'),
                           subtitle: Text(
-                              "${oSrvInter.veloSube!} (${oSrvInter.veloMinSubePtje ?? '0'})"),
+                              "${oSrvInter.veloSube!} (${(oSrvInter.veloMinSubePtje != "") ? formatoDecimal((int.parse(oSrvInter.veloMinSubePtje!.replaceAll(new RegExp(r'[^0-9]'), '')) ?? 0) / 100) : ''} %)"),
                         ),
                       ],
                     ),
