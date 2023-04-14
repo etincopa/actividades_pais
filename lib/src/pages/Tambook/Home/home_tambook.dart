@@ -710,18 +710,6 @@ class _HomeTambookState extends State<HomeTambook>
                         tabs: [
                           Tab(
                             icon: ImageIcon(
-                              AssetImage('assets/indicadores.png'),
-                              size: 60,
-                            ),
-                          ),
-                          Tab(
-                            icon: ImageIcon(
-                              AssetImage('assets/calendario.png'),
-                              size: 60,
-                            ),
-                          ),
-                          Tab(
-                            icon: ImageIcon(
                               AssetImage('assets/logros.png'),
                               size: 60,
                             ),
@@ -729,6 +717,18 @@ class _HomeTambookState extends State<HomeTambook>
                           Tab(
                             icon: ImageIcon(
                               AssetImage('assets/PLATAFORMAS.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
+                              AssetImage('assets/indicadores.png'),
+                              size: 60,
+                            ),
+                          ),
+                          Tab(
+                            icon: ImageIcon(
+                              AssetImage('assets/calendario.png'),
                               size: 60,
                             ),
                           ),
@@ -759,19 +759,40 @@ class _HomeTambookState extends State<HomeTambook>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 15),
+                  cardAtenciones(),
+                  avanceMetas(),
+                  cardBeneficiarios(),
+                  avanceMetasUsuarios(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  cardTambosRegion(),
+                  const SizedBox(height: 15),
+                  //cardPlataforma(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardIndicadorCategorizacion(),
+                  const SizedBox(height: 15),
+                  cardTambosSinIntervencion(),
+                  const SizedBox(height: 15),
                   cardIndicadorInternet(),
                   const SizedBox(height: 15),
                   cardIndicadorEstadoInternet(),
                   const SizedBox(height: 15),
                   cardResumenProveedor(),
                   const SizedBox(height: 15),
-                  cardIndicadorCategorizacion(),
-                  const SizedBox(height: 15),
                   cardIndicadorResumenAgua(),
                   const SizedBox(height: 15),
                   cardIndicadorResumenLuz(),
-                  const SizedBox(height: 15),
-                  cardTambosSinIntervencion(),
+
                   // const SizedBox(height: 15),
                   //cardTambosSinIntervencionMes(),
                 ],
@@ -786,26 +807,6 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                   const SizedBox(height: 10),
                   cardActividadesDiarias(),
-                  const SizedBox(height: 15),
-                  //cardPlataforma(),
-                ],
-              )),
-              SingleChildScrollView(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 15),
-                  cardAtenciones(),
-                  avanceMetas(),
-                  cardBeneficiarios(),
-                  avanceMetasUsuarios(),
-                ],
-              )),
-              SingleChildScrollView(
-                  child: Column(
-                children: [
-                  const SizedBox(height: 15),
-                  cardTambosRegion(),
                   const SizedBox(height: 15),
                   //cardPlataforma(),
                 ],
@@ -3720,7 +3721,7 @@ class _HomeTambookState extends State<HomeTambook>
  */
   Padding cardTambosRegion() {
     var heading =
-        'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO\n(UT: ${aTambosRegion.length})\n(DISTRITOS: ${aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.distritos!))})\n(CENTROS POBLADOS: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.cp!)))})';
+        'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO\n(UT: ${aTambosRegion.length})\n(DISTRITOS: ${aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.distritos!))})\n(CENTROS POBLADOS: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.cp!)))})\n(POBLACIÓN OBJETIVO: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + double.parse(item.poblacion!).toInt()))})';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
