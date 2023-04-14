@@ -3719,7 +3719,8 @@ class _HomeTambookState extends State<HomeTambook>
  * -----------------------------------------------
  */
   Padding cardTambosRegion() {
-    var heading = 'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO';
+    var heading =
+        'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO\n(UT: ${aTambosRegion.length})\n(DISTRITOS: ${aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.distritos!))})\n(CENTROS POBLADOS: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.cp!)))})';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
