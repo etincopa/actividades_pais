@@ -3,6 +3,8 @@ class CantidadTamboRegionFld {
   static String poblacion = "poblacion";
   static String cantidad = "cantidad";
   static String nombre = "nombre";
+  static String cp = "cp";
+  static String distritos = "distritos";
 }
 
 class CantidadTamboRegion {
@@ -10,15 +12,18 @@ class CantidadTamboRegion {
   String? poblacion;
   String? cantidad;
   String? nombre;
+  String? cp;
+  String? distritos;
 
   CantidadTamboRegion.empty() {}
 
-  CantidadTamboRegion({
-    this.departamentoID,
-    this.poblacion,
-    this.cantidad,
-    this.nombre,
-  });
+  CantidadTamboRegion(
+      {this.departamentoID,
+      this.poblacion,
+      this.cantidad,
+      this.nombre,
+      this.cp,
+      this.distritos});
 
   factory CantidadTamboRegion.fromJson(Map<String, dynamic> json) {
     return CantidadTamboRegion(
@@ -26,6 +31,8 @@ class CantidadTamboRegion {
       poblacion: json[CantidadTamboRegionFld.poblacion],
       cantidad: json[CantidadTamboRegionFld.cantidad],
       nombre: json[CantidadTamboRegionFld.nombre],
+      cp: json[CantidadTamboRegionFld.cp],
+      distritos: json[CantidadTamboRegionFld.distritos],
     );
   }
 

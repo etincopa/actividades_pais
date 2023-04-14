@@ -3784,7 +3784,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         fontWeight: FontWeight.bold),
                                   ),
                                   subtitle: Text(
-                                    "TAMBOS EN SERVICIO: ${tambos.cantidad}\nPOBLACIÓN OBJETIVO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
+                                    "TAMBOS EN SERVICIO: ${tambos.cantidad}\nCENTROS POBLADOS: ${formatoDecimal((double.tryParse(tambos.cp!) ?? 0).toInt())}\nDISTRITOS: ${formatoDecimal((double.tryParse(tambos.distritos!) ?? 0).toInt())}\nPOBLACIÓN OBJETIVO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       color: Colors.black,
