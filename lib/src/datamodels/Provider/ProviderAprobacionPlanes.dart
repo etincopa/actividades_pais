@@ -162,6 +162,26 @@ class ProviderAprobacionPlanes {
     } else {
       return List.empty();
     }
+  }Future<List<UnidadesTerritoriales>>? ListarUnidadesTerritorialesTambook() async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+
+      'Content-Type': 'application/json'
+    };
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.backendsismonitor +
+          '/programaciongit/Listar-unidades-territoriales-tambook'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listado =
+          new ListaUnidadesTerritoriales.fromJsonList(jsonResponse["lista"]);
+      print(listado.items[0].idUnidadesTerritoriales);
+      return listado.items;
+    } else {
+      return List.empty();
+    }
   }
 
   Future<List<TambosDependientes>>? ListarTambosDependientes(ut) async {

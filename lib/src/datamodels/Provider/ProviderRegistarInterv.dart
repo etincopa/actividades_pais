@@ -59,6 +59,31 @@ class ProviderRegistarInterv {
     } else {
       return List.empty();
     }
+  }  Future cargarEventosTamb(
+      FiltroIntervencionesTambos filtroIntervencionesTambos) async {
+    print(jsonEncode(filtroIntervencionesTambos));
+    http.Response response = await http.post(
+        Uri.parse(AppConfig.backendsismonitor + '/programaciongit/filtroTambook'),
+        headers:  {
+
+          'Content-Type': 'application/json'
+        },
+        body: '{'
+            '"id": "${filtroIntervencionesTambos.id}",'
+            '"tipo": "${filtroIntervencionesTambos.tipo}",'
+            '"estado": "${filtroIntervencionesTambos.estado}",'
+            '"ut": "${filtroIntervencionesTambos.ut}",'
+            '"inicio": "${filtroIntervencionesTambos.inicio}",'
+            '"fin": "${filtroIntervencionesTambos.fin}",'
+            '"mes": "${filtroIntervencionesTambos.mes}",'
+            '"anio": ${filtroIntervencionesTambos.anio}'
+            '}');
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body);
+      return eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
+    } else {
+      return List.empty();
+    }
   }
 
   Future getTipoIntervencion() async {

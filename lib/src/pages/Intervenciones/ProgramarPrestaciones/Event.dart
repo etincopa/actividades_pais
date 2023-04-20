@@ -13,7 +13,7 @@ class Evento {
   final String idPlataforma;
   final String plataformaDescripcion;
   final String plataformaCodigoSnip;
-  final String tipoProgramacion;
+    String tipoProgramacion;
   final String estadoProgramacion;
   final String puntos;
   final String idUnidadesTerritoriales;

@@ -29,6 +29,7 @@ import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart'
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
+import 'package:actividades_pais/src/pages/Tambook/Calendario/Calendario.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/mapa.dart';
@@ -68,14 +69,16 @@ class _DetalleTambookState extends State<DetalleTambook>
     "INFORMACIÓN DEL TAMBO",
     "INFORMACIÓN DEL PERSONAL",
     "METAS",
+    "INTERVENCIONES",
+    "ACTIVIDADES DIARIAS",
     "PLAN DE MANTENIMIENTO",
     "SERVICIOS DEL TAMBO",
     "EQUIPOS INFORMÁTICOS",
     //"ACTIVIDADES APROBADAS",
-    "ACTIVIDADES DIARIAS",
     "CLIMA",
     "COMO LLEGAR AL TAMBO",
-    "INTERVENCIONES"
+
+   // "CALENDARIO",
   ];
   String currentTitle = '';
   int _selectedTab = 0;
@@ -1122,6 +1125,42 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
+                                message: 'INTERVENCIONES',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/intervenciones.png'),
+                                    size: 55,
+                                  ),
+                                ),
+                              ),
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
+                                message: 'ACTIVIDADES DIARIAS',
+                                child: Tab(
+                                  icon: ImageIcon(
+                                    AssetImage('assets/calendario.png'),
+                                    size: 55,
+                                  ),
+                                ),
+                              ),
+                              Tooltip(
+                                waitDuration: Duration(seconds: 1),
+                                showDuration: Duration(seconds: 2),
+                                padding: EdgeInsets.all(5),
+                                height: 35,
+                                textStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                                triggerMode: TooltipTriggerMode.longPress,
                                 message: 'PLAN DE MANTENIMIENTO',
                                 child: Tab(
                                   icon: ImageIcon(
@@ -1130,6 +1169,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
+
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -1203,24 +1243,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
-                                message: 'ACTIVIDADES DIARIAS',
-                                child: Tab(
-                                  icon: ImageIcon(
-                                    AssetImage('assets/calendario.png'),
-                                    size: 55,
-                                  ),
-                                ),
-                              ),
-                              Tooltip(
-                                waitDuration: Duration(seconds: 1),
-                                showDuration: Duration(seconds: 2),
-                                padding: EdgeInsets.all(5),
-                                height: 35,
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                                triggerMode: TooltipTriggerMode.longPress,
                                 message: 'INFORMACIÓN DEL CLIMA',
                                 child: Tab(
                                   icon: ImageIcon(
@@ -1247,7 +1269,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-                              Tooltip(
+                               /*Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
                                 padding: EdgeInsets.all(5),
@@ -1257,14 +1279,14 @@ class _DetalleTambookState extends State<DetalleTambook>
                                     color: Colors.white,
                                     fontWeight: FontWeight.normal),
                                 triggerMode: TooltipTriggerMode.longPress,
-                                message: 'INTERVENCIONES',
+                                message: 'CALENDARIO',
                                 child: Tab(
                                   icon: ImageIcon(
-                                    AssetImage('assets/intervenciones.png'),
+                                    AssetImage('assets/calendario.png'),
                                     size: 55,
                                   ),
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
                         ),
@@ -1352,7 +1374,17 @@ class _DetalleTambookState extends State<DetalleTambook>
                         cardBeneficiarios(),
                       ],
                     ),
-
+                    //intervenciones
+                    Calendario(idTambo: oTambo.idTambo.toString() ?? "x"),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          cardActividadesDiarias(),
+                          const SizedBox(height: 40),
+                        ],
+                      ),
+                    ),
                     //const TabScreen("PLAN DE MANTENIMIENTO"),
                     ListView(
                       children: [
@@ -1419,15 +1451,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     ),*/
 
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          cardActividadesDiarias(),
-                          const SizedBox(height: 40),
-                        ],
-                      ),
-                    ),
 
                     //const TabScreen("Clima"),
 
@@ -1448,7 +1471,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
 
                     //const TabScreen("INTERVENCIONES"),
-                    DefaultTabController(
+                   /* DefaultTabController(
                       length: 2,
                       child: Column(
                         children: <Widget>[
@@ -1538,7 +1561,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                           ),
                         ],
                       ),
-                    ),
+                    ),*/
+
                   ],
                 ),
               ),

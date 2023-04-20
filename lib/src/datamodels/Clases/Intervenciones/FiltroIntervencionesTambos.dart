@@ -2,7 +2,7 @@ class FiltroIntervencionesTambos {
   String? id;
   String? tipo;
   String? estado;
-  String? ut;
+  String? ut="x";
   String? inicio;
   String? fin;
   String? mes;
@@ -12,7 +12,7 @@ class FiltroIntervencionesTambos {
       {this.id,
         this.tipo,
         this.estado,
-        this.ut,
+        this.ut="x",
         this.inicio,
         this.fin,
         this.mes,

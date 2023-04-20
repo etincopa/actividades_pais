@@ -13,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:printing/printing.dart';
+import 'package:http/http.dart' as http;
 
 class FichaIntervencion extends StatefulWidget {
   int idIntervencion = 0;
@@ -29,61 +30,44 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
   void initState() {
     print("aqyiii");
     // TODO: implement initState
+
     super.initState();
   }
+
   //var file = File('');
   //String porcentaje = "";
-   late String pdfFilePath="";
+  late String pdfFilePath = "";
   String porcentaje = '0';
 
   Future<Uint8List> _downloadPDF(String idIntervencion) async {
-    Dio dio = Dio();
-     final directory = await DownloadsPath.downloadsDirectory();
-
-    final DateTime now = DateTime.now();
-    final String timestamp =
-        '${widget.fechaEjecucion}_${now.hour}${now.minute}${now.second}';
-    final String pdfFilePath =
-        '${directory!.path}/${idIntervencion}_$timestamp.pdf';
-
-    await dio.download(
-      'https://www.pais.gob.pe/backendsismonitor/public/reportesintervenciones/exportar-ficha-pdf?data=$idIntervencion',
-      pdfFilePath,
-      onReceiveProgress: (receivedBytes, totalBytes) {
-        if (totalBytes != -1) {
-          porcentaje =
-              (receivedBytes / totalBytes * 100).toStringAsFixed(0);
-
-        }
-
-       // setState(() {});
-      },
-    );
-
-    final file = File(pdfFilePath);
-    final bytes = await file.readAsBytes();
-    return bytes;
-
-    ///return pdfFilePath;
+    final url =
+        AppConfig.backendsismonitor+'/reportesintervenciones/exportar-ficha-pdf?data=$idIntervencion';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    }
+    return response.bodyBytes;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('INTERVENCION'), backgroundColor: AppConfig.primaryColor,
+        title: Text(
+          'INTERVENCION - ${widget.idIntervencion.toString()}',
+        ),
+        backgroundColor: AppConfig.primaryColor,
       ),
       body: FutureBuilder<Uint8List>(
         future: _downloadPDF(widget.idIntervencion.toString()),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-         return PdfPreview(
-           maxPageWidth: 708,
-           onPrinted: showPrintedToast,
-          onShared: showSharedToast,
-           build: (context) => (snapshot.data!),
-         );
-
+            return PdfPreview(
+              maxPageWidth: 708,
+              onPrinted: showPrintedToast,
+              onShared: showSharedToast,
+              build: (context) => (snapshot.data!),
+            );
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
@@ -97,7 +81,6 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
                   SizedBox(height: 16),
                   Text('Descargando archivo...'),
                   SizedBox(height: 8),
-                  Text('$porcentaje%'),
                 ],
               ),
             );
@@ -106,8 +89,8 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
       ),
     );
   }
-  }
- /*   return Scaffold(
+}
+/*   return Scaffold(
         appBar: AppBar(
             backgroundColor: AppConfig.primaryColor,
             title: const Text("REPORTE DE ACTIVIDADES"),
@@ -234,4 +217,3 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
       }
     }
   }*/
-

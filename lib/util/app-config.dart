@@ -19,6 +19,7 @@ class AppConfig {
   static var letrasColorAppBar =Color(0xFFFFFFFF);
   static var letrasColor =Color(0xFF000000);
   static var primaryColor =Color(0xFF78b8cd);
+  static var primaryColor2 =Color(0xFF79B7CC);
 
 
   static String urlBackendMovil = 'https://www.pais.gob.pe/';

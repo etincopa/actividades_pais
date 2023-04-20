@@ -23,6 +23,7 @@ import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart'
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
+import 'package:actividades_pais/src/pages/Tambook/Calendario/Calendario.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/detalle_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -584,7 +585,7 @@ class _HomeTambookState extends State<HomeTambook>
     );*/
 
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         backgroundColor: color_10o15,
         body: NestedScrollView(
@@ -722,6 +723,11 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                           Tab(
                             icon: ImageIcon(
+                              AssetImage('assets/intervenciones.png'),
+                              size: 60,
+                            ),
+                          ),Tab(
+                            icon: ImageIcon(
                               AssetImage('assets/calendario.png'),
                               size: 60,
                             ),
@@ -774,6 +780,7 @@ class _HomeTambookState extends State<HomeTambook>
                   //cardPlataforma(),
                 ],
               )),
+           Calendario(),
               SingleChildScrollView(
                   child: Column(
                 children: [
@@ -829,7 +836,7 @@ class _HomeTambookState extends State<HomeTambook>
                   cardResumenEquipos(),
                   //cardEquipamientoTecnologico(),
                 ],
-              )),
+              ))
             ],
           ),
         ),
