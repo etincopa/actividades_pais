@@ -35,9 +35,9 @@ class UltimoAvancePartidaModel {
   DateTime? createdTime = null;
 
   String? numSnip;
-  int? idTambo;
+  String? idTambo;
   String? idMonitoreo;
-  int? idAvanceFisicoPartida;
+  String? idAvanceFisicoPartida;
   double? avanceFisicoPartida;
 
   UltimoAvancePartidaModel.empty() {}
@@ -57,10 +57,9 @@ class UltimoAvancePartidaModel {
     int? id,
     int? isEdit,
     DateTime? createdTime,
-    String? numSnip,
-    int? idTambo,
+    String? idTambo,
     String? idMonitoreo,
-    int? idAvanceFisicoPartida,
+    String? idAvanceFisicoPartida,
     double? avanceFisicoPartida,
   }) =>
       UltimoAvancePartidaModel(
@@ -99,7 +98,16 @@ class UltimoAvancePartidaModel {
       idTambo: json[UltimoAvancePartidaFld.idTambo],
       idMonitoreo: json[UltimoAvancePartidaFld.idMonitoreo],
       idAvanceFisicoPartida: json[UltimoAvancePartidaFld.idAvanceFisicoPartida],
-      avanceFisicoPartida: json[UltimoAvancePartidaFld.avanceFisicoPartida],
+      avanceFisicoPartida:
+          _getDouble(json[UltimoAvancePartidaFld.avanceFisicoPartida]),
     );
+  }
+
+  static double _getDouble(dynamic data) {
+    try {
+      return data != null ? double.parse(data.toString()) : 0.000;
+    } catch (oError) {
+      return 0.0;
+    }
   }
 }

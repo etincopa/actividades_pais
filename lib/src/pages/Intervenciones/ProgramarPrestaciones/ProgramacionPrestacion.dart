@@ -161,119 +161,131 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
               height: 10,
             ),
             if (id_evaluacion == "1") ...[
-            widget.event.estadoProgramacion != '5'  ? Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Intervenciones(widget.event.unidadTerritorialDescripcion, snip:widget.event.plataformaCodigoSnip ),
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          height: 40,
-                          width: width / 3,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
-                                Icon(Icons.playlist_add_check),
-                                Text(
-                                  'EJECCUCIÓN',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    letterSpacing: 1.5,
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans',
+              widget.event.estadoProgramacion != '5'
+                  ? Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Intervenciones(
+                                        widget
+                                            .event.unidadTerritorialDescripcion,
+                                        snip:
+                                            widget.event.plataformaCodigoSnip),
+                                  ),
+                                );
+                              },
+                              child: SizedBox(
+                                height: 40,
+                                width: width / 3,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: const [
+                                      Icon(Icons.playlist_add_check),
+                                      Text(
+                                        'EJECCUCIÓN',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          letterSpacing: 1.5,
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'OpenSans',
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                    ReprogramarFecha(widget.event),
-                            ),
-                          );
-                        },
-                        child: SizedBox(
-                          height: 40,
-                          width: width / 3,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
-                                Icon(Icons.calendar_month),
-                                Text(
-                                  'REPROGRAMAR',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    letterSpacing: 1.5,
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans',
+                            ElevatedButton(
+                              onPressed: () async {
+                                var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ReprogramarFecha(widget.event),
+                                  ),
+                                );
+                              },
+                              child: SizedBox(
+                                height: 40,
+                                width: width / 3,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: const [
+                                      Icon(Icons.calendar_month),
+                                      Text(
+                                        'REPROGRAMAR',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          letterSpacing: 1.5,
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'OpenSans',
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                SuspenderIntervencion(idProgramacion: widget.event.idProgramacion),
+                              ),
                             )
-                          );
-                        },
-                        child: SizedBox(
-                          height: 40,
-                          width: width / 3,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
-                                Icon(Icons.stop),
-                                Text(
-                                  'SUSPENDER',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    letterSpacing: 1.5,
-                                    fontSize: 10.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans',
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                var res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          SuspenderIntervencion(
+                                              idProgramacion:
+                                                  widget.event.idProgramacion),
+                                    ));
+                              },
+                              child: SizedBox(
+                                height: 40,
+                                width: width / 3,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: const [
+                                      Icon(Icons.stop),
+                                      Text(
+                                        'SUSPENDER',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          letterSpacing: 1.5,
+                                          fontSize: 10.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'OpenSans',
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ):Container()
+                          ],
+                        )
+                      ],
+                    )
+                  : Container()
             ]
           ]),
         )

@@ -726,7 +726,8 @@ class _HomeTambookState extends State<HomeTambook>
                               AssetImage('assets/intervenciones.png'),
                               size: 60,
                             ),
-                          ),Tab(
+                          ),
+                          Tab(
                             icon: ImageIcon(
                               AssetImage('assets/calendario.png'),
                               size: 60,
@@ -780,7 +781,7 @@ class _HomeTambookState extends State<HomeTambook>
                   //cardPlataforma(),
                 ],
               )),
-           Calendario(),
+              Calendario(),
               SingleChildScrollView(
                   child: Column(
                 children: [
@@ -2816,7 +2817,6 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 20,
                         ),
                         const Text('FUENTE: PNPAIS'),
-                        Text("ACTUALIZADO AL ${fechaActual}"),
                         const SizedBox(
                           height: 1,
                         ),
@@ -3500,6 +3500,52 @@ class _HomeTambookState extends State<HomeTambook>
                         Divider(
                           height: 10,
                         ),
+                        if (aActividadesResumen.isNotEmpty)
+                          Column(children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 120,
+                                  child: Image.asset(
+                                      "assets/regiones/MAPA_COSTA_SIERRA_SELVA.png",
+                                      fit: BoxFit.cover),
+                                ),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "NACIONAL",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.black,
+                                        ),
+                                        onPressed: () {},
+                                        child: Text(
+                                            'CON ACTIVIDADES : ${aActividadesResumen.fold(0, (sum, item) => sum + int.parse(item.conActividades!))}'),
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          primary: Colors.black,
+                                        ),
+                                        onPressed: () {},
+                                        child: Text(
+                                            'SIN ACTIVIDADES : ${aActividadesResumen.fold(0, (sum, item) => sum + int.parse(item.sinActividades!))}'),
+                                      ),
+                                    ]),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            const Divider(color: colorI),
+                          ]),
                         for (var tambos in aActividadesResumen)
                           Column(children: [
                             Row(
