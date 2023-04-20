@@ -804,7 +804,7 @@ class PnPaisApi {
 
   Future<HttpResponse<List<TambosMapaModel>>> getTambosParaMapa() async {
     return await _http.request<List<TambosMapaModel>>(
-      '${basePathApp4}listadarBandejaTambosInternet',
+      '${basePathApp4}listadarBandejaTambosInternet/2023/0',
       method: "GET",
       parser: (data) {
         var tambosOperativos = (data[0] as List)

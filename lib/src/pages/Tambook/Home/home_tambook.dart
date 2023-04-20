@@ -722,13 +722,13 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                           Tab(
                             icon: ImageIcon(
-                              AssetImage('assets/indicadores.png'),
+                              AssetImage('assets/calendario.png'),
                               size: 60,
                             ),
                           ),
                           Tab(
                             icon: ImageIcon(
-                              AssetImage('assets/calendario.png'),
+                              AssetImage('assets/indicadores.png'),
                               size: 60,
                             ),
                           ),
@@ -776,6 +776,20 @@ class _HomeTambookState extends State<HomeTambook>
               )),
               SingleChildScrollView(
                   child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('SELECCIONAR FECHA DE ACTIVIDAD'),
+                  ),
+                  const SizedBox(height: 10),
+                  cardActividadesDiarias(),
+                  const SizedBox(height: 15),
+                  //cardPlataforma(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 15),
@@ -795,20 +809,6 @@ class _HomeTambookState extends State<HomeTambook>
 
                   // const SizedBox(height: 15),
                   //cardTambosSinIntervencionMes(),
-                ],
-              )),
-              SingleChildScrollView(
-                  child: Column(
-                children: [
-                  const SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: Text('SELECCIONAR FECHA DE ACTIVIDAD'),
-                  ),
-                  const SizedBox(height: 10),
-                  cardActividadesDiarias(),
-                  const SizedBox(height: 15),
-                  //cardPlataforma(),
                 ],
               )),
               SingleChildScrollView(
@@ -3720,8 +3720,7 @@ class _HomeTambookState extends State<HomeTambook>
  * -----------------------------------------------
  */
   Padding cardTambosRegion() {
-    var heading =
-        'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO\n(UT: ${aTambosRegion.length})\n(DISTRITOS: ${aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.distritos!))})\n(CENTROS POBLADOS: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.cp!)))})\n(POBLACIÓN OBJETIVO: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + double.parse(item.poblacion!).toInt()))})';
+    var heading = 'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -3765,6 +3764,40 @@ class _HomeTambookState extends State<HomeTambook>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: SizedBox(
+                                  height: 150.0,
+                                  child: Image.asset(
+                                      "assets/regiones/MAPA_COSTA_SIERRA_SELVA.png")),
+
+                              // AssetImage("assets/regiones/AYACUCHO.png"),
+
+                              iconColor: const Color.fromARGB(255, 0, 0, 0),
+                              title: ListTile(
+                                title: Text(
+                                  "NACIONAL",
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(
+                                  "UT: ${aTambosRegion.length}\nDISTRITOS: ${aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.distritos!))}\nCENTROS POBLADOS: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + int.parse(item.cp!)))}\nPOBLACIÓN OBJETIVO: ${formatoDecimal(aTambosRegion.fold(0, (sum, item) => sum + double.parse(item.poblacion!).toInt()))}",
+                                  textAlign: TextAlign.justify,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            const Divider(color: colorI),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
                         for (var tambos in aTambosRegion)
                           Column(
                             children: [

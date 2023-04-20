@@ -2092,8 +2092,30 @@ class _DetalleTambookState extends State<DetalleTambook>
                           for (var priorizacion in aPriorizacion!)
                             ListTile(
                               iconColor: const Color.fromARGB(255, 0, 0, 0),
-                              title:
-                                  Text(priorizacion.nombrePriorizacion ?? ''),
+                              title: Row(children: [
+                                Text(priorizacion.nombrePriorizacion ?? ''),
+                                /*Tooltip(
+                                  child: Icon(Icons.info, size: 30.0),
+                                  message:
+                                      'Lorem ipsum dolor sit amet, consectetur '
+                                      'adipiscing elit, sed do eiusmod tempor incididunt '
+                                      'ut labore et dolore magna aliqua. '
+                                      'Ut enim ad minim veniam, quis nostrud exercitation '
+                                      'ullamco laboris nisi ut aliquip ex ea commodo consequat',
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  padding: EdgeInsets.all(20),
+                                  margin: EdgeInsets.all(20),
+                                  showDuration: Duration(seconds: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.9),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(4)),
+                                  ),
+                                  textStyle: TextStyle(color: Colors.white),
+                                  preferBelow: true,
+                                  verticalOffset: 20,
+                                )*/
+                              ]),
                             ),
                         const SizedBox(height: 10),
                         const Text(
