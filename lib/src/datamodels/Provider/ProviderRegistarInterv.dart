@@ -59,15 +59,13 @@ class ProviderRegistarInterv {
     } else {
       return List.empty();
     }
-  }
-
-  Future cargarEventosTamb(
+  }  Future cargarEventosTamb(
       FiltroIntervencionesTambos filtroIntervencionesTambos) async {
-    print(jsonEncode(filtroIntervencionesTambos));
-    http.Response response = await http.post(
-        Uri.parse(
-            AppConfig.backendsismonitor + '/programaciongit/filtroTambook'),
-        headers: {'Content-Type': 'application/json'},
+     http.Response response = await http.post(
+        Uri.parse(AppConfig.backendsismonitor + '/programaciongit/filtroTambook'),
+        headers:  {
+          'Content-Type': 'application/json'
+        },
         body: '{'
             '"id": "${filtroIntervencionesTambos.id}",'
             '"tipo": "${filtroIntervencionesTambos.tipo}",'
@@ -78,7 +76,7 @@ class ProviderRegistarInterv {
             '"mes": "${filtroIntervencionesTambos.mes}",'
             '"anio": ${filtroIntervencionesTambos.anio}'
             '}');
-    if (response.statusCode == 200) {
+     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
     } else {
@@ -504,33 +502,31 @@ class ProviderRegistarInterv {
       throw Exception('Failed to fetch data');
     }
   }
-
   Future<List<Map<String, dynamic>>> fetchServicios(idActividad) async {
     final response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/lista-servicios-proggit/$idActividad'),
+        Uri.parse(
+            AppConfig.backendsismonitor +'/programaciongit/lista-servicios-proggit/$idActividad'),
         headers: await ProviderRegistarInterv().headerss());
-    print("response.bodyy::: ${response.body}");
+print("response.bodyy::: ${response.body}");
     if (response.statusCode == 200) {
       final List<dynamic> decoded = jsonDecode(response.body);
       final List<Map<String, dynamic>> actividades =
-          decoded.cast<Map<String, dynamic>>();
+      decoded.cast<Map<String, dynamic>>();
       return actividades;
     } else {
       throw Exception('Failed to fetch data');
     }
   }
-
   Future<List<Map<String, dynamic>>> fetchTipogobiernos(idActividad) async {
     final response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/lista-tipogobiernos-proggit/$idActividad'),
+        Uri.parse(
+            AppConfig.backendsismonitor +'/programaciongit/lista-tipogobiernos-proggit/$idActividad'),
         headers: await ProviderRegistarInterv().headerss());
 
     if (response.statusCode == 200) {
       final List<dynamic> decoded = jsonDecode(response.body);
       final List<Map<String, dynamic>> actividades =
-          decoded.cast<Map<String, dynamic>>();
+      decoded.cast<Map<String, dynamic>>();
       return actividades;
     } else {
       throw Exception('Failed to fetch data');

@@ -68,17 +68,18 @@ class Listas {
         ),
         backgroundColor: Colors.red[600],
       ), */
-      title: Text('${band.primerNombre! ==''?band.nombre:''} ${band.segundoNombre! ==''?band.nombre2:''}',
+      title: Text(
+          '${band.primerNombre! == '' ? band.nombre : ''} ${band.segundoNombre! == '' ? band.nombre2 : ''}',
           style: const TextStyle(fontSize: 13)),
-      subtitle:
-          new Text('${band.fechaNacimiento}', style: const TextStyle(fontSize: 10)),
+      subtitle: new Text('${band.fechaNacimiento}',
+          style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 80,
             child: Text(
-              ' ${band.entidad==''?band.nombre_programa:''}',
+              ' ${band.entidad == '' ? band.nombre_programa : ''}',
               style: const TextStyle(fontSize: 10),
             ),
           ),
@@ -98,6 +99,7 @@ class Listas {
       onTap: () {},
     );
   }
+
   ListTile banTitleParticipantesIntranet(Data band) {
     return ListTile(
       /*    leading: CircleAvatar(
@@ -107,17 +109,17 @@ class Listas {
         ),
         backgroundColor: Colors.red[600],
       ), */
-      title: Text('${ band.nombre} ${ band.nombre2 }',
+      title: Text('${band.nombre} ${band.nombre2}',
           style: const TextStyle(fontSize: 13)),
-      subtitle:
-          new Text('${band.fechaNacimiento}', style: const TextStyle(fontSize: 10)),
+      subtitle: new Text('${band.fechaNacimiento}',
+          style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: 80,
             child: Text(
-              ' ${band.nombrePrograma != null?'':''}',
+              ' ${band.nombrePrograma != null ? '' : ''}',
               style: const TextStyle(fontSize: 10),
             ),
           ),
@@ -149,8 +151,8 @@ class Listas {
       ), */
       title: Text('${band.nombre + ' ' + band.nombre2}',
           style: const TextStyle(fontSize: 13)),
-      subtitle:
-          new Text('${band.fecha_nacimiento}', style: const TextStyle(fontSize: 10)),
+      subtitle: new Text('${band.fecha_nacimiento}',
+          style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -524,8 +526,8 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.puntoAtencion} \n ${band.codigoUbigeo}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle:
-                new Text('${band.plataforma}', style: const TextStyle(fontSize: 10)),
+            subtitle: new Text('${band.plataforma}',
+                style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -596,8 +598,8 @@ class Listas {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${band.descripcionEquipoInformatico}',
-                    style:
-                        const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.bold)),
                 const SizedBox(
                   height: 5,
                 )
@@ -660,7 +662,7 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor:[Colors.red],
+                          activeBgColor: [Colors.red],
                           changeOnTap: false,
                           fontSize: 7.5,
                           labels: ['INACTIVO', 'ACTIVO'],
@@ -744,9 +746,10 @@ class Listas {
                 ),
                 Container(
                   width: 240,
-                  child: Text('Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Region: ${band.departamento}',
-                      style:
-                          const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold)),
+                  child: Text(
+                      'Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Region: ${band.departamento}',
+                      style: const TextStyle(
+                          fontSize: 10.5, fontWeight: FontWeight.bold)),
                 ),
                 const Divider(
                   color: Colors.blueAccent,
@@ -811,8 +814,8 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.idTicket} \n${band.usuarioAsignado}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle:
-                new Text('${band.material}', style: const TextStyle(fontSize: 10)),
+            subtitle: new Text('${band.material}',
+                style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -871,12 +874,14 @@ class Listas {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('${band.usuario}\n${band.sector}\n',
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
             Row(
               children: [
                 Expanded(
                   child: Text('${band.categoria}\n${band.subcategoria}\n',
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
                 SizedBox(width: width / 5),
               ],
@@ -896,11 +901,13 @@ class Listas {
             ),
             const SizedBox(height: 10),
             Text('${band.actividad}',
-                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Text('${band.descripcionEntidad ?? ''}',
                 textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
           ],
         ),
       ),
@@ -946,8 +953,8 @@ class Listas {
                       '${band.plataformaDescripcion}\n'
                       '${band.idProgramacion}\n'
                       '${band.tipoPlan}\n',
-                      style:
-                          const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
                 Container(
                   width: 120,
@@ -955,8 +962,8 @@ class Listas {
                       '${band.codigoPlan}\n'
                       '${band.nombreSector}\n'
                       '${DateFormat('dd/MM/yy').format(DateTime.parse(band.fecha.toString()))}\n',
-                      style:
-                          const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -976,8 +983,8 @@ class Listas {
                 ),
                 const SizedBox(height: 10),
                 Text('${band.nombrePrograma}',
-                    style:
-                        const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 Text(
                     textAlign: TextAlign.justify,

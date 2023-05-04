@@ -2938,7 +2938,7 @@ class _DetalleTambookState extends State<DetalleTambook>
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
-    var heading = 'USUARIOS $sCurrentYear';
+    var heading = 'USUARIOS $sCurrentYear - (USUARIOS ÚNICOS ACUMULADOS)';
     late ValueNotifier<double> valueNotifier =
         ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
 

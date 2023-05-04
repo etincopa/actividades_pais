@@ -205,7 +205,7 @@ class _HomeTambookState extends State<HomeTambook>
   Future<void> getCantidadTambosPIAS() async {
     List<TamboPias> aTamboPias = await mainCtr.getCantidadTambosPIAS();
     oTamboPias = aTamboPias[0];
-    banerTambosPias = '${oTamboPias.tambos} TAMBOS OPERANDO';
+    banerTambosPias = '${oTamboPias.tambos} TAMBOS PRESTANDO SERVICIO';
 
     /**
      * Obtener tambos sin intervenciones
@@ -711,13 +711,13 @@ class _HomeTambookState extends State<HomeTambook>
                         tabs: [
                           Tab(
                             icon: ImageIcon(
-                              AssetImage('assets/logros.png'),
+                              AssetImage('assets/icons/atenciones.png'),
                               size: 60,
                             ),
                           ),
                           Tab(
                             icon: ImageIcon(
-                              AssetImage('assets/PLATAFORMAS.png'),
+                              AssetImage('assets/icons/tambo.png'),
                               size: 60,
                             ),
                           ),
@@ -735,7 +735,7 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                           Tab(
                             icon: ImageIcon(
-                              AssetImage('assets/indicadores.png'),
+                              AssetImage('assets/icons/evoluciones.png'),
                               size: 60,
                             ),
                           ),
@@ -3287,7 +3287,7 @@ class _HomeTambookState extends State<HomeTambook>
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
-    var heading = 'USUARIOS $sCurrentYear';
+    var heading = 'USUARIOS $sCurrentYear (USUARIOS ÚNICOS ACUMULADOS)';
     late ValueNotifier<double> valueNotifier =
         ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
 
@@ -4199,7 +4199,8 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding avanceMetasUsuarios() {
-    var heading = 'EVOLUCIÓN DE LA EJECUCIÓN DE USUARIOS - $sCurrentYear';
+    var heading =
+        'EVOLUCIÓN DE LA EJECUCIÓN DE USUARIOS - $sCurrentYear (USUARIOS ÚNICOS ACUMULADOS)';
 
     final List<ChartDataAvance> chartData1 = [];
 
