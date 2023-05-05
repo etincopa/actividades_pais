@@ -1617,80 +1617,79 @@ class _MonitoringDetailNewEditPageState
                               codigo: _prefs!.getString('codigo') ?? '',
                               rol: _prefs!.getString('rol') ?? '',
                             );
-                            if (aPartidaEjecutada.isEmpty) {
-                              showSnackbar(
-                                success: false,
-                                text:
-                                    'Debe ingresar registros de partida Ejecutada',
-                              );
+                            // if (aPartidaEjecutada.isEmpty) {
+                            //   showSnackbar(
+                            //     success: false,
+                            //     text:
+                            //         'Debe ingresar registros de partida Ejecutada',
+                            //   );
+                            // } else {
+                            if (idM == 0) {
+                              AnimatedSnackBar.rectangle(
+                                'Error',
+                                'Para enviar un monitoreo debes ingresar todos los campos obligatorios y hacer click en el botón grabar',
+                                type: AnimatedSnackBarType.error,
+                                brightness: Brightness.light,
+                                mobileSnackBarPosition:
+                                    MobileSnackBarPosition.top,
+                              ).show(context);
                             } else {
-                              if (idM == 0) {
-                                AnimatedSnackBar.rectangle(
-                                  'Error',
-                                  'Para enviar un monitoreo debes ingresar todos los campos obligatorios y hacer click en el botón grabar',
-                                  type: AnimatedSnackBarType.error,
-                                  brightness: Brightness.light,
-                                  mobileSnackBarPosition:
-                                      MobileSnackBarPosition.top,
-                                ).show(context);
-                              } else {
-                                final alert = AlertQuestion(
-                                    title: 'Información',
-                                    message: '¿Está Seguro de Enviar Monitor?',
-                                    onNegativePressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    onPostivePressed: () async {
-                                      Navigator.of(context).pop();
-                                      BusyIndicator.show(context);
-                                      try {
-                                        List<TramaMonitoreoModel> dataSend =
-                                            await mainCtr
-                                                .sendMonitoreo([oMonitor]);
-                                        BusyIndicator.hide(context);
+                              final alert = AlertQuestion(
+                                  title: 'Información',
+                                  message: '¿Está Seguro de Enviar Monitor?',
+                                  onNegativePressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  onPostivePressed: () async {
+                                    Navigator.of(context).pop();
+                                    BusyIndicator.show(context);
+                                    try {
+                                      List<TramaMonitoreoModel> dataSend =
+                                          await mainCtr
+                                              .sendMonitoreo([oMonitor]);
+                                      BusyIndicator.hide(context);
 
-                                        if (dataSend.isEmpty) {
-                                          showSnackbar(
-                                            success: true,
-                                            text:
-                                                'Datos Enviados Correctamente',
-                                          );
-                                        } else {
-                                          /**
+                                      if (dataSend.isEmpty) {
+                                        showSnackbar(
+                                          success: true,
+                                          text: 'Datos Enviados Correctamente',
+                                        );
+                                      } else {
+                                        /**
                                            * Mostrar el registro que esta generando error
                                            */
-                                          buildFormData(dataSend[0]);
+                                        buildFormData(dataSend[0]);
 
-                                          AnimatedSnackBar.rectangle(
-                                            'Error',
-                                            'No se pudo enviar el monitor',
-                                            type: AnimatedSnackBarType.error,
-                                            brightness: Brightness.light,
-                                            mobileSnackBarPosition:
-                                                MobileSnackBarPosition.top,
-                                          ).show(context);
-                                        }
-                                      } catch (ex) {
-                                        BusyIndicator.hide(context);
                                         AnimatedSnackBar.rectangle(
                                           'Error',
-                                          ex.toString(),
+                                          'No se pudo enviar el monitor',
                                           type: AnimatedSnackBarType.error,
                                           brightness: Brightness.light,
                                           mobileSnackBarPosition:
                                               MobileSnackBarPosition.top,
                                         ).show(context);
                                       }
-                                    });
+                                    } catch (ex) {
+                                      BusyIndicator.hide(context);
+                                      AnimatedSnackBar.rectangle(
+                                        'Error',
+                                        ex.toString(),
+                                        type: AnimatedSnackBarType.error,
+                                        brightness: Brightness.light,
+                                        mobileSnackBarPosition:
+                                            MobileSnackBarPosition.top,
+                                      ).show(context);
+                                    }
+                                  });
 
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return alert;
-                                  },
-                                );
-                              }
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return alert;
+                                },
+                              );
                             }
+                            // }
                           } else {
                             showSnackbar(
                               success: false,

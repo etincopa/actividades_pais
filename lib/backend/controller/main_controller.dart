@@ -742,8 +742,8 @@ class MainController extends GetxController {
       isComplete = false;
     } else if (o.idEstadoAvance == 0) {
       isComplete = false;
-    } else if (o.imgActividad!.trim() == '') {
-      isComplete = false;
+      // } else if (o.imgActividad!.trim() == '') {
+      //   isComplete = false;
     } else if (o.idProblemaIdentificado == 0) {
       isComplete = false;
     }
