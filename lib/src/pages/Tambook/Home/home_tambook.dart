@@ -56,6 +56,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   bool isLoading = true;
   bool isLoading2 = false;
+  bool isLoadingAtencionMensualizada = false;
   bool isLoadingEI = true;
   bool isLoadingEquipos = false;
 
@@ -130,6 +131,8 @@ class _HomeTambookState extends State<HomeTambook>
     buildPlataforma();
     getTambosRegion();
     buildPersonalTambo();
+    obtenerAvanceMetasPorMes();
+    getMetasGeneral();
     getCantidadTambosPIAS();
     getCantidadTotalMetas();
     getActividadesDiariasResumen("0");
@@ -141,9 +144,8 @@ class _HomeTambookState extends State<HomeTambook>
     obtenerIndicadorCategorizacion();
     obtenerResumenAgua();
     obtenerResumenLuz();
-    obtenerAvanceMetasPorMes();
-    getMetasGeneral();
-    getProgIntervencionTambo();
+
+    //getProgIntervencionTambo();
     getResumenParqueInformatico();
     setState(() {});
   }
@@ -535,6 +537,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> obtenerAvanceMetasPorMes() async {
     aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
+    isLoadingAtencionMensualizada = true;
   }
 
   Future<void> obtenerIndicadorInternet() async {
@@ -4142,46 +4145,54 @@ class _HomeTambookState extends State<HomeTambook>
           children: <Widget>[
             const Divider(color: colorI),
             const SizedBox(height: 10),
-            Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+            isLoadingAtencionMensualizada
+                ? Text(
+                    'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}')
+                : const Text(""),
             const SizedBox(height: 10),
             Container(
               alignment: Alignment.centerLeft,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SfCartesianChart(
-                    plotAreaBorderWidth: 0,
-                    legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.bottom,
-                        overflowMode: LegendItemOverflowMode.wrap),
-                    primaryXAxis: CategoryAxis(),
-                    primaryYAxis: NumericAxis(
-                      edgeLabelPlacement: EdgeLabelPlacement.shift,
-                      numberFormat: NumberFormat.decimalPattern(),
-                    ),
-                    series: <CartesianSeries>[
-                      // Renders line chart
-
-                      ColumnSeries<ChartDataAvance, String>(
-                          name: 'META FÍSICA',
-                          dataSource: chartData1,
-                          dataLabelSettings: const DataLabelSettings(
-                            isVisible: true,
+                  isLoadingAtencionMensualizada
+                      ? SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          legend: Legend(
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.wrap),
+                          primaryXAxis: CategoryAxis(),
+                          primaryYAxis: NumericAxis(
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            numberFormat: NumberFormat.decimalPattern(),
                           ),
-                          xValueMapper: (ChartDataAvance data, _) => data.x,
-                          yValueMapper: (ChartDataAvance data, _) => data.y),
-                      ColumnSeries<ChartDataAvance, String>(
-                          name: 'EJECUCIÓN FÍSICA',
-                          dataSource: chartData1,
-                          dataLabelSettings:
-                              const DataLabelSettings(isVisible: true),
-                          xValueMapper: (ChartDataAvance data, _) => data.x,
-                          yValueMapper: (ChartDataAvance data, _) => data.y1),
-                    ],
-                    tooltipBehavior: TooltipBehavior(enable: true),
-                  ),
+                          series: <CartesianSeries>[
+                            // Renders line chart
+
+                            ColumnSeries<ChartDataAvance, String>(
+                                name: 'META FÍSICA',
+                                dataSource: chartData1,
+                                dataLabelSettings: const DataLabelSettings(
+                                  isVisible: true,
+                                ),
+                                xValueMapper: (ChartDataAvance data, _) =>
+                                    data.x,
+                                yValueMapper: (ChartDataAvance data, _) =>
+                                    data.y),
+                            ColumnSeries<ChartDataAvance, String>(
+                                name: 'EJECUCIÓN FÍSICA',
+                                dataSource: chartData1,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                                xValueMapper: (ChartDataAvance data, _) =>
+                                    data.x,
+                                yValueMapper: (ChartDataAvance data, _) =>
+                                    data.y1),
+                          ],
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                        )
+                      : const Center(child: CircularProgressIndicator()),
                   const SizedBox(
                     height: 20,
                   ),
@@ -4250,45 +4261,55 @@ class _HomeTambookState extends State<HomeTambook>
           children: <Widget>[
             const Divider(color: colorI),
             const SizedBox(height: 10),
-            Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+            isLoadingAtencionMensualizada
+                ? Text(
+                    'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}')
+                : const Text(""),
             const SizedBox(height: 10),
             Container(
               alignment: Alignment.centerLeft,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SfCartesianChart(
-                    plotAreaBorderWidth: 0,
-                    legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.bottom,
-                        overflowMode: LegendItemOverflowMode.wrap),
-                    primaryXAxis: CategoryAxis(),
-                    primaryYAxis: NumericAxis(
-                      edgeLabelPlacement: EdgeLabelPlacement.shift,
-                      numberFormat: NumberFormat.decimalPattern(),
-                    ),
-                    series: <CartesianSeries>[
-                      ColumnSeries<ChartDataAvance, String>(
-                          animationDuration: 2500,
-                          name: 'META FÍSICA',
-                          dataSource: chartData1,
-                          dataLabelSettings:
-                              const DataLabelSettings(isVisible: true),
-                          xValueMapper: (ChartDataAvance data, _) => data.x,
-                          yValueMapper: (ChartDataAvance data, _) => data.y),
-                      ColumnSeries<ChartDataAvance, String>(
-                          animationDuration: 2500,
-                          name: 'EJECUCIÓN FÍSICA',
-                          dataSource: chartData1,
-                          dataLabelSettings:
-                              const DataLabelSettings(isVisible: true),
-                          xValueMapper: (ChartDataAvance data, _) => data.x,
-                          yValueMapper: (ChartDataAvance data, _) => data.y1),
-                    ],
-                    tooltipBehavior: TooltipBehavior(enable: true),
-                  ),
+                  isLoadingAtencionMensualizada
+                      ? SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          legend: Legend(
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.wrap),
+                          primaryXAxis: CategoryAxis(),
+                          primaryYAxis: NumericAxis(
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            numberFormat: NumberFormat.decimalPattern(),
+                          ),
+                          series: <CartesianSeries>[
+                            ColumnSeries<ChartDataAvance, String>(
+                                animationDuration: 2500,
+                                name: 'META FÍSICA',
+                                dataSource: chartData1,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                                xValueMapper: (ChartDataAvance data, _) =>
+                                    data.x,
+                                yValueMapper: (ChartDataAvance data, _) =>
+                                    data.y),
+                            ColumnSeries<ChartDataAvance, String>(
+                                animationDuration: 2500,
+                                name: 'EJECUCIÓN FÍSICA',
+                                dataSource: chartData1,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                                xValueMapper: (ChartDataAvance data, _) =>
+                                    data.x,
+                                yValueMapper: (ChartDataAvance data, _) =>
+                                    data.y1),
+                          ],
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                        )
+                      : const Center(
+                          child: CircularProgressIndicator(),
+                        ),
                   const SizedBox(
                     height: 20,
                   ),
