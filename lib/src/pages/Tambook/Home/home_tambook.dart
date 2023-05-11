@@ -536,8 +536,18 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Future<void> obtenerAvanceMetasPorMes() async {
-    aMetasMensualizada = await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
-    isLoadingAtencionMensualizada = true;
+    try {
+      aMetasMensualizada =
+          await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
+
+      setState(() {
+        isLoadingAtencionMensualizada = true;
+      });
+    } on Exception catch (e) {
+      setState(() {
+        isLoadingAtencionMensualizada = true;
+      });
+    }
   }
 
   Future<void> obtenerIndicadorInternet() async {
@@ -4145,7 +4155,7 @@ class _HomeTambookState extends State<HomeTambook>
           children: <Widget>[
             const Divider(color: colorI),
             const SizedBox(height: 10),
-            isLoadingAtencionMensualizada
+            isLoadingAtencionMensualizada == true
                 ? Text(
                     'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}')
                 : const Text(""),
@@ -4155,7 +4165,7 @@ class _HomeTambookState extends State<HomeTambook>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  isLoadingAtencionMensualizada
+                  isLoadingAtencionMensualizada == true
                       ? SfCartesianChart(
                           plotAreaBorderWidth: 0,
                           legend: Legend(
