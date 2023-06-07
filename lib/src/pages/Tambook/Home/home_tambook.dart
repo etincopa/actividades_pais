@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
@@ -7,6 +10,7 @@ import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.d
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/indicador_categorizacion_model.dart';
 import 'package:actividades_pais/backend/model/indicador_internet_model.dart';
@@ -22,10 +26,12 @@ import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Calendario/Calendario.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/detalle_tambook.dart';
 import 'package:actividades_pais/util/Constants.dart';
+import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
@@ -2119,8 +2125,10 @@ class _HomeTambookState extends State<HomeTambook>
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) =>
-                                                buildSuccessDialog2(
+                                                dialogCategorizacion(
                                               context,
+                                              idCategoria:
+                                                  idCategoria.toString(),
                                               title:
                                                   "LISTA DE TAMBOS (${indicadorCategorizacion.length})\n${categoria}",
                                               child: ListView.builder(
@@ -4172,7 +4180,17 @@ class _HomeTambookState extends State<HomeTambook>
                               isVisible: true,
                               position: LegendPosition.bottom,
                               overflowMode: LegendItemOverflowMode.wrap),
-                          primaryXAxis: CategoryAxis(),
+                          primaryXAxis: CategoryAxis(
+                              visibleMinimum: 1,
+                              interval: 1,
+                              labelIntersectAction:
+                                  AxisLabelIntersectAction.multipleRows,
+                              edgeLabelPlacement: EdgeLabelPlacement.shift,
+                              autoScrollingMode: AutoScrollingMode.end,
+                              visibleMaximum: 3),
+                          zoomPanBehavior: ZoomPanBehavior(
+                            enablePanning: true,
+                          ),
                           primaryYAxis: NumericAxis(
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
                             numberFormat: NumberFormat.decimalPattern(),
@@ -4288,7 +4306,17 @@ class _HomeTambookState extends State<HomeTambook>
                               isVisible: true,
                               position: LegendPosition.bottom,
                               overflowMode: LegendItemOverflowMode.wrap),
-                          primaryXAxis: CategoryAxis(),
+                          primaryXAxis: CategoryAxis(
+                              visibleMinimum: 1,
+                              interval: 1,
+                              labelIntersectAction:
+                                  AxisLabelIntersectAction.multipleRows,
+                              edgeLabelPlacement: EdgeLabelPlacement.shift,
+                              autoScrollingMode: AutoScrollingMode.end,
+                              visibleMaximum: 3),
+                          zoomPanBehavior: ZoomPanBehavior(
+                            enablePanning: true,
+                          ),
                           primaryYAxis: NumericAxis(
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
                             numberFormat: NumberFormat.decimalPattern(),
@@ -5359,6 +5387,70 @@ class _HomeTambookState extends State<HomeTambook>
     );
   }
 
+  Widget dialogCategorizacion(
+    BuildContext context, {
+    String? title,
+    String? subTitle,
+    String? idCategoria,
+    Widget? child,
+  }) {
+    return AlertDialog(
+      title: Text(
+        title!,
+        textAlign: TextAlign.center,
+      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      actions: const <Widget>[],
+      content: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.centerLeft,
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.download),
+                onPressed: () async {
+                  try {
+                    BusyIndicator.show(context);
+                    bool isConnec = await CheckConnection.isOnlineWifiMobile();
+                    if (isConnec) {
+                      RespBase64FileDto oB64 =
+                          await mainCtr.getReporteCategorizacion(
+                        idCategoria!,
+                      );
+                      Uint8List dataPdf = convertBase64(oB64.base64 ?? '');
+
+                      BusyIndicator.hide(context);
+                      _controller!.reverse();
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PdfPreviewPage2(dataPdf: dataPdf),
+                        ),
+                      );
+                      return;
+                    } else {}
+                  } catch (oError) {}
+                  BusyIndicator.hide(context);
+                },
+              ),
+              const Divider(),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.4,
+                ),
+                child: child,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildSuccessDialog(
     BuildContext context, {
     String? title,
@@ -5595,6 +5687,10 @@ class _HomeTambookState extends State<HomeTambook>
         ],
       ),
     );
+  }
+
+  Uint8List convertBase64(String base64String) {
+    return const Base64Decoder().convert(base64String.split(',').last);
   }
 
   String formatoDecimal(int numero) {

@@ -14,6 +14,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
+import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
@@ -51,6 +52,7 @@ import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/backend/service/main_serv.dart';
 import 'package:actividades_pais/util/check_geolocator.dart';
@@ -1253,6 +1255,26 @@ class MainController extends GetxController {
   Future<List<MonitoreoDetailModel>> getMonitoreoDetail(int snip) async {
     List<MonitoreoDetailModel> oResp =
         await Get.find<MainService>().monitoreoDetail(snip);
+    return oResp;
+  }
+
+  Future<TramaRespApiDto> insertarTockenUsuario({
+    required TockenUsuariosModel tockens,
+  }) async {
+    TramaRespApiDto oResp =
+        await Get.find<MainService>().tockenUsuario(o: tockens);
+    return oResp;
+  }
+
+  Future<RespBase64FileDto> getReporteCategorizacion(String categoria) async {
+    RespBase64FileDto oResp =
+        await Get.find<MainService>().getReporteCategorizacion(categoria);
+    return oResp;
+  }
+
+  Future<RespBase64FileDto> getReporteTambosPoblacion(String ut) async {
+    RespBase64FileDto oResp =
+        await Get.find<MainService>().getReporteTambosPoblacion(ut);
     return oResp;
   }
 

@@ -951,6 +951,7 @@ class Listas {
                   width: 120,
                   child: Text(
                       '${band.plataformaDescripcion}\n'
+                      'UT: ${band.unidadTerritorialDescripcion}\n'
                       '${band.idProgramacion}\n'
                       '${band.tipoPlan}\n',
                       style: const TextStyle(

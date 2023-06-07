@@ -188,7 +188,7 @@ class _CalendarioState extends State<Calendario> {
       key: _backdropKey,
       appBar: BackdropAppBar(
         toolbarHeight: 40,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
         leading: InkWell(
@@ -214,7 +214,8 @@ class _CalendarioState extends State<Calendario> {
           ),
         ],
       ),
-      backLayerBackgroundColor: Colors.transparent,
+      backLayerBackgroundColor: Colors.white,
+      frontLayerBackgroundColor: Colors.white,
       frontLayer: frontLayer(),
     );
   }

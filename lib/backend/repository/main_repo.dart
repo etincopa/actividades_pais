@@ -11,6 +11,7 @@ import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
 import 'package:actividades_pais/backend/model/categorizacion_tambos_model.dart';
 import 'package:actividades_pais/backend/model/dato_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
+import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
@@ -48,6 +49,7 @@ import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:logger/logger.dart';
 
@@ -972,6 +974,43 @@ class MainRepo {
   Future<List<TambosMapaModel>> UbicacionTambo(int snip) async {
     List<TambosMapaModel> aResp = [];
     final response = await _pnPaisApi.getUbicacionTambo(snip);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<TramaRespApiDto> tockenUsuario(TockenUsuariosModel o) async {
+    TramaRespApiDto aResp = TramaRespApiDto.empty();
+    final response = await _pnPaisApi.insertarTockenUsuario(oBody: o);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<RespBase64FileDto> getReporteCategorizacion(
+    String categoria,
+  ) async {
+    RespBase64FileDto aResp = RespBase64FileDto.empty();
+    final response = await _pnPaisApi.getReporteCategorizacion(categoria);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<RespBase64FileDto> getReporteTambosPoblacion(
+    String ut,
+  ) async {
+    RespBase64FileDto aResp = RespBase64FileDto.empty();
+    final response = await _pnPaisApi.getReporteTambosPoblacion(ut);
     if (response.error == null) {
       aResp = response.data!;
     } else {

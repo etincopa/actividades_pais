@@ -4,6 +4,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDepe
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
+import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobarObservar.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/BackdropScaffold/backdrofile.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/DetalleObservacion.dart';
@@ -32,6 +33,9 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
 
   bool isLoading = false;
   bool isMostar = false;
+
+  String idTambo = '';
+  String idUT = '';
 
   var seleccionarUnidadTerritorial = "Seleccionar UnidadTerritorial";
   var seleccionarPlataformaDescripcion = "Seleccionar plataforma";
@@ -111,6 +115,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
     filtroDataPlanMensual.fin = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     _controlleFechaFin.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
     setState(() {});
   }
 
@@ -135,7 +140,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
           automaticallyImplyLeading: false,
           title: const Text(
             "PLAN DE TRABAJO MENSUAL",
-            style: TextStyle(fontSize: 15, color: Colors.black),
+            style: TextStyle(fontSize: 13, color: Colors.black),
           ),
           actions: <Widget>[
             const BackdropToggleButton(
@@ -204,145 +209,151 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                         ),
                       ],
                     ),
-                    FutureBuilder<List<UnidadesTerritoriales>>(
-                      future: ProviderAprobacionPlanes()
-                          .ListarUnidadesTerritoriales(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<UnidadesTerritoriales>> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                        } else if (snapshot.hasError) {
-                          return const Text('Error al cargar las opciones');
-                        } else {
-                          List<UnidadesTerritoriales> options = snapshot.data!;
-                          options.insert(
-                              0,
-                              UnidadesTerritoriales(
-                                  idUnidadesTerritoriales: 0,
-                                  unidadTerritorialDescripcion: 'TODOS'));
+                    if (idTambo == '0')
+                      FutureBuilder<List<UnidadesTerritoriales>>(
+                        future: ProviderAprobacionPlanes()
+                            .ListarUnidadesTerritoriales(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<UnidadesTerritoriales>>
+                                snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                          } else if (snapshot.hasError) {
+                            return const Text('Error al cargar las opciones');
+                          } else {
+                            List<UnidadesTerritoriales> options =
+                                snapshot.data!;
+                            options.insert(
+                                0,
+                                UnidadesTerritoriales(
+                                    idUnidadesTerritoriales: 0,
+                                    unidadTerritorialDescripcion: 'TODOS'));
 
-                          return Row(
-                            children: [
-                              const Icon(Icons.account_balance_wallet_outlined,
-                                  size: 15, color: Colors.grey),
-                              const SizedBox(width: 13),
-                              Expanded(
-                                child: DropdownButtonFormField<
-                                    UnidadesTerritoriales>(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Unidad Territorial',
-                                  ),
-                                  isExpanded: true,
-                                  items: options.map((user) {
-                                    return DropdownMenuItem<
-                                        UnidadesTerritoriales>(
-                                      value: user,
-                                      child: Text(
-                                        user.unidadTerritorialDescripcion!,
-                                        style: const TextStyle(fontSize: 10),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (UnidadesTerritoriales? value) {
-                                    seleccionarUnidadTerritorial =
-                                        value!.unidadTerritorialDescripcion!;
-                                    filtroDataPlanMensual.ut =
-                                        ((value.idUnidadesTerritoriales == 0)
-                                                ? "x"
-                                                : value.idUnidadesTerritoriales)
-                                            .toString();
+                            return Row(
+                              children: [
+                                const Icon(
+                                    Icons.account_balance_wallet_outlined,
+                                    size: 15,
+                                    color: Colors.grey),
+                                const SizedBox(width: 13),
+                                Expanded(
+                                  child: DropdownButtonFormField<
+                                      UnidadesTerritoriales>(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Unidad Territorial',
+                                    ),
+                                    isExpanded: true,
+                                    items: options.map((user) {
+                                      return DropdownMenuItem<
+                                          UnidadesTerritoriales>(
+                                        value: user,
+                                        child: Text(
+                                          user.unidadTerritorialDescripcion!,
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (UnidadesTerritoriales? value) {
+                                      seleccionarUnidadTerritorial =
+                                          value!.unidadTerritorialDescripcion!;
+                                      filtroDataPlanMensual.ut =
+                                          ((value.idUnidadesTerritoriales == 0)
+                                                  ? "x"
+                                                  : value
+                                                      .idUnidadesTerritoriales)
+                                              .toString();
 
-                                    isMostar = true;
-                                    seleccionarPlataformaDescripcion =
-                                        "Seleccionar plataforma";
+                                      isMostar = true;
+                                      seleccionarPlataformaDescripcion =
+                                          "Seleccionar plataforma";
 
-                                   setState(() {});
-                                  },
-                                  hint: Text(
-                                    seleccionarUnidadTerritorial,
-                                    style: const TextStyle(fontSize: 10),
+                                      setState(() {});
+                                    },
+                                    hint: Text(
+                                      seleccionarUnidadTerritorial,
+                                      style: const TextStyle(fontSize: 10),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(),
-                      child: FutureBuilder<List<TambosDependientes>>(
-                          future: ProviderAprobacionPlanes()
-                              .ListarTambosDependientes(
-                                  filtroDataPlanMensual.ut),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<TambosDependientes>>
-                                  snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                            } else if (snapshot.hasError) {
-                              return const Text('');
-                            } else {
-                              if (snapshot.hasData) {
-                                List<TambosDependientes> optionsP =
-                                    snapshot.data!;
-                                optionsP.insert(
-                                    0,
-                                    TambosDependientes(
-                                        idPlataforma: "x",
-                                        plataformaDescripcion: 'TODOS'));
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    if (idTambo == '0')
+                      Container(
+                        margin: const EdgeInsets.only(),
+                        child: FutureBuilder<List<TambosDependientes>>(
+                            future: ProviderAprobacionPlanes()
+                                .ListarTambosDependientes(
+                                    filtroDataPlanMensual.ut),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<TambosDependientes>>
+                                    snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                              } else if (snapshot.hasError) {
+                                return const Text('');
+                              } else {
+                                if (snapshot.hasData) {
+                                  List<TambosDependientes> optionsP =
+                                      snapshot.data!;
+                                  optionsP.insert(
+                                      0,
+                                      TambosDependientes(
+                                          idPlataforma: "x",
+                                          plataformaDescripcion: 'TODOS'));
 
-                                return Row(
-                                  children: [
-                                    const Icon(
-                                        Icons.account_balance_wallet_outlined,
-                                        size: 15,
-                                        color: Colors.grey),
-                                    const SizedBox(width: 13),
-                                    Expanded(
-                                      child: Container(
-                                        child: DropdownButtonFormField<
-                                            TambosDependientes>(
-                                          decoration: const InputDecoration(
-                                            labelText: 'Plataforma',
-                                          ),
-                                          isExpanded: true,
-                                          items: optionsP.map((user) {
-                                            return new DropdownMenuItem<
-                                                TambosDependientes>(
-                                              value: user,
-                                              child: new Text(
-                                                user.plataformaDescripcion!,
-                                                style: const TextStyle(
-                                                    fontSize: 10),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged:
-                                              (TambosDependientes? value) {
-                                            seleccionarPlataformaDescripcion =
-                                                value!.plataformaDescripcion!;
-                                            filtroDataPlanMensual.id =
-                                                value.idPlataforma;
-                                          },
-                                          hint: Text(
-                                            seleccionarPlataformaDescripcion,
-                                            style:
-                                                const TextStyle(fontSize: 10),
+                                  return Row(
+                                    children: [
+                                      const Icon(
+                                          Icons.account_balance_wallet_outlined,
+                                          size: 15,
+                                          color: Colors.grey),
+                                      const SizedBox(width: 13),
+                                      Expanded(
+                                        child: Container(
+                                          child: DropdownButtonFormField<
+                                              TambosDependientes>(
+                                            decoration: const InputDecoration(
+                                              labelText: 'Plataforma',
+                                            ),
+                                            isExpanded: true,
+                                            items: optionsP.map((user) {
+                                              return new DropdownMenuItem<
+                                                  TambosDependientes>(
+                                                value: user,
+                                                child: new Text(
+                                                  user.plataformaDescripcion!,
+                                                  style: const TextStyle(
+                                                      fontSize: 10),
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged:
+                                                (TambosDependientes? value) {
+                                              seleccionarPlataformaDescripcion =
+                                                  value!.plataformaDescripcion!;
+                                              filtroDataPlanMensual.id =
+                                                  value.idPlataforma;
+                                            },
+                                            hint: Text(
+                                              seleccionarPlataformaDescripcion,
+                                              style:
+                                                  const TextStyle(fontSize: 10),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                );
+                                    ],
+                                  );
+                                }
                               }
-                            }
-
-                            return Container();
-                          }),
-                    ),
+                              return Container();
+                            }),
+                      ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -413,7 +424,9 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                       return Listas().cardAprobacionPlanTrabajo(
                         _posts![index],
                         () async {
-                          switch (_posts![index].idEvaluacion) {
+                          switch ((idTambo == '0')
+                              ? _posts![index].idEvaluacion
+                              : '1') {
                             case "1":
                               var resp = await Navigator.push(
                                   context,
@@ -626,6 +639,18 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
 
     _onlistener();
     try {
+      DatabasePr.db.initDB();
+      var data = await DatabasePr.db.getAllTasksConfigInicio();
+      if (data.isNotEmpty) {
+        idTambo = data[0].idTambo.toString();
+        idUT = data[0].idUnidTerritoriales.toString();
+      }
+
+      if (idTambo != '0') {
+        filtroDataPlanMensual.id = (idTambo == '0') ? null : idTambo;
+        filtroDataPlanMensual.ut = (idUT == '0') ? null : idUT;
+      }
+
       var posts = await ProviderAprobacionPlanes()
           .ListarAprobacionPlanTrabajo(filtroDataPlanMensual);
 

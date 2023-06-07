@@ -49,6 +49,7 @@ import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/helpers/http.dart';
 import 'package:actividades_pais/helpers/http_responce.dart';
@@ -883,6 +884,43 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => CCPPModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<TramaRespApiDto>> insertarTockenUsuario({
+    required TockenUsuariosModel oBody,
+  }) async {
+    return await _http.request<TramaRespApiDto>(
+      '${basePathApp3}agregarTockenUsuarios',
+      formData: TockenUsuariosModel.toJsonObjectApi(oBody),
+      method: "POST",
+      parser: (data) {
+        return TramaRespApiDto.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<RespBase64FileDto>> getReporteCategorizacion(
+    String categoria,
+  ) async {
+    return await _http.request<RespBase64FileDto>(
+      '${basePathApp3}reporteCategorizaciones/$categoria',
+      method: "GET",
+      parser: (data) {
+        return RespBase64FileDto.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<RespBase64FileDto>> getReporteTambosPoblacion(
+    String ut,
+  ) async {
+    return await _http.request<RespBase64FileDto>(
+      '${basePathApp3}reporteTambosPorUT/$ut',
+      method: "GET",
+      parser: (data) {
+        return RespBase64FileDto.fromJson(data);
       },
     );
   }

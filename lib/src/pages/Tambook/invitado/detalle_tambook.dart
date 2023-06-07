@@ -30,10 +30,10 @@ import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/Calendario/Calendario.dart';
-import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/Detalle/mapa.dart';
-import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/invitado/home_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/invitado/main_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/invitado/mapa.dart';
+import 'package:actividades_pais/src/pages/Tambook/invitado/search_tambook.dart';
 import 'package:actividades_pais/src/pages/widgets/image_preview.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
@@ -74,11 +74,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     "PLAN DE MANTENIMIENTO",
     "SERVICIOS DEL TAMBO",
     "EQUIPOS INFORMÁTICOS",
-    //"ACTIVIDADES APROBADAS",
     "CLIMA",
     "COMO LLEGAR AL TAMBO",
-
-    // "CALENDARIO",
   ];
   String currentTitle = '';
   int _selectedTab = 0;
@@ -591,73 +588,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
       );
     }
-
-    /*String icon1 = 'assets/icons/computadora.png';
-    String icon2 = 'assets/icons/laptop.png';
-    String icon3 = 'assets/icons/proyector.png';
-    String icon4 = 'assets/icons/wifi.png';
-    String icon5 = 'assets/icons/impresora.png';
-    String icon6 = 'assets/icons/parlante.png';
-
-    var cpu = equipamiento['CPU']?.length ?? '0';
-    var laptop = equipamiento['LAPTOP']?.length ?? '0';
-    var proyector = equipamiento['PROYECTOR']?.length ?? '0';
-    var impresora = equipamiento['IMPRESORA']?.length ?? '0';
-
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2001',
-        name: 'PC \n(${cpu.toString()})',
-        types: const ['Ver'],
-        image: icon1,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2002',
-        name: 'LAPTOP \n(${laptop.toString()})',
-        types: const ['Ver'],
-        image: icon2,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2003',
-        name: 'PROYECTOR \n(${proyector.toString()})',
-        types: const ['Ver'],
-        image: icon3,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2004',
-        name: 'ANTENA WIFI \n(1047)',
-        types: const ['Ver'],
-        image: icon4,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2005',
-        name: 'IMPRESORAS \n(${impresora.toString()})',
-        types: const ['Ver'],
-        image: icon5,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2006',
-        name: 'PARLANTES \n(1047)',
-        types: const ['Ver'],
-        image: icon6,
-        color: Colors.white,
-      ),
-    );*/
   }
 
   Widget equipoInformatico() {
@@ -887,10 +817,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 },
               );
             } else {
-              Center(
+              const Center(
                 child: Text(
                   'SIN EQUIPOS ASIGNADOS',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.normal,
@@ -909,14 +839,6 @@ class _DetalleTambookState extends State<DetalleTambook>
   @override
   Widget build(BuildContext context) {
     var flexibleSpaceWidget = SliverAppBar(
-      /*title const Text(
-        "¡ BIENVENIDO A",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-          fontWeight: FontWeight.w700,
-        ),
-      ),*/
       automaticallyImplyLeading: true,
       expandedHeight: 200,
       floating: false,
@@ -1205,33 +1127,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-
-                              /*Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/grifo.png'),
-                                  size: 55,
-                                ),
-                              ),*/
-
-                              /*Tooltip(
-                                waitDuration: Duration(seconds: 1),
-                                showDuration: Duration(seconds: 2),
-                                padding: EdgeInsets.all(5),
-                                height: 35,
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                                triggerMode: TooltipTriggerMode.longPress,
-                                message: ' ACTIVIDADES PROGRAMADAS APROBADAS',
-                                child: Tab(
-                                  icon: ImageIcon(
-                                    AssetImage('assets/calendario.png'),
-                                    size: 55,
-                                  ),
-                                ),
-                              ),*/
-
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -1268,24 +1163,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-                              /*Tooltip(
-                                waitDuration: Duration(seconds: 1),
-                                showDuration: Duration(seconds: 2),
-                                padding: EdgeInsets.all(5),
-                                height: 35,
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                                triggerMode: TooltipTriggerMode.longPress,
-                                message: 'CALENDARIO',
-                                child: Tab(
-                                  icon: ImageIcon(
-                                    AssetImage('assets/calendario.png'),
-                                    size: 55,
-                                  ),
-                                ),
-                              ),*/
                             ],
                           ),
                         ),
@@ -1349,8 +1226,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                           */
                         cardNuestroGestor(),
                         const SizedBox(height: 10),
-                        //cardHistorialGestores(),
-                        //const SizedBox(height: 10),
                         cardVigilante(),
                         const SizedBox(height: 10),
 
@@ -1358,18 +1233,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO JEFE DE UNIDAD TERRITORIAL
                           */
                         cardNuestroJefeUnidad(),
-                        //const SizedBox(height: 10),
-                        //cardHistorialJUT(),
                         const SizedBox(height: 50),
                       ],
                     ),
-
-                    //const TabScreen("METAS"),
                     ListView(
                       children: [
                         const SizedBox(height: 10),
                         cardAtenciones(),
-                        //cardIntervenciones(),
                         cardBeneficiarios(),
                       ],
                     ),
@@ -1424,32 +1294,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     )),
 
-//const TabScreen("COMBUSTIBLE"),
-
-                    /*ListView(
-                      children: [
-                        cardCombustible(),
-                        const SizedBox(height: 40),
-                      ],
-                    ),*/
-
-                    //const TabScreen("ACTIVIDADES PROGRAMADAS"),
-
-                    /*ListView(
-                      children: [
-                        const SizedBox(height: 15),
-                        Column(children: [
-                          ElevatedButton(
-                            onPressed: () => _selectDate(context),
-                            child: Text('SELECCIONAR MES DE ACTIVIDADES'),
-                          )
-                        ]),
-                        const SizedBox(height: 10),
-                        cardActividadProgramada(),
-                        const SizedBox(height: 40),
-                      ],
-                    ),*/
-
                     //const TabScreen("Clima"),
 
                     ListView(
@@ -1467,99 +1311,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         cardCamino(),
                       ],
                     ),
-
-                    //const TabScreen("INTERVENCIONES"),
-                    /* DefaultTabController(
-                      length: 2,
-                      child: Column(
-                        children: <Widget>[
-                          Material(
-                            color: Colors.grey.shade300,
-                            child: TabBar(
-                              //isScrollable: true,
-                              unselectedLabelColor: Colors.blue,
-                              labelColor: Colors.blue,
-                              indicatorColor: Colors.white,
-                              controller: _tabController,
-                              labelPadding: const EdgeInsets.all(0.0),
-                              tabs: [
-                                _getTab(
-                                  0,
-                                  const Center(
-                                    child: Text(
-                                      "PRESTACIÓN DE SERVICIO",
-                                      style: TextStyle(
-                                        color: colorS,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                                _getTab(
-                                  1,
-                                  const Center(
-                                    child: Text(
-                                      "EJECUCIÓN DE SOPORTE",
-                                      style: TextStyle(
-                                        color: colorI,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                                /*_getTab(
-                                  2,
-                                  const Center(
-                                    child: Text(
-                                      "COORDINACIONES Y ACTIVIDADES",
-                                      style: TextStyle(
-                                        color: colorP,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),*/
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              controller: _tabController,
-                              children: [
-                                ListView(
-                                  children: [
-                                    cardDatosIntervencionCod1(),
-                                    const SizedBox(height: 40),
-                                  ],
-                                ),
-                                ListView(
-                                  children: [
-                                    cardDatosIntervencionCod2(),
-                                    const SizedBox(height: 40),
-                                  ],
-                                ),
-                                /*ListView(
-                                  children: [
-                                    cardDatosIntervencionCod4(),
-                                    const SizedBox(height: 40),
-                                  ],
-                                ),*/
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),*/
                   ],
                 ),
               ),
@@ -1739,25 +1490,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           oTambo.gestorSexo!.toUpperCase() ??
                                               ''),
                                     ),
-                                    ListTile(
-                                      title: const Text('ESTADO CIVIL'),
-                                      subtitle:
-                                          Text(oTambo.gestorEstadoCivil ?? ''),
-                                    ),
-                                    ListTile(
-                                      title: const Text('EMAIL'),
-                                      subtitle: Text(oTambo.gestorCorreo ?? ''),
-                                    ),
-                                    ListTile(
-                                      title: const Text('CELULAR'),
-                                      subtitle:
-                                          Text(oTambo.gestorTelefono ?? ''),
-                                    ),
-                                    ListTile(
-                                      title: const Text('TIPO CONTRATO'),
-                                      subtitle:
-                                          Text(oTambo.gestorTipoContrato ?? ''),
-                                    ),
                                   ],
                                 ),
                               ),
@@ -1855,29 +1587,13 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
-                          title: const Text('DNI'),
-                          subtitle: Text(oGuardia.numeroDocumento ?? ''),
-                        ),
-                        ListTile(
                           title: const Text('SEXO'),
                           subtitle: Text(oGuardia.sexo!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('CELULAR'),
-                          subtitle: Text(oGuardia.celular!.toUpperCase() ?? ''),
                         ),
                         ListTile(
                           title: const Text('TIPO CONTRATO'),
                           subtitle:
                               Text(oGuardia.tipoContrato!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA INICIO CONTRATO'),
-                          subtitle: Text(oGuardia.fecInicioContrato ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA FIN CONTRATO'),
-                          subtitle: Text(oGuardia.fecFinalContrato ?? ''),
                         ),
                       ],
                     ),
@@ -2306,20 +2022,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
-                          title: const Text('DNI'),
-                          subtitle: Text(oJUT.nroDocumento ?? ''),
-                        ),
-                        ListTile(
                           title: const Text('SEXO'),
                           subtitle: Text(oJUT.genero!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('CELULAR'),
-                          subtitle: Text(oJUT.telefono ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('EMAIL'),
-                          subtitle: Text(oJUT.correo ?? ''),
                         ),
                         ListTile(
                           title: const Text('UNIDAD TERRITORIAL'),
