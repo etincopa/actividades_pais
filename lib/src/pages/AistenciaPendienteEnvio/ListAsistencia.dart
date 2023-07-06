@@ -197,9 +197,9 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
                   Container(
                       child: Expanded(
                     child: ListView.builder(
-                      itemCount: listaPersonalAux?.length,
+                      itemCount: listaPersonalAux.length,
                       itemBuilder: (context, i) {
-                        return _banTitle(listaPersonalAux![i]);
+                        return _banTitle(listaPersonalAux[i]);
                       },
                     ),
                   )),

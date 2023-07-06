@@ -76,9 +76,9 @@ class _HistorialPageState extends State<HistorialPage> {
                   child: RefreshIndicator(
                       onRefresh: refreshList,
                       child: ListView.builder(
-                        itemCount: listaPersonalAux?.length,
+                        itemCount: listaPersonalAux.length,
                         itemBuilder: (context, i) {
-                          return _banTitle(listaPersonalAux![i]);
+                          return _banTitle(listaPersonalAux[i]);
                         },
                       )));
             }
