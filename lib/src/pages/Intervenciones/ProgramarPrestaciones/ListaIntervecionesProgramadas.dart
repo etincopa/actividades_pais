@@ -956,7 +956,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
               var res = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PlanesDeTrabajo(),
+                  builder: (context) =>   PlanesDeTrabajo(),
                 ),
               );
               if (res == 'OK') {

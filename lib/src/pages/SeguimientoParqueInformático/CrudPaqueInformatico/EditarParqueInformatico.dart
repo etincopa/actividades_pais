@@ -389,7 +389,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: FutureBuilder<List<Modelo>>(
-        future: ProviderSeguimientoParqueInformatico().listaModelos(),
+        future: ProviderSeguimientoParqueInformatico().listaModelos(2),
         builder: (BuildContext context, AsyncSnapshot<List<Modelo>> snapshot) {
           if (!snapshot.hasData) {
             return const Center(

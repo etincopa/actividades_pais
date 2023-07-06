@@ -8,6 +8,10 @@ class FiltroParqueInformatico {
   int? pageIndex;
   int? pageSize;
 
+  String? anio;
+
+  String? codInventario;
+
   FiltroParqueInformatico(
       {this.codigoPatrimonial = '',
       this.denominacion = '',
@@ -16,7 +20,7 @@ class FiltroParqueInformatico {
       this.idUbicacion = '',
       this.responsableactual = '',
       this.pageIndex = 0,
-      this.pageSize = 0});
+      this.pageSize = 0, this.anio='', this.codInventario=''});
 
   FiltroParqueInformatico.fromJson(Map<String, dynamic> json) {
     codigoPatrimonial = json['codigoPatrimonial'] ?? '';
@@ -39,6 +43,8 @@ class FiltroParqueInformatico {
     data['responsableactual'] = this.responsableactual;
     data['pageIndex'] = this.pageIndex;
     data['pageSize'] = this.pageSize;
+    data['anio'] = this.anio;
+    data['codInventario'] = this.codInventario;
     return data;
   }
 }

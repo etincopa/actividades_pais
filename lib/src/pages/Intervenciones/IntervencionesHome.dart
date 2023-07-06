@@ -80,7 +80,6 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                 color: const Color(0xFF78b8cd),
               ),
             );
-
             aHomeOptions.add(
               HomeOptions(
                 code: 'OPT1011',
@@ -125,6 +124,29 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
 
           break;
         case '1':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1012',
+              name: 'PROGRAMAR PRESTACION'.tr,
+              types: const ['Ver'],
+              image: iconActividades,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1011',
+              name: 'PLAN DE TRABAJO MENSUAL'.tr,
+              types: const ['Ver'],
+              image: iconActividades,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          break;
+
+        case '80':
           aHomeOptions.add(
             HomeOptions(
               code: 'OPT1012',
@@ -252,13 +274,13 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                           ),
                         );
                         break;
-                      /* case 'OPT1012':
+                      case 'OPT1012':
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => ListaIntervecionesProgramadas(),
                           ),
                         );
-                        break;*/
+                        break;
                       default:
                     }
                   },

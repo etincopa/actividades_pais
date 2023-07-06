@@ -28,13 +28,14 @@ class Calendario extends StatefulWidget {
 
 class _CalendarioState extends State<Calendario> {
   bool mostarUt = true;
-
+  int porcentaje = 0;
+  Color colorPorcentaje = Colors.red;
   @override
   void initState() {
     if (widget.idTambo == "x") {
       mostarUt = true;
     } else {
-      selectedEstado = "1";
+      selectedEstado = "x";
       loadEvents();
       mostarUt = false;
     }
@@ -77,7 +78,7 @@ class _CalendarioState extends State<Calendario> {
 
   var seleccionarPlataformaDescripcion = "Seleccionar plataforma";
 
-  String? selectedEstado = "4";
+  String? selectedEstado = "x";
 
   String? selectedTipoProgramacion = "x";
 
@@ -205,7 +206,7 @@ class _CalendarioState extends State<Calendario> {
         automaticallyImplyLeading: false,
         title: const Text(
           "INTERVENCIONES EN LOS TAMBOS",
-          style: TextStyle(fontSize: 15, color: Colors.black),
+          style: TextStyle(fontSize: 13, color: Colors.black),
         ),
         actions: const <Widget>[
           BackdropToggleButton(
@@ -240,7 +241,7 @@ class _CalendarioState extends State<Calendario> {
                           CircularProgressIndicator(),
                           SizedBox(height: 20),
                           Text(
-                            "Cargando Eventos",
+                            "CARGANDO INTERVENCIONES",
                             style: TextStyle(fontSize: 16),
                           ),
                         ],
@@ -248,7 +249,9 @@ class _CalendarioState extends State<Calendario> {
                     ),
                   )
                 : Container(),
-            SizedBox(height:9),
+            const SizedBox(height: 1),
+            const Text("Clic en la lupa para buscar intervenciones"),
+            const SizedBox(height: 4),
             Container(
               padding: const EdgeInsets.only(
                   top: 0, left: 20, right: 20, bottom: 18),
@@ -282,6 +285,7 @@ class _CalendarioState extends State<Calendario> {
                   ),
                 ],
               ),
+
               // height: MediaQuery.of(context).size.height*0.511,
               //  color: Colors.white,
               child: Column(
@@ -291,18 +295,19 @@ class _CalendarioState extends State<Calendario> {
                     calendarBuilders: CalendarBuilders(
                       defaultBuilder: (context, date, events) => Container(
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.white,
                         ),
                         child: Text(
                           '${date.day}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13, // ajusta el tamaño de la fuente
                           ),
                         ),
                       ),
-                      singleMarkerBuilder: (context, date, _) {
+                      singleMarkerBuilder: (context, date, _event) {
+                        //print("DÍA ${_event}");
                         return Container(
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
@@ -319,7 +324,8 @@ class _CalendarioState extends State<Calendario> {
                     onPageChanged: (s) {
                       year = s.year;
                       month = s.month.toString();
-                      kFirstDays = DateTime(year, DateTime.now().month - 4, s.day);
+                      kFirstDays =
+                          DateTime(year, DateTime.now().month - 4, s.day);
                       _focusedDay = s;
                       loadEvents();
                       setState(() {});
@@ -332,7 +338,8 @@ class _CalendarioState extends State<Calendario> {
                         shape: BoxShape.circle,
                       ),
                       selectedDecoration: BoxDecoration(
-                        color: blue400, // Establece el color del día seleccionado
+                        color: blue400,
+                        // Establece el color del día seleccionado
                         shape: BoxShape.circle,
                       ),
                       selectedTextStyle: TextStyle(
@@ -371,12 +378,13 @@ class _CalendarioState extends State<Calendario> {
                         _focusedDay = focusedDay;
                         _selectedDay = selectedDay;
                         _selectedEvents = eventos
-                            .where(
-                                (evento) => isSameDay(evento.fecha, _selectedDay))
+                            .where((evento) =>
+                                isSameDay(evento.fecha, _selectedDay))
                             .toList();
                       });
                       if (_selectedEvents.isNotEmpty) {
-                        showAlertDialogAprobar(context, "Detalle", _selectedEvents);
+                        showAlertDialogAprobar(
+                            context, "Detalle", _selectedEvents, _selectedDay);
                       }
                     },
                     firstDay: kFirstDays,
@@ -385,7 +393,10 @@ class _CalendarioState extends State<Calendario> {
                     calendarFormat: CalendarFormat.month,
                   ),
                   const SizedBox(height: 8.0),
-                  const Text("FUENTE: PNPAIS", style: TextStyle(fontWeight: FontWeight.bold),)
+                  const Text(
+                    "FUENTE: PNPAIS",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
                 ],
               ),
             ),
@@ -435,39 +446,39 @@ class _CalendarioState extends State<Calendario> {
               ],
             ),
             mostarUt ? unidadesTerritorales() : Container(),
-                const SizedBox(height: 10),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
+            const SizedBox(height: 10),
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3), // changes position of shadow
                     ),
-                    margin: const EdgeInsets.only(right: 15, left: 30),
-                    height: 40.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: AppConfig.primaryColor2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                      ),
-                      onPressed: () async {
-                        filtroIntervencionesTambos.inicio =
-                            _controlleFechaInici.text;
-                        filtroIntervencionesTambos.fin = _controlleFechaFin.text;
-                        _backdropKey.currentState!.fling();
-                        await filters();
-                      },
-                      child: const Text("FILTRAR"),
-                    )),
+                  ],
+                ),
+                margin: const EdgeInsets.only(right: 15, left: 30),
+                height: 40.0,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: AppConfig.primaryColor2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                  onPressed: () async {
+                    filtroIntervencionesTambos.inicio =
+                        _controlleFechaInici.text;
+                    filtroIntervencionesTambos.fin = _controlleFechaFin.text;
+                    _backdropKey.currentState!.fling();
+                    await filters();
+                  },
+                  child: const Text("FILTRAR"),
+                )),
           ])))
     ]);
   }
@@ -514,20 +525,62 @@ class _CalendarioState extends State<Calendario> {
     );
   }
 
-  showAlertDialogAprobar(BuildContext context, texto, _selectedEventss) {
+  showAlertDialogAprobar(
+      BuildContext context, texto, _selectedEventss, selectDay) async {
+    FiltroIntervencionesTambos filtroIntervencionesTambosS =
+        FiltroIntervencionesTambos();
+    filtroIntervencionesTambosS.inicio =
+        DateFormat('dd/MM/yyyy').format(selectDay);
+    filtroIntervencionesTambosS.fin =
+        DateFormat('dd/MM/yyyy').format(selectDay);
+
+    filtroIntervencionesTambosS.ut = filtroIntervencionesTambos.ut;
+    filtroIntervencionesTambosS.estado = filtroIntervencionesTambos.estado;
+    filtroIntervencionesTambosS.anio =
+        int.parse(DateFormat('yyyy').format(selectDay));
+    filtroIntervencionesTambosS.mes = DateFormat('MM').format(selectDay);
+    var totalTambos = '';
+    var totalTamboCon = '';
+    var totalTamboSin = '';
+    await ProviderRegistarInterv()
+        .cantidadTambo(filtroIntervencionesTambosS)
+        .then((values) {
+      setState(() {
+        totalTambos = values[0];
+        totalTamboCon = values[1];
+        totalTamboSin = values[2];
+      });
+      print('TOTAL_TAMBOS: $totalTambos');
+      print('TOTAL_TAMBO_CON: $totalTamboCon');
+      print('TOTAL_TAMBO_SIN: $totalTamboSin');
+
+      porcentaje =
+          ((int.parse(totalTamboCon) / int.parse(totalTambos)) * 100).toInt();
+
+      colorPorcentaje = ((porcentaje <= 50)
+          ? Colors.red
+          : ((porcentaje > 50 && porcentaje <= 90)
+              ? Colors.amber
+              : Colors.green));
+    });
     showDialog(
       context: context,
       builder: (BuildContext context) => buildSuccessDialog2(context,
-          title: "Lista Interverneciones", selectedEventss: _selectedEventss),
+          title: "Lista Intervenciones",
+          selectedEventss: _selectedEventss,
+          selectDay: selectDay,
+          totalTamboCon: totalTamboCon,
+          totalTamboSin: totalTamboSin),
     );
   }
 
-  Widget buildSuccessDialog2(
-    BuildContext context, {
-    String? title,
-    String? subTitle,
-    List<Evento>? selectedEventss,
-  }) {
+  Widget buildSuccessDialog2(BuildContext context,
+      {String? title,
+      String? subTitle,
+      List<Evento>? selectedEventss,
+      selectDay,
+      totalTamboCon,
+      totalTamboSin}) {
     var global = true;
     var filterTipoProgramacions = "";
     var cant1 = selectedEventss!
@@ -546,7 +599,7 @@ class _CalendarioState extends State<Calendario> {
         builder: (BuildContext context, StateSetter sstdotstate) {
       return AlertDialog(
         title: SizedBox(
-          height: 129,
+          height: mostarUt ? 188 : 145,
           child: Column(
             children: [
               Row(
@@ -555,9 +608,67 @@ class _CalendarioState extends State<Calendario> {
                   Text(
                     title!,
                     textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
+              const SizedBox(
+                height: 1,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    DateFormat('dd/MM/yyyy').format(selectDay),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 1,
+              ),
+              mostarUt == true
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "TAMBOS CON INTERVENCIONES ($totalTamboCon)",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              mostarUt == true
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "TAMBOS SIN INTERVENCIONES ($totalTamboSin)",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              mostarUt == true
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "PORCENTAJE DE TAMBOS CON INT. (${porcentaje} %)",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: colorPorcentaje),
+                        ),
+                      ],
+                    )
+                  : Container(),
               const SizedBox(
                 height: 10,
               ),
@@ -580,7 +691,7 @@ class _CalendarioState extends State<Calendario> {
                     ),
                     Text(
                       " INTERVENCION DE PRESTACIONES ($cant1)",
-                      style: const TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 11),
                     ),
                   ],
                 ),
@@ -601,7 +712,7 @@ class _CalendarioState extends State<Calendario> {
                     const Icon(Icons.radio_button_checked_outlined,
                         color: Colors.blue),
                     Text(" INTERVENCION DE SOPORTE ($cant3)",
-                        style: const TextStyle(fontSize: 12)),
+                        style: const TextStyle(fontSize: 11)),
                   ],
                 ),
               ),
@@ -623,7 +734,7 @@ class _CalendarioState extends State<Calendario> {
                       color: Colors.green,
                     ),
                     Text(" ACTIVIDADES GIT ($cant2)",
-                        style: const TextStyle(fontSize: 12)),
+                        style: const TextStyle(fontSize: 11)),
                   ],
                 ),
               ),
@@ -645,7 +756,7 @@ class _CalendarioState extends State<Calendario> {
                       color: Colors.black,
                     ),
                     Text(" TODOS (${selectedEventss.length})",
-                        style: const TextStyle(fontSize: 12)),
+                        style: const TextStyle(fontSize: 11)),
                   ],
                 ),
               ),
@@ -899,8 +1010,23 @@ class _CalendarioState extends State<Calendario> {
                                                                 ),
                                                                 TextSpan(
                                                                   text:
-                                                                      ' - ${elementos3[1]}',
+                                                                      ' - ${elementos3[1]}\n',
                                                                 ),
+                                                                const TextSpan(
+                                                                  text:
+                                                                      'LUGAR : ',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                                TextSpan(
+                                                                    text:
+                                                                        "${event!.idLugarIntervencion == '1' ? 'DENTRO DEL TAMBO' : ''}"
+                                                                        "${event!.idLugarIntervencion == '2' ? 'FUERA DEL TAMBO' : ''}"
+                                                                        "${event!.idLugarIntervencion != '1' && event.idLugarIntervencion != '2' ? 'SIN VALOR' : ''}"),
                                                               ],
                                                             ),
                                                           ),

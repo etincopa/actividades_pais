@@ -6,6 +6,8 @@ import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atencionesRegionResponse.dart';
+import 'package:actividades_pais/backend/model/atencionesSectorialResponse.dart';
 import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
@@ -537,6 +539,32 @@ class PnPaisApi {
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => AvanceMetasModel.fromJson(e)).toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<AtencionesSectorialesModel>>> getReporteSectorial(
+      String tipo, String anio, String mes, String sector) async {
+    return await _http.request<List<AtencionesSectorialesModel>>(
+      '${basePathApp3}obtenerReporteSectorialAtenciones/${tipo}/${anio}/${mes}/${sector}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => AtencionesSectorialesModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<AtencionesRegionModel>>> getReporteAtencionesRegion(
+      String anio, String mes, String region) async {
+    return await _http.request<List<AtencionesRegionModel>>(
+      '${basePathApp3}obtenerReporteAtencionesRegion/${anio}/${mes}/${region}',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => AtencionesRegionModel.fromJson(e))
+            .toList();
       },
     );
   }

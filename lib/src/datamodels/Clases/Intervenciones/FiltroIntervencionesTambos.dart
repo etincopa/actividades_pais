@@ -1,17 +1,17 @@
 class FiltroIntervencionesTambos {
-  String? id;
+  String? id="x";
   String? tipo;
   String? estado;
   String? ut="x";
-  String? inicio;
+  String? inicio ="x";
   String? fin;
   String? mes;
   int? anio;
 
   FiltroIntervencionesTambos(
-      {this.id,
-        this.tipo,
-        this.estado,
+      {this.id="x",
+        this.tipo="x",
+        this.estado="x",
         this.ut="x",
         this.inicio,
         this.fin,

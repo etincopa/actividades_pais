@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:actividades_pais/src/datamodels/Clases/EquipoMantenimiento.dart';
+import 'package:actividades_pais/src/datamodels/Clases/TipoMantenimiento.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/EstadoGuardar.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroListaEquipos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.dart';
@@ -63,17 +65,39 @@ class ProviderSeguimientoParqueInformatico {
     }
   }
 
-  Future<List<Modelo>>? listaModelos() async {
+  Future listarAniosInventario() async {
     var logUser = await DatabasePr.db.loginUser();
     var headers = {
       'Authorization': 'Bearer ${logUser[0].token}',
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor + '/seguimientoequipo/modelo'),
+        Uri.parse(AppConfig.backendsismonitor +
+            '/seguimientoequipo/listarAniosInventario'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      //final listarAniosInventario = new ListaMarcas.fromJsonList(jsonResponse);
+      return jsonResponse;
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future<List<Modelo>> listaModelos(idMarca) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+    http.Response response = await http.get(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/seguimientoequipo/modelo/$idMarca'),
+        headers: headers);
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      print(jsonResponse);
       final listadoModelo = new ListaModelos.fromJsonList(jsonResponse);
       return listadoModelo.items;
     } else {
@@ -484,6 +508,99 @@ class ProviderSeguimientoParqueInformatico {
       return listadoEquiposInformaticosTickets.items;
     } else {
       return List.empty();
+    }
+  }
+
+  Future<List<EquipoMantenimiento>> ListaEquipoMantenimiento(
+      {required EquipoMantenimiento equipoManto}) async {
+     var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+     http.Response response = await http.post(
+        Uri.parse(AppConfig.backendsismonitor +
+            '/seguimientoequipo/listaEquipoInformaticoMantenimiento'),
+        headers: headers,
+        body: json.encode(equipoManto));
+     if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listaEquipoMantenimiento =
+          new ListarEquipoMantenimiento.fromJsonList(jsonResponse["data"]);
+
+      return listaEquipoMantenimiento.items;
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future<List<TipoMantenimiento>> ListarTipoMantenimientos() async {
+
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+
+    http.Response response = await http.get(
+      Uri.parse(
+          AppConfig.backendsismonitor + '/seguimientoequipo/tipoMantenimiento'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      final listaTipoMantenimiento =
+          new ListarTipoMantenimiento.fromJsonList(jsonResponse);
+
+      return listaTipoMantenimiento.items;
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future<EstadoGuardar> guardarMantenimiento(
+      EquipoMantenimiento equipoMantenimiento) async {
+    var logUser = await DatabasePr.db.loginUser();
+
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+equipoMantenimiento.archivos=[];
+    http.Response response = await http.post(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/seguimientoequipo/crearMantenimientoEquipo'),
+        headers: headers,
+        body: json.encode(equipoMantenimiento));
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final listar = new EstadoGuardar.fromJson(jsonResponse);
+      return listar;
+    } else {
+      return EstadoGuardar();
+    }
+  }
+
+  Future EliminarEquipoInformaticoMantenimiento(
+      idEquipoManto) async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {
+      'Authorization': 'Bearer ${logUser[0].token}',
+      'Content-Type': 'application/json'
+    };
+
+    http.Response response = await http.get(
+      Uri.parse(AppConfig.backendsismonitor +
+          '/seguimientoequipo/eliminarEquipoInfoManto/${idEquipoManto}'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return EstadoGuardar();
     }
   }
 }

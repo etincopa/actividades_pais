@@ -2,6 +2,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.da
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaMarca.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaPersonalSoporte.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/Mantenimiento.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/TicketsEquipos.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
         appBar: AppBar(title: Text("DETALLE EQUIPO INFORMATICO"),centerTitle: true),
         body: DefaultTabController(
           initialIndex: 0,
-          length: 2,
+          length:3,
           child: Scaffold(
             appBar: PreferredSize(
                 preferredSize: Size.fromHeight(50.0),
@@ -58,8 +59,7 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
                     //    controller: _tabController,
                     // isScrollable: true,
                     onTap: (index) {
-                      print("indexx:: $index");
-                      setState(() {
+                       setState(() {
                         if (index == 1) {
                           filterTikets = true;
                         } else {
@@ -73,6 +73,8 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
                       ),
                       Tab(
                         text: 'Tickets',
+                      ),Tab(
+                        text: 'Mantenimiento',
                       )
                     ],
                   ),
@@ -82,7 +84,8 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
               //controller: _tabController,
               children: [
                 DetalleEquipo(widget.listaEquipoInformatico),
-                TicketsEquipos(filtroTicketEquipo)
+                TicketsEquipos(filtroTicketEquipo),
+                Mantenimiento(filtroTicketEquipo)
               ],
             ),
           ),

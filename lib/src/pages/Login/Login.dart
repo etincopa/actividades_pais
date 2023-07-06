@@ -6,7 +6,7 @@ import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Login/politicas.dart';
-import 'package:actividades_pais/src/pages/Tambook/invitado/main_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/configuracion/ResetContrasenia.dart';
 import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:flutter/material.dart';
@@ -203,6 +203,12 @@ class __FormState extends State<_Form> {
 
             await OneSignal.shared
                 .setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
+
+            await OneSignal.shared
+                .promptUserForPushNotificationPermission()
+                .then((aceptado) {
+              print("Permiso aceptado: $aceptado");
+            });
 
             await OneSignal.shared
                 .getDeviceState()

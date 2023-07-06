@@ -982,7 +982,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             minScale: 0.5,
             maxScale: 2,
             child: ImageUtil.ImageUrl(
-              oTambo.tamboPathImage ?? '',
+              'https://www.pais.gob.pe/tambook_/FILES/portadas-imagenes/${oTambo.idTambo}/${oTambo.idTambo}.jpg',
               //fit: BoxFit.fitHeight,
             ),
           ),

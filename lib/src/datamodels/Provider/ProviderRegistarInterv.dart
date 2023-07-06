@@ -59,13 +59,25 @@ class ProviderRegistarInterv {
     } else {
       return List.empty();
     }
-  }  Future cargarEventosTamb(
+  }
+
+  Future cargarEventosTamb(
       FiltroIntervencionesTambos filtroIntervencionesTambos) async {
-     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor + '/programaciongit/filtroTambook'),
-        headers:  {
-          'Content-Type': 'application/json'
-        },
+    print('{'
+        '"id": "${filtroIntervencionesTambos.id}",'
+        '"tipo": "${filtroIntervencionesTambos.tipo}",'
+        '"estado": "${filtroIntervencionesTambos.estado}",'
+        '"ut": "${filtroIntervencionesTambos.ut}",'
+        '"inicio": "${filtroIntervencionesTambos.inicio}",'
+        '"fin": "${filtroIntervencionesTambos.fin}",'
+        '"mes": "${filtroIntervencionesTambos.mes}",'
+        '"anio": ${filtroIntervencionesTambos.anio}'
+        '}');
+
+    http.Response response = await http.post(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programaciongit/filtroTambook'),
+        headers: {'Content-Type': 'application/json'},
         body: '{'
             '"id": "${filtroIntervencionesTambos.id}",'
             '"tipo": "${filtroIntervencionesTambos.tipo}",'
@@ -76,9 +88,48 @@ class ProviderRegistarInterv {
             '"mes": "${filtroIntervencionesTambos.mes}",'
             '"anio": ${filtroIntervencionesTambos.anio}'
             '}');
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
+    } else {
+      return List.empty();
+    }
+  }
+
+  Future cantidadTambo(
+      FiltroIntervencionesTambos filtroIntervencionesTambos) async {
+    print('{'
+        '"idPlataforma": "${filtroIntervencionesTambos.id}",'
+        '"numTipo": "${filtroIntervencionesTambos.tipo}",'
+        '"numEstado": "${filtroIntervencionesTambos.estado}",'
+        '"idUTerritorial": "${filtroIntervencionesTambos.ut}",'
+        '"fecInicio": "${filtroIntervencionesTambos.inicio}",'
+        '"fecFinal": "${filtroIntervencionesTambos.fin}",'
+        '"numMes": "${filtroIntervencionesTambos.mes}",'
+        '"numAnio": ${filtroIntervencionesTambos.anio}'
+        '}');
+    http.Response response = await http.post(
+        Uri.parse(
+            AppConfig.backendsismonitor + '/programaciongit/cantidadTambo'),
+        headers: {'Content-Type': 'application/json'},
+        body: '{'
+            '"idPlataforma": "${filtroIntervencionesTambos.id}",'
+            '"numTipo": "${filtroIntervencionesTambos.tipo}",'
+            '"numEstado": "${filtroIntervencionesTambos.estado}",'
+            '"idUTerritorial": "${filtroIntervencionesTambos.ut}",'
+            '"fecInicio": "${filtroIntervencionesTambos.inicio}",'
+            '"fecFinal": "${filtroIntervencionesTambos.fin}",'
+            '"numMes": "${filtroIntervencionesTambos.mes}",'
+            '"numAnio": "${filtroIntervencionesTambos.anio}"'
+            '}');
+    List<String> values = [];
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      values.add(data[0]['TOTAL_TAMBOS']);
+      values.add(data[0]['TOTAL_TAMBO_CON']);
+      values.add(data[0]['TOTAL_TAMBO_SIN']);
+      return values;
     } else {
       return List.empty();
     }
@@ -142,6 +193,7 @@ class ProviderRegistarInterv {
                 plataformaCodigoSnip: json['plataforma_codigo_snip'],
                 unidadTerritorialDescripcion:
                     json['unidad_territorial_descripcion'],
+                idLugarIntervencion: json['id_lugar_intervencion'],
               ))
           .toList();
     } else {
@@ -157,7 +209,6 @@ class ProviderRegistarInterv {
     );
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return tipoDocumentoAcredita = jsonResponse
           .map((json) => TipoDocumentoAcredita.fromJson(json))
           .toList();
@@ -175,7 +226,6 @@ class ProviderRegistarInterv {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return jsonResponse
           .map((json) => LugarIntervencion.fromJson(json))
           .toList();
@@ -502,31 +552,33 @@ class ProviderRegistarInterv {
       throw Exception('Failed to fetch data');
     }
   }
+
   Future<List<Map<String, dynamic>>> fetchServicios(idActividad) async {
     final response = await http.get(
-        Uri.parse(
-            AppConfig.backendsismonitor +'/programaciongit/lista-servicios-proggit/$idActividad'),
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/lista-servicios-proggit/$idActividad'),
         headers: await ProviderRegistarInterv().headerss());
-print("response.bodyy::: ${response.body}");
+    print("response.bodyy::: ${response.body}");
     if (response.statusCode == 200) {
       final List<dynamic> decoded = jsonDecode(response.body);
       final List<Map<String, dynamic>> actividades =
-      decoded.cast<Map<String, dynamic>>();
+          decoded.cast<Map<String, dynamic>>();
       return actividades;
     } else {
       throw Exception('Failed to fetch data');
     }
   }
+
   Future<List<Map<String, dynamic>>> fetchTipogobiernos(idActividad) async {
     final response = await http.get(
-        Uri.parse(
-            AppConfig.backendsismonitor +'/programaciongit/lista-tipogobiernos-proggit/$idActividad'),
+        Uri.parse(AppConfig.backendsismonitor +
+            '/programaciongit/lista-tipogobiernos-proggit/$idActividad'),
         headers: await ProviderRegistarInterv().headerss());
 
     if (response.statusCode == 200) {
       final List<dynamic> decoded = jsonDecode(response.body);
       final List<Map<String, dynamic>> actividades =
-      decoded.cast<Map<String, dynamic>>();
+          decoded.cast<Map<String, dynamic>>();
       return actividades;
     } else {
       throw Exception('Failed to fetch data');

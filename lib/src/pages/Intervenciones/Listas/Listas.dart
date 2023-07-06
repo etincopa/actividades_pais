@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/datamodels/Clases/EquipoMantenimiento.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DatosPlanMensual.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ParticipantesIntranet.dart';
@@ -716,7 +717,7 @@ class Listas {
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(10),
       elevation: 7,
       child: Column(
         children: <Widget>[
@@ -745,11 +746,11 @@ class Listas {
                   width: 1,
                 ),
                 Container(
-                  width: 240,
+                  width: 200,
                   child: Text(
-                      'Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Region: ${band.departamento}',
+                      'Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Región: ${band.departamento}\n Institución: ${band.tipoUsuario}\n Sector: ${band.sector}',
                       style: const TextStyle(
-                          fontSize: 10.5, fontWeight: FontWeight.bold)),
+                          fontSize: 10, fontWeight: FontWeight.bold)),
                 ),
                 const Divider(
                   color: Colors.blueAccent,
@@ -771,7 +772,7 @@ class Listas {
                     textAlign: TextAlign.justify,
                     '${band.descripcion}',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.w800,
                     )),
                 const SizedBox(height: 10),
@@ -840,6 +841,98 @@ class Listas {
               ],
             ),
             onTap: callback,
+          )
+        ],
+      ),
+    );
+  }
+
+  Card cardEquipoMantenimiento(EquipoMantenimiento band,
+      {descarga, editar, descargarPdf, delete}) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.all(10),
+      elevation: 10,
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(
+              Icons.text_snippet_sharp,
+              color: Colors.black,
+            ),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
+            title: Text(
+                '${band.nombresApellidos != null ? band.nombresApellidos : ''}',
+                style: const TextStyle(fontSize: 13)),
+            subtitle: new Text('${band.observacion}',
+                style: const TextStyle(fontSize: 10)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 70,
+                  child: Text(
+                    '${band.descripcionTipoMantenimiento}',
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  child: Text(
+                    '${band.fechaMantenimiento}',
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ),
+              ],
+              /* onTap: callback,*/
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    band.informeTecnico != null
+                        ? InkWell(
+                            onTap: descarga,
+                            child: Icon(
+                              Icons.file_download,
+                              color: Colors.green,
+                            ))
+                        : Container(),
+                    Container(
+                      width: band.informeTecnico != null ? 120.0 : 0,
+                      child: Text(
+                        '${band.informeTecnico != null ? band.informeTecnico : ''}',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    )
+                  ],
+                ),
+                /* InkWell(
+                    onTap: editar,
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.green,
+                    )),*/
+                InkWell(
+                  onTap: descargarPdf,
+                  child: Icon(
+                    Icons.picture_as_pdf,
+                    color: Colors.black,
+                  ),
+                ),
+                InkWell(
+                  onTap: delete,
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

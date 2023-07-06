@@ -232,6 +232,38 @@ class _HomePagePais extends State<HomePagePais> {
           );
 
           break;
+
+        case '80':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1009',
+              name: 'TileParqueInfomatico'.tr,
+              types: const ['Ver'],
+              image: icon6,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1007',
+              name: 'SEGUIMIENTO Y MONITOREO',
+              types: const ['Ver'],
+              image: icon5,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
+              types: const ['Ver'],
+              image: icon4,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          break;
+
         case '110':
           aHomeOptions.add(
             HomeOptions(

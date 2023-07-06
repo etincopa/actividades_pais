@@ -16,7 +16,8 @@ class ActividadTambook extends StatelessWidget {
         TamboServicioIntervencionesGeneral();
     aServ.tambo = 'NUEVO PARAISO';
     aServ.departamento = 'departamento';
-    aServ.descripcion = '''
+    aServ.descripcion =
+        '''
       Sesión de trabajo para estatuir la cantidad de raciones
       diarias en función al padrón de beneficiarios que
       presenta el comedor popular, realizado por miembros
@@ -95,12 +96,14 @@ class ActividadTambook extends StatelessWidget {
             subtitle: Column(
               children: [
                 const SizedBox(height: 10),
-                Text(
-                  textAlign: TextAlign.justify,
-                  '${band.descripcion}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    '${band.descripcion}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),

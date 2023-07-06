@@ -11,7 +11,7 @@ abstract class DependencyInjection {
     String baseUrl2 = "";
     switch (sAmbiente) {
       case "DEV_LOC":
-        baseUrl = "http://192.168.248.13:8075/";
+        baseUrl = "http://192.168.19.13:8075";
         baseUrl2 = "https://www.pais.gob.pe";
         break;
       case "DEV":

@@ -3,6 +3,8 @@ import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atencionesRegionResponse.dart';
+import 'package:actividades_pais/backend/model/atencionesSectorialResponse.dart';
 import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
@@ -1027,6 +1029,20 @@ class MainController extends GetxController {
   Future<List<AvanceMetasModel>> getAvanceMetasMensualizada(String anio) async {
     List<AvanceMetasModel> aResp =
         await Get.find<MainService>().getAvanceMetasMensualizada(anio);
+    return aResp;
+  }
+
+  Future<List<AtencionesSectorialesModel>> getReporteSectorial(
+      String tipo, String anio, String mes, String sector) async {
+    List<AtencionesSectorialesModel> aResp = await Get.find<MainService>()
+        .getReporteSectorial(tipo, anio, mes, sector);
+    return aResp;
+  }
+
+  Future<List<AtencionesRegionModel>> getReporteAtencionesRegion(
+      String anio, String mes, String region) async {
+    List<AtencionesRegionModel> aResp = await Get.find<MainService>()
+        .getReporteAtencionesRegion(anio, mes, region);
     return aResp;
   }
 
