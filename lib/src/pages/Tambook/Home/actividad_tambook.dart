@@ -94,12 +94,14 @@ class ActividadTambook extends StatelessWidget {
             subtitle: Column(
               children: [
                 const SizedBox(height: 10),
-                Text(
-                  textAlign: TextAlign.justify,
-                  '${band.descripcion}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                Expanded(
+                  child: Text(
+                    textAlign: TextAlign.justify,
+                    '${band.descripcion}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),

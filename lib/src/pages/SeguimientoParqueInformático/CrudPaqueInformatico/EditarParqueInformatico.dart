@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEstado.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaModelo.dart';
@@ -19,7 +18,10 @@ class EditarParqueInformatico extends StatefulWidget {
   int tipo = 0;
 
   EditarParqueInformatico(
-      {super.key, required this.listaEquipoInformatico, this.titulo = "", this.tipo = 0});
+      {super.key,
+      required this.listaEquipoInformatico,
+      this.titulo = "",
+      this.tipo = 0});
 
   @override
   State<EditarParqueInformatico> createState() =>
@@ -57,7 +59,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   var idArchivo = 0;
 
-  var mostarBotonGuardar=true;
+  var mostarBotonGuardar = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -114,20 +116,21 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
               TextoConFecha("Fecha de Ingreso", true, controllerFechaIngreso),
               EstadoCombo(),
               if (archivos.isNotEmpty) ...[mostarArchivo()],
-              if(mostarBotonGuardar==true) Container(
-                  decoration: Servicios().myBoxDecoration(),
-                  margin: const EdgeInsets.only(top: 15, bottom: 20),
-                  height: 40.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[600],
-                    ),
-                    onPressed: () async {
-                if(mostarBotonGuardar==true)guardar();
-                    },
-                    child: Text(textoBoton),
-                  ))
+              if (mostarBotonGuardar == true)
+                Container(
+                    decoration: Servicios().myBoxDecoration(),
+                    margin: const EdgeInsets.only(top: 15, bottom: 20),
+                    height: 40.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue[600],
+                      ),
+                      onPressed: () async {
+                        if (mostarBotonGuardar == true) guardar();
+                      },
+                      child: Text(textoBoton),
+                    ))
             ],
           ),
         ),
@@ -285,8 +288,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                         children: [Text(nombreArchivo)],
                       ),
                     ],
-                  )
-                  ),
+                  )),
             ),
             const SizedBox(
               height: 10,
@@ -389,7 +391,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<Modelo>>(
-        future: ProviderSeguimientoParqueInformatico().listaModelos(),
+        future: ProviderSeguimientoParqueInformatico().listaModelos(2),
         builder: (BuildContext context, AsyncSnapshot<List<Modelo>> snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -422,7 +424,6 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                             ))
                         .toList(),
                     onChanged: (Modelo? value) async {
-
                       setState(() {
                         modelo = value;
                         seleccionarModelo = value!.descripcionModelo!;
@@ -442,7 +443,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                         controllerMarca.text = consultaMarca.toString();
                       });
                     },
-                  //  value:  snapshot.data![0],
+                    //  value:  snapshot.data![0],
                     hint: Text(seleccionarModelo,
                         style: const TextStyle(color: Colors.black)),
                   )),

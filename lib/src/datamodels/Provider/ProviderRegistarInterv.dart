@@ -20,7 +20,6 @@ import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/
 import 'package:http/http.dart' as http;
 import 'package:actividades_pais/util/app-config.dart';
 
-
 class ProviderRegistarInterv {
   List<Evento> eventos = [];
   List<TipoIntervencion> tipoIntervencion = [];
@@ -49,13 +48,25 @@ class ProviderRegistarInterv {
     } else {
       return List.empty();
     }
-  }  Future cargarEventosTamb(
+  }
+
+  Future cargarEventosTamb(
       FiltroIntervencionesTambos filtroIntervencionesTambos) async {
-     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/filtroTambook'),
-        headers:  {
-          'Content-Type': 'application/json'
-        },
+    print('{'
+        '"id": "${filtroIntervencionesTambos.id}",'
+        '"tipo": "${filtroIntervencionesTambos.tipo}",'
+        '"estado": "${filtroIntervencionesTambos.estado}",'
+        '"ut": "${filtroIntervencionesTambos.ut}",'
+        '"inicio": "${filtroIntervencionesTambos.inicio}",'
+        '"fin": "${filtroIntervencionesTambos.fin}",'
+        '"mes": "${filtroIntervencionesTambos.mes}",'
+        '"anio": ${filtroIntervencionesTambos.anio}'
+        '}');
+
+    http.Response response = await http.post(
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/filtroTambook'),
+        headers: {'Content-Type': 'application/json'},
         body: '{'
             '"id": "${filtroIntervencionesTambos.id}",'
             '"tipo": "${filtroIntervencionesTambos.tipo}",'
@@ -66,7 +77,7 @@ class ProviderRegistarInterv {
             '"mes": "${filtroIntervencionesTambos.mes}",'
             '"anio": ${filtroIntervencionesTambos.anio}'
             '}');
-     if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
     } else {
@@ -74,9 +85,49 @@ class ProviderRegistarInterv {
     }
   }
 
+  Future cantidadTambo(
+      FiltroIntervencionesTambos filtroIntervencionesTambos) async {
+    print('{'
+        '"idPlataforma": "${filtroIntervencionesTambos.id}",'
+        '"numTipo": "${filtroIntervencionesTambos.tipo}",'
+        '"numEstado": "${filtroIntervencionesTambos.estado}",'
+        '"idUTerritorial": "${filtroIntervencionesTambos.ut}",'
+        '"fecInicio": "${filtroIntervencionesTambos.inicio}",'
+        '"fecFinal": "${filtroIntervencionesTambos.fin}",'
+        '"numMes": "${filtroIntervencionesTambos.mes}",'
+        '"numAnio": ${filtroIntervencionesTambos.anio}'
+        '}');
+    http.Response response = await http.post(
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/cantidadTambo'),
+        headers: {'Content-Type': 'application/json'},
+        body: '{'
+            '"idPlataforma": "${filtroIntervencionesTambos.id}",'
+            '"numTipo": "${filtroIntervencionesTambos.tipo}",'
+            '"numEstado": "${filtroIntervencionesTambos.estado}",'
+            '"idUTerritorial": "${filtroIntervencionesTambos.ut}",'
+            '"fecInicio": "${filtroIntervencionesTambos.inicio}",'
+            '"fecFinal": "${filtroIntervencionesTambos.fin}",'
+            '"numMes": "${filtroIntervencionesTambos.mes}",'
+            '"numAnio": "${filtroIntervencionesTambos.anio}"'
+            '}');
+    List<String> values = [];
+
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      values.add(data[0]['TOTAL_TAMBOS']);
+      values.add(data[0]['TOTAL_TAMBO_CON']);
+      values.add(data[0]['TOTAL_TAMBO_SIN']);
+      return values;
+    } else {
+      return List.empty();
+    }
+  }
+
   Future getTipoIntervencion() async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-tipo-intervencion'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-tipo-intervencion'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -89,7 +140,8 @@ class ProviderRegistarInterv {
 
   Future getlistaTipoGobierno() async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-tipo-gobierno'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-tipo-gobierno'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -130,6 +182,7 @@ class ProviderRegistarInterv {
                 plataformaCodigoSnip: json['plataforma_codigo_snip'],
                 unidadTerritorialDescripcion:
                     json['unidad_territorial_descripcion'],
+                idLugarIntervencion: json['id_lugar_intervencion'],
               ))
           .toList();
     } else {
@@ -139,12 +192,12 @@ class ProviderRegistarInterv {
 
   Future listaTipoDocumentoAcredita() async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-tipo-documento/1'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/lista-tipo-documento/1'),
       headers: await headerss(),
     );
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return tipoDocumentoAcredita = jsonResponse
           .map((json) => TipoDocumentoAcredita.fromJson(json))
           .toList();
@@ -155,13 +208,13 @@ class ProviderRegistarInterv {
 
   Future getListaLugarIntervenciona() async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-lugar-intervencion'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/lista-lugar-intervencion'),
       headers: await headerss(),
     );
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return jsonResponse
           .map((json) => LugarIntervencion.fromJson(json))
           .toList();
@@ -172,7 +225,8 @@ class ProviderRegistarInterv {
 
   Future getlistaSector(tpUsuario) async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-sector/$tpUsuario'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-sector/$tpUsuario'),
         headers: await headerss());
 
     if (response.statusCode == 200) {
@@ -186,7 +240,8 @@ class ProviderRegistarInterv {
 
   Future getListarEntidadFuncionario(sector) async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-entidad/$sector'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-entidad/$sector'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -198,7 +253,8 @@ class ProviderRegistarInterv {
 
   Future getListarCategoria(pro) async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-categoria/$pro'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-categoria/$pro'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -210,7 +266,8 @@ class ProviderRegistarInterv {
 
   Future getListarSubcategoria(pro) async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-subcategoria/$pro'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-subcategoria/$pro'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -222,7 +279,8 @@ class ProviderRegistarInterv {
 
   Future getActividad(pro) async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-actividad/$pro'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-actividad/$pro'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -235,7 +293,8 @@ class ProviderRegistarInterv {
   Future<List<Servicio>> getServicio(actividad) async {
     print("actividad $actividad");
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-servicios2/$actividad'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-servicios2/$actividad'),
         headers: await headerss());
     print(response.body);
 
@@ -264,7 +323,8 @@ class ProviderRegistarInterv {
   Future<RespuestaApi> getGuardarIntervencions(jsona) async {
     print(json);
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/guardar-intervencion-movil'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/guardar-intervencion-movil'),
         headers: await headerss(),
         body: jsona);
     print(response.body);
@@ -280,7 +340,8 @@ class ProviderRegistarInterv {
   Future getntervencionDetalle(idIntervencion) async {
     print(json);
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/intervencion-detalle/$idIntervencion'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/intervencion-detalle/$idIntervencion'),
         headers: await headerss());
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -294,7 +355,8 @@ class ProviderRegistarInterv {
   Future<List<Accion>> getListaAcciones(idIntervencion) async {
     print(idIntervencion);
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/lista-acciones/$idIntervencion'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/lista-acciones/$idIntervencion'),
         headers: await headerss());
     print(response.body);
     if (response.statusCode == 200) {
@@ -309,7 +371,8 @@ class ProviderRegistarInterv {
   Future<List<Funcionarios>> getListaFuncionarios(idIntervencion) async {
     print(idIntervencion);
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/listar-funcionarios_BD/$idIntervencion'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/listar-funcionarios_BD/$idIntervencion'),
       headers: await headerss(),
     );
     print(response.body);
@@ -325,7 +388,8 @@ class ProviderRegistarInterv {
   Future<PariticipantesIntranet> getListaParticipantes(
       idIntervencion, pageIndex, pageSize) async {
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/listar-participantes_BD'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/listar-participantes_BD'),
         headers: await headerss(),
         body: '''{
     "id": "$idIntervencion",
@@ -347,7 +411,8 @@ class ProviderRegistarInterv {
 
   Future<List<Archivo>> getListaImagenes(idIntervencion) async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/detalle-imagenes/$idIntervencion'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/detalle-imagenes/$idIntervencion'),
       headers: await headerss(),
     );
     print("aqaqaqaaqa ${response.body}");
@@ -414,7 +479,8 @@ class ProviderRegistarInterv {
     };
     print("response 11122121");
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/suspender-programacion-actividad'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/suspender-programacion-actividad'),
         headers: headers,
         body: ''' {
                       "id_programacion": "$idProgramacion",
@@ -475,21 +541,23 @@ class ProviderRegistarInterv {
       throw Exception('Failed to fetch data');
     }
   }
+
   Future<List<Map<String, dynamic>>> fetchServicios(idActividad) async {
     final response = await http.get(
         Uri.parse(
             '${AppConfig.backendsismonitor}/programaciongit/lista-servicios-proggit/$idActividad'),
         headers: await ProviderRegistarInterv().headerss());
-print("response.bodyy::: ${response.body}");
+    print("response.bodyy::: ${response.body}");
     if (response.statusCode == 200) {
       final List<dynamic> decoded = jsonDecode(response.body);
       final List<Map<String, dynamic>> actividades =
-      decoded.cast<Map<String, dynamic>>();
+          decoded.cast<Map<String, dynamic>>();
       return actividades;
     } else {
       throw Exception('Failed to fetch data');
     }
   }
+
   Future<List<Map<String, dynamic>>> fetchTipogobiernos(idActividad) async {
     final response = await http.get(
         Uri.parse(
@@ -499,7 +567,7 @@ print("response.bodyy::: ${response.body}");
     if (response.statusCode == 200) {
       final List<dynamic> decoded = jsonDecode(response.body);
       final List<Map<String, dynamic>> actividades =
-      decoded.cast<Map<String, dynamic>>();
+          decoded.cast<Map<String, dynamic>>();
       return actividades;
     } else {
       throw Exception('Failed to fetch data');

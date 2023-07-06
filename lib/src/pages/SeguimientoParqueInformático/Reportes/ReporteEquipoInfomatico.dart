@@ -54,7 +54,6 @@ class _ReporteEquipoInformaticoState extends State<ReporteEquipoInformatico> {
         ChartData('INACTIVO', inactivo, const Color(0xFFE84258)),
       ];
     });
-
   }
 
   Future<void> cargarTicketPie() async {

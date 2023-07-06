@@ -78,7 +78,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     "CLIMA",
     "COMO LLEGAR AL TAMBO",
 
-   // "CALENDARIO",
+    // "CALENDARIO",
   ];
   String currentTitle = '';
   int _selectedTab = 0;
@@ -983,7 +983,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             minScale: 0.5,
             maxScale: 2,
             child: ImageUtil.ImageUrl(
-              oTambo.tamboPathImage ?? '',
+              'https://www.pais.gob.pe/tambook_/FILES/portadas-imagenes/${oTambo.idTambo}/${oTambo.idTambo}.jpg',
               //fit: BoxFit.fitHeight,
             ),
           ),
@@ -1170,7 +1170,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -1270,7 +1269,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-                               /*Tooltip(
+                              /*Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
                                 padding: EdgeInsets.all(5),
@@ -1452,7 +1451,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     ),*/
 
-
                     //const TabScreen("Clima"),
 
                     ListView(
@@ -1472,7 +1470,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                     ),
 
                     //const TabScreen("INTERVENCIONES"),
-                   /* DefaultTabController(
+                    /* DefaultTabController(
                       length: 2,
                       child: Column(
                         children: <Widget>[
@@ -1563,7 +1561,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ],
                       ),
                     ),*/
-
                   ],
                 ),
               ),
@@ -2144,8 +2141,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ]),
                             ),
                         const SizedBox(height: 10),
-                        const Text(
-                            'FUENTE: UNIDAD DE PLATAFORMA DE SERVCIOS - PNPAIS'),
+                        const Text('FUENTE: PNPAIS'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2585,8 +2581,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         if (oTambo.montoAdjudicado != "")
                           ListTile(
                             title: const Text('MONTO CONTRATADO'),
-                            subtitle: Text(
-                                formatoDecimal(double.parse(oTambo.montoAdjudicado ?? '0'))),
+                            subtitle: Text(formatoDecimal(
+                                double.parse(oTambo.montoAdjudicado ?? '0'))),
                           ),
                         const SizedBox(height: 10),
                         const Text('FUENTE: BANCO DE INVERSIONES - MEF'),
@@ -3168,8 +3164,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           'MANTENIMIENTO PROGRAMADO PARA EL MES DE ',
                                       children: [
                                     TextSpan(
-                                        text:
-                                            obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? ''),
+                                        text: obtenerNombreMes(
+                                            aPlanMantenimientoInformatico[index]
+                                                    .mes ??
+                                                ''),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     const TextSpan(text: " DEL AÑO "),
@@ -3351,7 +3349,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         ListTile(
                                           title: const Text('SITUACIÓN:'),
                                           subtitle: Text(
-                                              aPlanMantenimientoInfraestructura[index].situacion!.toUpperCase()),
+                                              aPlanMantenimientoInfraestructura[
+                                                      index]
+                                                  .situacion!
+                                                  .toUpperCase()),
                                         ),
                                         if ((double.tryParse(
                                                     aPlanMantenimientoInfraestructura[

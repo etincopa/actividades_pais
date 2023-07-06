@@ -37,14 +37,6 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
     {"value": '3', "descripcion": 'OBSERVADO'},
     {"value": '4', "descripcion": 'APROBADAS'},
     {"value": '0', "descripcion": 'ELIMINADOS'},
-
-    /*   [{ value: 'x', descripcion: 'TODOS' },
-      { value: '1', descripcion: 'PROGRAMADOS' },
-      { value: '2', descripcion: 'POR APROBAR' },
-      { value: '3', descripcion: 'OBSERVADOS' },
-      { value: '4', descripcion: 'APROBADAS' },
-      { value: '0', descripcion: 'ELIMINADOS' },
-    ]*/
   ];
   var tipoProgramacion = [
     {"value": 'x', "descripcion": 'TODOS'},
@@ -175,315 +167,325 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
   @override
   Widget build(BuildContext context) {
     return BackdropScaffold(
-      floatingActionButton: floatingButton(),
-      key: _backdropKey,
-      appBar: BackdropAppBar(
-        backgroundColor: AppConfig.primaryColor,
-        elevation: 0.0,
-        leading: Util().iconbuton(() {
-          Navigator.pop(context);
-        }),
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Intervenciones en los Tambos",
-          style: TextStyle(fontSize: 15, color: Colors.black),
-        ),
-        actions: <Widget>[
-          const BackdropToggleButton(
-            color: Colors.black,
-            icon: AnimatedIcons.list_view,
+        floatingActionButton: floatingButton(),
+        key: _backdropKey,
+        appBar: BackdropAppBar(
+          backgroundColor: AppConfig.primaryColor,
+          elevation: 0.0,
+          leading: Util().iconbuton(() {
+            Navigator.pop(context);
+          }),
+          automaticallyImplyLeading: false,
+          title: const Text(
+            "Intervenciones en los Tambos",
+            style: TextStyle(fontSize: 15, color: Colors.black),
           ),
-          InkWell(
-            child: const Icon(
-              Icons.restart_alt_sharp,
+          actions: <Widget>[
+            const BackdropToggleButton(
               color: Colors.black,
+              icon: AnimatedIcons.list_view,
             ),
-            onTap: () async {
-              //  BusyIndicator.show(context);
-              seleccionarUnidadTerritorial = "TODOS";
-              seleccionarPlataformaDescripcion = "TODOS";
-              await cargarEventos();
-              //  BusyIndicator.hide(context);
-            },
-          )
-        ],
-      ),
-      // frontLayerBackgroundColor: Colors.white,
-      //frontLayerBorderRadius: BorderRadius.horizontal(),
-      backLayerBackgroundColor: Colors.white,
-      backLayer: ListView(children: [
-        Container(
-            margin: const EdgeInsets.all(20),
-            child: Center(
-                child: Column(mainAxisSize: MainAxisSize.max, children: [
-              Row(
-                children: [
-                  const Icon(Icons.account_balance_wallet_outlined,
-                      size: 15, color: Colors.grey),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: selectedTipoProgramacion,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedTipoProgramacion = newValue;
-                          filtroIntervencionesTambos.tipo = newValue;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Tipo Programacion',
-                      ),
-                      items: tipoProgramacion.map((item) {
-                        return DropdownMenuItem<String>(
-                          value: item["value"],
-                          child: Text(
-                            item["descripcion"]!,
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
+            InkWell(
+              child: const Icon(
+                Icons.restart_alt_sharp,
+                color: Colors.black,
               ),
-              Row(
-                children: [
-                  const Icon(Icons.account_balance_wallet_outlined,
-                      size: 15, color: Colors.grey),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: selectedEstado,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedEstado = newValue;
-                          filtroIntervencionesTambos.estado = newValue;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Estado',
+              onTap: () async {
+                //  BusyIndicator.show(context);
+                seleccionarUnidadTerritorial = "TODOS";
+                seleccionarPlataformaDescripcion = "TODOS";
+                await cargarEventos();
+                //  BusyIndicator.hide(context);
+              },
+            )
+          ],
+        ),
+        // frontLayerBackgroundColor: Colors.white,
+        //frontLayerBorderRadius: BorderRadius.horizontal(),
+        backLayerBackgroundColor: Colors.white,
+        backLayer: ListView(children: [
+          Container(
+              margin: const EdgeInsets.all(20),
+              child: Center(
+                  child: Column(mainAxisSize: MainAxisSize.max, children: [
+                Row(
+                  children: [
+                    const Icon(Icons.account_balance_wallet_outlined,
+                        size: 15, color: Colors.grey),
+                    const SizedBox(width: 13),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: selectedTipoProgramacion,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedTipoProgramacion = newValue;
+                            filtroIntervencionesTambos.tipo = newValue;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Tipo Programacion',
+                        ),
+                        items: tipoProgramacion.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item["value"],
+                            child: Text(
+                              item["descripcion"]!,
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          );
+                        }).toList(),
                       ),
-                      items: estados.map((item) {
-                        return DropdownMenuItem<String>(
-                          value: item["value"],
-                          child: Text(
-                            item["descripcion"]!,
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        );
-                      }).toList(),
                     ),
-                  ),
-                ],
-              ),
-              isTambo
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(Icons.date_range_outlined,
-                                size: 15, color: Colors.grey),
-                            const SizedBox(width: 13),
-                            Expanded(
-                              child: Text(UnidadTerritorialTexto),
-                            ),
-                          ],
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.account_balance_wallet_outlined,
+                        size: 15, color: Colors.grey),
+                    const SizedBox(width: 13),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: selectedEstado,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedEstado = newValue;
+                            filtroIntervencionesTambos.estado = newValue;
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Estado',
                         ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(Icons.date_range_outlined,
-                                size: 15, color: Colors.grey),
-                            const SizedBox(width: 13),
-                            Expanded(
-                              child: Text(PlataformaTexto),
+                        items: estados.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item["value"],
+                            child: Text(
+                              item["descripcion"]!,
+                              style: const TextStyle(fontSize: 10),
                             ),
-                          ],
-                        ),
-                      ],
-                    )
-                  : Column(children: [
-                      FutureBuilder<List<UnidadesTerritoriales>>(
-                        future: ProviderAprobacionPlanes()
-                            .ListarUnidadesTerritoriales(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<UnidadesTerritoriales>>
-                                snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                          } else if (snapshot.hasError) {
-                            return const Text('Error al cargar las opciones');
-                          } else {
-                            List<UnidadesTerritoriales> options =
-                                snapshot.data!;
-                            options.insert(
-                                0,
-                                UnidadesTerritoriales(
-                                    idUnidadesTerritoriales: 0,
-                                    unidadTerritorialDescripcion: 'TODOS'));
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                isTambo
+                    ? Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.date_range_outlined,
+                                  size: 15, color: Colors.grey),
+                              const SizedBox(width: 13),
+                              Expanded(
+                                child: Text(UnidadTerritorialTexto),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.date_range_outlined,
+                                  size: 15, color: Colors.grey),
+                              const SizedBox(width: 13),
+                              Expanded(
+                                child: Text(PlataformaTexto),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    : Column(children: [
+                        FutureBuilder<List<UnidadesTerritoriales>>(
+                          future: ProviderAprobacionPlanes()
+                              .ListarUnidadesTerritoriales(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<UnidadesTerritoriales>>
+                                  snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                            } else if (snapshot.hasError) {
+                              return const Text('Error al cargar las opciones');
+                            } else {
+                              List<UnidadesTerritoriales> options =
+                                  snapshot.data!;
+                              options.insert(
+                                  0,
+                                  UnidadesTerritoriales(
+                                      idUnidadesTerritoriales: 0,
+                                      unidadTerritorialDescripcion: 'TODOS'));
 
-                            return Row(
-                              children: [
-                                const Icon(
-                                    Icons.account_balance_wallet_outlined,
-                                    size: 15,
-                                    color: Colors.grey),
-                                const SizedBox(width: 13),
-                                Expanded(
-                                  child: DropdownButtonFormField<
-                                      UnidadesTerritoriales>(
-                                    decoration: const InputDecoration(
-                                      labelText: 'Unidad Territorial',
-                                    ),
-                                    isExpanded: true,
-                                    items: options.map((user) {
-                                      return DropdownMenuItem<
-                                          UnidadesTerritoriales>(
-                                        value: user,
-                                        child: Text(
-                                          user.unidadTerritorialDescripcion!,
-                                          style: const TextStyle(fontSize: 10),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (UnidadesTerritoriales? value) {
-                                      seleccionarUnidadTerritorial =
-                                          value!.unidadTerritorialDescripcion!;
-                                      filtroIntervencionesTambos.ut =
-                                          ((value.idUnidadesTerritoriales == 0)
-                                                  ? "x"
-                                                  : value
-                                                      .idUnidadesTerritoriales)
-                                              .toString();
-                                      seleccionarPlataformaDescripcion =
-                                          "Seleccionar plataforma";
-                                      setState(() {});
-                                    },
-                                    hint: Text(
-                                      seleccionarUnidadTerritorial,
-                                      style: const TextStyle(fontSize: 10),
+                              return Row(
+                                children: [
+                                  const Icon(
+                                      Icons.account_balance_wallet_outlined,
+                                      size: 15,
+                                      color: Colors.grey),
+                                  const SizedBox(width: 13),
+                                  Expanded(
+                                    child: DropdownButtonFormField<
+                                        UnidadesTerritoriales>(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Unidad Territorial',
+                                      ),
+                                      isExpanded: true,
+                                      items: options.map((user) {
+                                        return DropdownMenuItem<
+                                            UnidadesTerritoriales>(
+                                          value: user,
+                                          child: Text(
+                                            user.unidadTerritorialDescripcion!,
+                                            style:
+                                                const TextStyle(fontSize: 10),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged:
+                                          (UnidadesTerritoriales? value) {
+                                        seleccionarUnidadTerritorial = value!
+                                            .unidadTerritorialDescripcion!;
+                                        filtroIntervencionesTambos.ut =
+                                            ((value.idUnidadesTerritoriales ==
+                                                        0)
+                                                    ? "x"
+                                                    : value
+                                                        .idUnidadesTerritoriales)
+                                                .toString();
+                                        seleccionarPlataformaDescripcion =
+                                            "Seleccionar plataforma";
+                                        setState(() {});
+                                      },
+                                      hint: Text(
+                                        seleccionarUnidadTerritorial,
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(),
-                        child: FutureBuilder<List<TambosDependientes>>(
-                            future: ProviderAprobacionPlanes()
-                                .ListarTambosDependientes(
-                                    filtroIntervencionesTambos.ut),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<TambosDependientes>>
-                                    snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
-                              } else if (snapshot.hasError) {
-                                return const Text('');
-                              } else {
-                                if (snapshot.hasData) {
-                                  List<TambosDependientes> optionsP =
-                                      snapshot.data!;
-                                  optionsP.insert(
-                                      0,
-                                      TambosDependientes(
-                                          idPlataforma: "x",
-                                          plataformaDescripcion: 'TODOS'));
+                                ],
+                              );
+                            }
+                          },
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(),
+                          child: FutureBuilder<List<TambosDependientes>>(
+                              future: ProviderAprobacionPlanes()
+                                  .ListarTambosDependientes(
+                                      filtroIntervencionesTambos.ut),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<TambosDependientes>>
+                                      snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se carga la lista
+                                } else if (snapshot.hasError) {
+                                  return const Text('');
+                                } else {
+                                  if (snapshot.hasData) {
+                                    List<TambosDependientes> optionsP =
+                                        snapshot.data!;
+                                    optionsP.insert(
+                                        0,
+                                        TambosDependientes(
+                                            idPlataforma: "x",
+                                            plataformaDescripcion: 'TODOS'));
 
-                                  return Row(
-                                    children: [
-                                      const Icon(
-                                          Icons.account_balance_wallet_outlined,
-                                          size: 15,
-                                          color: Colors.grey),
-                                      const SizedBox(width: 13),
-                                      Expanded(
-                                        child: Container(
-                                          child: DropdownButtonFormField<
-                                              TambosDependientes>(
-                                            decoration: const InputDecoration(
-                                              labelText: 'Plataforma',
-                                            ),
-                                            isExpanded: true,
-                                            items: optionsP.map((user) {
-                                              return DropdownMenuItem<
-                                                  TambosDependientes>(
-                                                value: user,
-                                                child: Text(
-                                                  user.plataformaDescripcion!,
-                                                  style: const TextStyle(
-                                                      fontSize: 10),
-                                                ),
-                                              );
-                                            }).toList(),
-                                            onChanged:
-                                                (TambosDependientes? value) {
-                                              seleccionarPlataformaDescripcion =
-                                                  value!.plataformaDescripcion!;
-                                              filtroIntervencionesTambos.id =
-                                                  value.idPlataforma;
-                                            },
-                                            hint: Text(
-                                              seleccionarPlataformaDescripcion,
-                                              style:
-                                                  const TextStyle(fontSize: 10),
+                                    return Row(
+                                      children: [
+                                        const Icon(
+                                            Icons
+                                                .account_balance_wallet_outlined,
+                                            size: 15,
+                                            color: Colors.grey),
+                                        const SizedBox(width: 13),
+                                        Expanded(
+                                          child: Container(
+                                            child: DropdownButtonFormField<
+                                                TambosDependientes>(
+                                              decoration: const InputDecoration(
+                                                labelText: 'Plataforma',
+                                              ),
+                                              isExpanded: true,
+                                              items: optionsP.map((user) {
+                                                return DropdownMenuItem<
+                                                    TambosDependientes>(
+                                                  value: user,
+                                                  child: Text(
+                                                    user.plataformaDescripcion!,
+                                                    style: const TextStyle(
+                                                        fontSize: 10),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged:
+                                                  (TambosDependientes? value) {
+                                                seleccionarPlataformaDescripcion =
+                                                    value!
+                                                        .plataformaDescripcion!;
+                                                filtroIntervencionesTambos.id =
+                                                    value.idPlataforma;
+                                              },
+                                              hint: Text(
+                                                seleccionarPlataformaDescripcion,
+                                                style: const TextStyle(
+                                                    fontSize: 10),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  );
+                                      ],
+                                    );
+                                  }
                                 }
-                              }
 
-                              return Container();
-                            }),
-                      ),
-                    ]),
-              Row(
-                children: [
-                  const Icon(Icons.date_range_outlined,
-                      size: 15, color: Colors.grey),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: TextoConFecha(
-                        "Fecha Incio", true, _controlleFechaInici),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.date_range_sharp,
-                      size: 15, color: Colors.grey),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: TextoConFecha("Fecha Fin", true, _controlleFechaFin),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Container(
-                  //  decoration: Servicios().myBoxDecoration(),
-                  margin: const EdgeInsets.only(right: 10, left: 10),
-                  height: 40.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppConfig.primaryColor,
+                                return Container();
+                              }),
+                        ),
+                      ]),
+                Row(
+                  children: [
+                    const Icon(Icons.date_range_outlined,
+                        size: 15, color: Colors.grey),
+                    const SizedBox(width: 13),
+                    Expanded(
+                      child: TextoConFecha(
+                          "Fecha Incio", true, _controlleFechaInici),
                     ),
-                    onPressed: () async {
-                      filtroIntervencionesTambos.inicio =
-                          _controlleFechaInici.text;
-                      filtroIntervencionesTambos.fin = _controlleFechaFin.text;
-                      _backdropKey.currentState!.fling();
-                      await filtro();
-                      /* filtroDataPlanMensual.estado = selectedEstado;
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.date_range_sharp,
+                        size: 15, color: Colors.grey),
+                    const SizedBox(width: 13),
+                    Expanded(
+                      child:
+                          TextoConFecha("Fecha Fin", true, _controlleFechaFin),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Container(
+                    //  decoration: Servicios().myBoxDecoration(),
+                    margin: const EdgeInsets.only(right: 10, left: 10),
+                    height: 40.0,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppConfig.primaryColor2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      onPressed: () async {
+                        filtroIntervencionesTambos.inicio =
+                            _controlleFechaInici.text;
+                        filtroIntervencionesTambos.fin =
+                            _controlleFechaFin.text;
+                        _backdropKey.currentState!.fling();
+                        await filtro();
+                        /* filtroDataPlanMensual.estado = selectedEstado;
                           filtroDataPlanMensual.inicio =
                               _controlleFechaInici.text;
                           filtroDataPlanMensual.fin = _controlleFechaFin.text;
@@ -491,12 +493,21 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                           filtroDataPlanMensual.pageIndex = 0;
                           filtroDataPlanMensual.pageSize = 10;
                           _loadData();*/
-                    },
-                    child: const Text("FILTRAR"),
-                  )),
-            ])))
-      ]),
-      frontLayer: Column(
+                      },
+                      child: const Text("FILTRAR"),
+                    )),
+              ])))
+        ]),
+        frontLayer: frontLayers());
+  }
+
+  frontLayers() {
+    return Container(
+      height:
+          MediaQuery.of(context).size.height * 1, // establece una altura fija
+
+      padding: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 3),
+      child: Column(
         children: [
           _isLoading
               ? Container(
@@ -517,68 +528,106 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                   ),
                 )
               : Container(),
-          TableCalendar(
-            calendarBuilders: CalendarBuilders(
-              singleMarkerBuilder: (context, date, _) {
-                return Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: date == _selectedDay
-                          ? Colors.white
-                          : Colors.black), //Change color
-                  width: 5.0,
-                  height: 5.0,
-                  margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                );
+          const SizedBox(height: 9),
+          Container(
+            padding:
+                const EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(-3, 0), // changes position of shadow
+                ),
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(3, 0), // changes position of shadow
+                ),
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, -3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: TableCalendar(
+              rowHeight: 32,
+              calendarBuilders: CalendarBuilders(
+                singleMarkerBuilder: (context, date, _) {
+                  return Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: date == _selectedDay
+                            ? Colors.white
+                            : Colors.black), //Change color
+                    width: 5.0,
+                    height: 5.0,
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                  );
+                },
+              ),
+              onHeaderTapped: (DateTime focusedDay) {
+                print('Se ha cambiado el mes a ${focusedDay.month}');
+                setState(() {});
               },
-            ),
-            onHeaderTapped: (DateTime focusedDay) {
-              print('Se ha cambiado el mes a ${focusedDay.month}');
-              setState(() {});
-            },
-            onPageChanged: (s) {
-              print(s.year);
-            },
-            formatAnimationCurve: Curves.linear,
-            headerVisible: true,
-            calendarStyle: const CalendarStyle(
-              rangeHighlightColor: Colors.green,
-            ),
-            daysOfWeekStyle: const DaysOfWeekStyle(
-              weekendStyle: TextStyle(color: Colors.red),
-              weekdayStyle: TextStyle(color: Colors.blue),
-            ),
-            locale: 'es_ES',
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: true,
-              titleCentered: true,
-              titleTextStyle: TextStyle(fontSize: 20),
-            ),
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
+              onPageChanged: (s) {
+                print(s.year);
+              },
+              formatAnimationCurve: Curves.linear,
+              headerVisible: true,
+              calendarStyle: const CalendarStyle(
+                rangeHighlightColor: Colors.green,
+              ),
+              daysOfWeekStyle: const DaysOfWeekStyle(
+                weekendStyle: TextStyle(color: Colors.red),
+                weekdayStyle: TextStyle(color: Colors.blue),
+              ),
+              locale: 'es_ES',
+              headerStyle: HeaderStyle(
+                // formatButtonVisible: false,
+                titleCentered: true,
+                titleTextStyle:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                titleTextFormatter: (date, _) =>
+                    DateFormat.yMMMM('es_ES').format(date).toUpperCase(),
+              ),
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              eventLoader: _getEventsForDay,
+              selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
+              onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
-                  _calendarFormat = format;
+                  _focusedDay = focusedDay;
+                  _selectedDay = selectedDay;
+                  _selectedEvents = eventos
+                      .where((evento) => isSameDay(evento.fecha, _selectedDay))
+                      .toList();
                 });
-              }
-            },
-            eventLoader: _getEventsForDay,
-            selectedDayPredicate: (day) => isSameDay(day, _selectedDay),
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _focusedDay = focusedDay;
-                _selectedDay = selectedDay;
-                _selectedEvents = eventos
-                    .where((evento) => isSameDay(evento.fecha, _selectedDay))
-                    .toList();
-              });
-            },
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
+              },
+              firstDay: kFirstDay,
+              lastDay: kLastDay,
+              focusedDay: _focusedDay,
+              calendarFormat: _calendarFormat,
+            ),
           ),
           const SizedBox(height: 14.0),
-          const Divider(color: Colors.black, height: 20),
           Expanded(
             child: ListView.builder(
                 itemCount: _selectedEvents.length,
@@ -592,21 +641,30 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                   tamboNm = elementos4[1].split(') °')[0];
 
                   return Container(
+                    padding: const EdgeInsets.all(14),
                     margin: const EdgeInsets.symmetric(
-                      horizontal: 15.0,
+                      horizontal: 3.0,
                       vertical: 4.0,
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(14.0),
-                    ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
+                          ),
+                        ]),
                     child: InkWell(
                         onTap: () async {
                           /*       "${event.estadoProgramacion == '1' ? 'PROGRAMADO' : ''}"
-                                            "${event.estadoProgramacion == '2' ? 'POR APROBAR' : ''}"
-                                            "${event.estadoProgramacion == '3' ? 'OBSERVADO' : ''}"
-                                            "${event.estadoProgramacion == '4' ? 'APROBADA' : ''}"
-                                            "${event.estadoProgramacion == '0' ? 'ELIMINADO' : ''}",*/
+                                              "${event.estadoProgramacion == '2' ? 'POR APROBAR' : ''}"
+                                              "${event.estadoProgramacion == '3' ? 'OBSERVADO' : ''}"
+                                              "${event.estadoProgramacion == '4' ? 'APROBADA' : ''}"
+                                              "${event.estadoProgramacion == '0' ? 'ELIMINADO' : ''}",*/
                           print(
                               "event.estadoProgramacion ${event.estadoProgramacion}");
 
@@ -643,7 +701,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                 ),
                               );
                               break;
-                              case '5':
+                            case '5':
                               var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -661,32 +719,6 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                 width: 5,
                                 height: 10,
                               ),
-                              Image.network(
-                                  "https://cdn-icons-png.flaticon.com/512/3652/3652267.png",
-                                  height: 45,
-                                  width: 33),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    right: 13.0, left: 3, top: 3),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      elementos2[0],
-                                      style: const TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      elementos2[1].trim(),
-                                      style: const TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               Expanded(
                                 child: Container(
                                   margin: const EdgeInsets.only(
@@ -697,7 +729,35 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
+                                          Image.network(
+                                              "https://cdn-icons-png.flaticon.com/512/3652/3652267.png",
+                                              height: 45,
+                                              width: 33),
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 10.0, left: 3, top: 3),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  elementos2[0],
+                                                  style: const TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  elementos2[1].trim(),
+                                                  style: const TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                           Icon(
                                               Icons
                                                   .radio_button_checked_outlined,
@@ -754,7 +814,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                         ],
                                       ),
                                       const SizedBox(
-                                        height: 5,
+                                        height: 3,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -764,9 +824,9 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.60,
+                                                0.83,
                                             child: Text(
-                                              textAlign: TextAlign.start,
+                                              textAlign: TextAlign.justify,
                                               "$tamboNm - ${elementos3[1]}",
                                               style: const TextStyle(
                                                 fontSize: 13.2,
@@ -897,7 +957,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
               var res = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PlanesDeTrabajo(),
+                  builder: (context) => PlanesDeTrabajo(),
                 ),
               );
               if (res == 'OK') {

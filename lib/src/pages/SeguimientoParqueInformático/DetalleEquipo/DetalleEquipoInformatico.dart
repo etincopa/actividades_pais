@@ -1,5 +1,6 @@
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
+import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/Mantenimiento.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/TicketsEquipos.dart';
 import 'package:flutter/material.dart';
 
@@ -19,13 +20,14 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
   bool filterTikets = false;
   FiltroTicketEquipo filtroTicketEquipo = FiltroTicketEquipo();
 
-  var seleccionarPersonal="";
+  var seleccionarPersonal = "";
 
   ///TabController? _tabController;
 
   @override
   void initState() {
-    filtroTicketEquipo.idEquipo = widget.listaEquipoInformatico.idEquipoInformatico;
+    filtroTicketEquipo.idEquipo =
+        widget.listaEquipoInformatico.idEquipoInformatico;
     //   _tabController = new TabController(vsync: null!, length: 5);
 
     super.initState();
@@ -41,10 +43,11 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("DETALLE EQUIPO INFORMATICO"),centerTitle: true),
+        appBar: AppBar(
+            title: const Text("DETALLE EQUIPO INFORMATICO"), centerTitle: true),
         body: DefaultTabController(
           initialIndex: 0,
-          length: 2,
+          length: 3,
           child: Scaffold(
             appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(50.0),
@@ -55,7 +58,6 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
                     //    controller: _tabController,
                     // isScrollable: true,
                     onTap: (index) {
-                      print("indexx:: $index");
                       setState(() {
                         if (index == 1) {
                           filterTikets = true;
@@ -70,6 +72,9 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
                       ),
                       Tab(
                         text: 'Tickets',
+                      ),
+                      Tab(
+                        text: 'Mantenimiento',
                       )
                     ],
                   ),
@@ -79,11 +84,11 @@ class _DetalleEquipoInformaticoState extends State<DetalleEquipoInformatico> {
               //controller: _tabController,
               children: [
                 DetalleEquipo(widget.listaEquipoInformatico),
-                TicketsEquipos(filtroTicketEquipo)
+                TicketsEquipos(filtroTicketEquipo),
+                Mantenimiento(filtroTicketEquipo)
               ],
             ),
           ),
         ));
   }
-
 }

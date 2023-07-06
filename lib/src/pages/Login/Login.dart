@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Login/politicas.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
@@ -18,6 +19,7 @@ import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../datamodels/Provider/PorviderLogin.dart';
 
@@ -193,6 +195,39 @@ class __FormState extends State<_Form> {
           );
           esperar = 'Ingresar';
           if (resLogin >= 1) {
+            MainController mainCtr = MainController();
+            TockenUsuariosModel tocken = TockenUsuariosModel.empty();
+            var res = await DatabasePr.db.loginUser();
+            String toquen = '';
+            tocken.idUsuario = res[0].id.toString();
+            tocken.ipmaq = '0.0.0.0';
+
+            await OneSignal.shared
+                .setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
+
+            await OneSignal.shared
+                .promptUserForPushNotificationPermission()
+                .then((aceptado) {
+              print("Permiso aceptado: $aceptado");
+            });
+
+            await OneSignal.shared
+                .getDeviceState()
+                .then((value) => {toquen = value!.userId ?? ''});
+
+            if (toquen != '' && toquen.isNotEmpty && toquen != '0') {
+              tocken.tocken = toquen;
+              await mainCtr.insertarTockenUsuario(tockens: tocken);
+            }
+
+            OneSignal.shared.setSubscriptionObserver(
+                (OSSubscriptionStateChanges changes) async {
+              String onesignalUserId = changes.to.userId ?? '';
+              print('Player ID CHANGED: $onesignalUserId');
+              tocken.tocken = onesignalUserId;
+              await mainCtr.insertarTockenUsuario(tockens: tocken);
+            });
+
             BusyIndicator.hide(context);
 
             await Navigator.of(context).pushReplacement(

@@ -20,13 +20,13 @@ class ProviderAprobacionPlanes {
 
     print(json.encode(filtro));
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/datos-plan-mensual'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/datos-plan-mensual'),
         headers: headers,
         body: json.encode(filtro));
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listado =
-          ListaDatosPlanMensual.fromJsonList(jsonResponse["data"]);
+      final listado = ListaDatosPlanMensual.fromJsonList(jsonResponse["data"]);
       return listado.items;
     } else {
       return List.empty();
@@ -39,9 +39,11 @@ class ProviderAprobacionPlanes {
       'Authorization': 'Bearer ${logUser[0].token}',
       'Content-Type': 'application/json'
     };
-    print(Uri.parse('${AppConfig.backendsismonitor}/programaciongit/datosparaevaluar/$idProgramacion'));
+    print(Uri.parse(
+        '${AppConfig.backendsismonitor}/programaciongit/datosparaevaluar/$idProgramacion'));
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/datosparaevaluar/$idProgramacion'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/datosparaevaluar/$idProgramacion'),
       headers: headers,
     );
 
@@ -64,7 +66,8 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/aprobandointervencion'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/aprobandointervencion'),
         headers: headers,
         body: '{"id_programacion": "$idProgramacion"}');
     if (response.statusCode == 200) {
@@ -81,7 +84,8 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/observandointervencion'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/observandointervencion'),
         headers: headers,
         body:
             '{"id_programacion": "$idProgramacion","observacion":"$observacion"}');
@@ -100,13 +104,13 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/historialobservaciones/$idProgramacion'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/historialobservaciones/$idProgramacion'),
       headers: headers,
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listado =
-          ListaHistorialobservaciones.fromJsonList(jsonResponse);
+      final listado = ListaHistorialobservaciones.fromJsonList(jsonResponse);
       return listado.items;
     } else {
       return List.empty();
@@ -121,13 +125,13 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/historialsubsanacion/$idProgramacion'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/historialsubsanacion/$idProgramacion'),
       headers: headers,
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listado =
-          ListaHistorialobservaciones.fromJsonList(jsonResponse);
+      final listado = ListaHistorialobservaciones.fromJsonList(jsonResponse);
       return listado.items;
     } else {
       return List.empty();
@@ -141,7 +145,8 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/Listar-unidades-territoriales'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/Listar-unidades-territoriales'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -153,14 +158,15 @@ class ProviderAprobacionPlanes {
     } else {
       return List.empty();
     }
-  }Future<List<UnidadesTerritoriales>>? ListarUnidadesTerritorialesTambook() async {
-    var logUser = await DatabasePr.db.loginUser();
-    var headers = {
+  }
 
-      'Content-Type': 'application/json'
-    };
+  Future<List<UnidadesTerritoriales>>?
+      ListarUnidadesTerritorialesTambook() async {
+    var logUser = await DatabasePr.db.loginUser();
+    var headers = {'Content-Type': 'application/json'};
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/Listar-unidades-territoriales-tambook'),
+      Uri.parse(
+          '${AppConfig.backendsismonitor}/programaciongit/Listar-unidades-territoriales-tambook'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -182,13 +188,13 @@ class ProviderAprobacionPlanes {
     };
     if (ut != "x") {
       http.Response response = await http.get(
-        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/ListarTambosDependientes/$ut'),
+        Uri.parse(
+            '${AppConfig.backendsismonitor}/programaciongit/ListarTambosDependientes/$ut'),
         headers: headers,
       );
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         final listado = ListaTambosDependientes.fromJsonList(jsonResponse);
-        print(listado.items[0].idUnidadesTerritoriales);
         return listado.items;
       } else {
         return List.empty();
@@ -211,5 +217,4 @@ class ProviderAprobacionPlanes {
     }
     return List.empty();
   }
-
 }

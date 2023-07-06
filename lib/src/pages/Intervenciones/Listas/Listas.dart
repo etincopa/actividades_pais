@@ -1,3 +1,4 @@
+import 'package:actividades_pais/src/datamodels/Clases/EquipoMantenimiento.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DatosPlanMensual.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ParticipantesIntranet.dart';
@@ -70,8 +71,8 @@ class Listas {
       title: Text(
           '${band.primerNombre! == '' ? band.nombre : ''} ${band.segundoNombre! == '' ? band.nombre2 : ''}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: Text('${band.fechaNacimiento}',
-          style: const TextStyle(fontSize: 10)),
+      subtitle:
+          Text('${band.fechaNacimiento}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -110,8 +111,8 @@ class Listas {
       ), */
       title: Text('${band.nombre} ${band.nombre2}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: Text('${band.fechaNacimiento}',
-          style: const TextStyle(fontSize: 10)),
+      subtitle:
+          Text('${band.fechaNacimiento}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -150,8 +151,8 @@ class Listas {
       ), */
       title: Text('${band.nombre} ${band.nombre2}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: Text(band.fecha_nacimiento,
-          style: const TextStyle(fontSize: 10)),
+      subtitle:
+          Text(band.fecha_nacimiento, style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -525,8 +526,8 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.puntoAtencion} \n ${band.codigoUbigeo}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle: Text(band.plataforma,
-                style: const TextStyle(fontSize: 10)),
+            subtitle:
+                Text(band.plataforma, style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -715,7 +716,7 @@ class Listas {
     return Card(
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(10),
       elevation: 7,
       child: Column(
         children: <Widget>[
@@ -744,11 +745,11 @@ class Listas {
                   width: 1,
                 ),
                 SizedBox(
-                  width: 240,
+                  width: 200,
                   child: Text(
-                      'Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Region: ${band.departamento}',
+                      'Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Región: ${band.departamento}\n Institución: ${band.tipoUsuario}\n Sector: ${band.sector}',
                       style: const TextStyle(
-                          fontSize: 10.5, fontWeight: FontWeight.bold)),
+                          fontSize: 10, fontWeight: FontWeight.bold)),
                 ),
                 const Divider(
                   color: Colors.blueAccent,
@@ -770,7 +771,7 @@ class Listas {
                     textAlign: TextAlign.justify,
                     '${band.descripcion}',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.w800,
                     )),
                 const SizedBox(height: 10),
@@ -813,8 +814,8 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.idTicket} \n${band.usuarioAsignado}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle: Text('${band.material}',
-                style: const TextStyle(fontSize: 10)),
+            subtitle:
+                Text('${band.material}', style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -839,6 +840,97 @@ class Listas {
               ],
             ),
             onTap: callback,
+          )
+        ],
+      ),
+    );
+  }
+
+  Card cardEquipoMantenimiento(EquipoMantenimiento band,
+      {descarga, editar, descargarPdf, delete}) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.all(10),
+      elevation: 10,
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(
+              Icons.text_snippet_sharp,
+              color: Colors.black,
+            ),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
+            title: Text(band.nombresApellidos ?? '',
+                style: const TextStyle(fontSize: 13)),
+            subtitle: Text('${band.observacion}',
+                style: const TextStyle(fontSize: 10)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 70,
+                  child: Text(
+                    '${band.descripcionTipoMantenimiento}',
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ),
+                SizedBox(
+                  width: 70,
+                  child: Text(
+                    '${band.fechaMantenimiento}',
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ),
+              ],
+              /* onTap: callback,*/
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    band.informeTecnico != null
+                        ? InkWell(
+                            onTap: descarga,
+                            child: const Icon(
+                              Icons.file_download,
+                              color: Colors.green,
+                            ))
+                        : Container(),
+                    SizedBox(
+                      width: band.informeTecnico != null ? 120.0 : 0,
+                      child: Text(
+                        band.informeTecnico ?? '',
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                    )
+                  ],
+                ),
+                /* InkWell(
+                    onTap: editar,
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.green,
+                    )),*/
+                InkWell(
+                  onTap: descargarPdf,
+                  child: const Icon(
+                    Icons.picture_as_pdf,
+                    color: Colors.black,
+                  ),
+                ),
+                InkWell(
+                  onTap: delete,
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),
@@ -950,6 +1042,7 @@ class Listas {
                   width: 120,
                   child: Text(
                       '${band.plataformaDescripcion}\n'
+                      'UT: ${band.unidadTerritorialDescripcion}\n'
                       '${band.idProgramacion}\n'
                       '${band.tipoPlan}\n',
                       style: const TextStyle(

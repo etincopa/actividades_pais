@@ -53,7 +53,7 @@ class ImageUtil {
           return Container(
             alignment: alignment ?? Alignment.center,
             height: 50.0,
-            child: Image.asset('assets/Monitor/logo.png'),
+            child: Image.asset('assets/TAMBO_DEFECTO.jpeg'),
           );
         },
       );

@@ -3,6 +3,8 @@ import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
+import 'package:actividades_pais/backend/model/atencionesRegionResponse.dart';
+import 'package:actividades_pais/backend/model/atencionesSectorialResponse.dart';
 import 'package:actividades_pais/backend/model/atenciones_usuarios_total_model.dart';
 import 'package:actividades_pais/backend/model/avance_metas.dart';
 import 'package:actividades_pais/backend/model/cantidad_tambo_region.dart';
@@ -13,6 +15,7 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
+import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/historial_gestor_model.dart';
 import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
@@ -50,6 +53,7 @@ import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambo_ruta_model.dart';
 import 'package:actividades_pais/backend/model/tambo_servicio_basico_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/backend/repository/main2_repo.dart';
 import 'package:actividades_pais/util/check_connection.dart';
@@ -1146,6 +1150,20 @@ class MainService {
     return aResp;
   }
 
+  Future<List<AtencionesSectorialesModel>> getReporteSectorial(
+      String tipo, String anio, String mes, String sector) async {
+    List<AtencionesSectorialesModel> aResp =
+        await Get.find<MainRepo>().getReporteSectorial(tipo, anio, mes, sector);
+    return aResp;
+  }
+
+  Future<List<AtencionesRegionModel>> getReporteAtencionesRegion(
+      String anio, String mes, String region) async {
+    List<AtencionesRegionModel> aResp = await Get.find<MainRepo>()
+        .getReporteAtencionesRegion(anio, mes, region);
+    return aResp;
+  }
+
   Future<List<IndicadorInternetModel>> getIndicadorInternet(
       String idTipo) async {
     List<IndicadorInternetModel> aResp =
@@ -1262,6 +1280,31 @@ class MainService {
   Future<List<TambosMapaModel>> UbicacionTambo(int snip) async {
     List<TambosMapaModel> aFind =
         await Get.find<MainRepo>().UbicacionTambo(snip);
+    return aFind;
+  }
+
+  Future<TramaRespApiDto> tockenUsuario({
+    required TockenUsuariosModel o,
+  }) async {
+    TramaRespApiDto oResp = await Get.find<MainRepo>().tockenUsuario(o);
+    return oResp;
+  }
+
+  Future<RespBase64FileDto> getReporteCategorizacion(
+    String categoria,
+  ) async {
+    ///Obtiene fich tecnica PDF del tambo en formato Base64
+    RespBase64FileDto aFind =
+        await Get.find<MainRepo>().getReporteCategorizacion(categoria);
+    return aFind;
+  }
+
+  Future<RespBase64FileDto> getReporteTambosPoblacion(
+    String ut,
+  ) async {
+    ///Obtiene fich tecnica PDF del tambo en formato Base64
+    RespBase64FileDto aFind =
+        await Get.find<MainRepo>().getReporteTambosPoblacion(ut);
     return aFind;
   }
 }

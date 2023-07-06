@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
+import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/IntervencionesHome.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
@@ -55,6 +58,8 @@ class _HomePagePais extends State<HomePagePais> {
   var modalidad = '';
   int? dniPrueba;
 
+  MainController mainCtr = MainController();
+
   String? token;
 
   String long = '';
@@ -63,6 +68,8 @@ class _HomePagePais extends State<HomePagePais> {
 
   bool cargo = false;
   List<Perfil> idMenuPadre = [];
+
+  TockenUsuariosModel tocken = TockenUsuariosModel.empty();
 
   @override
   void initState() {
@@ -77,7 +84,7 @@ class _HomePagePais extends State<HomePagePais> {
     verificargps();
     datosParaPerfil();
     mostrarNombre();
-    initPlatform();
+    //initPlatform();
   }
 
   perfil() async {
@@ -222,6 +229,38 @@ class _HomePagePais extends State<HomePagePais> {
           );
 
           break;
+
+        case '80':
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1009',
+              name: 'TileParqueInfomatico'.tr,
+              types: const ['Ver'],
+              image: icon6,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1007',
+              name: 'SEGUIMIENTO Y MONITOREO',
+              types: const ['Ver'],
+              image: icon5,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+          aHomeOptions.add(
+            HomeOptions(
+              code: 'OPT1003',
+              name: 'TileIntervencion'.tr,
+              types: const ['Ver'],
+              image: icon4,
+              color: const Color(0xFF78b8cd),
+            ),
+          );
+
+          break;
+
         case '110':
           aHomeOptions.add(
             HomeOptions(
@@ -646,7 +685,8 @@ class _HomePagePais extends State<HomePagePais> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const IntervencionesHome(),
+                                builder: (context) =>
+                                    const IntervencionesHome(),
                               ),
                             );
                             /* Navigator.push(
@@ -750,25 +790,28 @@ class _HomePagePais extends State<HomePagePais> {
 
   Future<void> initPlatform() async {
     var res = await DatabasePr.db.loginUser();
+    String toquen = '';
+    tocken.idUsuario = res[0].id.toString();
+    tocken.ipmaq = '0.0.0.0';
 
-    print("USUARIO ID ${res[0].id ?? ''}");
     await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
 
     await OneSignal.shared
         .getDeviceState()
-        .then((value) => {print("IDS ${value!.userId}")});
+        .then((value) => {toquen = value!.userId ?? ''});
 
-    /*OneSignal.shared
-        .promptUserForPushNotificationPermission()
-        .then((accepted) {});
-    await OneSignal.shared
-        .getDeviceState()
-        .then((value) => {print("IDS ${value!.userId}")});*/
+    if (toquen != '' && toquen.isNotEmpty && toquen != '0') {
+      tocken.tocken = toquen;
+      TramaRespApiDto resp =
+          await mainCtr.insertarTockenUsuario(tockens: tocken);
+    }
 
     OneSignal.shared
         .setSubscriptionObserver((OSSubscriptionStateChanges changes) async {
       String onesignalUserId = changes.to.userId ?? '';
-      print('Player ID CHANGED: $onesignalUserId');
+      tocken.tocken = onesignalUserId;
+      TramaRespApiDto resp =
+          await mainCtr.insertarTockenUsuario(tockens: tocken);
     });
   }
 }

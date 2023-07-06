@@ -1,4 +1,5 @@
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
+import 'package:actividades_pais/src/datamodels/Clases/Tambos/TipoGobiernoResponse.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderTambok.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
@@ -26,10 +27,14 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
   ];
   final GlobalKey<BackdropScaffoldState> _backdropKey = GlobalKey();
 
+  List<TipoGobiernoResponse> tipoGobiernos = [];
+  List<TipoGobiernoResponse> sectores = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    obtenerListaTipoGobierno(0);
     controller.addListener(_onlistener);
   }
 
@@ -58,178 +63,279 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
   Future<void> traerPaguinado(pageSize) async {
     // await Future.delayed(const Duration(seconds: 1));
     //  pageIndexQ = pageIndex;
-    await ProviderTambok()
-        .listaTamboServicioIntervencionesGeneral(pag: 1, sizePag: pageSize);
+    await ProviderTambok().listaTamboServicioIntervencionesGeneral(
+        gobierno: 0, sector: 0, pag: 1, sizePag: pageSize);
+    setState(() {});
+  }
+
+  Future<void> obtenerListaTipoGobierno(tipo) async {
+    TipoGobiernoResponse oDefault = TipoGobiernoResponse();
+    oDefault.idSector = 0;
+    oDefault.idTipoGobierno = 0;
+    oDefault.nombre = "TODOS LOS TIPOS DE GOBIERNO";
+
+    tipoGobiernos = await ProviderTambok().obtenerTipoGobierno(tipo) ?? [];
+    tipoGobiernos.add(oDefault);
+    tipoGobiernos
+        .sort((a, b) => a.idTipoGobierno!.compareTo(b.idTipoGobierno!));
+
+    //print(tipoGobiernos[0].nombre);
     setState(() {});
   }
 
   String? tipoIntervencion = '1';
+  String? idTipoGobierno = '0';
+  String? idSector = '0';
 
   @override
   Widget build(BuildContext context) {
     Listas listas = Listas();
     return BackdropScaffold(
-       key: _backdropKey,
-      appBar: BackdropAppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        // backgroundColor: AppConfig.primaryColor,
-        leading:     InkWell(
-          child: const Icon(
-            Icons.restart_alt_sharp,
-            color: Colors.black,
-          ),
-          onTap: () async {
-            pageSizeQ = 10;
-            tipoIntervencion = '1';
+        key: _backdropKey,
+        appBar: BackdropAppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          // backgroundColor: AppConfig.primaryColor,
+          leading: InkWell(
+            child: const Icon(
+              Icons.restart_alt_sharp,
+              color: Colors.black,
+            ),
+            onTap: () async {
+              pageSizeQ = 10;
+              tipoIntervencion = '1';
 
-            setState(() {
-            });
-          },
-        ),
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "INTERVENCIONES",
-          style: TextStyle(fontSize: 15, color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: const <Widget>[
-          BackdropToggleButton(
-            color: Colors.black,
-            icon: AnimatedIcons.list_view,
+              setState(() {});
+            },
           ),
-
-        ],
-      ),
-      frontLayerBackgroundColor: Colors.white,
-      //frontLayerBorderRadius: BorderRadius.horizontal(),
-      backLayerBackgroundColor: Colors.white60,
-      frontLayer: FutureBuilder<List<TamboServicioIntervencionesGeneral>>(
-        future: ProviderTambok().listaTamboServicioIntervencionesGeneral(
-            pag: 1, sizePag: pageSizeQ,tipo: tipoIntervencion),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<TamboServicioIntervencionesGeneral>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.hasData == false) {
-              return const Center(
-                child: Text("¡No existen registros"),
-              );
-            } else {
-              final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.isEmpty) {
+          automaticallyImplyLeading: false,
+          title: const Text(
+            "INTERVENCIONES",
+            style: TextStyle(fontSize: 15, color: Colors.black),
+          ),
+          centerTitle: true,
+          actions: const <Widget>[
+            BackdropToggleButton(
+              color: Colors.black,
+              icon: AnimatedIcons.list_view,
+            ),
+          ],
+        ),
+        frontLayerBackgroundColor: Colors.white,
+        //frontLayerBorderRadius: BorderRadius.horizontal(),
+        backLayerBackgroundColor: Colors.white60,
+        frontLayer: FutureBuilder<List<TamboServicioIntervencionesGeneral>>(
+          future: ProviderTambok().listaTamboServicioIntervencionesGeneral(
+              pag: 1,
+              sizePag: pageSizeQ,
+              tipo: tipoIntervencion,
+              gobierno: idTipoGobierno,
+              sector: idSector),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<TamboServicioIntervencionesGeneral>>
+                  snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.hasData == false) {
                 return const Center(
-                  child: Text(
-                    'No hay informacion',
-                    style: TextStyle(fontSize: 19),
-                  ),
+                  child: Text("¡No existen registros"),
                 );
               } else {
-                return Column(
-                  children: [
-                    Expanded(
-                        child: RefreshIndicator(
-                            onRefresh: resetlista,
-                            child: ListView.builder(
-                              controller: controller,
-                              itemCount: listaPersonalAux.length,
-                              itemBuilder: (context, i) =>
-                                  listas.cardHistrialTambosInter(
-                                listaPersonalAux[i],
-                                () async {
-                                  var status = await Permission.storage.status;
-                                  if (status != PermissionStatus.granted) {
-                                    status = await Permission.storage.request();
-                                    setState(() {});
-                                  }
-                                  await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              FichaIntervencion(
-                                                  listaPersonalAux[i]
-                                                      .idProgramacion!, listaPersonalAux[i]
-                                                  .fecha!)));
-                                },
-                              ),
-                            ))),
-                    if (isLoading == true)
-                      const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                  ],
-                );
+                final listaPersonalAux = snapshot.data;
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No hay informacion',
+                      style: TextStyle(fontSize: 19),
+                    ),
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Expanded(
+                          child: RefreshIndicator(
+                              onRefresh: resetlista,
+                              child: ListView.builder(
+                                controller: controller,
+                                itemCount: listaPersonalAux.length,
+                                itemBuilder: (context, i) =>
+                                    listas.cardHistrialTambosInter(
+                                  listaPersonalAux[i],
+                                  () async {
+                                    var status =
+                                        await Permission.storage.status;
+                                    if (status != PermissionStatus.granted) {
+                                      status =
+                                          await Permission.storage.request();
+                                      setState(() {});
+                                    }
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                FichaIntervencion(
+                                                    listaPersonalAux[i]
+                                                        .idProgramacion!,
+                                                    listaPersonalAux[i]
+                                                        .fecha!)));
+                                  },
+                                ),
+                              ))),
+                      if (isLoading == true)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                    ],
+                  );
+                }
               }
             }
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
-      backLayer:ListView(
-        children: [
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
+        backLayer: ListView(children: [
           Container(
-            margin: const EdgeInsets.all(20),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
+              margin: const EdgeInsets.all(20),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.account_balance_wallet_outlined,
+                            size: 15, color: Colors.grey),
+                        const SizedBox(width: 13),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            value: tipoIntervencion,
+                            onChanged: (String? newValue) {
+                              tipoIntervencion = newValue;
 
-                  Row(
-                    children: [
-                      const Icon(Icons.account_balance_wallet_outlined,
-                          size: 15, color: Colors.grey),
-                      const SizedBox(width: 13),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          value: tipoIntervencion,
-                          onChanged: (String? newValue) {
-                            tipoIntervencion = newValue;
-
-                          /*  setState(() {
+                              /*  setState(() {
 
                             });*/
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Tipo Intervencion',
+                            },
+                            decoration: const InputDecoration(
+                              labelText: 'Tipo Intervencion',
+                            ),
+                            items: tipoIntervencions.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item["value"],
+                                child: Text(
+                                  item["descripcion"]!,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          items: tipoIntervencions.map((item) {
-                            return DropdownMenuItem<String>(
-                              value: item["value"],
-                              child: Text(
-                                item["descripcion"]!,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            );
-                          }).toList(),
                         ),
-                      ),
-                    ],
-                  ),
-                   const SizedBox(height: 15),
-                  Container(
-                    //  decoration: Servicios().myBoxDecoration(),
-                      margin: const EdgeInsets.only(right: 10, left: 10),
-                      height: 40.0,
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppConfig.primaryColor,
-                        ),
-                        onPressed: () async {
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.account_balance_wallet_outlined,
+                            size: 15, color: Colors.grey),
+                        const SizedBox(width: 13),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            value: idTipoGobierno,
+                            onChanged: (String? newValue) async {
+                              var sectores = await ProviderTambok()
+                                      .obtenerTipoGobierno(newValue) ??
+                                  [];
 
-                         await  ProviderTambok().listaTamboServicioIntervencionesGeneral(
-                              pag: 1, sizePag: pageSizeQ,tipo: tipoIntervencion);
-                         _backdropKey.currentState!.fling();
-                           setState(() {
-                           });
-                          //_loadData();
-                        },
-                        child: const Text("FILTRAR"),
-                      )),
-        ],
-      ),))]
-    ));
+                              TipoGobiernoResponse oDefault =
+                                  TipoGobiernoResponse();
+                              oDefault.idSector = 0;
+                              oDefault.idTipoGobierno = 0;
+                              oDefault.nombre = "TODOS LOS SECTORES";
+
+                              sectores.add(oDefault);
+
+                              sectores.sort(
+                                  (a, b) => a.idSector!.compareTo(b.idSector!));
+
+                              setState(() {
+                                sectores = sectores;
+                                idTipoGobierno = newValue;
+                                idSector = "0";
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              labelText: 'Tipo de Gobierno',
+                            ),
+                            items: tipoGobiernos.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item.idTipoGobierno.toString(),
+                                child: Text(
+                                  item.nombre!,
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.account_balance_wallet_outlined,
+                            size: 15, color: Colors.grey),
+                        const SizedBox(width: 13),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            isExpanded: true,
+                            value: idSector == "0" ? null : idSector,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                idSector = newValue;
+                              });
+                            },
+                            decoration: const InputDecoration(
+                              labelText: 'Seleccione sector',
+                            ),
+                            items: sectores.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item.idSector.toString(),
+                                child: Text(
+                                  item.nombre!,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    Container(
+                        //  decoration: Servicios().myBoxDecoration(),
+                        margin: const EdgeInsets.only(right: 10, left: 10),
+                        height: 40.0,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppConfig.primaryColor,
+                          ),
+                          onPressed: () async {
+                            await ProviderTambok()
+                                .listaTamboServicioIntervencionesGeneral(
+                                    pag: 1,
+                                    sizePag: pageSizeQ,
+                                    tipo: tipoIntervencion,
+                                    gobierno: idTipoGobierno,
+                                    sector: idSector);
+                            _backdropKey.currentState!.fling();
+                            setState(() {});
+                            //_loadData();
+                          },
+                          child: const Text("FILTRAR"),
+                        )),
+                  ],
+                ),
+              ))
+        ]));
   }
 
   Widget buildSwipeActionRigth() => Container(

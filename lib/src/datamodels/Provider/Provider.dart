@@ -30,6 +30,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+//import 'package:mac_address/mac_address.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Clases/Tambos/IntentosRegistrosFallecidos.dart';
@@ -83,7 +84,8 @@ class ProviderDatos {
 
   Future<String> guardarCierre(CierreUsuario cierreUsuario) async {
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/registroCierreActividad'),
+        Uri.parse(
+            '${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/registroCierreActividad'),
         headers: headers,
         body: '{  "descripcion":"${cierreUsuario.descripcion}",'
             '"dni" :"${cierreUsuario.dni}",'
@@ -105,7 +107,8 @@ class ProviderDatos {
   Future<String> registroUbicacionUsuario(
       UbicacionUsuario ubicacionUsuario) async {
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/registroUbicacionUsuario'),
+        Uri.parse(
+            '${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/registroUbicacionUsuario'),
         headers: headers,
         body: '{'
             ' "actividad": "${ubicacionUsuario.actividad}",'
@@ -127,7 +130,8 @@ class ProviderDatos {
 
   Future gettiempo() async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/tiempo'),
+        Uri.parse(
+            '${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/tiempo'),
         headers: headers);
 
     if (response.statusCode == 200) {
@@ -138,12 +142,12 @@ class ProviderDatos {
 
   Future<List<ActividadesTambo>> getactividades() async {
     http.Response response = await http.get(
-        Uri.parse('${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/actividades'),
+        Uri.parse(
+            '${AppConfig.urlBackendMovil}backendsismonitor/public/tracking/actividades'),
         headers: headers);
 
     if (response.statusCode == 200) {
-      final vias =
-          ActividadesTambos.fromJsonList(json.decode(response.body));
+      final vias = ActividadesTambos.fromJsonList(json.decode(response.body));
       return vias.items;
     } else if (response.statusCode == 400) {}
     return List.empty();
@@ -229,7 +233,6 @@ class ProviderDatos {
 
   Future<List<TramaIntervencion>> getListaTramaIntervencion(snip,
       {snippre}) async {
-
     if (snip == 0) {
       snip = snippre;
     }
@@ -243,10 +246,12 @@ class ProviderDatos {
       await DatabasePr.db.eliminarTodoParticipanteEjecucion();
       print(snip);
       http.Response response = await http.get(
-        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarTramaIntervencion/$snip'),
+        Uri.parse(
+            '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarTramaIntervencion/$snip'),
       );
 
-      print(Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarTramaIntervencion/$snip'));
+      print(Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarTramaIntervencion/$snip'));
       if (response.statusCode == 200) {
         await getlistarCcpp(snip);
 
@@ -307,7 +312,8 @@ class ProviderDatos {
 
   Future<List<TipoDocumento>> getTipoDocumento() async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarTramaIntervencion/0s'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarTramaIntervencion/0s'),
     );
 
     if (response.statusCode == 200) {
@@ -328,7 +334,7 @@ class ProviderDatos {
     if (resfallecidos.dni.isNotEmpty) {
       var abc = await DatabasePr.db.getAllTasksConfigInicio();
       var login = await DatabasePr.db.loginUser();
-      String macAddress = "30-65-EC-6F-C4-58";
+      String macAddress = '00-B0-D0-63-C2-26'; //await GetMac.macAddress;
       DateTime now = DateTime.now();
       String formattedDate =
           '${DateFormat('yyyy-MM-dd kk:mm:ss').format(now)}.000';
@@ -359,7 +365,8 @@ class ProviderDatos {
         }
       } else {
         http.Response response = await http.get(
-          Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/validarfuncionario/$dni'),
+          Uri.parse(
+              '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/validarfuncionario/$dni'),
         );
 
         if (response.statusCode == 200) {
@@ -367,13 +374,13 @@ class ProviderDatos {
 
           if (jsonResponse["total"] == 0) {
             http.Response responseReniec = await http.get(
-              Uri.parse('${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
+              Uri.parse(
+                  '${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
             );
 
             if (responseReniec.statusCode == 200) {
               final jsonResponse = json.decode(responseReniec.body);
-              final listadostraba =
-                  Funcionarios.fromJsonReniec(jsonResponse);
+              final listadostraba = Funcionarios.fromJsonReniec(jsonResponse);
               listadostraba.estado_registro = "ENCONTRADO_SERVICIO_RENIEC";
               return listadostraba;
             } else if (response.statusCode == 400) {
@@ -388,7 +395,8 @@ class ProviderDatos {
           }
         } else {
           http.Response responseReniec = await http.get(
-            Uri.parse('${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
+            Uri.parse(
+                '${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
           );
 
           if (responseReniec.statusCode == 200) {
@@ -417,7 +425,7 @@ class ProviderDatos {
       print(idProgramacion);
       var abc = await DatabasePr.db.getAllTasksConfigInicio();
       var login = await DatabasePr.db.loginUser();
-      String macAddress = "30-65-EC-6F-C4-58";
+      String macAddress = '00-B0-D0-63-C2-26'; //await GetMac.macAddress;
       DateTime now = DateTime.now();
       String formattedDate =
           '${DateFormat('yyyy-MM-dd kk:mm:ss').format(now)}.000';
@@ -455,14 +463,14 @@ class ProviderDatos {
           return resdb;
         } else {
           http.Response responseReniec = await http.get(
-            Uri.parse('${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
+            Uri.parse(
+                '${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
           );
           if (responseReniec.statusCode == 200) {
             print("5....");
             final jsonResponse = json.decode(responseReniec.body);
 
-            final listadostraba =
-                Participantes.fromJsonReniec(jsonResponse);
+            final listadostraba = Participantes.fromJsonReniec(jsonResponse);
             listadostraba.estado = "ENCONTRADO_SERV_RENIEC";
             print(listadostraba.apellidoPaterno);
             return listadostraba;
@@ -478,7 +486,8 @@ class ProviderDatos {
   Future<List<ListarCcpp>> getlistarCcpp(snip) async {
     DatabasePr.db.eliminarTodoListarCcpp();
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarCcpp/$snip'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarCcpp/$snip'),
     );
 
     if (response.statusCode == 200) {
@@ -506,13 +515,13 @@ class ProviderDatos {
     var abc = await DatabasePr.db.getAllTasksConfigInicio();
 
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listaProvinciaporSnp/${abc[0].snip}'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listaProvinciaporSnp/${abc[0].snip}'),
     );
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          Provincias.fromJsonList(jsonResponse["response"]);
+      final listadostraba = Provincias.fromJsonList(jsonResponse["response"]);
       return listadostraba.items;
     } else if (response.statusCode == 400) {}
     return List.empty();
@@ -520,12 +529,12 @@ class ProviderDatos {
 
   Future<List<Distrito>> getDistritos(ubigeo) async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarDistritosporUbigeo/$ubigeo'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarDistritosporUbigeo/$ubigeo'),
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          Distritos.fromJsonList(jsonResponse["response"]);
+      final listadostraba = Distritos.fromJsonList(jsonResponse["response"]);
       return listadostraba.items;
     } else if (response.statusCode == 400) {}
     return List.empty();
@@ -533,7 +542,8 @@ class ProviderDatos {
 
   Future<List<CentroPoblado>> getCentroPoblado(ubigeo) async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarCentroPobladoporUbigeo/$ubigeo'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarCentroPobladoporUbigeo/$ubigeo'),
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -552,7 +562,8 @@ class ProviderDatos {
     //await DatabasePr.db.eliminarTodoEntidadFuncionario();
 
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarEntidadesFuncionarios/$idProgramacion'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarEntidadesFuncionarios/$idProgramacion'),
     );
     print(response.body);
     if (response.statusCode == 200) {
@@ -668,7 +679,7 @@ class ProviderDatos {
 
   Future<List<ParticipantesIntervenciones>>
       getInsertParticipantesIntervencionesMovil(unidadTerritorial, {ut}) async {
-    if(unidadTerritorial==""){
+    if (unidadTerritorial == "") {
       unidadTerritorial = ut;
     }
     late File jsonFile;
@@ -681,9 +692,11 @@ class ProviderDatos {
       jsonFile = File("${dir.path}/$fileName");
       fileExists = jsonFile.existsSync();
     });
-    print('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial');
+    print(
+        '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial');
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial'),
     );
 
     print(response.statusCode);
@@ -716,9 +729,11 @@ class ProviderDatos {
 
     ///print("dsadsad");
     ///await DatabaseParticipantes.db.DeleteAllParticitantesInterv();
-    print(Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial'));
+    print(Uri.parse(
+        '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial'));
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarParticipantesIntervencionesMovil/$unidadTerritorial'),
     );
     if (response.statusCode == 200) {
       if (fileExists) {
@@ -747,8 +762,7 @@ class ProviderDatos {
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          ListarPaises.fromJsonList(jsonResponse["response"]);
+      final listadostraba = ListarPaises.fromJsonList(jsonResponse["response"]);
       return listadostraba.items;
     } else if (response.statusCode == 400) {}
     return List.empty();
@@ -761,7 +775,8 @@ class ProviderDatos {
       return null;
     }
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/validarExtranjeros/$numDocExtrangero'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/validarExtranjeros/$numDocExtrangero'),
     );
 
     if (response.statusCode == 200) {
@@ -770,7 +785,8 @@ class ProviderDatos {
         return null;
       } else {
         http.Response response2 = await http.get(
-          Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/pintarExtranjerosBD/${jsonResponse["response"][0]["id_participante"]}'),
+          Uri.parse(
+              '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/pintarExtranjerosBD/${jsonResponse["response"][0]["id_participante"]}'),
         );
         print(response2.body);
         final jsonResponse2 = json.decode(response2.body);
@@ -812,7 +828,8 @@ class ProviderDatos {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
     http.Response usuariodb = await http.get(
-        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
+        Uri.parse(
+            '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
         headers: headers);
     final jsonResponse = json.decode(usuariodb.body);
     var usu = jsonResponse["response"][0]["id_usuario"];
@@ -823,7 +840,8 @@ class ProviderDatos {
   Future<int> subirFuncionarios(Funcionarios funcionarios) async {
     funcionarios.idUsuario = await user();
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/registrarFuncionariosMovil'),
+        Uri.parse(
+            '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/registrarFuncionariosMovil'),
         body: jsonEncode(funcionarios),
         headers: headers);
     if (response.statusCode == 200) {
@@ -839,7 +857,8 @@ class ProviderDatos {
     participantes.idUsuario = await user();
 
     http.Response response = await http.post(
-        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/registrarParticipanteMovil'),
+        Uri.parse(
+            '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/registrarParticipanteMovil'),
         body: jsonEncode(participantes),
         headers: headers);
 
@@ -854,7 +873,8 @@ class ProviderDatos {
               int.parse(jsonResponse2["response"]);
 
           await http.post(
-              Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/registrarParticipanteServicioMovil'),
+              Uri.parse(
+                  '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/registrarParticipanteServicioMovil'),
               body: jsonEncode(dataBDServicioPart[i]),
               headers: headers);
         }
@@ -871,7 +891,8 @@ class ProviderDatos {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
     http.Response usuariodb = await http.get(
-        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
+        Uri.parse(
+            '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
         headers: headers);
     final jsonResponse = json.decode(usuariodb.body);
 
@@ -901,7 +922,8 @@ class ProviderDatos {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
     http.Response usuariodb = await http.get(
-        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
+        Uri.parse(
+            '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
         headers: headers);
 
     final jsonResponseusu = json.decode(usuariodb.body);
@@ -984,18 +1006,18 @@ class ProviderDatos {
   }
 */
   guardarProvincia(snip, {snippre}) async {
-    if(snip==0){
-     snip= snippre;
+    if (snip == 0) {
+      snip = snippre;
     }
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listaProvinciaporSnp/$snip'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listaProvinciaporSnp/$snip'),
     );
     await DatabaseProvincia.db.initDB();
     await DatabaseProvincia.db.eliminarProvincias();
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          Provincias.fromJsonList(jsonResponse["response"]);
+      final listadostraba = Provincias.fromJsonList(jsonResponse["response"]);
       for (var i = 0; i < listadostraba.items.length; i++) {
         var resp = Provincia(
             provinciaUbigeo: listadostraba.items[i].provinciaUbigeo,
@@ -1011,12 +1033,12 @@ class ProviderDatos {
   //provincia
   guardarJsDistrito(ubigeo) async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarDistritosporUbigeo/$ubigeo'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarDistritosporUbigeo/$ubigeo'),
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadostraba =
-          Distritos.fromJsonList(jsonResponse["response"]);
+      final listadostraba = Distritos.fromJsonList(jsonResponse["response"]);
       for (var i = 0; i < listadostraba.items.length; i++) {
         var resp = Distrito(
             distritoDescripcion: listadostraba.items[i].distritoDescripcion,
@@ -1029,7 +1051,8 @@ class ProviderDatos {
 
   guardarCentroPoblado(ubigeo) async {
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarCentroPobladoporUbigeoProvincia/$ubigeo'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarCentroPobladoporUbigeoProvincia/$ubigeo'),
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -1077,7 +1100,8 @@ class ProviderDatos {
     });
 
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/ListaFuncionariosIntervenciones'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/ListaFuncionariosIntervenciones'),
     );
 
     if (fileExists) {
@@ -1105,7 +1129,8 @@ class ProviderDatos {
     });
 
     http.Response response = await http.get(
-      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarPersonalFallecidos'),
+      Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarPersonalFallecidos'),
     );
     if (response.statusCode == 200) {
       if (fileExists) {
@@ -1132,7 +1157,8 @@ class ProviderDatos {
     var lista = await DatabasePr.db.ListarIntentosRegistrosFallecidos();
     for (var i = 0; i < lista.length; i++) {
       http.Response response = await http.post(
-          Uri.parse('${AppConfig.backendsismonitor}/programaciongit/guardarIntentosFallecidos'),
+          Uri.parse(
+              '${AppConfig.backendsismonitor}/programaciongit/guardarIntentosFallecidos'),
           headers: headers,
           body: json.encode(lista[i]));
       if (response.statusCode == 200) {
@@ -1163,7 +1189,8 @@ class ProviderDatos {
         await deleteFile(fileName);
       }
     } else {
-      print(Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/menus-rol-usuarios/$idRol'));
+      print(Uri.parse(
+          '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/menus-rol-usuarios/$idRol'));
       http.Response response = await http.get(Uri.parse(
           '${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/menus-rol-usuarios/$idRol'));
       if (response.statusCode == 200) {

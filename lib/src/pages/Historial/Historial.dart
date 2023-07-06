@@ -76,9 +76,9 @@ class _HistorialPageState extends State<HistorialPage> {
                   child: RefreshIndicator(
                       onRefresh: refreshList,
                       child: ListView.builder(
-                        itemCount: listaPersonalAux.length,
+                        itemCount: listaPersonalAux?.length,
                         itemBuilder: (context, i) {
-                          return _banTitle(listaPersonalAux[i]);
+                          return _banTitle(listaPersonalAux![i]);
                         },
                       )));
             }
@@ -112,7 +112,8 @@ class _HistorialPageState extends State<HistorialPage> {
       ),
       title: Text('${band.nombreTipoCheck} ($formattedTime)',
           style: const TextStyle(fontSize: 13)),
-      subtitle: Text('${band.tipoTrabajo}', style: const TextStyle(fontSize: 10)),
+      subtitle:
+          Text('${band.tipoTrabajo}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
