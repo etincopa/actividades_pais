@@ -1,5 +1,4 @@
 import 'package:actividades_pais/src/Utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlanesDeTrabajo extends StatelessWidget {

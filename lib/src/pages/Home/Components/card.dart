@@ -7,7 +7,7 @@ String _formattedPokeIndex(int index) {
 }
 
 String capitalizeFirstChar(String text) {
-  if (text == null || text.length <= 1) {
+  if (text.length <= 1) {
     return text.toUpperCase();
   }
 
@@ -103,7 +103,7 @@ class TiteCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.12),
+            color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.12),
           ),
         ),
       ),

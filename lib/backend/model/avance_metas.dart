@@ -15,7 +15,7 @@ class AvanceMetasModel {
   String? usuariosAtendidos;
   String? usuariosProgramados;
 
-  AvanceMetasModel.empty() {}
+  AvanceMetasModel.empty();
 
   AvanceMetasModel(
       {this.anio,

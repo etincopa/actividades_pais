@@ -5,7 +5,6 @@ import 'package:actividades_pais/backend/model/dto/login_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_program_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_token_dto.dart';
 import 'package:actividades_pais/backend/model/programa_actividad_model.dart';
-import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:logger/logger.dart';
 
 class Main2Repo {

@@ -10,9 +10,9 @@ class EstadoGuardar {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['estado'] = this.estado;
-    data['mensaje'] = this.mensaje;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['estado'] = estado;
+    data['mensaje'] = mensaje;
     return data;
   }
 }

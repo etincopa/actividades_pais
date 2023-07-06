@@ -12,10 +12,10 @@ class Subcategoria {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_subcategoria'] = this.idSubcategoria;
-    data['nombre_subcategoria'] = this.nombreSubcategoria;
-    data['id_entidad'] = this.idEntidad;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_subcategoria'] = idSubcategoria;
+    data['nombre_subcategoria'] = nombreSubcategoria;
+    data['id_entidad'] = idEntidad;
     return data;
   }
 }

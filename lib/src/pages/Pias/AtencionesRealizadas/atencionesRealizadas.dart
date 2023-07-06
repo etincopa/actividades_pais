@@ -1,17 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/Atencion.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Pias/Clima.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Pias/AtencionesRealizadas/CrearAtenciones.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../util/app-config.dart';
 
 class AtencionesRealizadas extends StatefulWidget {
   String idUnicoReporte = '';
 
-  AtencionesRealizadas(this.idUnicoReporte);
+  AtencionesRealizadas(this.idUnicoReporte, {super.key});
 
   @override
   State<AtencionesRealizadas> createState() => _AtencionesRealizadasState();
@@ -27,8 +24,8 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
   var sumaAtendidos = 0;
   var sumAtenciones = 0;
 
-  Future<Null> refresh() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refresh() async {
+    await Future.delayed(const Duration(seconds: 0));
     var ar = await DatabasePias.db.sumaAtenAtenc(widget.idUnicoReporte);
     sumaAtendidos = ar[0]["sumaAtendidos"] ?? 0;
     sumAtenciones = ar[0]["sumAtenciones"] ?? 0;
@@ -60,26 +57,26 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
         automaticallyImplyLeading: false,
       ),
       body: Container(
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           child: FutureBuilder<List<Atencion>>(
             future: DatabasePias.db.listarAtencion(widget.idUnicoReporte),
             builder:
                 (BuildContext context, AsyncSnapshot<List<Atencion>> snapshot) {
               if (!snapshot.hasData) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               final preguntas = snapshot.data;
-              if (preguntas!.length == 0) {
-                return Center(
+              if (preguntas!.isEmpty) {
+                return const Center(
                   child: Text("sin dato"),
                 );
               } else {
                 return Container(
                   child: ListView(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 420,
                         child: ListView.builder(
                           itemCount: preguntas.length,
@@ -88,22 +85,22 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10),
+                        margin: const EdgeInsets.only(top: 10),
                         child: Card(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 280,
                                 child: Text(
                                   "En este punto se logró atender un total \nde $sumAtenciones atenciones a través de $sumaAtendidos \npersonas atendidas.",
-                                  style: TextStyle(color: Colors.black),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 8,
                               ),
                             ],
@@ -129,7 +126,7 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
             refresh();
           }
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
@@ -146,9 +143,9 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
         refresh();
       },
       background: Container(
-          padding: EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8.0),
           color: Colors.red,
-          child: Align(
+          child: const Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Borrar Atencion',
@@ -159,14 +156,14 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               "${band.tipoDescripcion}",
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -180,7 +177,7 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             )
           ],
@@ -195,14 +192,14 @@ class _AtencionesRealizadasState extends State<AtencionesRealizadas> {
 
   showAlertDialogAgregar(
       titulo, BuildContext context, presse, pressno, controllerNovedad) {
-    Widget okButton = TextButton(child: Text("Guardar"), onPressed: presse);
-    Widget moButton = TextButton(child: Text("Cancelar"), onPressed: pressno);
+    Widget okButton = TextButton(onPressed: presse, child: const Text("Guardar"));
+    Widget moButton = TextButton(onPressed: pressno, child: const Text("Cancelar"));
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
       content: TextField(
         controller: controllerNovedad,
         maxLines: 5, //or null
-        decoration: InputDecoration.collapsed(hintText: "Insertar detalle"),
+        decoration: const InputDecoration.collapsed(hintText: "Insertar detalle"),
       ),
       actions: [okButton, moButton],
     );

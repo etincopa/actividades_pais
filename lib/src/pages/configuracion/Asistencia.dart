@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class Asistencia extends StatefulWidget {
@@ -19,7 +18,7 @@ class Asistencia extends StatefulWidget {
   String long = '';
   String lat = '';
 
-  Asistencia({this.imei = '', this.long='',this.lat=''});
+  Asistencia({super.key, this.imei = '', this.long='',this.lat=''});
 
   @override
   _AsistenciaState createState() => _AsistenciaState();
@@ -39,10 +38,10 @@ class _AsistenciaState extends State<Asistencia> {
   int unidadesOrganicas = 0;
   Color color = Colors.red;
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   var variable = "";
   var unidadTerritorial = "";
-  int _user = 0;
+  final int _user = 0;
   /*String long = '';
   String lat = '';*/
   var tipoAsistencia = 0;
@@ -52,7 +51,7 @@ class _AsistenciaState extends State<Asistencia> {
   int ok = 0;
   bool absorbing = false;
 
-  Servicios servicios = new Servicios();
+  Servicios servicios = Servicios();
   int idLugarDeprestacion = 0;
   int idTambo = 0;
   int idUnidTerritoriales = 0;
@@ -60,7 +59,7 @@ class _AsistenciaState extends State<Asistencia> {
   var seleccionarUnidOrganicas = "SELECCIONAR ACTIVIDAD";
 
   //prdats = ProviderDatos();
-  final _prdats = new ProviderDatos();
+  final _prdats = ProviderDatos();
 
   @override
   void initState() {
@@ -94,18 +93,19 @@ class _AsistenciaState extends State<Asistencia> {
     print("aqui pe mano: $valor}");
   }
 
+  @override
   Widget build(BuildContext context) {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFFEEEEEE),
+        backgroundColor: const Color(0xFFEEEEEE),
         body: NestedScrollView(
           controller: _scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
                   /*  Navigator.push(
                       context,
@@ -122,7 +122,7 @@ class _AsistenciaState extends State<Asistencia> {
                 expandedHeight: 50.0,
                 floating: false,
                 pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
+                flexibleSpace: const FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text('REGISTRAR BITACORA'),
                   stretchModes: [],
@@ -132,23 +132,23 @@ class _AsistenciaState extends State<Asistencia> {
           },
           body: SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.all(40),
+              margin: const EdgeInsets.all(40),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   cardNombre(_nombrePersona),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   if (unidadTerritorial != "")
-                    cardTambo("UT " + unidadTerritorial),
+                    cardTambo("UT $unidadTerritorial"),
                   cardTambo(variable),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   actividad(),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -220,9 +220,7 @@ class _AsistenciaState extends State<Asistencia> {
     cantidad = abc.length - 1;
     _nombrePersona = abc[cantidad].nombres.toUpperCase();
     dni = abc[cantidad].numeroDni.toString();
-    _apellidosPersona = abc[cantidad].apellidoPaterno.toUpperCase() +
-        ' ' +
-        abc[cantidad].apellidoMaterno.toUpperCase();
+    _apellidosPersona = '${abc[cantidad].apellidoPaterno.toUpperCase()} ${abc[cantidad].apellidoMaterno.toUpperCase()}';
     numeroDni = abc[cantidad].numeroDni;
     //cargo = abc[cantidad].cargo;
   }
@@ -237,7 +235,7 @@ class _AsistenciaState extends State<Asistencia> {
     });
   }
 
-  Future<Null> refreshList(tipo) async {
+  Future<void> refreshList(tipo) async {
     setState(() {
      // latlong();
       var a = UbicacionUsuario(
@@ -268,11 +266,11 @@ class _AsistenciaState extends State<Asistencia> {
 
   columprimero() {
     return Column(children: [
-      Text(
+      const Text(
         "Marcar inicio de actividades",
         style: TextStyle(fontSize: 20.0),
       ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       InkWell(
@@ -327,19 +325,19 @@ class _AsistenciaState extends State<Asistencia> {
 
           if (!snapshot.hasData) {
             if (snapshot.hasData == false) {
-              return Center(
+              return const Center(
                 child: Text("¡No existen registros!"),
               );
             } else {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
           }
           final preguntas = snapshot.data;
 
-          if (preguntas!.length == 0) {
-            return Center(
+          if (preguntas!.isEmpty) {
+            return const Center(
               child: Text("sin dato"),
             );
           } else {
@@ -351,7 +349,7 @@ class _AsistenciaState extends State<Asistencia> {
                 child: Container(
                     child: DropdownButton<ActividadesTambo>(
                   enableFeedback: false,
-                  underline: SizedBox(),
+                  underline: const SizedBox(),
                   isExpanded: true,
                   icon: Icon(
                     Icons.arrow_drop_down,
@@ -360,12 +358,12 @@ class _AsistenciaState extends State<Asistencia> {
                   ),
                   items: snapshot.data
                       ?.map((user) => DropdownMenuItem<ActividadesTambo>(
+                            value: user,
                             child: Text(
                               user.actividad,
                               style: TextStyle(
                                   color: Colors.blue[800], fontSize: 16),
                             ),
-                            value: user,
                           ))
                       .toList(),
                   onChanged: (ActividadesTambo? newVal) {
@@ -392,11 +390,11 @@ class _AsistenciaState extends State<Asistencia> {
 
   columnSegundo() {
     return Column(children: [
-      Text(
+      const Text(
         "Marcar termino de actividades",
         style: TextStyle(fontSize: 20.0),
       ),
-      SizedBox(
+      const SizedBox(
         height: 10,
       ),
       InkWell(
@@ -437,7 +435,7 @@ class _AsistenciaState extends State<Asistencia> {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllUbicacionUsuario();
 
-    if (abc.length > 0) {
+    if (abc.isNotEmpty) {
       ok = abc[abc.length - 1].tipo;
       if (ok == 0) {
         absorbing = false;
@@ -518,7 +516,7 @@ Widget cardNombre(nombre) {
       elevation: 19.0,
       color: Colors.white,
       child: Container(
-        margin: EdgeInsets.only(top: 3, left: 5, bottom: 5),
+        margin: const EdgeInsets.only(top: 3, left: 5, bottom: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -533,7 +531,7 @@ Widget cardNombre(nombre) {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 170,
                       child: Text(" $nombre",
                           style:
@@ -556,7 +554,7 @@ Widget cardTambo(nombre) {
       elevation: 19.0,
       color: Colors.white,
       child: Container(
-        margin: EdgeInsets.only(top: 3, left: 5, bottom: 5),
+        margin: const EdgeInsets.only(top: 3, left: 5, bottom: 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -570,7 +568,7 @@ Widget cardTambo(nombre) {
                         size: 40,
                         color: Colors.blue[900],
                       ),
-                      Container(
+                      SizedBox(
                         width: 190,
                         child: Text(" $nombre",
                             style: TextStyle(

@@ -42,13 +42,13 @@ class IntentosRegistrosFallecidos {
     };
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idPlataforma'] = this.idPlataforma;
-    data['idProgramacion'] = this.idProgramacion;
-    data['dni'] = this.dni;
-    data['idUsuarioReg'] = this.idUsuarioReg;
-    data['fechaReg'] = this.fechaReg;
-    data['ipmaqReg'] = this.ipmaqReg;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idPlataforma'] = idPlataforma;
+    data['idProgramacion'] = idProgramacion;
+    data['dni'] = dni;
+    data['idUsuarioReg'] = idUsuarioReg;
+    data['fechaReg'] = fechaReg;
+    data['ipmaqReg'] = ipmaqReg;
 
 
     return data;

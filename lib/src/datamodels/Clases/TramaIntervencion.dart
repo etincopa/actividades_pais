@@ -4,8 +4,8 @@ class TramaIntervenciones {
   TramaIntervenciones.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new TramaIntervencion.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = TramaIntervencion.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -106,37 +106,37 @@ class TramaIntervencion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['codigoIntervencion'] = this.codigoIntervencion;
-    data['codigoInterno'] = this.codigoInterno;
-    data['snip'] = this.snip;
-    data['id_departamento'] = this.idDepartamento;
-    data['departamento'] = this.departamento;
-    data['provincia'] = this.provincia;
-    data['distrito'] = this.distrito;
-    data['tambo'] = this.tambo;
-    data['tipoIntervencion'] = this.tipoIntervencion;
-    data['identificacionIntervencion'] = this.identificacionIntervencion;
-    data['fecha'] = this.fecha;
-    data['horaInicio'] = this.horaInicio;
-    data['horaFin'] = this.horaFin;
-    data['lugarIntervencion'] = this.lugarIntervencion;
-    data['tipoGobierno'] = this.tipoGobierno;
-    data['sector'] = this.sector;
-    data['programa'] = this.programa;
-    data['categoria'] = this.categoria;
-    data['subCategoria'] = this.subCategoria;
-    data['poblacion'] = this.poblacion;
-    data['atencion'] = this.atencion;
-    data['estado'] = this.estado;
-    data['fechaRegistro'] = this.fechaRegistro;
-    data['tipoActividad'] = this.tipoActividad;
-    data['servicio'] = this.servicio;
-    data['beneficiario'] = this.beneficiario;
-    data['descripcion_evento'] = this.descripcionEvento;
-    data['estadoAppMovil'] = this.estadoAppMovil;
-    data['idTipoIntervencion'] = this.idTipoIntervencion;
+    data['codigoIntervencion'] = codigoIntervencion;
+    data['codigoInterno'] = codigoInterno;
+    data['snip'] = snip;
+    data['id_departamento'] = idDepartamento;
+    data['departamento'] = departamento;
+    data['provincia'] = provincia;
+    data['distrito'] = distrito;
+    data['tambo'] = tambo;
+    data['tipoIntervencion'] = tipoIntervencion;
+    data['identificacionIntervencion'] = identificacionIntervencion;
+    data['fecha'] = fecha;
+    data['horaInicio'] = horaInicio;
+    data['horaFin'] = horaFin;
+    data['lugarIntervencion'] = lugarIntervencion;
+    data['tipoGobierno'] = tipoGobierno;
+    data['sector'] = sector;
+    data['programa'] = programa;
+    data['categoria'] = categoria;
+    data['subCategoria'] = subCategoria;
+    data['poblacion'] = poblacion;
+    data['atencion'] = atencion;
+    data['estado'] = estado;
+    data['fechaRegistro'] = fechaRegistro;
+    data['tipoActividad'] = tipoActividad;
+    data['servicio'] = servicio;
+    data['beneficiario'] = beneficiario;
+    data['descripcion_evento'] = descripcionEvento;
+    data['estadoAppMovil'] = estadoAppMovil;
+    data['idTipoIntervencion'] = idTipoIntervencion;
     return data;
   }
 

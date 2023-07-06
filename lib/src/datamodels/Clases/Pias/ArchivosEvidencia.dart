@@ -27,11 +27,11 @@ class ArchivosEvidencia {
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['idParteDiario'] = this.idParteDiario;
-    data['file'] = this.file;
-    data['idUnicoReporte'] = this.idUnicoReporte;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['idParteDiario'] = idParteDiario;
+    data['file'] = file;
+    data['idUnicoReporte'] = idUnicoReporte;
     return data;
   }
 

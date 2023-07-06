@@ -11,17 +11,15 @@ import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../../../../datamodels/Clases/ListaTipoGobierno.dart';
-import '../../../../datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 
 class AgregarEntidad extends StatefulWidget {
   //const AgregarEntidad(ismostar, {Key? key}) : super(key: key);
   bool ismostrar = false;
 
-  AgregarEntidad(this.ismostrar);
+  AgregarEntidad(this.ismostrar, {super.key});
 
   @override
   State<AgregarEntidad> createState() => _AgregarEntidadState();
@@ -39,8 +37,8 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
   List<Actividad> listActividad = [];
   List<Servicio> _servicios = [];
   List<Servicio> _serviciosSeleccionados = [];
-  List<String> _idServiciosSeleccionados = [];
-  List<String> _nombreServiciosSeleccionados = [];
+  final List<String> _idServiciosSeleccionados = [];
+  final List<String> _nombreServiciosSeleccionados = [];
 
 
 //  Accion() ;
@@ -57,7 +55,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
         appBar: AppBar(
             centerTitle: true,
             backgroundColor: AppConfig.primaryColor,
-            title: Text("AGREGAR ENTIDAD")),
+            title: const Text("AGREGAR ENTIDAD")),
         body: registroEntidades());
   }
 
@@ -73,7 +71,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                 value: value,
                 child: Text(
                   value.nombre!,
-                  style: TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 12),
                 ),
               );
             }).toList(),
@@ -91,7 +89,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                       value: value,
                       child: Text(
                         value.nombreSector!,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     );
                   }).toList(),
@@ -110,7 +108,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                       value: value,
                       child: Text(
                         value.nombre_programa,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     );
                   }).toList(),
@@ -129,7 +127,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                       value: value,
                       child: Text(
                         value.nombreCategoria!,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     );
                   }).toList(),
@@ -147,7 +145,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                       value: value,
                       child: Text(
                         value.nombreSubcategoria!,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     );
                   }).toList(),
@@ -165,7 +163,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                       value: value,
                       child: Text(
                         value.nombreTipoActividad!,
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     );
                   }).toList(),
@@ -190,9 +188,9 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                       .map((servicio) => MultiSelectItem<Servicio>(
                           servicio, servicio.nombreServicio!))
                       .toList(),
-                  title: Text('Seleccione los servicios'),
-                  selectedItemsTextStyle: TextStyle(color: Colors.blue),
-                  buttonText: Text('Servicios seleccionados'),
+                  title: const Text('Seleccione los servicios'),
+                  selectedItemsTextStyle: const TextStyle(color: Colors.blue),
+                  buttonText: const Text('Servicios seleccionados'),
                   onConfirm: (selectedItems) {
                     _serviciosSeleccionados = selectedItems;
                     for (int i = 0; i < _serviciosSeleccionados.length; i++) {
@@ -242,7 +240,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.save),
                     style: ElevatedButton.styleFrom(
-                        primary: AppConfig.primaryColor,
+                        backgroundColor: AppConfig.primaryColor,
                         //   shadowColor:
                         textStyle: const TextStyle(fontSize: 16),
                         minimumSize: const Size.fromHeight(72),
@@ -257,7 +255,7 @@ class _AgregarEntidadState extends State<AgregarEntidad> {
                     },
                     label: const Text('GUARDAR'),
                   ))
-              : new Container(),
+              : Container(),
 
         ],
       ),

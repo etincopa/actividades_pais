@@ -8,8 +8,8 @@ class ParticipanteEjecucions {
   ParticipanteEjecucions.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ParticipanteEjecucion.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ParticipanteEjecucion.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -34,11 +34,11 @@ class ParticipanteEjecucion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_entidad'] = this.id_entidad;
-    data['id_servicio'] = this.id_servicio;
-    data['nombre_servicio'] = this.nombre_servicio;
-    data['id_programacion'] = this.id_programacion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_entidad'] = id_entidad;
+    data['id_servicio'] = id_servicio;
+    data['nombre_servicio'] = nombre_servicio;
+    data['id_programacion'] = id_programacion;
     return data;
   }
 

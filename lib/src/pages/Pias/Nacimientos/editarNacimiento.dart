@@ -7,7 +7,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Pias/Archivos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/Nacimiento.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../util/app-config.dart';
 
@@ -16,7 +15,7 @@ class EditarNacimiento extends StatefulWidget {
   int id;
 
   EditarNacimiento(
-      {this.idUnicoReporte = '',
+      {super.key, this.idUnicoReporte = '',
       this.detalle = '',
       this.file1 = '',
       this.file2 = '',
@@ -65,16 +64,16 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
       appBar: AppBar(
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
         backgroundColor: AppConfig.primaryColor,
-        title: Text("Agregar Detalle Nacimiento"),
+        title: const Text("Agregar Detalle Nacimiento"),
       ),
       body: ListView(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 10, right: 10),
+            margin: const EdgeInsets.only(left: 10, right: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
 
@@ -84,7 +83,7 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(AppConfig.primaryColor),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Guardar',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -114,11 +113,11 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
+                  margin: const EdgeInsets.only(left: 10, right: 10),
                   child: Card(
                       color: Colors.grey[200],
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: TextField(
                           controller: controllerDetalle,
                           textCapitalization: TextCapitalization.sentences,
@@ -126,15 +125,15 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                             nacimiento.detalle = value;
                           },
                           maxLines: 5, //or null
-                          decoration: InputDecoration.collapsed(
+                          decoration: const InputDecoration.collapsed(
                               hintText: "Agregar Detalle"),
                         ),
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -147,21 +146,21 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                       onPressed: () {
                         selectCamera();
                       },
-                      child: Text(
+                      child: const Text(
                         'Agregar Imagen',
                         style: TextStyle(color: Colors.white),
                       ),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 for (var i in listArc) _tomarImagen(i.file),
 
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 // _tomarImagen2(),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],
@@ -178,7 +177,7 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
     return Container(
       child: Center(
         child: Stack(
-          alignment: Alignment(0.9, 1.1),
+          alignment: const Alignment(0.9, 1.1),
           children: <Widget>[
             Positioned(
               top: 0,
@@ -195,7 +194,7 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                       print('set new state of images');
                     });
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.red,
                   ),
@@ -205,7 +204,7 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
             Container(
               height: 300,
               width: 300,
-              margin: EdgeInsets.only(right: 10.0, top: 30, left: 10.2),
+              margin: const EdgeInsets.only(right: 10.0, top: 30, left: 10.2),
               child: Material(
                 elevation: 4.0,
                 borderRadius: BorderRadius.circular(100.0),
@@ -213,15 +212,15 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                 child: new ClipRRect(
                     //  borderRadius: new BorderRadius.circular(100.0),
                     child: i == null
-                        ? new GestureDetector(
+                        ? GestureDetector(
                             onTap: () {
                               //  selectCamera();
                             },
-                            child: new Container(
+                            child: SizedBox(
                                 height: 80.0,
                                 width: 80.0,
                                 // color: primaryColor,
-                                child: new FadeInImage.assetNetwork(
+                                child: FadeInImage.assetNetwork(
                                     placeholder: fotonomm1,
                                     imageErrorBuilder: (BuildContext context,
                                         Object exception,
@@ -229,11 +228,11 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                                       return Image.asset(fotonomm1);
                                     },
                                     image: '')))
-                        : new GestureDetector(
+                        : GestureDetector(
                             onTap: () {
                               //  selectCamera();
                             },
-                            child: new Container(
+                            child: SizedBox(
                               height: 80.0,
                               width: 80.0,
                               child: Image.file(
@@ -245,7 +244,7 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
                             ))),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],
@@ -276,11 +275,11 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancelar');
             },
+            child: const Text('Cancelar'),
           )),
     );
   }
@@ -321,7 +320,7 @@ class _AgregarNacimientoState extends State<EditarNacimiento> {
       _image = gallery!.path;
       // nacimiento.imagen1 = _image;
     });
-    List<int> bytes = await new File(gallery!.path).readAsBytesSync();
+    List<int> bytes = File(gallery!.path).readAsBytesSync();
     Archivos ar = Archivos();
     ar.file = _image.toString();
     ar.idNacimiento = widget.id;

@@ -19,7 +19,7 @@ class ProgIntervencionTamboModel {
   String? fecha = '';
   String? descripcion = '';
 
-  ProgIntervencionTamboModel.empty() {}
+  ProgIntervencionTamboModel.empty();
 
   ProgIntervencionTamboModel({
     this.idProgramacion,

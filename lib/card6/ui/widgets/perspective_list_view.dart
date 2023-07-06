@@ -121,9 +121,7 @@ class _PerspectiveListViewState extends State<PerspectiveListView> {
             top: height - widget.itemExtent,
             child: GestureDetector(
               onTap: () {
-                if (widget.onTapFrontItem != null) {
-                  widget.onTapFrontItem(_currentIndex);
-                }
+                widget.onTapFrontItem(_currentIndex);
               },
             ),
           )

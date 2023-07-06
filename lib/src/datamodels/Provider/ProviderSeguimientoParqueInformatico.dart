@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/EstadoGuardar.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroListaEquipos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.dart';
@@ -31,14 +30,13 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/listaEquipoInformatico'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/listaEquipoInformatico'),
         headers: headers,
         body: json.encode(filtroParqueInformatico));
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadoEquipos =
-          new ListaEquipoInformaticos.fromJsonList(jsonResponse["data"]);
+          ListaEquipoInformaticos.fromJsonList(jsonResponse["data"]);
       return listadoEquipos.items;
     } else {
       return List.empty();
@@ -52,11 +50,11 @@ class ProviderSeguimientoParqueInformatico {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor + '/seguimientoequipo/marcas'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/marcas'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadoMarcas = new ListaMarcas.fromJsonList(jsonResponse);
+      final listadoMarcas = ListaMarcas.fromJsonList(jsonResponse);
       return listadoMarcas.items;
     } else {
       return List.empty();
@@ -70,11 +68,11 @@ class ProviderSeguimientoParqueInformatico {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor + '/seguimientoequipo/modelo'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/modelo'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listadoModelo = new ListaModelos.fromJsonList(jsonResponse);
+      final listadoModelo = ListaModelos.fromJsonList(jsonResponse);
       return listadoModelo.items;
     } else {
       return List.empty();
@@ -89,11 +87,11 @@ class ProviderSeguimientoParqueInformatico {
     };
     http.Response response = await http.get(
         Uri.parse(
-            AppConfig.backendsismonitor + '/seguimientoequipo/listasUbicacion'),
+            '${AppConfig.backendsismonitor}/seguimientoequipo/listasUbicacion'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listaUbicacion = new ListaUbicacion.fromJsonList(jsonResponse);
+      final listaUbicacion = ListaUbicacion.fromJsonList(jsonResponse);
       return listaUbicacion.items;
     } else {
       return List.empty();
@@ -108,7 +106,7 @@ class ProviderSeguimientoParqueInformatico {
     };
     http.Response response = await http.post(
         Uri.parse(
-            AppConfig.backendsismonitor + '/seguimientoequipo/consultaEquipo'),
+            '${AppConfig.backendsismonitor}/seguimientoequipo/consultaEquipo'),
         headers: headers,
         body: json.encode({"id_equipo": idEquipo}));
     if (response.statusCode == 200) {
@@ -131,7 +129,7 @@ class ProviderSeguimientoParqueInformatico {
     };
     http.Response response = await http.post(
         Uri.parse(
-            AppConfig.backendsismonitor + '/seguimientoequipo/consultaMarca'),
+            '${AppConfig.backendsismonitor}/seguimientoequipo/consultaMarca'),
         headers: headers,
         body: json.encode({"idModelo": idModelo}));
     if (response.statusCode == 200) {
@@ -154,15 +152,14 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/seguimientoequipo/listaPersonalSoporte'),
+      Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/listaPersonalSoporte'),
       headers: headers,
     );
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listaPersonalSoporte =
-          new ListaPersonalSoportes.fromJsonList(jsonResponse);
+          ListaPersonalSoportes.fromJsonList(jsonResponse);
       return listaPersonalSoporte.items;
     } else {
       return List.empty();
@@ -178,14 +175,14 @@ class ProviderSeguimientoParqueInformatico {
 
     http.Response response = await http.get(
       Uri.parse(
-          AppConfig.backendsismonitor + '/seguimientoequipo/ticketEstado'),
+          '${AppConfig.backendsismonitor}/seguimientoequipo/ticketEstado'),
       headers: headers,
     );
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listaTicketEstados =
-          new ListaTicketEstados.fromJsonList(jsonResponse);
+          ListaTicketEstados.fromJsonList(jsonResponse);
       return listaTicketEstados.items;
     } else {
       return List.empty();
@@ -203,14 +200,13 @@ class ProviderSeguimientoParqueInformatico {
     };
     print(json.encode(filtroTicketEquipo));
     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/listaEquiposInformaticosTicket'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/listaEquiposInformaticosTicket'),
         headers: headers,
         body: json.encode(filtroTicketEquipo));
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadoEquiposInformaticosTickets =
-          new ListaEquiposInformaticosTickets.fromJsonList(jsonResponse);
+          ListaEquiposInformaticosTickets.fromJsonList(jsonResponse);
       return listadoEquiposInformaticosTickets.items;
     } else {
       return List.empty();
@@ -224,13 +220,12 @@ class ProviderSeguimientoParqueInformatico {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/listarProveedores'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/listarProveedores'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listarProveedores =
-          new ListarProveedores.fromJsonList(jsonResponse);
+          ListarProveedores.fromJsonList(jsonResponse);
       return listarProveedores.items;
     } else {
       return List.empty();
@@ -245,11 +240,11 @@ class ProviderSeguimientoParqueInformatico {
     };
     http.Response response = await http.get(
         Uri.parse(
-            AppConfig.backendsismonitor + '/seguimientoequipo/tipoEquipo'),
+            '${AppConfig.backendsismonitor}/seguimientoequipo/tipoEquipo'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listar = new ListarTipoEquipo.fromJsonList(jsonResponse);
+      final listar = ListarTipoEquipo.fromJsonList(jsonResponse);
       return listar.items;
     } else {
       return List.empty();
@@ -262,7 +257,7 @@ class ProviderSeguimientoParqueInformatico {
       {"idEstado": "1", "estado": "ACTIVO"}
     ];
     final jsonResponse = json.decode(json.encode(estado));
-    final listar = new ListarEstado.fromJsonList(jsonResponse);
+    final listar = ListarEstado.fromJsonList(jsonResponse);
     return listar.items;
   }
 
@@ -277,7 +272,7 @@ class ProviderSeguimientoParqueInformatico {
 
     http.Response response = await http.post(
         Uri.parse(
-            AppConfig.backendsismonitor + '/seguimientoequipo/editarMovil'),
+            '${AppConfig.backendsismonitor}/seguimientoequipo/editarMovil'),
         headers: headers,
         body: json.encode(listaEquipoInformatico));
     print(response.statusCode);
@@ -285,7 +280,7 @@ class ProviderSeguimientoParqueInformatico {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listar = new EstadoGuardar.fromJson(jsonResponse);
+      final listar = EstadoGuardar.fromJson(jsonResponse);
       return listar;
     } else {
       return EstadoGuardar();
@@ -303,7 +298,7 @@ class ProviderSeguimientoParqueInformatico {
 
     http.Response response = await http.post(
         Uri.parse(
-            AppConfig.backendsismonitor + '/seguimientoequipo/crearMovil'),
+            '${AppConfig.backendsismonitor}/seguimientoequipo/crearMovil'),
         headers: headers,
         body: json.encode(listaEquipoInformatico));
     print(response.statusCode);
@@ -311,7 +306,7 @@ class ProviderSeguimientoParqueInformatico {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      final listar = new EstadoGuardar.fromJson(jsonResponse);
+      final listar = EstadoGuardar.fromJson(jsonResponse);
       return listar;
     } else {
       return EstadoGuardar();
@@ -327,8 +322,7 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/seguimientoequipo/eliminarEquipoInfo/${listaEquipoInformatico.idEquipoInformatico}'),
+      Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/eliminarEquipoInfo/${listaEquipoInformatico.idEquipoInformatico}'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -340,7 +334,7 @@ class ProviderSeguimientoParqueInformatico {
 
   Future EnvioArchivo(path) async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse(AppConfig.backendsismonitor + '/upload/*'));
+        'POST', Uri.parse('${AppConfig.backendsismonitor}/upload/*'));
     request.fields.addAll({'storage': 'equipo/archivos'});
     request.files.add(await http.MultipartFile.fromPath('file', path));
     http.StreamedResponse response = await request.send();
@@ -362,7 +356,7 @@ class ProviderSeguimientoParqueInformatico {
     final msg = jsonEncode({"file": "$path"});
 
     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor + '/unlink'),
+        Uri.parse('${AppConfig.backendsismonitor}/unlink'),
         headers: headers,
         body: msg);
     var jsonResponse;
@@ -371,7 +365,7 @@ class ProviderSeguimientoParqueInformatico {
     return jsonResponse;
   }
 
-  Future ArchivoEliminar(id_archivo) async {
+  Future ArchivoEliminar(idArchivo) async {
     var logUser = await DatabasePr.db.loginUser();
     var headers = {
       'Authorization': 'Bearer ${logUser[0].token}',
@@ -379,8 +373,7 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/seguimientoequipo/eliminarArchivo/${id_archivo}'),
+      Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/eliminarArchivo/$idArchivo'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -400,8 +393,7 @@ class ProviderSeguimientoParqueInformatico {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/archivo-equipo/$idEquipo'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/archivo-equipo/$idEquipo'),
         headers: headers);
     if (response.statusCode == 200) {
       if (response.body != "") {
@@ -426,8 +418,7 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/reportActivoInactivo/$idTipo'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/reportActivoInactivo/$idTipo'),
         headers: headers);
     if (response.statusCode == 200) {
       if (response.body != "") {
@@ -450,8 +441,7 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/listaTickect/$tipo'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/listaTickect/$tipo'),
         headers: headers);
     if (response.statusCode == 200) {
       var jsonResponse;
@@ -472,13 +462,12 @@ class ProviderSeguimientoParqueInformatico {
     };
 
     http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/seguimientoequipo/listaTickect/${filtroTicketEquipo.estado}'),
+        Uri.parse('${AppConfig.backendsismonitor}/seguimientoequipo/listaTickect/${filtroTicketEquipo.estado}'),
         headers: headers);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadoEquiposInformaticosTickets =
-          new ListaEquiposInformaticosTickets.fromJsonList(
+          ListaEquiposInformaticosTickets.fromJsonList(
               jsonResponse["data"]);
 
       return listadoEquiposInformaticosTickets.items;

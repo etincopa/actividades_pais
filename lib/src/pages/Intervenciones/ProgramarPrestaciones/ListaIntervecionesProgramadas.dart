@@ -9,15 +9,11 @@ import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/PlanesDeTrabajo.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ProgramacionesIntervenciones.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ProgramacionesIntervencionesHome.dart';
 import 'package:actividades_pais/util/app-config.dart';
-import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:marquee/marquee.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../datamodels/database/DatabasePr.dart';
@@ -25,6 +21,8 @@ import '../util/utils.dart';
 import 'ProgramacionPrestacion.dart';
 
 class ListaIntervecionesProgramadas extends StatefulWidget {
+  const ListaIntervecionesProgramadas({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -54,8 +52,8 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
     {"value": '2', "descripcion": 'ACTIVIDADES - GIT'},
     {"value": '3', "descripcion": 'SOPORTE'},
   ];
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
   final TextEditingController _controlleFechaInici = TextEditingController();
   final TextEditingController _controlleFechaFin = TextEditingController();
   var seleccionarUnidadTerritorial = "Seleccionar UnidadTerritorial";
@@ -288,7 +286,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                 size: 15, color: Colors.grey),
                             const SizedBox(width: 13),
                             Expanded(
-                              child: Text("$UnidadTerritorialTexto"),
+                              child: Text(UnidadTerritorialTexto),
                             ),
                           ],
                         ),
@@ -299,7 +297,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                 size: 15, color: Colors.grey),
                             const SizedBox(width: 13),
                             Expanded(
-                              child: Text("$PlataformaTexto"),
+                              child: Text(PlataformaTexto),
                             ),
                           ],
                         ),
@@ -414,10 +412,10 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                             ),
                                             isExpanded: true,
                                             items: optionsP.map((user) {
-                                              return new DropdownMenuItem<
+                                              return DropdownMenuItem<
                                                   TambosDependientes>(
                                                 value: user,
-                                                child: new Text(
+                                                child: Text(
                                                   user.plataformaDescripcion!,
                                                   style: const TextStyle(
                                                       fontSize: 10),
@@ -477,7 +475,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: AppConfig.primaryColor,
+                      backgroundColor: AppConfig.primaryColor,
                     ),
                     onPressed: () async {
                       filtroIntervencionesTambos.inicio =
@@ -503,10 +501,10 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
           _isLoading
               ? Container(
                   color: Colors.white,
-                  child: Center(
+                  child: const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         SizedBox(height: 20),
                         CircularProgressIndicator(),
                         SizedBox(height: 20),
@@ -762,7 +760,11 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Container(
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.60,
                                             child: Text(
                                               textAlign: TextAlign.start,
                                               "$tamboNm - ${elementos3[1]}",
@@ -770,10 +772,6 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                                                 fontSize: 13.2,
                                               ),
                                             ),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.60,
                                           )
                                         ],
                                       ),
@@ -798,6 +796,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
             if (value!.isEmpty) {
               return 'Por favor Ingrese dato.';
             }
+            return null;
           },
           enabled: enabled,
           controller: controller,

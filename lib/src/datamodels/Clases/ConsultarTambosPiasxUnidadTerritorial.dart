@@ -1,10 +1,10 @@
 
 class ConsultarTambosPiasxUnidadTerritorial {
-  Null? codResultado;
-  Null? msgResultado;
+  String? codResultado;
+  String? msgResultado;
   int? total;
   List<RspoTambosPiasxUnidadTerritorial>? response;
-  Null? idPerfil;
+  int? idPerfil;
 
   ConsultarTambosPiasxUnidadTerritorial(
       {this.codResultado,
@@ -20,21 +20,21 @@ class ConsultarTambosPiasxUnidadTerritorial {
     if (json['response'] != null) {
       response = <RspoTambosPiasxUnidadTerritorial>[];
       json['response'].forEach((v) {
-        response!.add(new RspoTambosPiasxUnidadTerritorial.fromJson(v));
+        response!.add(RspoTambosPiasxUnidadTerritorial.fromJson(v));
       });
     }
     idPerfil = json['idPerfil'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['codResultado'] = this.codResultado;
-    data['msgResultado'] = this.msgResultado;
-    data['total'] = this.total;
-    if (this.response != null) {
-      data['response'] = this.response!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codResultado'] = codResultado;
+    data['msgResultado'] = msgResultado;
+    data['total'] = total;
+    if (response != null) {
+      data['response'] = response!.map((v) => v.toJson()).toList();
     }
-    data['idPerfil'] = this.idPerfil;
+    data['idPerfil'] = idPerfil;
     return data;
   }
 }
@@ -171,48 +171,48 @@ class RspoTambosPiasxUnidadTerritorial {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idPlataforma'] = this.idPlataforma;
-    data['snip'] = this.snip;
-    data['ubigeoCcpp'] = this.ubigeoCcpp;
-    data['ubigeoTambo'] = this.ubigeoTambo;
-    data['nombreDepartamento'] = this.nombreDepartamento;
-    data['nombreProvincia'] = this.nombreProvincia;
-    data['nombreDistrito'] = this.nombreDistrito;
-    data['nombreCcpp'] = this.nombreCcpp;
-    data['nombreTambo'] = this.nombreTambo;
-    data['clasificacionPais'] = this.clasificacionPais;
-    data['poblacionCcpp'] = this.poblacionCcpp;
-    data['viviendasCcpp'] = this.viviendasCcpp;
-    data['fuenteCcpp'] = this.fuenteCcpp;
-    data['prestaServicio'] = this.prestaServicio;
-    data['ambitoInfluencia'] = this.ambitoInfluencia;
-    data['resolucionDirectorial'] = this.resolucionDirectorial;
-    data['xCcpp'] = this.xCcpp;
-    data['yCcpp'] = this.yCcpp;
-    data['altitudCcpp'] = this.altitudCcpp;
-    data['regionNatural'] = this.regionNatural;
-    data['rangoRegionNatural'] = this.rangoRegionNatural;
-    data['ubigeoCcppAnterior'] = this.ubigeoCcppAnterior;
-    data['ubigeoDistritoAnterior'] = this.ubigeoDistritoAnterior;
-    data['provinciaAnterior'] = this.provinciaAnterior;
-    data['distritoAnterior'] = this.distritoAnterior;
-    data['codCapita'] = this.codCapita;
-    data['capital'] = this.capital;
-    data['codCategoria'] = this.codCategoria;
-    data['categoria'] = this.categoria;
-    data['codArea'] = this.codArea;
-    data['area'] = this.area;
-    data['poblacionAnterior'] = this.poblacionAnterior;
-    data['viviendasAnterior'] = this.viviendasAnterior;
-    data['hogaresAnteriores'] = this.hogaresAnteriores;
-    data['ubigeoCreadoUps'] = this.ubigeoCreadoUps;
-    data['estadoAvanceAnterior'] = this.estadoAvanceAnterior;
-    data['grupo504'] = this.grupo504;
-    data['grupo510'] = this.grupo510;
-    data['idDepartamento'] = this.idDepartamento;
-    data['unidadTerritorialDescripcion'] = this.unidadTerritorialDescripcion;
-    data['modalidad'] = this.modalidad;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idPlataforma'] = idPlataforma;
+    data['snip'] = snip;
+    data['ubigeoCcpp'] = ubigeoCcpp;
+    data['ubigeoTambo'] = ubigeoTambo;
+    data['nombreDepartamento'] = nombreDepartamento;
+    data['nombreProvincia'] = nombreProvincia;
+    data['nombreDistrito'] = nombreDistrito;
+    data['nombreCcpp'] = nombreCcpp;
+    data['nombreTambo'] = nombreTambo;
+    data['clasificacionPais'] = clasificacionPais;
+    data['poblacionCcpp'] = poblacionCcpp;
+    data['viviendasCcpp'] = viviendasCcpp;
+    data['fuenteCcpp'] = fuenteCcpp;
+    data['prestaServicio'] = prestaServicio;
+    data['ambitoInfluencia'] = ambitoInfluencia;
+    data['resolucionDirectorial'] = resolucionDirectorial;
+    data['xCcpp'] = xCcpp;
+    data['yCcpp'] = yCcpp;
+    data['altitudCcpp'] = altitudCcpp;
+    data['regionNatural'] = regionNatural;
+    data['rangoRegionNatural'] = rangoRegionNatural;
+    data['ubigeoCcppAnterior'] = ubigeoCcppAnterior;
+    data['ubigeoDistritoAnterior'] = ubigeoDistritoAnterior;
+    data['provinciaAnterior'] = provinciaAnterior;
+    data['distritoAnterior'] = distritoAnterior;
+    data['codCapita'] = codCapita;
+    data['capital'] = capital;
+    data['codCategoria'] = codCategoria;
+    data['categoria'] = categoria;
+    data['codArea'] = codArea;
+    data['area'] = area;
+    data['poblacionAnterior'] = poblacionAnterior;
+    data['viviendasAnterior'] = viviendasAnterior;
+    data['hogaresAnteriores'] = hogaresAnteriores;
+    data['ubigeoCreadoUps'] = ubigeoCreadoUps;
+    data['estadoAvanceAnterior'] = estadoAvanceAnterior;
+    data['grupo504'] = grupo504;
+    data['grupo510'] = grupo510;
+    data['idDepartamento'] = idDepartamento;
+    data['unidadTerritorialDescripcion'] = unidadTerritorialDescripcion;
+    data['modalidad'] = modalidad;
     return data;
   }
 }

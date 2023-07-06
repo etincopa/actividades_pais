@@ -6,8 +6,8 @@ class ListarPuesto {
   ListarPuesto.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new Puesto.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = Puesto.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -27,7 +27,7 @@ class Puesto {
     };
   }
 
-  factory Puesto.fromJson(Map<String, dynamic> parsedJson) => new Puesto(
+  factory Puesto.fromJson(Map<String, dynamic> parsedJson) => Puesto(
       nombrePuesto: parsedJson['nombrePuesto'],
       idPuesto: parsedJson['idPuesto']);
 

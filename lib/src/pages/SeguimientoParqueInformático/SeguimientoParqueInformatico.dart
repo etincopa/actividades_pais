@@ -112,7 +112,7 @@ class _SeguimientoParqueInformaticoState
               );
             } else {
               final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.length == 0) {
+              if (listaPersonalAux!.isEmpty) {
                 return const Center(
                   child: Text(
                     'No hay informacion',
@@ -198,8 +198,8 @@ class _SeguimientoParqueInformaticoState
                           )),
                     )),
                     if (isLoading == true)
-                      new Center(
-                        child: const CircularProgressIndicator(),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                   ],
                 );
@@ -239,16 +239,16 @@ class _SeguimientoParqueInformaticoState
 
         elevation: 8.0,
         //shadow elevation of button
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         //shape of button
 
         children: [
           SpeedDialChild(
-            child: Icon(Icons.airplay_sharp),
+            child: const Icon(Icons.airplay_sharp),
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
             label: 'REGISTRAR EQUIPO INFORMATICO',
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: const TextStyle(fontSize: 18.0),
             onTap: () async {
               final respt = await Navigator.push(
                   context,
@@ -265,16 +265,16 @@ class _SeguimientoParqueInformaticoState
             onLongPress: () => print('SECOND CHILD LONG PRESS'),
           ),
           SpeedDialChild(
-            child: Icon(Icons.pie_chart),
+            child: const Icon(Icons.pie_chart),
             foregroundColor: Colors.white,
             backgroundColor: Colors.orangeAccent,
             label: 'REPORTE EQUIPO INFORMATICO',
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: const TextStyle(fontSize: 18.0),
             onTap: () async {
               final respt = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ReporteEquipoInformatico(),
+                    builder: (context) => const ReporteEquipoInformatico(),
                   ));
               if (respt == 'OK') {
                 resetlista();
@@ -293,21 +293,21 @@ class _SeguimientoParqueInformaticoState
           return AlertDialog(
             title: const Text("FILTRO"),
             content: SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 width: double.infinity,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     _buildTextFormField(
                       labelText: 'CODIGO PATRIMONIAL',
-                      icon: Icon(Icons.note_add, size: 15),
+                      icon: const Icon(Icons.note_add, size: 15),
                       onChanged: (value) {
                         filtroParqueInformatico.codigoPatrimonial = value;
                       },
                     ),
                     _buildTextFormField(
                       labelText: 'DENOMINACION',
-                      icon: Icon(Icons.note_add, size: 15),
+                      icon: const Icon(Icons.note_add, size: 15),
                       onChanged: (value) {
                         filtroParqueInformatico.denominacion = value;
                       },
@@ -327,7 +327,7 @@ class _SeguimientoParqueInformaticoState
                             );
                           }
                           final preguntas = snapshot.data;
-                          if (preguntas!.length == 0) {
+                          if (preguntas!.isEmpty) {
                             return const Center(
                               child: Text("sin dato"),
                             );
@@ -336,7 +336,7 @@ class _SeguimientoParqueInformaticoState
                               children: [
                                 const Icon(Icons.account_tree_rounded,
                                     size: 15, color: Colors.grey),
-                                SizedBox(width: 13),
+                                const SizedBox(width: 13),
                                 Expanded(
                                   child: Container(
                                     child: StatefulBuilder(builder:
@@ -346,9 +346,9 @@ class _SeguimientoParqueInformaticoState
                                         isExpanded: true,
                                         //underline: Container(),
                                         items: snapshot.data?.map((user) {
-                                          return new DropdownMenuItem<Modelo?>(
+                                          return DropdownMenuItem<Modelo?>(
                                             value: user,
-                                            child: new Text(
+                                            child: Text(
                                               user.descripcionModelo!,
                                               style:
                                                   const TextStyle(fontSize: 10),
@@ -390,7 +390,7 @@ class _SeguimientoParqueInformaticoState
                             );
                           }
                           final preguntas = snapshot.data;
-                          if (preguntas!.length == 0) {
+                          if (preguntas!.isEmpty) {
                             return const Center(
                               child: Text("sin dato"),
                             );
@@ -456,7 +456,7 @@ class _SeguimientoParqueInformaticoState
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[600],
+                      backgroundColor: Colors.blue[600],
                     ),
                     onPressed: () async {
                       setState(() {
@@ -544,7 +544,7 @@ class _SeguimientoParqueInformaticoState
     });
   }
 
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     filtroParqueInformatico.pageSize = pageSize;
     filtroParqueInformatico.pageIndex = pageIndex;
     await Future.delayed(const Duration(seconds: 1));

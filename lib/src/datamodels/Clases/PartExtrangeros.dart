@@ -4,8 +4,8 @@ class ListaPartExtrangeros {
   ListaPartExtrangeros.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new PartExtrangeros.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = PartExtrangeros.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -97,25 +97,25 @@ class PartExtrangeros {
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['id_programacion_participante'] = this.id_programacion_participante;
-    data['id_programacion'] = this.id_programacion;
-    data['id_participante'] = this.id_participante;
-    data['nombre'] = this.nombre;
-    data['nombre2'] = this.nombre2;
-    data['apellidoPaterno'] = this.apellidoPaterno;
-    data['apellidoMaterno'] = this.apellidoMaterno;
-    data['dni'] = this.dni;
-    data['edad'] = this.edad;
-    data['fecha_nacimiento'] = this.fecha_nacimiento;
-    data['sexo'] = this.sexo;
-    data['pais'] = this.pais;
-    data['idPais'] = this.idPais;
-    data['tipo_documento'] = this.tipo_documento;
-    data['id_tipo_documento'] = this.id_tipo_documento;
-    data['entidad'] = this.entidad;
-    data['servicio'] = this.servicio;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['id_programacion_participante'] = id_programacion_participante;
+    data['id_programacion'] = id_programacion;
+    data['id_participante'] = id_participante;
+    data['nombre'] = nombre;
+    data['nombre2'] = nombre2;
+    data['apellidoPaterno'] = apellidoPaterno;
+    data['apellidoMaterno'] = apellidoMaterno;
+    data['dni'] = dni;
+    data['edad'] = edad;
+    data['fecha_nacimiento'] = fecha_nacimiento;
+    data['sexo'] = sexo;
+    data['pais'] = pais;
+    data['idPais'] = idPais;
+    data['tipo_documento'] = tipo_documento;
+    data['id_tipo_documento'] = id_tipo_documento;
+    data['entidad'] = entidad;
+    data['servicio'] = servicio;
 
     return data;
   }

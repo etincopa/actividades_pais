@@ -4,21 +4,14 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ArchivoTramaIntervencion.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
-import 'package:actividades_pais/src/datamodels/Clases/PartExtrangeros.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/Extrangeros/Extranjeros.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Extrangeros/ListaExtrangeros.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/Funcionarios/Funcionarios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Funcionarios/listaFuncionarios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Intervenciones.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/Participantes/Participantes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Participantes/ListaParticipantes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
@@ -33,7 +26,7 @@ class EjecucionProgramacionPage extends StatefulWidget {
   TramaIntervencion tramaIntervencion;
 
   EjecucionProgramacionPage(
-      {this.idProgramacion = 0,
+      {super.key, this.idProgramacion = 0,
       this.descripcionEvento = '',
       this.snip = 0,
       this.programa = '',
@@ -79,18 +72,18 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
     setState(() {});
   }
 
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   // ignore: non_constant_identifier_names
-  Future<Null> listaFuniconario() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> listaFuniconario() async {
+    await Future.delayed(const Duration(seconds: 0));
     setState(() {
       DatabasePr.db.listarFuncionarios(widget.idProgramacion);
     });
   }
 
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     await DatabasePr.db.listarFuncionarios(widget.idProgramacion);
 
     await DatabasePr.db.listarPartExtrangeros(widget.idProgramacion);
@@ -99,7 +92,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
       border: Border.all(width: 1.0, color: (Colors.red[600]!)),
-      borderRadius: BorderRadius.all(
+      borderRadius: const BorderRadius.all(
           Radius.circular(5.0) //                 <--- border radius here
           ),
     );
@@ -125,28 +118,28 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
                         'Hora Fin: ${widget.tramaIntervencion.horaFin}'
                         '\n'
                         '${widget.tramaIntervencion.tipoIntervencion}'),
-                    SizedBox(
+                    const SizedBox(
                       height: 0,
                     ),
                     miCard(widget.descripcionEvento),
-                    SizedBox(
+                    const SizedBox(
                       height: 3,
                     ),
-                    Text("Adjuntar Imagenes"),
-                    SizedBox(
+                    const Text("Adjuntar Imagenes"),
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         _tomarImagen(),
                         _tomarImagen2()
                       ],
                     ),
                     Column(
                       children: <Widget>[
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         _tomarImagen3()
                       ],
                     ),
@@ -174,7 +167,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
 
         actions: [
           InkWell(
-            child: Icon(Icons.save),
+            child: const Icon(Icons.save),
             onTap: () {
               Util().showAlertDialogokno('Ejecucion Programacion', context,
                   () async {
@@ -196,7 +189,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
               }, '¿Estas seguro de guardar los datos para sincronizarlos?');
             },
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           )
         ],
@@ -214,23 +207,23 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
 
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-              icon: Icon(Icons.home),
-              title: Text("Inicio"),
+              icon: const Icon(Icons.home),
+              title: const Text("Inicio"),
               activeColor:const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Icons.engineering),
-              title: Text("Funcionarios"),
+              icon: const Icon(Icons.engineering),
+              title: const Text("Funcionarios"),
               activeColor: const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Icons.people_alt),
-              title: Text("Participantes"),
+              icon: const Icon(Icons.people_alt),
+              title: const Text("Participantes"),
               activeColor: const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
           BottomNavyBarItem(
-              icon: Icon(Icons.person_sharp),
-              title: Text("Extranjeros"),
+              icon: const Icon(Icons.person_sharp),
+              title: const Text("Extranjeros"),
               activeColor: const Color(0xFF78b8cd),
               inactiveColor: Colors.black),
         ],
@@ -241,12 +234,12 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
   _tomarImagen() {
     return Center(
       child: Stack(
-        alignment: Alignment(0.9, 1.1),
+        alignment: const Alignment(0.9, 1.1),
         children: <Widget>[
           Container(
             height: 150,
             width: 150,
-            margin: EdgeInsets.only(right: 10.0, left: 10.2),
+            margin: const EdgeInsets.only(right: 10.0, left: 10.2),
             child: Material(
               elevation: 4.0,
               //    borderRadius: BorderRadius.circular(100.0),
@@ -254,15 +247,15 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
               child: new ClipRRect(
                   //     borderRadius: new BorderRadius.circular(100.0),
                   child: _image == null
-                      ? new GestureDetector(
+                      ? GestureDetector(
                           onTap: () {
                             selectCamera();
                           },
-                          child: new Container(
+                          child: SizedBox(
                               height: 80.0,
                               width: 80.0,
                               // color: primaryColor,
-                              child: new FadeInImage.assetNetwork(
+                              child: FadeInImage.assetNetwork(
                                   placeholder: fotonomm,
                                   imageErrorBuilder: (BuildContext context,
                                       Object exception,
@@ -270,11 +263,11 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
                                     return Image.asset(fotonomm);
                                   },
                                   image: '')))
-                      : new GestureDetector(
+                      : GestureDetector(
                           onTap: () {
                             selectCamera();
                           },
-                          child: new Container(
+                          child: SizedBox(
                             height: 80.0,
                             width: 80.0,
                             child: Image.file(
@@ -294,12 +287,12 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
   _tomarImagen2() {
     return Center(
       child: Stack(
-        alignment: Alignment(0.9, 1.1),
+        alignment: const Alignment(0.9, 1.1),
         children: <Widget>[
           Container(
             height: 150,
             width: 150,
-            margin: EdgeInsets.only(right: 10.0, left: 10.2),
+            margin: const EdgeInsets.only(right: 10.0, left: 10.2),
             child: Material(
               elevation: 4.0,
               //    borderRadius: BorderRadius.circular(100.0),
@@ -307,15 +300,15 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
               child: new ClipRRect(
                   //     borderRadius: new BorderRadius.circular(100.0),
                   child: _image2 == null
-                      ? new GestureDetector(
+                      ? GestureDetector(
                           onTap: () {
                             selectCamera2();
                           },
-                          child: new Container(
+                          child: SizedBox(
                               height: 80.0,
                               width: 80.0,
                               // color: primaryColor,
-                              child: new FadeInImage.assetNetwork(
+                              child: FadeInImage.assetNetwork(
                                   placeholder: fotonomm,
                                   imageErrorBuilder: (BuildContext context,
                                       Object exception,
@@ -323,11 +316,11 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
                                     return Image.asset(fotonomm);
                                   },
                                   image: '')))
-                      : new GestureDetector(
+                      : GestureDetector(
                           onTap: () {
                             selectCamera2();
                           },
-                          child: new Container(
+                          child: SizedBox(
                             height: 80.0,
                             width: 80.0,
                             child: Image.file(
@@ -347,12 +340,12 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
   _tomarImagen3() {
     return Center(
       child: Stack(
-        alignment: Alignment(0.9, 1.1),
+        alignment: const Alignment(0.9, 1.1),
         children: <Widget>[
           Container(
             height: 150,
             width: 150,
-            margin: EdgeInsets.only(right: 10.0, left: 10.2),
+            margin: const EdgeInsets.only(right: 10.0, left: 10.2),
             child: Material(
               elevation: 4.0,
               //    borderRadius: BorderRadius.circular(100.0),
@@ -360,15 +353,15 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
               child: new ClipRRect(
                   //     borderRadius: new BorderRadius.circular(100.0),
                   child: _image3 == null
-                      ? new GestureDetector(
+                      ? GestureDetector(
                           onTap: () {
                             selectCamera3();
                           },
-                          child: new Container(
+                          child: SizedBox(
                               height: 80.0,
                               width: 80.0,
                               // color: primaryColor,
-                              child: new FadeInImage.assetNetwork(
+                              child: FadeInImage.assetNetwork(
                                   placeholder: fotonomm,
                                   imageErrorBuilder: (BuildContext context,
                                       Object exception,
@@ -376,11 +369,11 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
                                     return Image.asset(fotonomm);
                                   },
                                   image: '')))
-                      : new GestureDetector(
+                      : GestureDetector(
                           onTap: () {
                             selectCamera3();
                           },
-                          child: new Container(
+                          child: SizedBox(
                             height: 80.0,
                             width: 80.0,
                             child: Image.file(
@@ -421,11 +414,11 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancelar');
             },
+            child: const Text('Cancelar'),
           )),
     );
   }
@@ -452,11 +445,11 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancelar');
             },
+            child: const Text('Cancelar'),
           )),
     );
   }
@@ -483,11 +476,11 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancelar');
             },
+            child: const Text('Cancelar'),
           )),
     );
   }
@@ -511,7 +504,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
     setState(() {
       _image = File(gallery!.path);
     });
-    List<int> bytes = await new File(gallery!.path).readAsBytesSync();
+    List<int> bytes = File(gallery!.path).readAsBytesSync();
 
     ///image64 = base64Encode(bytes);
     archivoTramaIntervencion.codigoIntervencion =
@@ -554,7 +547,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
      // _image2 = gallery;
       //_image2 = gallery;
     });
-    List<int> bytes = await new File(gallery!.path).readAsBytesSync();
+    List<int> bytes = File(gallery!.path).readAsBytesSync();
     await DatabasePr.db.deleteArchivoIntervenciones(
         widget.tramaIntervencion.codigoIntervencion, 2);
 
@@ -598,7 +591,7 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
    //   _image3 = gallery;
       _image3 = File(gallery!.path);
     });
-    List<int> bytes = await new File(gallery!.path).readAsBytesSync();
+    List<int> bytes = File(gallery!.path).readAsBytesSync();
     archivoTramaIntervencion.codigoIntervencion =
         widget.tramaIntervencion.codigoIntervencion;
     archivoTramaIntervencion.file = gallery.path.toString();
@@ -631,15 +624,15 @@ class _EjecucionProgramacionPageState extends State<EjecucionProgramacionPage> {
   Card miCard(texto) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(15),
+      margin: const EdgeInsets.all(15),
       elevation: 10,
       child: Column(
         children: <Widget>[
           ListTile(
-            contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
+            contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
              subtitle: Text(texto),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           )
         ],

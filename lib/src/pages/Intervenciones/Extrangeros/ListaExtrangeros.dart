@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/src/datamodels/Clases/PartExtrangeros.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Extrangeros/Extranjeros.dart';
@@ -10,14 +9,14 @@ import '../../../../util/app-config.dart';
 
 class ListaExtrangeros extends StatefulWidget {
   int idProgramacion;
-  ListaExtrangeros(this.idProgramacion);
+  ListaExtrangeros(this.idProgramacion, {super.key});
   @override
   _ListaExtrangerosState createState() => _ListaExtrangerosState();
 }
 
 class _ListaExtrangerosState extends State<ListaExtrangeros> {
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     await DatabasePr.db.listarPartExtrangeros(widget.idProgramacion);
   }
 
@@ -40,7 +39,7 @@ class _ListaExtrangerosState extends State<ListaExtrangeros> {
               setState(() {});
             }
           },
-          child: Icon(
+          child: const Icon(
             Icons.person_add,
             color: Colors.white,
           ),
@@ -48,7 +47,7 @@ class _ListaExtrangerosState extends State<ListaExtrangeros> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0, // 1
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
@@ -68,25 +67,24 @@ class _ListaExtrangerosState extends State<ListaExtrangeros> {
               AsyncSnapshot<List<Participantes>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
-                  return Center(
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
                     child: Text("No hay informacion"),
                   );
                 } else {
                   return Container(
                     child: RefreshIndicator(
+                        onRefresh: refreshList,
                         child: ListView.builder(
                           itemCount: listaPersonalAux.length,
                           itemBuilder: (context, i) => Dismissible(
                               key: UniqueKey(),
-                              child: listas.miCardLisPartExtrangeros(
-                                  listaPersonalAux[i]),
                               background: Util().buildSwipeActionLeft(),
                               secondaryBackground:
                                   Util().buildSwipeActionRigth(),
@@ -127,15 +125,17 @@ class _ListaExtrangerosState extends State<ListaExtrangeros> {
                                       Navigator.pop(context);
                                     });
                                     break;
+                                  default:
                                 }
-                              }),
-                        ),
-                        onRefresh: refreshList),
+                              },
+                              child: listas.miCardLisPartExtrangeros(
+                                  listaPersonalAux[i])),
+                        )),
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

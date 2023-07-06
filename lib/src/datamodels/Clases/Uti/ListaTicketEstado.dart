@@ -6,9 +6,9 @@ class ListaTicketEstados {
   ListaTicketEstados.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual =
-      new ListaTicketEstado.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual =
+      ListaTicketEstado.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -24,9 +24,9 @@ class ListaTicketEstado {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['nombre'] = this.nombre;
-    data['id_ticket_estado'] = this.idTicketEstado;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['nombre'] = nombre;
+    data['id_ticket_estado'] = idTicketEstado;
     return data;
   }
 }

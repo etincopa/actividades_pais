@@ -4,7 +4,6 @@ import 'package:actividades_pais/src/datamodels/Clases/ParticipantesIntranet.dar
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEquipos.dart';
 import 'package:actividades_pais/util/app-config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/IncidentesNovedadesPias.dart';
@@ -29,22 +28,22 @@ class Listas {
         ),
         backgroundColor: Colors.red[600],
       ), */
-      title: Text('${band.nombres + ' ' + band.apellidoPaterno}',
+      title: Text('${band.nombres} ${band.apellidoPaterno}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: new Text('${band.dni}', style: const TextStyle(fontSize: 10)),
+      subtitle: Text(band.dni, style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 70,
             child: Text(
               ' ${band.cargo}',
               style: const TextStyle(fontSize: 10),
             ),
           ),
-          Container(
+          const SizedBox(
             width: 70,
-            child: const Text(
+            child: Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
@@ -71,21 +70,21 @@ class Listas {
       title: Text(
           '${band.primerNombre! == '' ? band.nombre : ''} ${band.segundoNombre! == '' ? band.nombre2 : ''}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: new Text('${band.fechaNacimiento}',
+      subtitle: Text('${band.fechaNacimiento}',
           style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 80,
             child: Text(
               ' ${band.entidad == '' ? band.nombre_programa : ''}',
               style: const TextStyle(fontSize: 10),
             ),
           ),
-          Container(
+          const SizedBox(
             width: 70,
-            child: const Text(
+            child: Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
@@ -111,21 +110,21 @@ class Listas {
       ), */
       title: Text('${band.nombre} ${band.nombre2}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: new Text('${band.fechaNacimiento}',
+      subtitle: Text('${band.fechaNacimiento}',
           style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 80,
             child: Text(
               ' ${band.nombrePrograma != null ? '' : ''}',
               style: const TextStyle(fontSize: 10),
             ),
           ),
-          Container(
+          const SizedBox(
             width: 70,
-            child: const Text(
+            child: Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
@@ -149,23 +148,23 @@ class Listas {
         ),
         backgroundColor: Colors.red[600],
       ), */
-      title: Text('${band.nombre + ' ' + band.nombre2}',
+      title: Text('${band.nombre} ${band.nombre2}',
           style: const TextStyle(fontSize: 13)),
-      subtitle: new Text('${band.fecha_nacimiento}',
+      subtitle: Text(band.fecha_nacimiento,
           style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 70,
             child: Text(
               ' ${band.entidad}',
               style: const TextStyle(fontSize: 10),
             ),
           ),
-          Container(
+          const SizedBox(
             width: 70,
-            child: const Text(
+            child: Text(
               ' ',
               style: TextStyle(fontSize: 10),
             ),
@@ -195,23 +194,23 @@ class Listas {
               fit: BoxFit.contain,
             ),
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
-            title: Text('${band.primerNombre! + ' ' + band.apellidoPaterno!}',
+            title: Text('${band.primerNombre!} ${band.apellidoPaterno!}',
                 style: const TextStyle(fontSize: 13, color: Colors.black)),
-            subtitle: new Text('${band.dni}',
+            subtitle: Text('${band.dni}',
                 style: const TextStyle(fontSize: 12, color: Colors.black)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 70,
                   child: Text(
                     ' ${band.pais}',
                     style: const TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ),
-                Container(
+                const SizedBox(
                   width: 70,
-                  child: const Text(
+                  child: Text(
                     ' ',
                     style: TextStyle(fontSize: 10, color: Colors.black),
                   ),
@@ -244,23 +243,23 @@ class Listas {
                 fit: BoxFit.contain,
               ),
               contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
-              title: Text('${band.puntoAtencion}',
+              title: Text(band.puntoAtencion,
                   style: const TextStyle(fontSize: 13, color: Colors.black)),
-              subtitle: new Text('${band.clima}',
+              subtitle: Text(band.clima,
                   style: const TextStyle(fontSize: 12, color: Colors.black)),
               trailing: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 70,
                     child: Text(
-                      '${band.fechaParteDiario}',
+                      band.fechaParteDiario,
                       style: const TextStyle(fontSize: 10, color: Colors.black),
                     ),
                   ),
-                  Container(
+                  const SizedBox(
                     width: 70,
-                    child: const Text(
+                    child: Text(
                       ' ',
                       style: TextStyle(fontSize: 10, color: Colors.black),
                     ),
@@ -277,8 +276,8 @@ class Listas {
     );
   }
 
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('dd/MM/yyyy');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('dd/MM/yyyy');
 
   Card miCardParticipantes(Participantes band) {
     return Card(
@@ -296,17 +295,17 @@ class Listas {
             ),
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text(
-                '${band.primerNombre! + ' ' + band.segundoNombre! + ' ' + band.apellidoPaterno! + ' ' + band.apellidoMaterno!}',
+                '${band.primerNombre!} ${band.segundoNombre!} ${band.apellidoPaterno!} ${band.apellidoMaterno!}',
                 style: const TextStyle(fontSize: 13, color: Colors.black)),
             // formatter.format(picked),
 
-            subtitle: new Text(
-                '${formatter.format(DateTime.parse(band.fechaNacimiento!))}',
+            subtitle: Text(
+                formatter.format(DateTime.parse(band.fechaNacimiento!)),
                 style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 70,
                   child:
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -316,14 +315,14 @@ class Listas {
                     ),
                   ]),
                 ),
-                Container(
+                const SizedBox(
                   width: 70,
-                  child: const Text(
+                  child: Text(
                     ' ',
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 80,
                   child:
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -370,23 +369,23 @@ class Listas {
             ,
             //new (band.dni == '')? Text('${band.dni}', style: TextStyle(fontSize: 12, color: Colors.black)) : new Container(),
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
-            title: Text('${band.nombres + ' ' + band.apellidoPaterno}',
+            title: Text('${band.nombres} ${band.apellidoPaterno}',
                 style: const TextStyle(fontSize: 13, color: Colors.black)),
-            subtitle: new Text('${valordocumento}',
+            subtitle: Text(valordocumento,
                 style: const TextStyle(fontSize: 12, color: Colors.black)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 70,
                   child: Text(
                     ' ${band.cargo}',
                     style: const TextStyle(fontSize: 10, color: Colors.black),
                   ),
                 ),
-                Container(
+                const SizedBox(
                   width: 70,
-                  child: const Text(
+                  child: Text(
                     ' ',
                     style: TextStyle(fontSize: 10, color: Colors.black),
                   ),
@@ -416,7 +415,7 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.descripcion}',
                 style: const TextStyle(fontSize: 13, color: Colors.black)),
-            subtitle: new Text(''),
+            subtitle: const Text(''),
             onTap: () {},
           )
         ],
@@ -436,7 +435,7 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.descripcion}',
                 style: const TextStyle(fontSize: 13, color: Colors.black)),
-            subtitle: new Text(''),
+            subtitle: const Text(''),
             onTap: () {},
           )
         ],
@@ -456,7 +455,7 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.incidentes}',
                 style: const TextStyle(fontSize: 13, color: Colors.black)),
-            subtitle: new Text(''),
+            subtitle: const Text(''),
             onTap: () {},
           )
         ],
@@ -479,21 +478,21 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.tambo} \n ${band.codigoIntervencion}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle: new Text('${band.tipoGobierno}',
+            subtitle: Text('${band.tipoGobierno}',
                 style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 70,
                   child: Text(
                     ' ${band.fecha}',
                     style: const TextStyle(fontSize: 10),
                   ),
                 ),
-                Container(
+                const SizedBox(
                   width: 70,
-                  child: const Text(
+                  child: Text(
                     ' ',
                     style: TextStyle(fontSize: 10),
                   ),
@@ -526,21 +525,21 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.puntoAtencion} \n ${band.codigoUbigeo}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle: new Text('${band.plataforma}',
+            subtitle: Text(band.plataforma,
                 style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 70,
                   child: Text(
                     ' ${band.fechaParteDiario}',
                     style: const TextStyle(fontSize: 10),
                   ),
                 ),
-                Container(
+                const SizedBox(
                   width: 70,
-                  child: const Text(
+                  child: Text(
                     ' ',
                     style: TextStyle(fontSize: 10),
                   ),
@@ -567,7 +566,8 @@ class Listas {
       child: Column(
         children: <Widget>[
           ListTile(
-            leading: Container(
+            leading: SizedBox(
+              width: 49,
               child: Row(
                 children: [
                   (band.estado == 'INACTIVO')
@@ -590,7 +590,6 @@ class Listas {
                       decoration: const BoxDecoration(color: Colors.grey))
                 ],
               ),
-              width: 49,
             ),
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Column(
@@ -605,7 +604,7 @@ class Listas {
                 )
               ],
             ),
-            subtitle: new Text(
+            subtitle: Text(
                 '${band.descripcionMarca} - ${band.color} \nSERIE - ${band.serie}\n${band.descripcionModelo}\n',
                 style: const TextStyle(fontSize: 10)),
             trailing: Column(
@@ -645,10 +644,10 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor: [Colors.green],
+                          activeBgColor: const [Colors.green],
                           changeOnTap: false,
                           fontSize: 7.5,
-                          labels: ['INACTIVO', 'ACTIVO'],
+                          labels: const ['INACTIVO', 'ACTIVO'],
                           //     icons: Icon(Icons.abc),
                           onToggle: (index) {
                             print('switched to: $index');
@@ -662,10 +661,10 @@ class Listas {
                           activeFgColor: Colors.white,
                           inactiveBgColor: Colors.grey,
                           inactiveFgColor: Colors.white,
-                          activeBgColor: [Colors.red],
+                          activeBgColor: const [Colors.red],
                           changeOnTap: false,
                           fontSize: 7.5,
-                          labels: ['INACTIVO', 'ACTIVO'],
+                          labels: const ['INACTIVO', 'ACTIVO'],
 
                           //     icons: Icon(Icons.abc),
                           onToggle: (index) {
@@ -744,7 +743,7 @@ class Listas {
                 const SizedBox(
                   width: 1,
                 ),
-                Container(
+                SizedBox(
                   width: 240,
                   child: Text(
                       'Tambo: ${band.tambo}\n Fecha: ${band.fecha}\n Region: ${band.departamento}',
@@ -814,19 +813,19 @@ class Listas {
             contentPadding: const EdgeInsets.fromLTRB(15, 10, 25, 0),
             title: Text('${band.idTicket} \n${band.usuarioAsignado}',
                 style: const TextStyle(fontSize: 13)),
-            subtitle: new Text('${band.material}',
+            subtitle: Text('${band.material}',
                 style: const TextStyle(fontSize: 10)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 70,
                   child: Text(
                     '${band.material}',
                     style: const TextStyle(fontSize: 10),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 70,
                   child: Text(
                     '${band.repuesto}',
@@ -904,7 +903,7 @@ class Listas {
                 style:
                     const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
-            Text('${band.descripcionEntidad ?? ''}',
+            Text(band.descripcionEntidad ?? '',
                 textAlign: TextAlign.justify,
                 style:
                     const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
@@ -947,7 +946,7 @@ class Listas {
                 const SizedBox(
                   width: 2.5,
                 ),
-                Container(
+                SizedBox(
                   width: 120,
                   child: Text(
                       '${band.plataformaDescripcion}\n'
@@ -956,7 +955,7 @@ class Listas {
                       style: const TextStyle(
                           fontSize: 13, fontWeight: FontWeight.bold)),
                 ),
-                Container(
+                SizedBox(
                   width: 120,
                   child: Text(
                       '${band.codigoPlan}\n'
@@ -1006,44 +1005,44 @@ class Listas {
                       if (band.idEvaluacion == "0") ...[
                         Container(
                           margin: const EdgeInsets.only(right: 10),
-                          child: Row(
+                          child: const Row(
                             children: [
-                              const Icon(Icons.radio_button_checked_outlined,
+                              Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.red),
-                              const Text(" PROGRAMADO")
+                              Text(" PROGRAMADO")
                             ],
                           ),
                         ),
                       ] else if (band.idEvaluacion == "1") ...[
                         Container(
                           margin: const EdgeInsets.only(right: 10),
-                          child: Row(
+                          child: const Row(
                             children: [
-                              const Icon(Icons.radio_button_checked_outlined,
+                              Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.green),
-                              const Text(" APROBADO")
+                              Text(" APROBADO")
                             ],
                           ),
                         ),
                       ] else if (band.idEvaluacion == "2") ...[
                         Container(
                           margin: const EdgeInsets.only(right: 10),
-                          child: Row(
+                          child: const Row(
                             children: [
-                              const Icon(Icons.radio_button_checked_outlined,
+                              Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.black),
-                              const Text(" OBSERVADO")
+                              Text(" OBSERVADO")
                             ],
                           ),
                         ),
                       ] else if (band.idEvaluacion == "3") ...[
                         Container(
                           margin: const EdgeInsets.only(right: 10),
-                          child: Row(
+                          child: const Row(
                             children: [
-                              const Icon(Icons.radio_button_checked_outlined,
+                              Icon(Icons.radio_button_checked_outlined,
                                   color: Colors.deepPurpleAccent),
-                              const Text(" SUBSANADO")
+                              Text(" SUBSANADO")
                             ],
                           ),
                         ),

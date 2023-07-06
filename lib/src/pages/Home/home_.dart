@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/IntervencionesHome.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/main_footer_all_option.dart';
 import 'package:actividades_pais/src/pages/ProgramacionActividades/actividadesPnpais.dart';
@@ -7,7 +6,6 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/cordinacion_a
 import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_suspervicion.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/historialTambo/historialTambos.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -18,7 +16,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/Intervenciones.dart';
 import 'package:actividades_pais/src/pages/Pias/ListaReportesPias.dart';
 import 'package:actividades_pais/src/pages/configuracion/Asistencia.dart';
 import 'package:actividades_pais/src/pages/configuracion/pantallainicio.dart';
@@ -32,6 +29,8 @@ SharedPreferences? _prefs;
 
 class HomePagePais extends StatefulWidget {
   static String route = '/';
+
+  const HomePagePais({super.key});
 
   @override
   _HomePagePais createState() => _HomePagePais();
@@ -466,7 +465,7 @@ class _HomePagePais extends State<HomePagePais> {
                         if (oHomeOptionSelect.code == 'OPT1000') {
                           await Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => PantallaInicio(),
+                              builder: (context) => const PantallaInicio(),
                             ),
                           );
                         } else {
@@ -490,7 +489,7 @@ class _HomePagePais extends State<HomePagePais> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => IntervencionesHome(),
+                                builder: (context) => const IntervencionesHome(),
                               ),
                             );
                             /* Navigator.push(
@@ -542,7 +541,7 @@ class _HomePagePais extends State<HomePagePais> {
                         case 'OPT1005':
                           var rspt = await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) => MainFooterAllOptionPage(),
+                              builder: (_) => const MainFooterAllOptionPage(),
                             ),
                           );
                           break;

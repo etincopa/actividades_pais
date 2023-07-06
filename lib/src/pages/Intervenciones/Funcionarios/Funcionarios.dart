@@ -17,7 +17,7 @@ class FuncionariosPage extends StatefulWidget {
   int idProgramacion;
   String programa;
 
-  FuncionariosPage({this.idProgramacion = 0, this.programa = ''});
+  FuncionariosPage({super.key, this.idProgramacion = 0, this.programa = ''});
 
   @override
   State<FuncionariosPage> createState() => _FuncionariosPageState();
@@ -90,7 +90,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
   @override
   Widget build(BuildContext context) {
     _checkInternetConnection();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -106,7 +106,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
         child: ListView(
           children: [
             Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 children: [
                   Row(
@@ -216,7 +216,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                                 )
                               : Container(),
                           Text(
-                            'Validar ' + nombreBoton,
+                            'Validar $nombreBoton',
                             style: const TextStyle(
                               color:
                                   Colors.white, // this is for your text colour
@@ -269,6 +269,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                       if (value!.isEmpty) {
                         return 'Por favor ingrese dato.';
                       }
+                      return null;
                     },
                     enabled: enableController,
                     controller: controllerNombre,
@@ -282,6 +283,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                       if (value!.isEmpty) {
                         return 'Por favor ingrese dato.';
                       }
+                      return null;
                     },
                     enabled: enableController,
                     controller: controllerApellidoPaterno,
@@ -295,6 +297,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                       if (value!.isEmpty) {
                         return 'Por favor ingrese dato.';
                       }
+                      return null;
                     },
                     enabled: enableController,
                     controller: controllerApellidoMaterno,
@@ -341,6 +344,7 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                       if (value!.isEmpty) {
                         return 'Por favor ingrese dato.';
                       }
+                      return null;
                     },
                     //  enabled: enableController,
                     controller: controllerCargo,
@@ -369,11 +373,11 @@ class _FuncionariosPageState extends State<FuncionariosPage>
                             MaterialStateProperty.all(AppConfig.primaryColor),
                       ),
                       child: Text(
-                        "Agregar " + nombreBoton,
+                        "Agregar $nombreBoton",
                         style: const TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await agregar(_formKey);
+                        await agregar(formKey);
                       },
                     ),
                   ),

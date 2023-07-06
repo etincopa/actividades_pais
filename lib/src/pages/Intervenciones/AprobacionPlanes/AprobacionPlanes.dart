@@ -3,9 +3,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroDato
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
-import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobarObservar.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/BackdropScaffold/backdrofile.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/DetalleObservacion.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/DetalleSubsanado.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
@@ -43,8 +41,8 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
     {"value": '2', "descripcion": 'OBSERVADO'},
     {"value": '3', "descripcion": 'SUBSANADO'},
   ];
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
 
   var pageIndex = 1;
   bool mostarIcono = false;
@@ -90,7 +88,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
       });
     }
   }*/
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     filtroDataPlanMensual.pageSize = pageSize;
     filtroDataPlanMensual.pageIndex = pageIndex;
     setState(() {});
@@ -119,7 +117,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
   List<DatosPlanMensual>? _posts = [];
   int _currentPage = 1;
   bool _isLoading = false;
-  bool _showAddPageButton = true;
+  final bool _showAddPageButton = true;
 
   @override
   Widget build(BuildContext context) {
@@ -310,10 +308,10 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                                           ),
                                           isExpanded: true,
                                           items: optionsP.map((user) {
-                                            return new DropdownMenuItem<
+                                            return DropdownMenuItem<
                                                 TambosDependientes>(
                                               value: user,
-                                              child: new Text(
+                                              child: Text(
                                                 user.plataformaDescripcion!,
                                                 style: const TextStyle(
                                                     fontSize: 10),
@@ -374,7 +372,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: AppConfig.primaryColor,
+                            backgroundColor: AppConfig.primaryColor,
                           ),
                           onPressed: () async {
                             _backdropKey.currentState!.fling();
@@ -659,6 +657,7 @@ class _AprobacionPlanesTrabajoState extends State<AprobacionPlanesTrabajo> {
             if (value!.isEmpty) {
               return 'Por favor Ingrese dato.';
             }
+            return null;
           },
           enabled: enabled,
           controller: controller,

@@ -334,8 +334,6 @@ class PnPaisApi {
   Future<HttpResponse<List<HistorialJUTModel>>> getHistorialJUT(
     String? ut,
   ) async {
-    DateTime today = DateTime.now();
-    String dateStr = "${today.year}";
 
     var sut = ut != null ? '/$ut' : '';
 
@@ -519,7 +517,7 @@ class PnPaisApi {
   Future<HttpResponse<List<HistorialGestorModel>>> getHistorialGestor(
       String? snip) async {
     return await _http.request<List<HistorialGestorModel>>(
-      '${basePathApp3}obtenerHistorialGestores/${snip}',
+      '${basePathApp3}obtenerHistorialGestores/$snip',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -532,7 +530,7 @@ class PnPaisApi {
   Future<HttpResponse<List<AvanceMetasModel>>> getAvanceMetasMensualizada(
       String anio) async {
     return await _http.request<List<AvanceMetasModel>>(
-      '${basePathApp3}obtenerEjecucionMetasMensualizadoAnio/${anio}',
+      '${basePathApp3}obtenerEjecucionMetasMensualizadoAnio/$anio',
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => AvanceMetasModel.fromJson(e)).toList();
@@ -543,7 +541,7 @@ class PnPaisApi {
   Future<HttpResponse<List<IndicadorInternetModel>>> getIndicadorInternet(
       String itTipo) async {
     return await _http.request<List<IndicadorInternetModel>>(
-      '${basePathApp3}obtenerTambosTipoProveedorInternet/${itTipo}',
+      '${basePathApp3}obtenerTambosTipoProveedorInternet/$itTipo',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -556,7 +554,7 @@ class PnPaisApi {
   Future<HttpResponse<List<ListaTambosEstadoInternetModel>>>
       getListaTambosEstadoInternet(String idEstado) async {
     return await _http.request<List<ListaTambosEstadoInternetModel>>(
-      '${basePathApp3}obtenerTambosEstadoInternet/${idEstado}',
+      '${basePathApp3}obtenerTambosEstadoInternet/$idEstado',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -582,7 +580,7 @@ class PnPaisApi {
   Future<HttpResponse<List<IndicadorCategorizacionModel>>>
       getIndicadorCategorizacion(String itTipo) async {
     return await _http.request<List<IndicadorCategorizacionModel>>(
-      '${basePathApp3}obtenerTambosTipoCategorizacion/${itTipo}',
+      '${basePathApp3}obtenerTambosTipoCategorizacion/$itTipo',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -595,7 +593,7 @@ class PnPaisApi {
   Future<HttpResponse<List<ServiciosBasicosResumenModel>>>
       getIndicadorResumenServiciosBasicos(String opcion, String tipo) async {
     return await _http.request<List<ServiciosBasicosResumenModel>>(
-      '${basePathApp3}obtenerTipoServicioBasicoAguaLuz/${opcion}/${tipo}',
+      '${basePathApp3}obtenerTipoServicioBasicoAguaLuz/$opcion/$tipo',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -608,7 +606,7 @@ class PnPaisApi {
   Future<HttpResponse<List<CategorizacionTambosModel>>> getCategorizacionTambos(
       String itTipo) async {
     return await _http.request<List<CategorizacionTambosModel>>(
-      '${basePathApp3}obtenerTambosTipoCategorizacion/${itTipo}',
+      '${basePathApp3}obtenerTambosTipoCategorizacion/$itTipo',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -622,7 +620,7 @@ class PnPaisApi {
     String sTipo,
   ) async {
     return await _http.request<List<PersonalTambo>>(
-      '${basePathApp3}obtenerPersonalPuesto/${sTipo}',
+      '${basePathApp3}obtenerPersonalPuesto/$sTipo',
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => PersonalTambo.fromJson(e)).toList();
@@ -643,7 +641,7 @@ class PnPaisApi {
   Future<HttpResponse<List<AtencionesUsuariosTotalModel>>>
       getCantidadTotalMetas(String anio) async {
     return await _http.request<List<AtencionesUsuariosTotalModel>>(
-      '${basePathApp3}obtenerEjecucionAnualTambo/${anio}',
+      '${basePathApp3}obtenerEjecucionAnualTambo/$anio',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -682,7 +680,7 @@ class PnPaisApi {
   Future<HttpResponse<List<ActividadesDiariasResumenModel>>>
       getActividadesDiariasResumen(String fecha) async {
     return await _http.request<List<ActividadesDiariasResumenModel>>(
-      '${basePathApp3}obtenerActividadesDiariasTamboResumen/${fecha}',
+      '${basePathApp3}obtenerActividadesDiariasTamboResumen/$fecha',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -695,7 +693,7 @@ class PnPaisApi {
   Future<HttpResponse<List<ActividadesDiariasModel>>> getActividadesDiarias(
       String fecha, String tipo, String idUt, String snip) async {
     return await _http.request<List<ActividadesDiariasModel>>(
-      '${basePathApp3}obtenerActividadesDiariasTambo/${fecha}/${tipo}/${idUt}/${snip}',
+      '${basePathApp3}obtenerActividadesDiariasTambo/$fecha/$tipo/$idUt/$snip',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -708,7 +706,7 @@ class PnPaisApi {
   Future<HttpResponse<List<BuscarTamboDto>>> getDatosTamboGestor(
       String idTambo) async {
     return await _http.request<List<BuscarTamboDto>>(
-      '${basePathApp3}buscarTamboOrGestorID/${idTambo}',
+      '${basePathApp3}buscarTamboOrGestorID/$idTambo',
       method: "GET",
       parser: (data) {
         return (data as List).map((e) => BuscarTamboDto.fromJson(e)).toList();
@@ -719,7 +717,7 @@ class PnPaisApi {
   Future<HttpResponse<List<ProgramacionMantenimientoModel>>>
       getProgramacionMantenimiento(String? nomUT) async {
     return await _http.request<List<ProgramacionMantenimientoModel>>(
-      '${basePathApp3}obtenerProgramacionMantenimiento/${nomUT}',
+      '${basePathApp3}obtenerProgramacionMantenimiento/$nomUT',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -811,7 +809,7 @@ class PnPaisApi {
             .where((o) => o['estado'] == 'PRESTA SERVICIO')
             .toList();
 
-        return (tambosOperativos as List)
+        return (tambosOperativos)
             .map((e) => TambosMapaModel.fromJson(e))
             .toList();
       },
@@ -827,7 +825,7 @@ class PnPaisApi {
         var tambosOperativos =
             (data[0] as List).where((o) => o['num_snip'] == snip).toList();
 
-        return (tambosOperativos as List)
+        return (tambosOperativos)
             .map((e) => TambosMapaModel.fromJson(e))
             .toList();
       },
@@ -837,7 +835,7 @@ class PnPaisApi {
   Future<HttpResponse<List<EquipamientoInformaticoModel>>>
       getEquipamientoInformatico(String snip) async {
     return await _http.request<List<EquipamientoInformaticoModel>>(
-      '${basePathApp3}obtenerParqueInformatico/${snip}',
+      '${basePathApp3}obtenerParqueInformatico/$snip',
       method: "GET",
       parser: (data) {
         return (data as List)
@@ -853,7 +851,7 @@ class PnPaisApi {
     int snip,
   ) async {
     return await _http.request<List<IncidentesInternetModel>>(
-      '${basePathApp3}tamboIncidenciaInternet/${snip}/2023',
+      '${basePathApp3}tamboIncidenciaInternet/$snip/2023',
       method: "GET",
       parser: (data) {
         return (data as List)

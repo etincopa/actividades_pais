@@ -115,7 +115,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: WidgetCustoms.appBar(
         'ProjectDetailTitle'.tr,
         context: context,

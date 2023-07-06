@@ -63,26 +63,26 @@ class DetalleIntervencion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_programacion'] = this.idProgramacion;
-    data['fecha'] = this.fecha;
-    data['hora_inicio'] = this.horaInicio;
-    data['hora_fin'] = this.horaFin;
-    data['plataforma_descripcion'] = this.plataformaDescripcion;
-    data['nombre_tipo_intervencion'] = this.nombreTipoIntervencion;
-    data['descripcion_intervencion'] = this.descripcionIntervencion;
-    data['nombre'] = this.nombre;
-    data['nombre_sector'] = this.nombreSector;
-    data['nombre_programa'] = this.nombrePrograma;
-    data['nombre_categoria'] = this.nombreCategoria;
-    data['nombre_subcategoria'] = this.nombreSubcategoria;
-    data['nombre_tipo_actividad'] = this.nombreTipoActividad;
-    data['nombre_lugar_intervencion'] = this.nombreLugarIntervencion;
-    data['nombre_documento_acredita'] = this.nombreDocumentoAcredita;
-    data['id_evaluacion'] = this.idEvaluacion;
-    data['tipo_plan'] = this.tipoPlan;
-    data['codigo_plan'] = this.codigoPlan;
-    data['nombre_tipo_servicio'] = this.nombreTipoServicio;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_programacion'] = idProgramacion;
+    data['fecha'] = fecha;
+    data['hora_inicio'] = horaInicio;
+    data['hora_fin'] = horaFin;
+    data['plataforma_descripcion'] = plataformaDescripcion;
+    data['nombre_tipo_intervencion'] = nombreTipoIntervencion;
+    data['descripcion_intervencion'] = descripcionIntervencion;
+    data['nombre'] = nombre;
+    data['nombre_sector'] = nombreSector;
+    data['nombre_programa'] = nombrePrograma;
+    data['nombre_categoria'] = nombreCategoria;
+    data['nombre_subcategoria'] = nombreSubcategoria;
+    data['nombre_tipo_actividad'] = nombreTipoActividad;
+    data['nombre_lugar_intervencion'] = nombreLugarIntervencion;
+    data['nombre_documento_acredita'] = nombreDocumentoAcredita;
+    data['id_evaluacion'] = idEvaluacion;
+    data['tipo_plan'] = tipoPlan;
+    data['codigo_plan'] = codigoPlan;
+    data['nombre_tipo_servicio'] = nombreTipoServicio;
     return data;
   }
 }

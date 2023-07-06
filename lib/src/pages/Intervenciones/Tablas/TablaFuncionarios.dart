@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 
 class TablaGiaClienteAsix extends StatefulWidget {
-  late final String title;
+  late String title;
+
+  TablaGiaClienteAsix({super.key});
   @override
   State<TablaGiaClienteAsix> createState() => _TablaGiaClienteAsixState();
 }
 
 class _TablaGiaClienteAsixState extends State<TablaGiaClienteAsix> {
   List<Funcionarios> list = [];
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   Future refreshList() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     //var a = await DatabasePr.db.getDtaGRC();
     setState(() {
       ///list = a;
@@ -23,9 +25,9 @@ class _TablaGiaClienteAsixState extends State<TablaGiaClienteAsix> {
   Widget build(BuildContext context) {
     refreshList();
     return DataTable(
-      columns: [
+      columns: const [
         DataColumn(
-            label: Container(
+            label: SizedBox(
           width: 50,
           child: Text('N° Guia',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
@@ -48,20 +50,20 @@ class _TablaGiaClienteAsixState extends State<TablaGiaClienteAsix> {
                 cells: [
                   DataCell(
                     Text(
-                      list[i].cargo + '-' + list[i].telefono,
-                      style: TextStyle(fontSize: 10),
+                      '${list[i].cargo}-${list[i].telefono}',
+                      style: const TextStyle(fontSize: 10),
                     ),
                     // placeholder: true,
                     //  showEditIcon: true)
                   ),
                   DataCell(Text(
                     list[i].dni,
-                    style: TextStyle(fontSize: 10),
+                    style: const TextStyle(fontSize: 10),
                   )),
                   DataCell(Row(
                     children: [
                       accionesE(list[i].id),
-                      SizedBox(width: 10.0),
+                      const SizedBox(width: 10.0),
                       accionesEl(list[i].id)
                     ],
                   )),
@@ -75,12 +77,12 @@ class _TablaGiaClienteAsixState extends State<TablaGiaClienteAsix> {
         elevation: 1.0,
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.green,
-        child: Container(
+        child: SizedBox(
           height: 20.0,
           width: 20.0,
           child: MaterialButton(
             minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             onPressed: () async {
 /*              var consulta = await DatabasePr.db.getporid(i);
 
@@ -121,12 +123,12 @@ class _TablaGiaClienteAsixState extends State<TablaGiaClienteAsix> {
         elevation: 1.0,
         borderRadius: BorderRadius.circular(20.0),
         color: Colors.red,
-        child: Container(
+        child: SizedBox(
           height: 20.0,
           width: 20.0,
           child: MaterialButton(
             minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             onPressed: () async {
               showDialog<String>(
                 context: context,
@@ -147,13 +149,13 @@ class _TablaGiaClienteAsixState extends State<TablaGiaClienteAsix> {
                               refreshList();
                               Navigator.pop(context);
                             },
-                            child: Text('Si'),
+                            child: const Text('Si'),
                           ),
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
                             },
-                            child: Text('No'),
+                            child: const Text('No'),
                           )
                         ],
                       ),

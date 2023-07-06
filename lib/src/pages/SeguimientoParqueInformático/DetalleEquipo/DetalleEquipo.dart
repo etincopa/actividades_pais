@@ -1,6 +1,5 @@
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
-import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +8,17 @@ import 'package:flutter/material.dart';
 class DetalleEquipo extends StatefulWidget {
   ListaEquipoInformatico listaEquipoInformatico;
 
-  DetalleEquipo(this.listaEquipoInformatico);
+  DetalleEquipo(this.listaEquipoInformatico, {super.key});
 
   @override
   State<DetalleEquipo> createState() => _DetalleEquipoState();
 }
 
 class _DetalleEquipoState extends State<DetalleEquipo> {
-  bool _loaded = false;
+  final bool _loaded = false;
   var img = Image.network(
       'https://www.pais.gob.pe/backendsismonitor/public/storage/null');
-  var placeholder = AssetImage('assets/paislogo.png');
+  var placeholder = const AssetImage('assets/paislogo.png');
   var respuetaImgen = '0';
   Dio dio = Dio();
 
@@ -40,14 +39,14 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 20, top: 10),
+      margin: const EdgeInsets.only(left: 15, right: 20, top: 10),
       child: Column(
         children: [
           Expanded(
             child: ListView(
               children: [
-                SizedBox(height: 10),
-                Row(
+                const SizedBox(height: 10),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
@@ -58,124 +57,124 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
                     Text("ACTIVO")
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "CODIGO PATRIMONIAL :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Text("${widget.listaEquipoInformatico.codigoPatrimonial}")
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "FECHA DE INGRESO :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 28),
+                    const SizedBox(width: 28),
                     Text("${widget.listaEquipoInformatico.fecIngreso}")
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "MARCA :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 105),
+                    const SizedBox(width: 105),
                     Text("${widget.listaEquipoInformatico.descripcionMarca}")
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "COLOR :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 110),
+                    const SizedBox(width: 110),
                     Text("${widget.listaEquipoInformatico.color}")
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "DENOMINACION :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 50),
-                    Container(
+                    const SizedBox(width: 50),
+                    SizedBox(
                         width: 170,
                         child: Text(
                           "${widget.listaEquipoInformatico.descripcionEquipoInformatico}",
                         ))
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "TIPO EQUIPO :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 70),
-                    Container(
+                    const SizedBox(width: 70),
+                    SizedBox(
                         width: 170,
                         child: Text(
                           "${widget.listaEquipoInformatico.descripcionTipoEquipoInformatico}",
                         ))
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "MODELO :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 97),
-                    Container(
+                    const SizedBox(width: 97),
+                    SizedBox(
                         width: 170,
                         child: Text(
                           "${widget.listaEquipoInformatico.descripcionModelo}",
                         ))
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "NRO SERIE :",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 89),
-                    Container(
+                    const SizedBox(width: 89),
+                    SizedBox(
                         width: 170,
                         child: Text(
                           "${widget.listaEquipoInformatico.serie}",
                         ))
                   ],
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 if (respuetaImgen != '0') ...[
                   Image.network(
-                      AppConfig.backendsismonitor + '/storage/' + respuetaImgen)
+                      '${AppConfig.backendsismonitor}/storage/$respuetaImgen')
                 ],
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
           ),

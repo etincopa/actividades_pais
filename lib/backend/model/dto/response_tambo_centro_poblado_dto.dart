@@ -25,7 +25,7 @@ class TamboCentroPobladoDto {
   String? distanciaM;
   String? distanciaKm;
 
-  TamboCentroPobladoDto.empty() {}
+  TamboCentroPobladoDto.empty();
 
   TamboCentroPobladoDto(
       {this.nombreCcpp,

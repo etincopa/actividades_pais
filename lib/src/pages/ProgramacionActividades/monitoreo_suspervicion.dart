@@ -28,7 +28,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
   List<ActividadTamboModel> aTambo = [];
   String? _fechaca;
 
-  var uuid = Uuid();
+  var uuid = const Uuid();
   @override
   void initState() {
     super.initState();
@@ -216,7 +216,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                       }
                     }
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: width / 3.5,
                     child: const Center(
@@ -235,15 +235,14 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 237, 82, 68),
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 237, 82, 68),
                     shadowColor: const Color.fromARGB(255, 53, 53, 53),
                     elevation: 5,
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: width / 3.5,
                     child: const Center(
@@ -476,7 +475,7 @@ class _MonitoreoSupervicionState extends State<MonitoreoSupervicion> {
               for (DataRow oDataRow in dataRows) {
                 LocalKey oKey = oDataRow.key!;
                 String iKey =
-                    oKey.toString().replaceAll(new RegExp(r'[^0-9]'), '');
+                    oKey.toString().replaceAll(RegExp(r'[^0-9]'), '');
                 if (iKey == data.idRegistroEntidadesYActividades) {
                   break;
                 }

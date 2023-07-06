@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Paises.dart';
 
@@ -12,9 +11,7 @@ import 'package:actividades_pais/src/datamodels/Clases/TipoDocumento.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
-import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -23,7 +20,7 @@ enum BestTutorSite { javatpoint, w3schools, tutorialandexample }
 class ExtrangerosPage extends StatefulWidget {
   int idProgramacion = 0;
 
-  ExtrangerosPage({this.idProgramacion = 0});
+  ExtrangerosPage({super.key, this.idProgramacion = 0});
 
   @override
   State<ExtrangerosPage> createState() => _ExtrangerosPageState();
@@ -36,7 +33,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
   var tipoDoc = "Seleccione documento de Indentidad";
   var nombreBoton = "Validar DNI";
   bool visibilityTag = true;
-  BestTutorSite _site = BestTutorSite.javatpoint;
+  final BestTutorSite _site = BestTutorSite.javatpoint;
   bool validarcontroles = true;
   Participantes participantes = Participantes();
   TextEditingController controllerPrimerNombre = TextEditingController();
@@ -62,9 +59,9 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
   ServicioProgramacionParticipante participanteSr =
       ServicioProgramacionParticipante();
 
-  var formatter = new DateFormat('yyyy-MM-dd');
+  var formatter = DateFormat('yyyy-MM-dd');
 
-  DateTime? nowfec = new DateTime.now();
+  DateTime? nowfec = DateTime.now();
 
   @override
   void initState() {
@@ -89,29 +86,29 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: const Color(0xFF78b8cd),
-        title: Text("AGREGAR EXTRANGEROS - ${widget.idProgramacion}",style: TextStyle(fontSize: 15),),
+        title: Text("AGREGAR EXTRANGEROS - ${widget.idProgramacion}",style: const TextStyle(fontSize: 15),),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
-        actions: [],
+        actions: const [],
       ),
       body: Container(
         child: ListView(
           children: [
             Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                        child: Text('Pais : '),
+                        margin: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                        child: const Text('Pais : '),
                       ),
                     ],
                   ),
@@ -120,23 +117,23 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                           width: 350,
                           child: Text(" ${controllerPais.text}"),
                         )
-                      : new Container(),
+                      : Container(),
                   visibilityTag
                       ? SizedBox(
                           width: 350,
-                          child: new FutureBuilder<List<Paises>>(
+                          child: FutureBuilder<List<Paises>>(
                             future: provider.listaPaises(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<Paises>> snapshot) {
                               if (snapshot.hasData) {
                                 return Container(
                                     child: DropdownButton<Paises>(
-                                  underline: SizedBox(),
+                                  underline: const SizedBox(),
                                   isExpanded: true,
                                   items: snapshot.data
                                       ?.map((user) => DropdownMenuItem<Paises>(
-                                            child: Text(user.paisNombre),
                                             value: user,
+                                            child: Text(user.paisNombre),
                                           ))
                                       .toList(),
                                   onChanged: (Paises? newVal) {
@@ -146,20 +143,20 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                                       //   ProviderServicios().getTipoDocumento();
                                     });
                                   },
-                                  hint: Text("${controllerPais.text}"),
+                                  hint: Text(controllerPais.text),
                                 ));
                               }
-                              return SizedBox();
+                              return const SizedBox();
                             },
                           ),
                         )
-                      : new Container(),
+                      : Container(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                        child: Text('Tipo Documento: '),
+                        margin: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                        child: const Text('Tipo Documento: '),
                       ),
                     ],
                   ),
@@ -168,24 +165,24 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                           width: 350,
                           child: Text(" $tipoDocumento"),
                         )
-                      : new Container(),
+                      : Container(),
                   visibilityTag
                       ? SizedBox(
                           width: 350,
-                          child: new FutureBuilder<List<TipoDocumento>>(
+                          child: FutureBuilder<List<TipoDocumento>>(
                             future: ProviderServicios().getTipoDocumento(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<TipoDocumento>> snapshot) {
                               if (snapshot.hasData) {
                                 return Container(
                                     child: DropdownButton<TipoDocumento>(
-                                  underline: SizedBox(),
+                                  underline: const SizedBox(),
                                   isExpanded: true,
                                   items: snapshot.data
                                       ?.map((user) =>
                                           DropdownMenuItem<TipoDocumento>(
-                                            child: Text(user.descripcion),
                                             value: user,
+                                            child: Text(user.descripcion),
                                           ))
                                       .toList(),
                                   onChanged: (TipoDocumento? newVal) {
@@ -194,27 +191,27 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
 
                                     setState(() {});
                                   },
-                                  hint: Text("$tipoDocumento"),
+                                  hint: Text(tipoDocumento),
                                 ));
                               }
-                              return SizedBox();
+                              return const SizedBox();
                             },
                           ),
                         )
-                      : new Container(),
+                      : Container(),
                   Container(),
                   SizedBox(
                     width: 350,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: controllerNumeroDoc,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Numero Documento',
                         hintText: 'Numero Documento',
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   SizedBox(
@@ -224,7 +221,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                         backgroundColor:
                             MaterialStateProperty.all(const Color(0xFF78b8cd)),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Validar",
                         style: TextStyle(
                           color: Colors.white, // this is for your text colour
@@ -260,10 +257,11 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                         if (value!.isEmpty) {
                           return 'Por favor ingrese dato.';
                         }
+                        return null;
                       },
                       enabled: validarcontroles,
                       controller: controllerPrimerNombre,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Primer Nombre',
                         hintText: 'Primer Nombre',
                       ),
@@ -274,7 +272,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                     child: TextField(
                       enabled: validarcontroles,
                       controller: controllerSegundoNombre,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Segundo Nombre',
                         hintText: 'Segundo Nombre',
                       ),
@@ -287,10 +285,11 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                         if (value!.isEmpty) {
                           return 'Por favor ingrese dato.';
                         }
+                        return null;
                       },
                       controller: controllerApellidoPaterno,
                       enabled: validarcontroles,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Apellido Paterno',
                         hintText: 'Apellido Paterno',
                       ),
@@ -301,13 +300,13 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                     child: TextField(
                       controller: controllerApellidoMaterno,
                       enabled: validarcontroles,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Apellido Materno',
                         hintText: 'Apellido Materno',
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   !visibilityTag
@@ -315,28 +314,28 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                           width: 350,
                           child: Row(
                             children: [
-                              Text('Sexo: '),
+                              const Text('Sexo: '),
                               Text(controllerSexo.text)
                             ],
                           ),
                         )
-                      : new Container(),
+                      : Container(),
                   visibilityTag
                       ? SizedBox(
                           width: 350,
-                          child: new FutureBuilder<List<Sexo>>(
+                          child: FutureBuilder<List<Sexo>>(
                             future: ProviderServicios().getSexo(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<Sexo>> snapshot) {
                               if (snapshot.hasData) {
                                 return Container(
                                     child: DropdownButton<Sexo>(
-                                  underline: SizedBox(),
+                                  underline: const SizedBox(),
                                   isExpanded: true,
                                   items: snapshot.data
                                       ?.map((user) => DropdownMenuItem<Sexo>(
-                                            child: Text(user.descripcion),
                                             value: user,
+                                            child: Text(user.descripcion),
                                           ))
                                       .toList(),
                                   onChanged: (Sexo? newVal) {
@@ -345,15 +344,15 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                                   },
                                   hint: Text(
                                     "Sexo ${controllerSexo.text}",
-                                    style: TextStyle(color: Colors.black),
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ));
                               }
-                              return SizedBox();
+                              return const SizedBox();
                             },
                           ),
                         )
-                      : new Container(),
+                      : Container(),
                   SizedBox(
                       width: 350,
                       child: TextFormField(
@@ -361,12 +360,13 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                           if (value!.isEmpty) {
                             return 'Por favor ingrese dato.';
                           }
+                          return null;
                         },
                         enabled: validarcontroles,
                         //cursorColor: Colors.blueAccent,
                         controller: controllerfechaNacimiento,
                         //obscureText: false,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Fecha Nacimiento',
                           hintText: 'Fecha Nacimiento',
                           /*   fillColor: Colors.blueAccent,
@@ -397,27 +397,27 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                       keyboardType: TextInputType.number,
                       controller: controllerEdad,
                       enabled: validarcontroles,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Edad',
                         hintText: 'Edad',
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                        child: Text('Seleccioné Entidad'),
+                        margin: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                        child: const Text('Seleccioné Entidad'),
                       ),
                     ],
                   ),
                   SizedBox(
                     width: 350,
-                    child: new FutureBuilder<List<ListarEntidadFuncionario>>(
+                    child: FutureBuilder<List<ListarEntidadFuncionario>>(
                       future: DatabasePr.db
                           .listarEntidadFuncionario(widget.idProgramacion),
                       builder: (BuildContext context,
@@ -426,13 +426,13 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                         if (snapshot.hasData) {
                           return Container(
                               child: DropdownButton<ListarEntidadFuncionario>(
-                            underline: SizedBox(),
+                            underline: const SizedBox(),
                             isExpanded: true,
                             items: snapshot.data
                                 ?.map((user) =>
                                     DropdownMenuItem<ListarEntidadFuncionario>(
-                                      child: Text(' ${user.nombre_programa}'),
                                       value: user,
+                                      child: Text(' ${user.nombre_programa}'),
                                     ))
                                 .toList(),
                             onChanged: (ListarEntidadFuncionario? newVal) {
@@ -442,10 +442,10 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                                   widget.idProgramacion, id_entidad);
                               setState(() {});
                             },
-                            hint: Text('$entidad'),
+                            hint: Text(entidad),
                           ));
                         }
-                        return SizedBox();
+                        return const SizedBox();
                       },
                     ),
                   ),
@@ -468,17 +468,17 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                                     MultiSelectItem<ParticipanteEjecucion>(
                                         animal, animal.nombre_servicio!))
                                 .toList(),
-                            title: Text("Servicios"),
+                            title: const Text("Servicios"),
                             decoration: BoxDecoration(
                               color: Colors.blue.withOpacity(0.0),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(40)),
+                                  const BorderRadius.all(Radius.circular(40)),
                             ),
-                            buttonIcon: Icon(
+                            buttonIcon: const Icon(
                               Icons.search,
                               color: Colors.grey,
                             ),
-                            buttonText: Text(
+                            buttonText: const Text(
                               "Servicios",
                               style: TextStyle(
                                 // color: Colors.blue[800],
@@ -492,7 +492,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                             },
                           ));
                         }
-                        return SizedBox();
+                        return const SizedBox();
                       },
                     ),
                   ),
@@ -511,7 +511,7 @@ class _ExtrangerosPageState extends State<ExtrangerosPage>
                         ),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                           participantes.primerNombre =
                               controllerPrimerNombre.text;
                           participantes.segundoNombre =

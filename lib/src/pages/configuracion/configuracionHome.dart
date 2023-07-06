@@ -44,8 +44,8 @@ class _SettingPageState extends State<SettingPageAlert> {
               onChanged: (value) {
                 setState(() {
                   _toggleAirplaneMode = value;
-                  print("ID USUARIO ${idUser}");
-                  print("TOKEN SIGNAL ${tokenSignal}");
+                  print("ID USUARIO $idUser");
+                  print("TOKEN SIGNAL $tokenSignal");
                 });
               },
               value: _toggleAirplaneMode,

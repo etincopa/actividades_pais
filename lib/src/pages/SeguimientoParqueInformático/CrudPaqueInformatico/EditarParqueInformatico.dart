@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:io';
 
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEstado.dart';
@@ -10,7 +9,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Uti/ListarProveedores.dar
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../../datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
 import '../../../datamodels/Provider/ProviderServicios.dart';
 import '../../../datamodels/Servicios/Servicios.dart';
@@ -21,7 +19,7 @@ class EditarParqueInformatico extends StatefulWidget {
   int tipo = 0;
 
   EditarParqueInformatico(
-      {required this.listaEquipoInformatico, this.titulo = "", this.tipo = 0});
+      {super.key, required this.listaEquipoInformatico, this.titulo = "", this.tipo = 0});
 
   @override
   State<EditarParqueInformatico> createState() =>
@@ -44,8 +42,8 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   String seleccionarProveedor = "SELECCIONAR";
 
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
 
   String seleccionarEstado = "SELECCIONAR";
 
@@ -85,8 +83,8 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "${widget.titulo}",
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
+          widget.titulo,
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
         ),
         actions: [
           InkWell(
@@ -98,7 +96,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 5),
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 5),
         child: Form(
           key: _formKey,
           child: ListView(
@@ -123,12 +121,12 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[600],
+                      backgroundColor: Colors.blue[600],
                     ),
                     onPressed: () async {
                 if(mostarBotonGuardar==true)guardar();
                     },
-                    child: Text("$textoBoton"),
+                    child: Text(textoBoton),
                   ))
             ],
           ),
@@ -234,7 +232,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
     return Container(
       child: Center(
         child: Stack(
-          alignment: Alignment(0.9, 1.1),
+          alignment: const Alignment(0.9, 1.1),
           children: <Widget>[
             Positioned(
               top: 0,
@@ -261,7 +259,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                       setState(() {});
                     }
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.red,
                   ),
@@ -271,7 +269,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
             Container(
               height: 120,
               width: 120,
-              margin: EdgeInsets.only(right: 10.0, top: 30, left: 10.2),
+              margin: const EdgeInsets.only(right: 10.0, top: 30, left: 10.2),
               child: Material(
                   elevation: 4.0,
                   borderRadius: BorderRadius.circular(25.0),
@@ -280,17 +278,17 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        child: Icon(Icons.file_copy_sharp, size: 80),
+                        child: const Icon(Icons.file_copy_sharp, size: 80),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text("$nombreArchivo")],
+                        children: [Text(nombreArchivo)],
                       ),
                     ],
                   )
                   ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],
@@ -303,7 +301,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
       context: context,
       builder: (context) {
         Widget okButton = TextButton(
-            child: Text("OK"),
+            child: const Text("OK"),
             onPressed: () {
               Navigator.pop(context);
             });
@@ -332,12 +330,13 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   TextoConFecha(labelText, enabled, controller) {
     return Container(
-        margin: EdgeInsets.only(top: 3),
+        margin: const EdgeInsets.only(top: 3),
         child: TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
               return 'Por favor Ingrese dato.';
             }
+            return null;
           },
           enabled: enabled,
           controller: controller,
@@ -369,12 +368,13 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   TextForm(labelText, enabled, controller) {
     return Container(
-        margin: EdgeInsets.only(top: 0),
+        margin: const EdgeInsets.only(top: 0),
         child: TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
               return 'Por favor ingrese dato.';
             }
+            return null;
           },
           enabled: enabled,
           controller: controller,
@@ -387,7 +387,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   ModeloCombo() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<Modelo>>(
         future: ProviderSeguimientoParqueInformatico().listaModelos(),
         builder: (BuildContext context, AsyncSnapshot<List<Modelo>> snapshot) {
@@ -403,7 +403,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
             );
           } else {
             return Stack(children: [
-              Text(
+              const Text(
                 "Modelo",
                 style: TextStyle(
                     fontSize: 10,
@@ -411,14 +411,14 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                     fontWeight: FontWeight.bold),
               ),
               Container(
-                  margin: EdgeInsets.only(top: 5),
+                  margin: const EdgeInsets.only(top: 5),
                   child: DropdownButton<Modelo>(
                     underline: ProviderServicios().underline(),
                     isExpanded: true,
                     items: snapshot.data
                         ?.map((user) => DropdownMenuItem<Modelo>(
-                              child: Text(user.descripcionModelo!),
                               value: user,
+                              child: Text(user.descripcionModelo!),
                             ))
                         .toList(),
                     onChanged: (Modelo? value) async {
@@ -443,8 +443,8 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                       });
                     },
                   //  value:  snapshot.data![0],
-                    hint: Text("$seleccionarModelo",
-                        style: TextStyle(color: Colors.black)),
+                    hint: Text(seleccionarModelo,
+                        style: const TextStyle(color: Colors.black)),
                   )),
             ]);
           }
@@ -455,7 +455,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   ProveedoresCombo() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<Proveedores>>(
         future: ProviderSeguimientoParqueInformatico().getListarProveedores(),
         builder:
@@ -472,20 +472,20 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
             );
           } else {
             return Stack(children: [
-              Text("Proveedor",
+              const Text("Proveedor",
                   style: TextStyle(
                       fontSize: 10,
                       color: Colors.grey,
                       fontWeight: FontWeight.w700)),
               Container(
-                  margin: EdgeInsets.only(top: 5),
+                  margin: const EdgeInsets.only(top: 5),
                   child: DropdownButton<Proveedores>(
                     underline: ProviderServicios().underline(),
                     isExpanded: true,
                     items: snapshot.data
                         ?.map((dat) => DropdownMenuItem<Proveedores>(
-                              child: Text(dat.proveedor!),
                               value: dat,
+                              child: Text(dat.proveedor!),
                             ))
                         .toList(),
                     onChanged: (Proveedores? value) async {
@@ -497,8 +497,8 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                             value.proveedor.toString();
                       });
                     },
-                    hint: Text("$seleccionarProveedor",
-                        style: TextStyle(color: Colors.black)),
+                    hint: Text(seleccionarProveedor,
+                        style: const TextStyle(color: Colors.black)),
                   ))
             ]);
           }
@@ -509,7 +509,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   EstadoCombo() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<Estado>>(
         future: ProviderSeguimientoParqueInformatico().getEstadoEquipo(),
         builder: (BuildContext context, AsyncSnapshot<List<Estado>> snapshot) {
@@ -525,20 +525,20 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
             );
           } else {
             return Stack(children: [
-              Text("Estado",
+              const Text("Estado",
                   style: TextStyle(
                       fontSize: 10,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold)),
               Container(
-                  margin: EdgeInsets.only(top: 5),
+                  margin: const EdgeInsets.only(top: 5),
                   child: DropdownButton<Estado>(
                     underline: ProviderServicios().underline(),
                     isExpanded: true,
                     items: snapshot.data
                         ?.map((dat) => DropdownMenuItem<Estado>(
-                              child: Text(dat.estado!),
                               value: dat,
+                              child: Text(dat.estado!),
                             ))
                         .toList(),
                     onChanged: (Estado? value) async {
@@ -550,8 +550,8 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                             value.estado.toString();
                       });
                     },
-                    hint: Text("$seleccionarEstado",
-                        style: TextStyle(color: Colors.black)),
+                    hint: Text(seleccionarEstado,
+                        style: const TextStyle(color: Colors.black)),
                   ))
             ]);
           }
@@ -562,7 +562,7 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
 
   TipoEquipoCombo() {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: FutureBuilder<List<TipoEquipo>>(
         future: ProviderSeguimientoParqueInformatico().getListarTipoEquipo(),
         builder:
@@ -579,21 +579,21 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
             );
           } else {
             return Stack(children: [
-              Text("Tipo Equipo",
+              const Text("Tipo Equipo",
                   style: TextStyle(
                       fontSize: 11,
                       color: Colors.grey,
                       fontWeight: FontWeight.w600)),
               Container(
-                  margin: EdgeInsets.only(top: 5),
+                  margin: const EdgeInsets.only(top: 5),
                   child: DropdownButton<TipoEquipo>(
                     underline: ProviderServicios().underline(),
                     isExpanded: true,
                     items: snapshot.data
                         ?.map((dat) => DropdownMenuItem<TipoEquipo>(
+                              value: dat,
                               child:
                                   Text(dat.descripcionTipoEquipoInformatico!),
-                              value: dat,
                             ))
                         .toList(),
                     onChanged: (TipoEquipo? value) async {
@@ -604,8 +604,8 @@ class _EditarParqueInformaticoState extends State<EditarParqueInformatico> {
                             value.idTipoEquipoInformatico.toString();
                       });
                     },
-                    hint: Text("$seleccionarTipoEquipo",
-                        style: TextStyle(color: Colors.black)),
+                    hint: Text(seleccionarTipoEquipo,
+                        style: const TextStyle(color: Colors.black)),
                   ))
             ]);
           }

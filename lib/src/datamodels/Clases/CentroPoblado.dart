@@ -4,8 +4,8 @@ class CentroPobladoes {
   CentroPobladoes.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new CentroPoblado.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = CentroPoblado.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -23,9 +23,9 @@ class CentroPoblado {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['centro_poblado_ubigeo'] = this.centroPobladoUbigeo;
-    data['centro_poblado_descripcion'] = this.centroPobladoDescripcion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['centro_poblado_ubigeo'] = centroPobladoUbigeo;
+    data['centro_poblado_descripcion'] = centroPobladoDescripcion;
     return data;
   }
   Map<String, dynamic> toMap() {

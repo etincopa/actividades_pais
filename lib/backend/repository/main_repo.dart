@@ -297,7 +297,9 @@ class MainRepo {
       _log.e(response.error.message);
     }
 
-    aResp.forEach((x) => {x.idTypeItem = sType});
+    for (var x in aResp) {
+      x.idTypeItem = sType;
+    }
 
     return aResp;
   }

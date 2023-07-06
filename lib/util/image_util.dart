@@ -17,9 +17,9 @@ class ImageUtil {
    * Encode Image to Base64
    */
   Future<String> imgBase64Encode(XFile file) async {
-    File? _imageby;
-    _imageby = File(file.path);
-    Uint8List bytes = File(_imageby!.path).readAsBytesSync();
+    File? imageby;
+    imageby = File(file.path);
+    Uint8List bytes = File(imageby.path).readAsBytesSync();
     String image64 = base64Encode(bytes);
     return image64;
   }

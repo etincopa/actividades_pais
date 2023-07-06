@@ -5,8 +5,8 @@ class CLimas {
   CLimas.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new CLima.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = CLima.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }

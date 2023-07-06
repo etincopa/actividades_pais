@@ -25,7 +25,7 @@ class IncidentesInternetModel {
   String? estadoInternet;
   String? fechaCierre;
 
-  IncidentesInternetModel.empty() {}
+  IncidentesInternetModel.empty();
 
   IncidentesInternetModel(
       {this.idTambo,

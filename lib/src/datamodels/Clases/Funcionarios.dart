@@ -6,8 +6,8 @@ class ListaFuncionarios {
   ListaFuncionarios.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Funcionarios.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Funcionarios.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -172,20 +172,20 @@ class Funcionarios {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['flgReniec'] = this.flgReniec;
-    data['tipo'] = this.tipo;
-    data['dni'] = this.dni;
-    data['pais'] = this.pais;
-    data['datos'] = this.datos;
-    data['entidad'] = this.entidad;
-    data['nombreCargo'] = this.nombreCargo;
-    data['telefono'] = this.telefono;
-    data['apellidoPaterno'] = this.apellidoPaterno;
-    data['apellidoMaterno'] = this.apellidoMaterno;
-    data['nombres'] = this.nombres;
-    data['idProgramacion'] = this.idProgramacion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['flgReniec'] = flgReniec;
+    data['tipo'] = tipo;
+    data['dni'] = dni;
+    data['pais'] = pais;
+    data['datos'] = datos;
+    data['entidad'] = entidad;
+    data['nombreCargo'] = nombreCargo;
+    data['telefono'] = telefono;
+    data['apellidoPaterno'] = apellidoPaterno;
+    data['apellidoMaterno'] = apellidoMaterno;
+    data['nombres'] = nombres;
+    data['idProgramacion'] = idProgramacion;
     data['idProgramacion'] = idProgramacion;
     data['cargo'] = cargo;
     data['idActividad'] = idActividad;

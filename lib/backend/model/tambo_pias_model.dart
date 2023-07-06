@@ -7,7 +7,7 @@ class TamboPias {
   String? tambos = '0';
   String? pias = '0';
 
-  TamboPias.empty() {}
+  TamboPias.empty();
 
   TamboPias({
     this.tambos,

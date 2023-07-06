@@ -3,7 +3,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DatosPlanM
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/DetalleIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/HistorialObservaciones.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobarObservar.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
 
@@ -11,14 +10,14 @@ class DetalleSubsanado extends StatefulWidget {
   String idProgramacion = "";
   DatosPlanMensual datosPlanMensual = DatosPlanMensual();
 
-  DetalleSubsanado(this.idProgramacion, {required this.datosPlanMensual});
+  DetalleSubsanado(this.idProgramacion, {super.key, required this.datosPlanMensual});
 
   @override
   _DetalleSubsanadoState createState() => _DetalleSubsanadoState();
 }
 
 class _DetalleSubsanadoState extends State<DetalleSubsanado> {
-  List<bool> _isOpenList = [false, false, false];
+  final List<bool> _isOpenList = [false, false, false];
 
   @override
   void initState() {
@@ -63,12 +62,12 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: AppConfig.primaryColor,
-          title: Text(
+          title: const Text(
             "EVALUAR LA INTERVENCION",
             style: TextStyle(fontSize: 12),
           )),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: ListView(
           children: [
             ExpansionPanelList(
@@ -80,7 +79,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
               children: [
                 ExpansionPanel(
                   headerBuilder: (context, isOpen) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text('HISTORIAL DE OBSERVACION '),
                     );
                   },
@@ -109,7 +108,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                           return Text(
                               'Error al obtener datos de la API: ${snapshot.error}');
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
@@ -118,7 +117,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                 ),
                 ExpansionPanel(
                   headerBuilder: (context, isOpen) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text('HORIAL DE SUBSANACION'),
                     );
                   },
@@ -147,7 +146,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                           return Text(
                               'Error al obtener datos de la API: ${snapshot.error}');
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
@@ -156,7 +155,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                 ),
                 ExpansionPanel(
                   headerBuilder: (context, isOpen) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text('DETALLE'),
                     );
                   },
@@ -175,7 +174,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerTIPO_PLAN,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'TIPO PLAN',
                                   hintText: 'TIPO PLAN',
                                 ),
@@ -183,7 +182,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerCODIGO_PLAN,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'CODIGO PLAN',
                                   hintText: 'CODIGO PLAN',
                                 ),
@@ -191,7 +190,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerPlataforma,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'PLATAFORMA',
                                   hintText: 'PLATAFORMA',
                                 ),
@@ -199,7 +198,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerFECHA,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'FECHA',
                                   hintText: 'FECHA',
                                 ),
@@ -207,7 +206,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerHORAINICIO,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'HORA INICIO',
                                   hintText: 'HORA INICIO',
                                 ),
@@ -215,7 +214,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerHORAFIN,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'HORA FIN',
                                   hintText: 'HORA FIN',
                                 ),
@@ -223,7 +222,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerLUGAR_INTERVENCION,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'LUGAR_INTERVENCION',
                                   hintText: 'LUGAR_INTERVENCION',
                                 ),
@@ -231,7 +230,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerDOCUMENTO_ACREDITA,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'DOCUMENTO_ACREDITA',
                                   hintText: 'DOCUMENTO_ACREDITA',
                                 ),
@@ -239,7 +238,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerTIPO_INTERVENCION,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'TIPO DE INTERVENCION',
                                   hintText: 'TIPO DE INTERVENCION',
                                 ),
@@ -247,7 +246,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerGOBIERNO,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'GOBIERNO',
                                   hintText: 'GOBIERNO',
                                 ),
@@ -255,7 +254,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerSECTOR,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'SECTOR',
                                   hintText: 'SECTOR',
                                 ),
@@ -263,7 +262,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerPROGRAMA,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'PROGRAMA',
                                   hintText: 'PROGRAMA',
                                 ),
@@ -271,7 +270,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerCATEGORIA,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'CATEGORIA',
                                   hintText: 'CATEGORIA',
                                 ),
@@ -279,7 +278,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerSUBCATEGORIA,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'SUBCATEGORIA',
                                   hintText: 'SUBCATEGORIA',
                                 ),
@@ -287,7 +286,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerACTIVIDAD,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'ACTIVIDAD',
                                   hintText: 'ACTIVIDAD',
                                 ),
@@ -295,13 +294,13 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                               TextField(
                                 controller: controllerSERVICIO,
                                 enabled: false,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'SERVICIO',
                                   hintText: 'SERVICIO',
                                 ),
                               ),
                               TextField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'DESCRIPCION',
                                   hintText: 'DESCRIPCION',
                                 ),
@@ -319,18 +318,18 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                                   }
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 18,
                               ),
                               mostrarboton
                                   ? Column(
                                       children: [
-                                        Text(
+                                        const Text(
                                           "¿ QUE ACCION DESEA EJECUTAR ?",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         Row(
@@ -357,7 +356,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                                                   Navigator.pop(context);
                                                 }, "¿Está seguro de aprobar essta programación?");
                                               },
-                                              child: Container(
+                                              child: SizedBox(
                                                 height: 40,
                                                 width: width / 3.5,
                                                 child: const Center(
@@ -378,9 +377,8 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                                             ),
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                primary: Color.fromARGB(
+                                                foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(
                                                     255, 237, 82, 68),
-                                                onPrimary: Colors.white,
                                                 shadowColor:
                                                     const Color.fromARGB(
                                                         255, 53, 53, 53),
@@ -407,7 +405,7 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                                                   Navigator.pop(context);
                                                 }, controllerObservar);
                                               },
-                                              child: Container(
+                                              child: SizedBox(
                                                 height: 40,
                                                 width: width / 3.5,
                                                 child: const Center(
@@ -430,14 +428,14 @@ class _DetalleSubsanadoState extends State<DetalleSubsanado> {
                                         ),
                                       ],
                                     )
-                                  : new Container(),
+                                  : Container(),
                             ],
                           );
                         } else if (snapshot.hasError) {
                           return Text(
                               'Error al obtener datos de la API: ${snapshot.error}');
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),

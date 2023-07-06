@@ -8,8 +8,8 @@ class Perfiles{
   Perfiles.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Perfil.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Perfil.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -38,12 +38,12 @@ class Perfil {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
    // data['id_accion'] = this.idAccion;
    // data['modulo_descripcion'] = this.moduloDescripcion;
    // data['menu_descripcion'] = this.menuDescripcion;
-    data['id_menu_padre'] = this.idMenuPadre;
-    data['id_menu_hijo'] = this.idMenuHijo;
+    data['id_menu_padre'] = idMenuPadre;
+    data['id_menu_hijo'] = idMenuHijo;
     return data;
   }
 }

@@ -1,32 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 
 class FormularioReq {
-  static Color primaryColor = Color(0xFF3949AB);
+  static Color primaryColor = const Color(0xFF3949AB);
 
-  static Color secondaryColor = Color(0xFF3949AB);
+  static Color secondaryColor = const Color(0xFF3949AB);
   String validateEmails(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern.toString());
-    if (!regex.hasMatch(value))
+    RegExp regex = RegExp(pattern.toString());
+    if (!regex.hasMatch(value)) {
       return 'Ingrese un correo valido';
-    else
+    } else {
       return '';
+    }
   }
 
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
       border: Border.all(width: 2.0, color: primaryColor),
-      borderRadius: BorderRadius.all(
+      borderRadius: const BorderRadius.all(
           Radius.circular(5.0) //                 <--- border radius here
           ),
     );
   }
-  Servicios servicios = new Servicios();
+  Servicios servicios = Servicios();
 
-  textinputdet(String text, TextEditingController _controller,
+  textinputdet(String text, TextEditingController controller,
       TextCapitalization textCapitalization, TextInputType textInputType, enabled,{validator}) {
     return Container(
 
@@ -37,7 +37,7 @@ class FormularioReq {
         textAlign: TextAlign.justify,
         keyboardType: textInputType,
         textCapitalization: textCapitalization,
-        controller: _controller,
+        controller: controller,
         enabled: enabled,
           validator: validator,
         //obscureText: true,/*    decoration: InputDecoration(
@@ -46,14 +46,14 @@ class FormularioReq {
         //                             // Display the number of entered characters
         //                             counterText: '${_enteredText.length.toString()} character(s)'),*/
         decoration: InputDecoration(
-          enabledBorder: UnderlineInputBorder(
+          enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xFF0EA1E8)),
           ),
-          focusedBorder: UnderlineInputBorder(
+          focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xFF0EA1E8)),
           ),
 
-          border: UnderlineInputBorder(
+          border: const UnderlineInputBorder(
             borderSide: BorderSide(color: Color(0xFF0EA1E8)),
           ),
           labelText: text,
@@ -86,14 +86,14 @@ class FormularioReq {
         //  onSubmitted: onSubmitted,
 
           decoration: InputDecoration(
-            enabledBorder: UnderlineInputBorder(
+            enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xFF0EA1E8)),
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xFF0EA1E8)),
             ),
 
-            border: UnderlineInputBorder(
+            border: const UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xFF0EA1E8)),
             ),
             labelText: labelText,

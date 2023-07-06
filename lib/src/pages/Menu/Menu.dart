@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 class MenuPage extends StatefulWidget {
   String nombre;
   String dni;
-  MenuPage({this.nombre = '', this.dni = ''});
+  MenuPage({super.key, this.nombre = '', this.dni = ''});
   @override
   State<MenuPage> createState() => _MenuPageState();
 }
 
 class _MenuPageState extends State<MenuPage> {
   int cantidad = 0;
-  String _nombrePersona = "";
+  final String _nombrePersona = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -22,19 +22,19 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menu'),
-        backgroundColor: Color(0xFF3949AB),
-        actions: [],
+        title: const Text('Menu'),
+        backgroundColor: const Color(0xFF3949AB),
+        actions: const [],
       ),
       body: Center(
           child: Container(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            cardNombre('${widget.nombre}', Icons.perm_contact_calendar, () {}),
-            SizedBox(
+            cardNombre(widget.nombre, Icons.perm_contact_calendar, () {}),
+            const SizedBox(
               height: 25,
             ),
             /*     cardNombre('Historial de Registros', Icons.article_outlined, () {
@@ -56,7 +56,7 @@ class _MenuPageState extends State<MenuPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => InformmacionAplicativoPage()),
+                    builder: (context) => const InformmacionAplicativoPage()),
               );
             }),
           ],
@@ -73,7 +73,7 @@ class _MenuPageState extends State<MenuPage> {
           elevation: 19.0,
           color: Colors.white,
           child: Container(
-            margin: EdgeInsets.only(top: 3, left: 10, bottom: 5),
+            margin: const EdgeInsets.only(top: 3, left: 10, bottom: 5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -88,7 +88,7 @@ class _MenuPageState extends State<MenuPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 300,
                           child: Text(" $nombre",
                               style: TextStyle(

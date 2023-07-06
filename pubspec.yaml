@@ -1,6 +1,5 @@
 name: actividades_pais
 description: A new Flutter project.
-
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -20,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+34
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: '>=3.0.5 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -55,10 +54,11 @@ dependencies:
   flutter_svg: ^2.0.0+1
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^3.0.2
+#  connectivity_plus: ^4.0.1
   overlay_support: ^2.0.1
   pin_code_text_field: ^1.8.0
   country_code_picker: ^3.0.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   # Http client.
   dio: ^5.0.0
   get_it: ^7.2.0
@@ -71,14 +71,14 @@ dependencies:
   printing: ^5.10.1
   open_file_safe: ^3.2.3
   uuid: ^3.0.7
-  flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.13.1
   change_app_package_name: ^1.1.0
-  syncfusion_flutter_charts: ^21.1.35
-  syncfusion_flutter_datagrid: ^21.1.35
+  syncfusion_flutter_charts: ^22.1.37
+  syncfusion_flutter_datagrid: ^22.1.37
   carousel_slider: ^4.1.1
   file_picker:
   flutter_speed_dial:
-  mac_address: ^1.0.0
+#  mac_address: ^1.0.0
   permission_handler: ^10.2.0
   toggle_switch:
 
@@ -87,14 +87,14 @@ dependencies:
   flutter_map_marker_cluster: ^1.1.0
   simple_circular_progress_bar: ^1.0.2
   kdgaugeview: ^1.0.4
-  shimmer: ^2.0.0
+  shimmer: ^3.0.0
   fancy_shimmer_image: ^2.0.2
   badges: ^3.0.2
 
   lecle_bubble_timeline: ^0.0.1+1
   timelines: ^0.1.0
 
-  backdrop: ^0.8.1
+  backdrop: ^0.9.0
   table_calendar: ^3.0.8
 
   #NOTIFICATIONS
@@ -106,18 +106,18 @@ dependencies:
 
   mat_month_picker_dialog: ^1.1.1
 
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  #TEST
+  mockito: ^5.3.2
+
 flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icons/paislogos.png"
 
-  #TEST
-  mockito: ^5.3.2
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -221,3 +221,4 @@ flutter_intl:
 analyzer:
   enable-experiment:
     - non-nullable
+

@@ -201,7 +201,7 @@ class ListViewProjet extends StatelessWidget {
                             width: 1.0,
                             style: BorderStyle.solid),
                         borderRadius: BorderRadius.circular(12),
-                        color: Color(int.parse('0xff${experienceLevelColor}'))
+                        color: Color(int.parse('0xff$experienceLevelColor'))
                             .withAlpha(20),
                       ),
                       child: const Center(
@@ -231,7 +231,7 @@ class ListViewProjet extends StatelessWidget {
                               width: 1.0,
                               style: BorderStyle.solid),
                           borderRadius: BorderRadius.circular(12),
-                          color: Color(int.parse('0xff${experienceLevelColor}'))
+                          color: Color(int.parse('0xff$experienceLevelColor'))
                               .withAlpha(20)),
                       child: const Center(
                         child: Icon(
@@ -260,7 +260,7 @@ class ListViewProjet extends StatelessWidget {
                               width: 1.0,
                               style: BorderStyle.solid),
                           borderRadius: BorderRadius.circular(12),
-                          color: Color(int.parse('0xff${experienceLevelColor}'))
+                          color: Color(int.parse('0xff$experienceLevelColor'))
                               .withAlpha(20)),
                       child: const Center(
                         child: Icon(

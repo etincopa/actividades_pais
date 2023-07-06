@@ -15,7 +15,7 @@ class AtenInterBeneResumenModel {
   int? atenciones = 0;
   int? beneficiarios = 0;
 
-  AtenInterBeneResumenModel.empty() {}
+  AtenInterBeneResumenModel.empty();
 
   AtenInterBeneResumenModel({
     this.idTambo,

@@ -1,13 +1,10 @@
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderTambok.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:backdrop/backdrop.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class intervencionesHistoria extends StatefulWidget {
@@ -58,7 +55,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
     }
   }
 
-  Future<Null> traerPaguinado(pageSize) async {
+  Future<void> traerPaguinado(pageSize) async {
     // await Future.delayed(const Duration(seconds: 1));
     //  pageIndexQ = pageIndex;
     await ProviderTambok()
@@ -96,8 +93,8 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
           style: TextStyle(fontSize: 15, color: Colors.black),
         ),
         centerTitle: true,
-        actions: <Widget>[
-          const BackdropToggleButton(
+        actions: const <Widget>[
+          BackdropToggleButton(
             color: Colors.black,
             icon: AnimatedIcons.list_view,
           ),
@@ -119,7 +116,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
               );
             } else {
               final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.length == 0) {
+              if (listaPersonalAux!.isEmpty) {
                 return const Center(
                   child: Text(
                     'No hay informacion',
@@ -156,8 +153,8 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                               ),
                             ))),
                     if (isLoading == true)
-                      new Center(
-                        child: const CircularProgressIndicator(),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                   ],
                 );
@@ -217,7 +214,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppConfig.primaryColor,
+                          backgroundColor: AppConfig.primaryColor,
                         ),
                         onPressed: () async {
 

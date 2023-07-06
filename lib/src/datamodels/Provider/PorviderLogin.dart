@@ -6,7 +6,6 @@ import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LoginClass.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderServiciosRest.dart';
-import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +21,7 @@ class ProviderLogin {
 
   Future checkInternetConnection() async {
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
 
       final result = await InternetAddress.lookup('www.google.com');
 
@@ -41,7 +40,7 @@ class ProviderLogin {
 
   Future<bool> _checkInternetConnection() async {
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
 
       final result = await InternetAddress.lookup('www.google.com');
 
@@ -69,7 +68,7 @@ class ProviderLogin {
    // if (chekInternet == true) {
 
     final headers = {'Content-Type': 'application/json'};
-    final response = await http.post(Uri.parse(AppConfig.backendsismonitor + '/seguridad/login'),
+    final response = await http.post(Uri.parse('${AppConfig.backendsismonitor}/seguridad/login'),
       headers: headers,
       body: json.encode({
         "username": username,
@@ -100,8 +99,7 @@ class ProviderLogin {
 
        // await ProviderDatos().getInsertPerfiles(log.rol);
         http.Response responseUsuario = await http.get(
-            Uri.parse(AppConfig.urlBackndServicioSeguro +
-                '/api-pnpais/app/datosLoginUsuario/${loginClass.id}'),
+            Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/datosLoginUsuario/${loginClass.id}'),
             headers: headers);
         final parsedJson2 = jsonDecode(responseUsuario.body);
         final data = parsedJson2["response"];
@@ -171,11 +169,11 @@ class ProviderLogin {
             loginClass.id = 0;
             var a = await DatabasePr.db.Login(loginClass);
 
-            SharedPreferences? _prefs = await SharedPreferences.getInstance();
-            _prefs.setString("nombres", oUser.nombres!);
-            _prefs.setString("codigo", oUser.codigo!);
-            _prefs.setString("rol", oUser.rol!);
-            _prefs.setString("dni", username);
+            SharedPreferences? prefs = await SharedPreferences.getInstance();
+            prefs.setString("nombres", oUser.nombres!);
+            prefs.setString("codigo", oUser.codigo!);
+            prefs.setString("rol", oUser.rol!);
+            prefs.setString("dni", username);
 
             var r2 = ConfigPersonal(
                 unidad: 'UPS',

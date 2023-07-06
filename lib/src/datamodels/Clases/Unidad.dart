@@ -6,8 +6,8 @@ class ListarUnidad {
   ListarUnidad.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listar = new Unidad.fromJson(item);
-      items.add(_listar);
+      final listar = Unidad.fromJson(item);
+      items.add(listar);
     }
   }
 }

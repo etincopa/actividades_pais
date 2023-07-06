@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 const iconColor = Color.fromARGB(255, 12, 124, 205);
 
 class CustomBottomBar extends StatelessWidget {
   final TabController controller;
 
-  const CustomBottomBar({
+  const CustomBottomBar({super.key, 
     required this.controller,
   });
   @override

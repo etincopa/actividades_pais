@@ -6,8 +6,8 @@ class ListaTambosDependientes{
   ListaTambosDependientes.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new TambosDependientes.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = TambosDependientes.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -31,11 +31,11 @@ class TambosDependientes {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_plataforma'] = this.idPlataforma;
-    data['plataforma_descripcion'] = this.plataformaDescripcion;
-    data['id_unidades_territoriales'] = this.idUnidadesTerritoriales;
-    data['unidad_territorial_descripcion'] = this.unidadTerritorialDescripcion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_plataforma'] = idPlataforma;
+    data['plataforma_descripcion'] = plataformaDescripcion;
+    data['id_unidades_territoriales'] = idUnidadesTerritoriales;
+    data['unidad_territorial_descripcion'] = unidadTerritorialDescripcion;
     return data;
   }
 }

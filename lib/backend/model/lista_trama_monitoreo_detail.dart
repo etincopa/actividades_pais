@@ -81,7 +81,7 @@ class MonitoreoDetailModel {
   String? imgActividad3;
   String? txtIpReg;
 
-  MonitoreoDetailModel.empty() {}
+  MonitoreoDetailModel.empty();
 
   MonitoreoDetailModel({
     this.numSnip,

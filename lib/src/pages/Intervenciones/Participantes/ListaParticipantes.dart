@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
@@ -13,15 +12,15 @@ import '../../../../util/app-config.dart';
 class ListaParticipantesVw extends StatefulWidget {
   int idProgramacion;
   int snip;
-  ListaParticipantesVw(this.idProgramacion, this.snip);
+  ListaParticipantesVw(this.idProgramacion, this.snip, {super.key});
 
   @override
   _ListaParticipantesVwState createState() => _ListaParticipantesVwState();
 }
 
 class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     await DatabasePr.db.listarFuncionarios(widget.idProgramacion);
     await DatabasePr.db
         .listarParticipantes(widget.idProgramacion, 'participantes');
@@ -48,7 +47,7 @@ class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
               setState(() {});
             }
           },
-          child: Icon(
+          child: const Icon(
             Icons.person_add,
             color: Colors.white,
           ),
@@ -56,7 +55,7 @@ class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0, // 1
-          title: Center(
+          title: const Center(
             child: Text(
               "Participantes",
               style: TextStyle(
@@ -85,25 +84,24 @@ class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
               AsyncSnapshot<List<Participantes>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
-                  return Center(
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
                     child: Text("No hay informacion"),
                   );
                 } else {
                   return Container(
                     child: RefreshIndicator(
+                        onRefresh: refreshList,
                         child: ListView.builder(
                           itemCount: listaPersonalAux.length,
                           itemBuilder: (context, i) => Dismissible(
                               key: UniqueKey(),
-                              child: Listas()
-                                  .miCardParticipantes(listaPersonalAux[i]),
                               background: Util().buildSwipeActionLeft(),
                               secondaryBackground:
                                   Util().buildSwipeActionRigth(),
@@ -144,15 +142,17 @@ class _ListaParticipantesVwState extends State<ListaParticipantesVw> {
                                       Navigator.pop(context);
                                     });
                                     break;
+                                  default:
                                 }
-                              }),
-                        ),
-                        onRefresh: refreshList),
+                              },
+                              child: Listas()
+                                  .miCardParticipantes(listaPersonalAux[i])),
+                        )),
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

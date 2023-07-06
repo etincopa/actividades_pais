@@ -2,7 +2,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/AprobacionPlanes/AprobacionPlanes.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Intervenciones.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ListaIntervecionesProgramadas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
@@ -10,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class IntervencionesHome extends StatefulWidget {
+  const IntervencionesHome({super.key});
+
   @override
   State<IntervencionesHome> createState() => _IntervencionesHomeState();
 }
@@ -261,7 +262,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
     ];
     return Scaffold(
       appBar: AppBar(
-          title: Text(
+          title: const Text(
             'INTERVENCIONES',
             style: TextStyle(color: Colors.black),
           ),
@@ -270,7 +271,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
           }),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(20),
             ),

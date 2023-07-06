@@ -10,9 +10,9 @@ class LugarIntervencion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_lugar_intervencion'] = this.idLugarIntervencion;
-    data['nombre_lugar_intervencion'] = this.nombreLugarIntervencion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_lugar_intervencion'] = idLugarIntervencion;
+    data['nombre_lugar_intervencion'] = nombreLugarIntervencion;
     return data;
   }
 }

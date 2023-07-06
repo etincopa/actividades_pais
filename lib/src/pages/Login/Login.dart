@@ -28,6 +28,8 @@ bool? bRepeat = false;
 MainController mainController = MainController();
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -194,7 +196,7 @@ class __FormState extends State<_Form> {
             BusyIndicator.hide(context);
 
             await Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => HomePagePais()),
+              MaterialPageRoute(builder: (_) => const HomePagePais()),
             );
           }
         } catch (oError) {
@@ -232,7 +234,7 @@ class __FormState extends State<_Form> {
           InkWell(
             onTap: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => ResetContrasenia()),
+                MaterialPageRoute(builder: (_) => const ResetContrasenia()),
               );
             },
             child: const Text(

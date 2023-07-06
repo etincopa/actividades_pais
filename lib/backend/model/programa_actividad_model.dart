@@ -82,7 +82,7 @@ class ProgActModel {
   int? tipoActividad = 0;
   List<ActividadTamboModel>? aTambo = [];
 
-  ProgActModel.empty() {}
+  ProgActModel.empty();
 
   ProgActModel({
     this.tipoGobierno,

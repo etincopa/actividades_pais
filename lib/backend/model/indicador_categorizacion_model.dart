@@ -9,7 +9,7 @@ class IndicadorCategorizacionModel {
   String? nomPriorizacion;
   int? numAsignados;
 
-  IndicadorCategorizacionModel.empty() {}
+  IndicadorCategorizacionModel.empty();
 
   IndicadorCategorizacionModel({
     this.idPriorizacion,

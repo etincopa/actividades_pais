@@ -55,7 +55,7 @@ class PartidaEjecutadaFld {
 class PartidaEjecutadaModel {
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   int? idAvanceFisicoPartida = 0;
   String? idMonitoreo = "";
@@ -69,7 +69,7 @@ class PartidaEjecutadaModel {
   int? idUsuario = 0;
   String? usuario = '';
 
-  PartidaEjecutadaModel.empty() {}
+  PartidaEjecutadaModel.empty();
 
   PartidaEjecutadaModel({
     this.id,

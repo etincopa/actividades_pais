@@ -9,7 +9,7 @@ class AtencionesUsuariosTotalModel {
   String? atenciones;
   String? usuuarios;
 
-  AtencionesUsuariosTotalModel.empty() {}
+  AtencionesUsuariosTotalModel.empty();
 
   AtencionesUsuariosTotalModel({
     this.periodo,

@@ -9,7 +9,7 @@ class TambosEstadoInternetModel {
   String? codigo;
   String? estado;
 
-  TambosEstadoInternetModel.empty() {}
+  TambosEstadoInternetModel.empty();
 
   TambosEstadoInternetModel({
     this.cantidad,

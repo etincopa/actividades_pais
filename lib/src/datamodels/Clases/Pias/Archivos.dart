@@ -34,13 +34,13 @@ class Archivos{
   );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['idNacimiento'] = this.idNacimiento;
-    data['idParteDiario'] = this.idParteDiario;
-    data['file'] = this.file;
-    data['idUnicoReporte'] = this.idUnicoReporte;
-    data['idParteDiarioNacimiento'] = this.idParteDiarioNacimiento;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['idNacimiento'] = idNacimiento;
+    data['idParteDiario'] = idParteDiario;
+    data['file'] = file;
+    data['idUnicoReporte'] = idUnicoReporte;
+    data['idParteDiarioNacimiento'] = idParteDiarioNacimiento;
     return data;
   }
 

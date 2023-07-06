@@ -140,9 +140,9 @@ class TamboModel {
   */
 
   List<TamboCentroPobladoDto>? aCentroPoblado = [];
-  TamboServicioInternetDto? oServicioInternet = null;
+  TamboServicioInternetDto? oServicioInternet;
 
-  TamboModel.empty() {}
+  TamboModel.empty();
 
   TamboModel({
     this.idTambo,

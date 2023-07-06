@@ -219,7 +219,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                             : map.descrip2.toString(),
                         child: Text(
                           map.descrip2.toString(),
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       );
                     }).toList()
@@ -240,7 +240,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         value: map.id.toString(),
                         child: Text(
                           map.descrip2.toString(),
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       );
                     }).toList()
@@ -280,7 +280,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         value: map.id.toString(),
                         child: Text(
                           map.descrip2.toString(),
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       );
                     }).toList()
@@ -306,7 +306,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         value: map.id.toString(),
                         child: Text(
                           map.descrip2.toString(),
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       );
                     }).toList()
@@ -333,7 +333,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         value: map.id.toString(),
                         child: Text(
                           map.descrip2.toString(),
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       );
                     }).toList()
@@ -371,7 +371,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                         value: map.id.toString(),
                         child: Text(
                           map.descrip2.toString(),
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       );
                     }).toList()
@@ -444,7 +444,7 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                       }
                     }
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: width / 3.5,
                     child: const Center(
@@ -463,15 +463,14 @@ class _CordinacionArticulacionState extends State<CordinacionArticulacion> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 237, 82, 68),
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 237, 82, 68),
                     shadowColor: const Color.fromARGB(255, 53, 53, 53),
                     elevation: 5,
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: width / 3.5,
                     child: const Center(

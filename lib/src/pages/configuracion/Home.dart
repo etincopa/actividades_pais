@@ -6,15 +6,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 //import 'package:sendsms/sendsms.dart';
 
-import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  TextEditingController controlerNombre = new TextEditingController();
+  TextEditingController controlerNombre = TextEditingController();
   // LoginDatdb _datdb = LoginDatdb();
   @override
   void initState() {
@@ -64,22 +65,22 @@ class _HomeState extends State<Home> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(80.0),
             gradient:
-                LinearGradient(colors: [Color(0xFF3949AB), Color(0xFF3949AB)])),
+                const LinearGradient(colors: [Color(0xFF3949AB), Color(0xFF3949AB)])),
       ));
   @override
   Widget build(BuildContext context) {
     var userLocation = Provider.of<UserLocation>(context);
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Color(0xFF3949AB),
+          backgroundColor: const Color(0xFF3949AB),
           body: SingleChildScrollView(
             child: Stack(children: [
               //  cajaRosa,
               Column(children: [
                 Container(
-                    margin: EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                         top: 50.0, left: 20, right: 20, bottom: 20),
-                    child: Column(
+                    child: const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         //
@@ -109,7 +110,7 @@ class _HomeState extends State<Home> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    margin: EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                         top: 35.0, left: 30, right: 30, bottom: 40),
                     child: Column(
                       children: [
@@ -134,11 +135,11 @@ class _HomeState extends State<Home> {
 
             Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 10,
                   height: 20,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -146,7 +147,7 @@ class _HomeState extends State<Home> {
                       height: 20,
                     ),
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         width: 290,
                         child: Text(
                             "Para registrar su asistencia seleccione el tambo a donde pertenece y de click en el boton guardar.",
@@ -158,7 +159,7 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 30,
                   height: 50,
                 ),
@@ -171,7 +172,7 @@ class _HomeState extends State<Home> {
                     )
                   ],
                 ), */
-                SizedBox(
+                const SizedBox(
                   width: 10,
                   height: 20,
                 ),
@@ -191,17 +192,17 @@ class _HomeState extends State<Home> {
                     )
                   ],
                 ), */
-                SizedBox(
+                const SizedBox(
                   width: 10,
                   height: 20,
                 ),
                 Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 5, right: 5),
+                      margin: const EdgeInsets.only(left: 5, right: 5),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Color(0xFF3949AB),
+                          color: const Color(0xFF3949AB),
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(12),
@@ -209,7 +210,7 @@ class _HomeState extends State<Home> {
                       width: 290,
                       child: TextField(
                         controller: controlerNombre,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Ingrese su nombre completo'),
                         textAlign: TextAlign.center,
@@ -217,13 +218,13 @@ class _HomeState extends State<Home> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                   height: 20,
                 ),
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Color(0xFF3949AB)),
-                    child: Text(
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3949AB)),
+                    child: const Text(
                       "Registrar",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white),
@@ -249,7 +250,7 @@ class _HomeState extends State<Home> {
                             MaterialPageRoute(builder: (_) => asistencia())); */
                       }
                     }),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                   height: 20,
                 ),

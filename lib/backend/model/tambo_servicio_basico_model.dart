@@ -16,7 +16,7 @@ class ServicioBasicoTamboModel {
   String? proveedorServicio;
   String? estado;
 
-  ServicioBasicoTamboModel.empty() {}
+  ServicioBasicoTamboModel.empty();
 
   ServicioBasicoTamboModel({
     this.idTambo,

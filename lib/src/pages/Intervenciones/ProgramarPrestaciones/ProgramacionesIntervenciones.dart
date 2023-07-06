@@ -68,13 +68,13 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
   }
 
   DateTime _selectedDate = DateTime.now();
-  TimeOfDay _selectedTime = TimeOfDay.now();
+  final TimeOfDay _selectedTime = TimeOfDay.now();
   TextEditingController controllerFecha = TextEditingController();
   TextEditingController controllerHoraIni = TextEditingController();
   TextEditingController controllerHoraFin = TextEditingController();
-  var _curremtime = TimeOfDay.now();
+  final _curremtime = TimeOfDay.now();
   int _selectedOption = 0;
-  int _valorOption = 1;
+  final int _valorOption = 1;
 
   Future<TimeOfDay?> getTimePikerwidget() {
     return showTimePicker(
@@ -524,7 +524,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.save),
                         style: ElevatedButton.styleFrom(
-                            primary: AppConfig.primaryColor,
+                            backgroundColor: AppConfig.primaryColor,
                             //   shadowColor:
                             textStyle: const TextStyle(fontSize: 16),
                             minimumSize: const Size.fromHeight(72),
@@ -543,7 +543,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                                 _selectedOption.toString();
                             guardarIntervencion.accion = listAcc;
 
-                            if (listAcc.length <= 0) {
+                            if (listAcc.isEmpty) {
                                return showSimpleDialogWithText(
                                   context, "Entidad no Registrada");
                             }
@@ -565,7 +565,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                         },
                         label: const Text('GUARDAR PROGRMACION'),
                       ))
-                      : new Container(),
+                      : Container(),
                   Container(
                     margin: const EdgeInsets.all(5),
                     height: 38,
@@ -573,7 +573,7 @@ class _DateTimeFormState extends State<ProgramacionIntervencion> {
                       icon: const Icon(Icons.settings_backup_restore),
                       label: const Text('CANCELAR'),
                       style: ElevatedButton.styleFrom(
-                        primary: AppConfig.primaryColor,
+                        backgroundColor: AppConfig.primaryColor,
                         textStyle: const TextStyle(fontSize: 16),
                         minimumSize: const Size.fromHeight(72),
                         shape: const StadiumBorder(),

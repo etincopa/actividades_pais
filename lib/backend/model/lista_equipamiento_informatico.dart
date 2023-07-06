@@ -57,7 +57,7 @@ class EquipamientoInformaticoModel {
   String? snip;
   String? categoria;
 
-  EquipamientoInformaticoModel.empty() {}
+  EquipamientoInformaticoModel.empty();
 
   EquipamientoInformaticoModel({
     this.codigoPatrimonial,

@@ -10,7 +10,7 @@ import '../../../../util/app-config.dart';
 
 class Incidentes extends StatefulWidget {
   String  idUnicoReporte='';
-  Incidentes(this.idUnicoReporte);
+  Incidentes(this.idUnicoReporte, {super.key});
   @override
   State<Incidentes> createState() => _IncidentesState();
 }
@@ -27,7 +27,7 @@ class _IncidentesState extends State<Incidentes> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppConfig.primaryColor,
           onPressed: () async {
-            var a = await DatabasePias.db;
+            var a = DatabasePias.db;
             showAlertDialogAgregar(context, titulo: 'Agregar Incidente',
                 controllerIncidentes: controllerIncidentes,
                 presse: () {
@@ -50,7 +50,7 @@ class _IncidentesState extends State<Incidentes> {
                   Navigator.pop(context);
                 });
           },
-          child: Icon(Icons.plus_one),
+          child: const Icon(Icons.plus_one),
         ),
         body: FutureBuilder<List<IncidentesNovedadesPias>>(
           future: DatabasePias.db.ListarIncidentesNovedadesPias(widget.idUnicoReporte, 1),
@@ -58,26 +58,25 @@ class _IncidentesState extends State<Incidentes> {
               AsyncSnapshot<List<IncidentesNovedadesPias>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
-                  return Center(
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
                     child: Text("No hay informacion"),
                   );
                 } else {
                   return Container(
                     child: RefreshIndicator(
+                        onRefresh: listarIncidentes,
                         child: ListView.builder(
                             itemCount: listaPersonalAux.length,
                             itemBuilder: (context, i) =>
                                 Dismissible(
                                   key: UniqueKey(),
-                                  child: Listas()
-                                      .cardIncidentesPias(listaPersonalAux[i]),
                                   background: Util().buildSwipeActionLeft(),
                                   secondaryBackground:
                                   Util().buildSwipeActionRigth(),
@@ -116,15 +115,17 @@ class _IncidentesState extends State<Incidentes> {
                                           Navigator.pop(context);
                                         });
                                         break;
+                                      default:
                                     }
                                   },
-                                )),
-                        onRefresh: listarIncidentes),
+                                  child: Listas()
+                                      .cardIncidentesPias(listaPersonalAux[i]),
+                                ))),
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
@@ -132,8 +133,8 @@ class _IncidentesState extends State<Incidentes> {
     );
   }
 
-  Future<Null> listarIncidentes() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> listarIncidentes() async {
+    await Future.delayed(const Duration(seconds: 0));
     setState(() {
       DatabasePias.db.ListarIncidentesNovedadesPias(widget.idUnicoReporte, 1);
     });
@@ -141,15 +142,15 @@ class _IncidentesState extends State<Incidentes> {
 
   showAlertDialogAgregar(BuildContext context,
       {titulo, presse, pressno, controllerIncidentes}) {
-    Widget okButton = TextButton(child: Text("Guardar"), onPressed: presse);
-    Widget moButton = TextButton(child: Text("Cancelar"), onPressed: pressno);
+    Widget okButton = TextButton(onPressed: presse, child: const Text("Guardar"));
+    Widget moButton = TextButton(onPressed: pressno, child: const Text("Cancelar"));
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
       content: TextField(
         textCapitalization: TextCapitalization.sentences,
         controller: controllerIncidentes,
         maxLines: 5, //or null
-        decoration: InputDecoration.collapsed(hintText: "Insertar detalle"),
+        decoration: const InputDecoration.collapsed(hintText: "Insertar detalle"),
       ),
       actions: [okButton, moButton],
     );

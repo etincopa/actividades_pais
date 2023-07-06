@@ -5,7 +5,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroDato
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/HistorialObservaciones.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
-import 'package:actividades_pais/src/datamodels/Clases/TipoDocumentoAcredita.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:http/http.dart' as http;
 import 'package:actividades_pais/util/app-config.dart';
@@ -21,14 +20,13 @@ class ProviderAprobacionPlanes {
 
     print(json.encode(filtro));
     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/datos-plan-mensual'),
+        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/datos-plan-mensual'),
         headers: headers,
         body: json.encode(filtro));
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listado =
-          new ListaDatosPlanMensual.fromJsonList(jsonResponse["data"]);
+          ListaDatosPlanMensual.fromJsonList(jsonResponse["data"]);
       return listado.items;
     } else {
       return List.empty();
@@ -41,11 +39,9 @@ class ProviderAprobacionPlanes {
       'Authorization': 'Bearer ${logUser[0].token}',
       'Content-Type': 'application/json'
     };
-    print(Uri.parse(AppConfig.backendsismonitor +
-        '/programaciongit/datosparaevaluar/$idProgramacion'));
+    print(Uri.parse('${AppConfig.backendsismonitor}/programaciongit/datosparaevaluar/$idProgramacion'));
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/programaciongit/datosparaevaluar/$idProgramacion'),
+      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/datosparaevaluar/$idProgramacion'),
       headers: headers,
     );
 
@@ -53,7 +49,7 @@ class ProviderAprobacionPlanes {
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       print(jsonResponse[0]);
-      final listado = new DetalleIntervencion.fromJson(jsonResponse[0]);
+      final listado = DetalleIntervencion.fromJson(jsonResponse[0]);
 
       return listado;
     } else {
@@ -68,8 +64,7 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/aprobandointervencion'),
+        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/aprobandointervencion'),
         headers: headers,
         body: '{"id_programacion": "$idProgramacion"}');
     if (response.statusCode == 200) {
@@ -86,8 +81,7 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.post(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/observandointervencion'),
+        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/observandointervencion'),
         headers: headers,
         body:
             '{"id_programacion": "$idProgramacion","observacion":"$observacion"}');
@@ -106,14 +100,13 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/programaciongit/historialobservaciones/$idProgramacion'),
+      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/historialobservaciones/$idProgramacion'),
       headers: headers,
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listado =
-          new ListaHistorialobservaciones.fromJsonList(jsonResponse);
+          ListaHistorialobservaciones.fromJsonList(jsonResponse);
       return listado.items;
     } else {
       return List.empty();
@@ -128,14 +121,13 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/programaciongit/historialsubsanacion/$idProgramacion'),
+      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/historialsubsanacion/$idProgramacion'),
       headers: headers,
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listado =
-          new ListaHistorialobservaciones.fromJsonList(jsonResponse);
+          ListaHistorialobservaciones.fromJsonList(jsonResponse);
       return listado.items;
     } else {
       return List.empty();
@@ -149,14 +141,13 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/programaciongit/Listar-unidades-territoriales'),
+      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/Listar-unidades-territoriales'),
       headers: headers,
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listado =
-          new ListaUnidadesTerritoriales.fromJsonList(jsonResponse["lista"]);
+          ListaUnidadesTerritoriales.fromJsonList(jsonResponse["lista"]);
       print(listado.items[0].idUnidadesTerritoriales);
       return listado.items;
     } else {
@@ -169,14 +160,13 @@ class ProviderAprobacionPlanes {
       'Content-Type': 'application/json'
     };
     http.Response response = await http.get(
-      Uri.parse(AppConfig.backendsismonitor +
-          '/programaciongit/Listar-unidades-territoriales-tambook'),
+      Uri.parse('${AppConfig.backendsismonitor}/programaciongit/Listar-unidades-territoriales-tambook'),
       headers: headers,
     );
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listado =
-          new ListaUnidadesTerritoriales.fromJsonList(jsonResponse["lista"]);
+          ListaUnidadesTerritoriales.fromJsonList(jsonResponse["lista"]);
       print(listado.items[0].idUnidadesTerritoriales);
       return listado.items;
     } else {
@@ -192,13 +182,12 @@ class ProviderAprobacionPlanes {
     };
     if (ut != "x") {
       http.Response response = await http.get(
-        Uri.parse(AppConfig.backendsismonitor +
-            '/programaciongit/ListarTambosDependientes/$ut'),
+        Uri.parse('${AppConfig.backendsismonitor}/programaciongit/ListarTambosDependientes/$ut'),
         headers: headers,
       );
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        final listado = new ListaTambosDependientes.fromJsonList(jsonResponse);
+        final listado = ListaTambosDependientes.fromJsonList(jsonResponse);
         print(listado.items[0].idUnidadesTerritoriales);
         return listado.items;
       } else {
@@ -207,13 +196,13 @@ class ProviderAprobacionPlanes {
     } else {
       http.Response response = await http.get(
         Uri.parse(
-            AppConfig.backendsismonitor + '/programaciongit/ListarTambos'),
+            '${AppConfig.backendsismonitor}/programaciongit/ListarTambos'),
         headers: headers,
       );
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        final listado = new ListaTambosDependientes.fromJsonList(jsonResponse);
+        final listado = ListaTambosDependientes.fromJsonList(jsonResponse);
         print(listado.items[0].idUnidadesTerritoriales);
         return listado.items;
       } else {

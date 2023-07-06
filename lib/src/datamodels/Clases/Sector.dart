@@ -18,11 +18,11 @@ class Sector {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_sector'] = this.idSector;
-    data['nombre_sector'] = this.nombreSector;
-    data['nombre_largo'] = this.nombreLargo;
-    data['id_tipo_gobierno'] = this.idTipoGobierno;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_sector'] = idSector;
+    data['nombre_sector'] = nombreSector;
+    data['nombre_largo'] = nombreLargo;
+    data['id_tipo_gobierno'] = idTipoGobierno;
     return data;
   }
 }

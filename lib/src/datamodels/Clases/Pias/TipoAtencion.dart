@@ -4,8 +4,8 @@ class ListaTipoAtencion {
   ListaTipoAtencion.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new TipoAtencion.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = TipoAtencion.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -24,10 +24,10 @@ class TipoAtencion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['cod'] = this.cod;
-    data['descripcion'] = this.descripcion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['cod'] = cod;
+    data['descripcion'] = descripcion;
     return data;
   }
   Map<String, dynamic> toMap() {

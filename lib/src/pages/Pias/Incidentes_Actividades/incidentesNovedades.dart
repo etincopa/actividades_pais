@@ -7,7 +7,7 @@ import '../../../../util/app-config.dart';
 
 class IncidentesNovedades extends StatelessWidget {
   String idUnicoReporte ='';
-  IncidentesNovedades(this.idUnicoReporte);
+  IncidentesNovedades(this.idUnicoReporte, {super.key});
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -15,11 +15,11 @@ class IncidentesNovedades extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50.0),
+            preferredSize: const Size.fromHeight(50.0),
             child: AppBar(
               backgroundColor:AppConfig.primaryColor,
               automaticallyImplyLeading: false,
-              bottom: TabBar(
+              bottom: const TabBar(
                 tabs: [
                   Tab(
                     text: 'Incidentes',

@@ -30,15 +30,15 @@ class FiltroParqueInformatico {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['codigoPatrimonial'] = this.codigoPatrimonial;
-    data['denominacion'] = this.denominacion;
-    data['id_marca'] = this.idMarca;
-    data['id_modelo'] = this.idModelo;
-    data['id_ubicacion'] = this.idUbicacion;
-    data['responsableactual'] = this.responsableactual;
-    data['pageIndex'] = this.pageIndex;
-    data['pageSize'] = this.pageSize;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codigoPatrimonial'] = codigoPatrimonial;
+    data['denominacion'] = denominacion;
+    data['id_marca'] = idMarca;
+    data['id_modelo'] = idModelo;
+    data['id_ubicacion'] = idUbicacion;
+    data['responsableactual'] = responsableactual;
+    data['pageIndex'] = pageIndex;
+    data['pageSize'] = pageSize;
     return data;
   }
 }
