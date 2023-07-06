@@ -11,7 +11,7 @@ class LoginDto {
   String? password = '';
   String? codigo = '';
 
-  LoginDto.empty() {}
+  LoginDto.empty();
 
   LoginDto({
     this.password,
@@ -27,7 +27,7 @@ class LoginDto {
       LoginDto(
         username: username ?? this.username,
         password: password ?? this.password,
-        codigo: codigo ?? this.codigo,
+        codigo: codigo ?? codigo,
       );
 
   static LoginDto fromJson(Map<String, Object?> o) => LoginDto(

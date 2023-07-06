@@ -13,7 +13,7 @@ class TockenUsuariosModel {
   String? ipmaq = '';
   String? tocken = '';
 
-  TockenUsuariosModel.empty() {}
+  TockenUsuariosModel.empty();
 
   TockenUsuariosModel({
     this.idUsuario,

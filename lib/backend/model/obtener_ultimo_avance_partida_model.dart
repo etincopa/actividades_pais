@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 String tableNameUltimoAvancePartida = 'obtenerUltimoAvancePartida';
 
@@ -32,7 +31,7 @@ class UltimoAvancePartidaFld {
 class UltimoAvancePartidaModel {
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   String? numSnip;
   String? idTambo;
@@ -40,7 +39,7 @@ class UltimoAvancePartidaModel {
   String? idAvanceFisicoPartida;
   double? avanceFisicoPartida;
 
-  UltimoAvancePartidaModel.empty() {}
+  UltimoAvancePartidaModel.empty();
 
   UltimoAvancePartidaModel({
     this.id,
@@ -66,7 +65,7 @@ class UltimoAvancePartidaModel {
         id: id ?? this.id,
         isEdit: isEdit ?? this.isEdit,
         createdTime: createdTime ?? this.createdTime,
-        numSnip: numSnip ?? this.numSnip,
+        numSnip: numSnip ?? numSnip,
         idTambo: idTambo ?? this.idTambo,
         idMonitoreo: idMonitoreo ?? this.idMonitoreo,
         idAvanceFisicoPartida:

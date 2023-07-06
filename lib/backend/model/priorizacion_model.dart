@@ -11,7 +11,7 @@ class PriorizacionModel {
   String? nombrePriorizacion;
   String? abreviatura;
 
-  PriorizacionModel.empty() {}
+  PriorizacionModel.empty();
 
   PriorizacionModel({
     this.idPlataforma,

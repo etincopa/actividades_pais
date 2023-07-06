@@ -5,8 +5,8 @@ class TipoPlataformas {
   TipoPlataformas.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new TipoPlataforma.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = TipoPlataforma.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -26,10 +26,10 @@ TipoPlataforma.fromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> toJson() {
-  final Map<String, dynamic> data = new Map<String, dynamic>();
-  data['id'] = this.id;
-  data['cod'] = this.cod;
-  data['descripcion'] = this.descripcion;
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = id;
+  data['cod'] = cod;
+  data['descripcion'] = descripcion;
   return data;
 }
 

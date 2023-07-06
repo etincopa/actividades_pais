@@ -25,7 +25,7 @@ class ActividadesDiariasModel {
   String? lugar;
   String? tipoIntervencion;
 
-  ActividadesDiariasModel.empty() {}
+  ActividadesDiariasModel.empty();
 
   ActividadesDiariasModel(
       {this.idUt,

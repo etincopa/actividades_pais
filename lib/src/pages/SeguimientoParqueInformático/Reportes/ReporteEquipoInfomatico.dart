@@ -81,7 +81,7 @@ class _ReporteEquipoInformaticoState extends State<ReporteEquipoInformatico> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("REPORTE EQUIPO INFORMATICO"),
+        title: const Text("REPORTE EQUIPO INFORMATICO"),
       ),
       body: Column(
         children: [
@@ -112,12 +112,12 @@ class _ReporteEquipoInformaticoState extends State<ReporteEquipoInformatico> {
                           ),
                           alignment: ChartAlignment.center,
                         ),
-                        legend: Legend(
+                        legend: const Legend(
                           isVisible: true,
                           position: LegendPosition.right,
                           orientation: LegendItemOrientation.vertical,
                           overflowMode: LegendItemOverflowMode.wrap,
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                             color: Color.fromRGBO(0, 116, 227, 1),
                           ),
                         ),
@@ -174,12 +174,12 @@ class _ReporteEquipoInformaticoState extends State<ReporteEquipoInformatico> {
                           ),
                           alignment: ChartAlignment.center,
                         ),
-                        legend: Legend(
+                        legend: const Legend(
                           isVisible: true,
                           position: LegendPosition.right,
                           orientation: LegendItemOrientation.vertical,
                           overflowMode: LegendItemOverflowMode.wrap,
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                             color: Color.fromRGBO(0, 116, 227, 1),
                           ),
                         ),

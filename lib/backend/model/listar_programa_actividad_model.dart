@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:actividades_pais/backend/model/listar_registro_entidad_actividad_model.dart';
-import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart';
 
 String tableNameProgramacionActividad = 'listar_programa_actividad';
 
@@ -97,7 +96,7 @@ class ProgramacionActividadModel {
 
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   String? idProgramacionIntervenciones = '';
   String? estadoProgramacion = '';
@@ -136,7 +135,7 @@ class ProgramacionActividadModel {
   String? unidadTerritoria = '';
   List<RegistroEntidadActividadModel>? registroEntidadActividades = [];
 
-  ProgramacionActividadModel.empty() {}
+  ProgramacionActividadModel.empty();
 
   ProgramacionActividadModel({
     this.id,

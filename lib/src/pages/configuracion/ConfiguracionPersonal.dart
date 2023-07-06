@@ -1,13 +1,10 @@
 import 'package:actividades_pais/main.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
-import 'package:actividades_pais/src/datamodels/Clases/InfoTelefono.dart';
 import 'package:actividades_pais/src/datamodels/Formulario/FormularioReq.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +14,7 @@ import '../../datamodels/Provider/ProviderConfiguracion.dart';
 class ConfiguracionPersonal extends StatefulWidget {
   String unidad = '';
 
-  ConfiguracionPersonal({
+  ConfiguracionPersonal({super.key, 
     this.unidad = '',
   });
 
@@ -26,15 +23,15 @@ class ConfiguracionPersonal extends StatefulWidget {
 }
 
 class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
-  TextEditingController _controllerNDocumento = TextEditingController();
-  TextEditingController _controllerApPaterno = TextEditingController();
-  TextEditingController _controllerApMaterno = TextEditingController();
-  TextEditingController _controllerNombres = TextEditingController();
-  TextEditingController _controllerContrasenia = TextEditingController();
-  TextEditingController _controllerfecha = TextEditingController();
-  var formatter = new DateFormat('yyyy-MM-dd');
-  DateTime? nowfec = new DateTime.now();
-  Servicios servicios = new Servicios();
+  final TextEditingController _controllerNDocumento = TextEditingController();
+  final TextEditingController _controllerApPaterno = TextEditingController();
+  final TextEditingController _controllerApMaterno = TextEditingController();
+  final TextEditingController _controllerNombres = TextEditingController();
+  final TextEditingController _controllerContrasenia = TextEditingController();
+  final TextEditingController _controllerfecha = TextEditingController();
+  var formatter = DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  Servicios servicios = Servicios();
   var _isloading = false;
   var _isloadingSave = false;
   var espacio = const SizedBox(height: 10.0);
@@ -52,9 +49,9 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
         appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.blue[800],
-            title: Row(
+            title: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text("CONFIGURACION PERSONAL"),
               ],
             )),
@@ -72,18 +69,18 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                   espacio,
                   Container(
                     decoration: servicios.myBoxDecoration(),
-                    margin: EdgeInsets.only(right: 0, left: 0),
+                    margin: const EdgeInsets.only(right: 0, left: 0),
                     height: 40.0,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[600],
+                          backgroundColor: Colors.blue[600],
                         ),
                         child: _isloading
-                            ? Row(
+                            ? const Row(
                           mainAxisAlignment:
                           MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             CircularProgressIndicator(
                               color: Colors.white,
                             ),
@@ -122,7 +119,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                               _controllerNDocumento.text);
                           print(usuario.primerNombre);
                           if(!usuario.isNull){
-                            _controllerNombres.text=usuario.primerNombre.toString() + " " + usuario.segundoNombre.toString();
+                            _controllerNombres.text="${usuario.primerNombre} ${usuario.segundoNombre}";
                             _controllerApPaterno.text=usuario.apellidoPaterno.toString();
                             _controllerApMaterno.text=usuario.apellidoMaterno.toString();
                             _controllerfecha.text=usuario.fechaNacimiento.toString();
@@ -151,6 +148,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                         if (value!.isEmpty) {
                           return 'Por favor ingrese dato.';
                         }
+                        return null;
                       },
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
@@ -198,12 +196,12 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[600],
+                          backgroundColor: Colors.blue[600],
                         ),
                         child: _isloadingSave
-                            ? Row(
+                            ? const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   CircularProgressIndicator(
                                     color: Colors.white,
                                   ),
@@ -263,7 +261,7 @@ class _ConfiguracionPersonal extends State<ConfiguracionPersonal> {
                             if (_isloadingSave == false) {
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
-                                      builder: (_) => LoadingScreen()));
+                                      builder: (_) => const LoadingScreen()));
                             }
                           }
                         }),

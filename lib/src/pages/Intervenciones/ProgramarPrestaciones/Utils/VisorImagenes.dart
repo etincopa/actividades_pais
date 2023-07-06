@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class VisorImagenes extends StatelessWidget {
   final List<Archivo> imagenes;
 
-  VisorImagenes({required this.imagenes});
+  const VisorImagenes({super.key, required this.imagenes});
 
   @override
   Widget build(BuildContext context) {

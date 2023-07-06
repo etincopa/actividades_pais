@@ -27,7 +27,7 @@ class ServiciosBasicosResumenModel {
   int? idProveedorServicio = 0;
   String? proveedorServicio = '';
 
-  ServiciosBasicosResumenModel.empty() {}
+  ServiciosBasicosResumenModel.empty();
 
   ServiciosBasicosResumenModel({
     this.idTipoConexion,

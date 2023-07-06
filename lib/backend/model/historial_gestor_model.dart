@@ -13,7 +13,7 @@ class HistorialGestorModel {
   String? fechaInicio;
   String? fechaFin;
 
-  HistorialGestorModel.empty() {}
+  HistorialGestorModel.empty();
 
   HistorialGestorModel({
     this.snip,

@@ -27,7 +27,7 @@ class CCPPModel {
   String? distancia_m;
   String? distancia_km;
 
-  CCPPModel.empty() {}
+  CCPPModel.empty();
 
   CCPPModel(
       {this.ubigeo,

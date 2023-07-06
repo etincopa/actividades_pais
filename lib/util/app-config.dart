@@ -16,10 +16,10 @@ class AppConfig {
   static String backendsismonitor =
    'http://192.168.20.35/backendsismonitor/public';
 */
-  static var letrasColorAppBar =Color(0xFFFFFFFF);
-  static var letrasColor =Color(0xFF000000);
-  static var primaryColor =Color(0xFF78b8cd);
-  static var primaryColor2 =Color(0xFF79B7CC);
+  static var letrasColorAppBar =const Color(0xFFFFFFFF);
+  static var letrasColor =const Color(0xFF000000);
+  static var primaryColor =const Color(0xFF78b8cd);
+  static var primaryColor2 =const Color(0xFF79B7CC);
 
 
   static String urlBackendMovil = 'https://www.pais.gob.pe/';

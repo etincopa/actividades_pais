@@ -4,8 +4,8 @@ class ListarSexo {
   ListarSexo.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Sexo.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Sexo.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }

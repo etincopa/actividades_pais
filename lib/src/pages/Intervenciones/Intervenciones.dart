@@ -2,10 +2,7 @@ import 'package:actividades_pais/src/datamodels/Provider/PorviderLogin.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
-import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderServiciosRest.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
-import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
-import 'package:actividades_pais/src/datamodels/database/DatabaseParticipantes.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/EjecucionProgramacion.dart';
@@ -23,7 +20,7 @@ class Intervenciones extends StatefulWidget {
   String snip="";
   bool anterior = false;
 
-  Intervenciones(this.unidadTerritorial,{this.snip=""});
+  Intervenciones(this.unidadTerritorial,{super.key, this.snip=""});
 
   @override
   State<Intervenciones> createState() => _IntervencionesState();
@@ -52,8 +49,8 @@ class _IntervencionesState extends State<Intervenciones> {
     CalcularParticipantes();
   }
 
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     cargarIntervenciones();
     setState(() {});
   }
@@ -79,9 +76,9 @@ class _IntervencionesState extends State<Intervenciones> {
             backgroundColor: AppConfig.primaryColor,
             leading:
                 Util().iconbuton(() => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => HomePagePais()),
+                      MaterialPageRoute(builder: (context) => const HomePagePais()),
                     )),
-            title: Text("Intervenciones"),
+            title: const Text("Intervenciones"),
           ),
           body: esperadecara(
               "Cargando informacion de usuarios de la region, un momento por favor."));
@@ -93,7 +90,7 @@ class _IntervencionesState extends State<Intervenciones> {
         appBar: AppBar(
           backgroundColor: AppConfig.primaryColor,
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => HomePagePais()),
+                MaterialPageRoute(builder: (context) => const HomePagePais()),
               )),
           title: Text(
             "EJECUCION INTERVENCION",
@@ -107,13 +104,13 @@ class _IntervencionesState extends State<Intervenciones> {
               AsyncSnapshot<List<TramaIntervencion>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
+                if (listaPersonalAux!.isEmpty) {
                   return esperadecara(
                       'Espere un momento... \nEl aplicativo esta recuperando las '
                       'intervenciones de su tambo...');
@@ -122,7 +119,7 @@ class _IntervencionesState extends State<Intervenciones> {
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
@@ -193,19 +190,19 @@ class _IntervencionesState extends State<Intervenciones> {
                       width: 24,
                     ),
                     Container(
-                      margin: EdgeInsets.only(right: 10, left: 10),
+                      margin: const EdgeInsets.only(right: 10, left: 10),
                       height: 100,
                       width: 250,
                       child: Text(
                         texto,
-                        style: TextStyle(fontSize: 17),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     )
                   ],
                 ),
               ],
             )
-          : Text(
+          : const Text(
               'No hay intervenciones',
               style: TextStyle(fontSize: 19),
             ),
@@ -310,18 +307,16 @@ class _IntervencionesState extends State<Intervenciones> {
 
     await DatabasePr.db.eliminarProvincias();
     var data = await DatabasePr.db.getAllTasksConfigInicio();
-    if (data[0].unidTerritoriales != null) {
-      await ProviderDatos()
-          .getInsertParticipantesIntervencionesMovil(data[0].unidTerritoriales, ut: widget.unidadTerritorial);
-      await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
-      await ProviderDatos().getInsertPersonasFallecidas();
-      await CalcularParticipantes();
-      await cargarIntervenciones();
-      await ProviderDatos().guardarProvincia(data[0].snip, snippre: widget.snip);
-      setState(() {
-        _isloading = false;
-      });
-    }
+    await ProviderDatos()
+        .getInsertParticipantesIntervencionesMovil(data[0].unidTerritoriales, ut: widget.unidadTerritorial);
+    await ProviderDatos().getInsertFuncionariosIntervencionesMovil();
+    await ProviderDatos().getInsertPersonasFallecidas();
+    await CalcularParticipantes();
+    await cargarIntervenciones();
+    await ProviderDatos().guardarProvincia(data[0].snip, snippre: widget.snip);
+    setState(() {
+      _isloading = false;
+    });
 
 
   }
@@ -416,10 +411,10 @@ class _IntervencionesState extends State<Intervenciones> {
                 width: 50.0,
                 //color: Colors.transparent,
               )
-            : new Container(),
+            : Container(),
         if (todoParticiw <= 0) ...[
           InkWell(
-            child: Icon(
+            child: const Icon(
               Icons.vpn_lock,
               color: Colors.red,
             ),
@@ -457,7 +452,7 @@ class _IntervencionesState extends State<Intervenciones> {
           )
         ] else ...[
           InkWell(
-            child: Icon(
+            child: const Icon(
               Icons.vpn_lock,
               color: Colors.green,
             ),
@@ -467,43 +462,43 @@ class _IntervencionesState extends State<Intervenciones> {
             },
           ),
         ],
-        SizedBox(
+        const SizedBox(
           width: 4,
         ),
         InkWell(
-          child: Icon(Icons.delete),
+          child: const Icon(Icons.delete),
           onTap: () async {
             await eliminarintervenciones();
 
             ///refreshList();
           },
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         isTab
             ? InkWell(
-                child: Icon(Icons.cloud_download_sharp),
+                child: const Icon(Icons.cloud_download_sharp),
                 onTap: () async {
                   isTab = false;
                   setState(() {});
                   await cargarIntervenciones();
                 },
               )
-            : new Container(),
-        SizedBox(
+            : Container(),
+        const SizedBox(
           width: 20,
         ),
         InkWell(
-          child: Icon(Icons.cloud_upload),
+          child: const Icon(Icons.cloud_upload),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PendienteSincronizar()),
+              MaterialPageRoute(builder: (context) => const PendienteSincronizar()),
             );
           },
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
       ],
@@ -559,15 +554,11 @@ class _IntervencionesState extends State<Intervenciones> {
       onRefresh: refreshList,
       child: ListView.separated(
         itemCount: listaPersonalAux.length,
-        separatorBuilder: (context, index) => Divider(),
+        separatorBuilder: (context, index) => const Divider(),
         itemBuilder: (context, i) {
           final personal = listaPersonalAux[i];
           return Dismissible(
             key: UniqueKey(),
-            child: listas.cardIntervenciones(
-              personal,
-              () => _navigateToEjecucionProgramacionPage(personal),
-            ),
             background: buildSwipeActionLeft(),
             secondaryBackground: buildSwipeActionRigth(),
             onDismissed: (direction) {
@@ -578,6 +569,10 @@ class _IntervencionesState extends State<Intervenciones> {
               //     break;
               // }
             },
+            child: listas.cardIntervenciones(
+              personal,
+              () => _navigateToEjecucionProgramacionPage(personal),
+            ),
           );
         },
       ),
@@ -604,11 +599,11 @@ class _IntervencionesState extends State<Intervenciones> {
 
   showAlertDialogBarra(BuildContext context,
       {titulo, presse, pressno, texto, bool a = false}) {
-    Widget okButton = TextButton(child: Text("SI"), onPressed: presse);
-    Widget moButton = TextButton(child: Text("NO"), onPressed: pressno);
+    Widget okButton = TextButton(onPressed: presse, child: const Text("SI"));
+    Widget moButton = TextButton(onPressed: pressno, child: const Text("NO"));
     AlertDialog alert = AlertDialog(
       title: Text("$titulo "),
-      content: Container(
+      content: SizedBox(
         height: 100,
         child: Column(
           children: [
@@ -620,7 +615,7 @@ class _IntervencionesState extends State<Intervenciones> {
                     width: 50.0,
                     //color: Colors.transparent,
                   )
-                : new Container(),
+                : Container(),
           ],
         ),
       ),
@@ -637,7 +632,7 @@ class _IntervencionesState extends State<Intervenciones> {
 
   Widget buildSwipeActionLeft() => Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       color: Colors.transparent,
       child: Icon(
         Icons.delete,
@@ -647,7 +642,7 @@ class _IntervencionesState extends State<Intervenciones> {
 
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.transparent,
       child: Icon(
         Icons.delete,
@@ -657,13 +652,13 @@ class _IntervencionesState extends State<Intervenciones> {
 
   Future<bool?> _onWillPopScope() {
     return Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => HomePagePais()),
+      MaterialPageRoute(builder: (context) => const HomePagePais()),
     );
   }
 
   Future<bool> systemBackButtonPressed() async {
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomePagePais()));
+        MaterialPageRoute(builder: (context) => const HomePagePais()));
     return true;
   }
 }

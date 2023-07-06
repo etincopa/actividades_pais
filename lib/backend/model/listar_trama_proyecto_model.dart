@@ -69,7 +69,7 @@ class TramaProyectoFields {
 class TramaProyectoModel {
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   /// Código único del proyecto
   String? cui = "";
@@ -146,7 +146,7 @@ class TramaProyectoModel {
   /// código del coordinador regional del proyecto
   String? codCrp = "";
 
-  TramaProyectoModel.empty() {}
+  TramaProyectoModel.empty();
 
   TramaProyectoModel({
     this.id,

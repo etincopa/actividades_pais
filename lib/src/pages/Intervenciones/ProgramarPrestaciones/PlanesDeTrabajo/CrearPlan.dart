@@ -2,7 +2,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/
 import 'package:flutter/material.dart';
 
 class CrearPlan extends StatefulWidget {
-  CrearPlan({Key? key}) : super(key: key);
+  const CrearPlan({Key? key}) : super(key: key);
 
   @override
   State<CrearPlan> createState() => _CrearPlanState();
@@ -18,31 +18,34 @@ class _CrearPlanState extends State<CrearPlan> {
   var itemsTipoAccion = [
     {"value": '0', "descripcion": 'Seleccionar'},
     {"value": '1', "descripcion": 'Necesidades que atiende el Plan de Trabajo'},
-    {"value": '2', "descripcion": 'Potencialidades identificadas que atiende el Plan de Trabajo'},
-
+    {
+      "value": '2',
+      "descripcion":
+          'Potencialidades identificadas que atiende el Plan de Trabajo'
+    },
   ];
   String? selectedTipoProgramacion = "x";
   String? selectedTipoAccion = "0";
 
   @override
   Widget build(BuildContext context) {
-    final fem = 1.05;
+    const fem = 1.05;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final tam = 0.75;
+    const tam = 0.75;
 
     return Scaffold(
-      backgroundColor: Color(0xFF8BBFD1),
+      backgroundColor: const Color(0xFF8BBFD1),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 10, top: 30, right: 5),
+              margin: const EdgeInsets.only(left: 10, top: 30, right: 5),
               height: height * 0.95,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16 * fem),
-                color: Color(0xffffffff),
-                boxShadow: [
+                color: const Color(0xffffffff),
+                boxShadow: const [
                   BoxShadow(
                     color: Color(0x3f000000),
                     offset: Offset(0 * fem, 4 * fem),
@@ -51,10 +54,10 @@ class _CrearPlanState extends State<CrearPlan> {
                 ],
               ),
               child: Container(
-                margin: EdgeInsets.all(25),
+                margin: const EdgeInsets.all(25),
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
@@ -69,7 +72,7 @@ class _CrearPlanState extends State<CrearPlan> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Align(
@@ -112,14 +115,14 @@ class _CrearPlanState extends State<CrearPlan> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Align(
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "N° Plan de trabajo",
                                   labelText: "N° Plan de trabajo"),
                             ),
@@ -139,21 +142,21 @@ class _CrearPlanState extends State<CrearPlan> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Align(
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Año", labelText: "Año"),
                             ),
                           ),
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20 * fem,
                     ),
                     Row(
@@ -178,7 +181,7 @@ class _CrearPlanState extends State<CrearPlan> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Align(
@@ -194,8 +197,8 @@ class _CrearPlanState extends State<CrearPlan> {
                               decoration: const InputDecoration(
                                 labelText: 'Tipo Accion',
                               ),
-                              items:
-                              itemsTipoAccion.map<DropdownMenuItem<String>>((item) {
+                              items: itemsTipoAccion
+                                  .map<DropdownMenuItem<String>>((item) {
                                 return DropdownMenuItem<String>(
                                   value: item["value"],
                                   child: Text(
@@ -221,7 +224,7 @@ class _CrearPlanState extends State<CrearPlan> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Align(
@@ -233,7 +236,7 @@ class _CrearPlanState extends State<CrearPlan> {
                         ),
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: [
                         SizedBox(
                           height: 50,
@@ -255,7 +258,7 @@ class _CrearPlanState extends State<CrearPlan> {
                         ),
                       ),
                     ),
-                    Row(
+                    const Row(
                       children: [
                         SizedBox(
                           height: 50,
@@ -267,10 +270,10 @@ class _CrearPlanState extends State<CrearPlan> {
                         // Acción a realizar cuando se presione el botón
                       },
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Color(0xFF8BBFD1)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xFF8BBFD1)),
                       ),
-                      child: Text(
+                      child: const Text(
                         'CREAR PLAN',
                         style: TextStyle(
                           color: Colors.black,

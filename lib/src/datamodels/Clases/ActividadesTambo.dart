@@ -4,8 +4,8 @@ class ActividadesTambos {
   ActividadesTambos.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ActividadesTambo.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ActividadesTambo.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }

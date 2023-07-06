@@ -18,7 +18,7 @@ class SinIntervencionModel {
   String? tipoProgramacion = '';
   int? cantidadIntervencionesEjecutadas = 0;
 
-  SinIntervencionModel.empty() {}
+  SinIntervencionModel.empty();
 
   SinIntervencionModel({
     this.idTambo,

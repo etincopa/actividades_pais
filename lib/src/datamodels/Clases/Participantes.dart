@@ -4,8 +4,8 @@ class ListaParticipantes {
   ListaParticipantes.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Participantes.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Participantes.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -16,8 +16,8 @@ class ListaParticipantesSer{
   ListaParticipantesSer.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Participantes.fromJsonSERICIO(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Participantes.fromJsonSERICIO(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -264,39 +264,39 @@ class Participantes {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = new Map<String, dynamic>();
+    final Map<String, dynamic> json = <String, dynamic>{};
 
-    json['id'] = this.id;
-    json['idProgramacion'] = this.idProgramacion;
-    json['tipoDocumento'] = this.tipoDocumento;
-    json['dni'] = this.dni;
-    json['primerNombre'] = this.primerNombre;
-    json['segundoNombre'] = this.segundoNombre;
-    json['apellidoPaterno'] = this.apellidoPaterno;
-    json['apellidoMaterno'] = this.apellidoMaterno;
-    json['edad'] = this.edad;
-    json['fechaNacimiento'] = this.fechaNacimiento;
-    json['sexo'] = this.sexo;
-    json['ubigeoCcpp'] = this.ubigeoCcpp;
-    json['nombreCcpp'] = this.nombreCcpp;
-    json['nombreResidencia'] = this.nombreResidencia;
-    json['entidad'] = this.entidad;
-    json['servicio'] = this.servicio;
-    json['provincia'] = this.provincia;
-    json['distrito'] = this.distrito;
-    json['idCentroPoblado'] = this.idCentroPoblado;
-    json['centroPoblado'] = this.centroPoblado;
-    json['flatResidencia'] = this.flatResidencia;
-    json['idEntidad'] = this.idEntidad;
-    json['idPais'] = this.idPais;
-    json['pais'] = this.pais;
-    json['idServicio'] = this.idServicio;
-    json['idTipoDocumento'] = this.idTipoDocumento;
-    json['idUsuario'] = this.idUsuario;
-    json['numDocExtranjero'] = this.numDocExtranjero;
-    json['txtIpmaq'] = this.txtIpmaq;
-    json['tipo'] = this.tipo;
-    json['tipoParticipante'] = this.tipoParticipante;
+    json['id'] = id;
+    json['idProgramacion'] = idProgramacion;
+    json['tipoDocumento'] = tipoDocumento;
+    json['dni'] = dni;
+    json['primerNombre'] = primerNombre;
+    json['segundoNombre'] = segundoNombre;
+    json['apellidoPaterno'] = apellidoPaterno;
+    json['apellidoMaterno'] = apellidoMaterno;
+    json['edad'] = edad;
+    json['fechaNacimiento'] = fechaNacimiento;
+    json['sexo'] = sexo;
+    json['ubigeoCcpp'] = ubigeoCcpp;
+    json['nombreCcpp'] = nombreCcpp;
+    json['nombreResidencia'] = nombreResidencia;
+    json['entidad'] = entidad;
+    json['servicio'] = servicio;
+    json['provincia'] = provincia;
+    json['distrito'] = distrito;
+    json['idCentroPoblado'] = idCentroPoblado;
+    json['centroPoblado'] = centroPoblado;
+    json['flatResidencia'] = flatResidencia;
+    json['idEntidad'] = idEntidad;
+    json['idPais'] = idPais;
+    json['pais'] = pais;
+    json['idServicio'] = idServicio;
+    json['idTipoDocumento'] = idTipoDocumento;
+    json['idUsuario'] = idUsuario;
+    json['numDocExtranjero'] = numDocExtranjero;
+    json['txtIpmaq'] = txtIpmaq;
+    json['tipo'] = tipo;
+    json['tipoParticipante'] = tipoParticipante;
 
     return json;
   }

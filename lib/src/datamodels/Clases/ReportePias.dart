@@ -17,11 +17,11 @@ class ReportePias{
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['tipo'] = this.tipo;
-    data['codigoIntervencion'] = this.codigoIntervencion;
-    data['porcentaje'] = this.porcentaje;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['tipo'] = tipo;
+    data['codigoIntervencion'] = codigoIntervencion;
+    data['porcentaje'] = porcentaje;
     return data;
   }
 

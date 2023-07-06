@@ -4,7 +4,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroListaEquipos.da
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaMarca.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaModelo.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaUbicacion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
@@ -29,9 +28,9 @@ class _SeguimientoParqueInformaticoState
     extends State<SeguimientoParqueInformatico> {
   Listas listas = Listas();
   FiltroParqueInformatico filtroParqueInformatico = FiltroParqueInformatico();
- TextEditingController controladorCodPatrimonial = TextEditingController();
- TextEditingController controladorDenominacion = TextEditingController();
- TextEditingController controladorCodInventario = TextEditingController();
+  TextEditingController controladorCodPatrimonial = TextEditingController();
+  TextEditingController controladorDenominacion = TextEditingController();
+  TextEditingController controladorCodInventario = TextEditingController();
   var seleccionarMarca = "Seleccionar Marca";
   var seleccionarModelo = "Seleccionar Modelo";
   var seleccionarUbicacion = "Seleccionar Ubicacion";
@@ -62,8 +61,6 @@ class _SeguimientoParqueInformaticoState
     super.dispose();
   }
 
-
-
   _onlistener() async {
     if ((controller.offset >= controller.position.maxScrollExtent)) {
       setState(() {
@@ -76,16 +73,15 @@ class _SeguimientoParqueInformaticoState
       });
     }
   }
-  final GlobalKey<BackdropScaffoldState> _backdropKey = GlobalKey();
 
+  final GlobalKey<BackdropScaffoldState> _backdropKey = GlobalKey();
 
   var listaAnios = [];
   String? selectedAnio;
-  cargarAnios(){
-    selectedAnio ="TODOS";
+  cargarAnios() {
+    selectedAnio = "TODOS";
     listaAnios = [];
-    listaAnios =
-    [
+    listaAnios = [
       {"anio": "TODOS"},
       {"anio": "2024"},
       {"anio": "2023"},
@@ -98,9 +94,7 @@ class _SeguimientoParqueInformaticoState
 
   @override
   Widget build(BuildContext context) {
-
     return BackdropScaffold(
-
       key: _backdropKey,
 
       appBar: BackdropAppBar(
@@ -111,7 +105,7 @@ class _SeguimientoParqueInformaticoState
         }),
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title:   Text(
+        title: Text(
           titulo,
           style: const TextStyle(fontSize: 17),
         ),
@@ -126,23 +120,23 @@ class _SeguimientoParqueInformaticoState
               color: Colors.black,
             ),
             onTap: () async {
+              setState(() {
+                isLoading = true;
+              });
+              await resetlista();
 
-                 setState(() {
-                  isLoading = true;
-                });
-                await resetlista();
+              setState(() {
+                isLoading = false;
+              });
 
-                setState(() {
-                  isLoading = false;
-                });
-
-                            //  BusyIndicator.show(context);
+              //  BusyIndicator.show(context);
 
               //  BusyIndicator.hide(context);
             },
           )
         ],
-      ),/*AppBar(centerTitle: true,
+      ),
+      /*AppBar(centerTitle: true,
         backgroundColor: AppConfig.primaryColor,
         title: Text(
           titulo,
@@ -177,7 +171,7 @@ class _SeguimientoParqueInformaticoState
       backLayer: Container(
         child: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.all(20),
+            margin: const EdgeInsets.all(20),
             width: double.infinity,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -185,7 +179,7 @@ class _SeguimientoParqueInformaticoState
                 _buildTextFormField(
                   controlador: controladorCodPatrimonial,
                   labelText: 'CODIGO PATRIMONIAL',
-                  icon: Icon(Icons.note_add, size: 15),
+                  icon: const Icon(Icons.note_add, size: 15),
                   onChanged: (value) {
                     filtroParqueInformatico.codigoPatrimonial = value;
                   },
@@ -193,14 +187,15 @@ class _SeguimientoParqueInformaticoState
                 _buildTextFormField(
                   controlador: controladorDenominacion,
                   labelText: 'DENOMINACION',
-                  icon: Icon(Icons.note_add, size: 15),
+                  icon: const Icon(Icons.note_add, size: 15),
                   onChanged: (value) {
                     filtroParqueInformatico.denominacion = value;
                   },
                 ),
                 FutureBuilder<List<Marca>>(
                   future: ProviderSeguimientoParqueInformatico().listaMarcas(),
-                  builder: (BuildContext context, AsyncSnapshot<List<Marca>> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Marca>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
@@ -208,7 +203,8 @@ class _SeguimientoParqueInformaticoState
                     } else {
                       return Row(
                         children: [
-                          const Icon(Icons.account_balance_wallet_outlined, size: 15, color: Colors.grey),
+                          const Icon(Icons.account_balance_wallet_outlined,
+                              size: 15, color: Colors.grey),
                           const SizedBox(width: 13),
                           Expanded(
                             child: DropdownButtonFormField<Marca>(
@@ -223,16 +219,17 @@ class _SeguimientoParqueInformaticoState
                                 );
                               }).toList(),
                               onChanged: (Marca? value) {
-                                setState (() {
-                                    seleccionarModelo = "Seleccionar Modelo";
+                                setState(() {
+                                  seleccionarModelo = "Seleccionar Modelo";
                                   seleccionarMarca = '';
-                                  activar=false;
+                                  activar = false;
 
                                   seleccionarMarca = value!.descripcionMarca!;
-                                  filtroParqueInformatico.idMarca = value.idMarca.toString();
+                                  filtroParqueInformatico.idMarca =
+                                      value.idMarca.toString();
                                   // Llamada al método para obtener los modelos
-                                  obtenerModelos(filtroParqueInformatico.idMarca!);
-
+                                  obtenerModelos(
+                                      filtroParqueInformatico.idMarca!);
                                 });
                               },
                               hint: Text(
@@ -246,17 +243,20 @@ class _SeguimientoParqueInformaticoState
                     }
                   },
                 ),
-                activar ==true? Container(
-                  child: (listaModelos.isNotEmpty)
-                      ? buildModeloDropdown(listaModelos)
-                      : const Center(
-                    child: Text("------Sin dato------"),
-                  ),
-                ) : Container(),
+                activar == true
+                    ? Container(
+                        child: (listaModelos.isNotEmpty)
+                            ? buildModeloDropdown(listaModelos)
+                            : const Center(
+                                child: Text("------Sin dato------"),
+                              ),
+                      )
+                    : Container(),
 
                 Row(
                   children: [
-                    const Icon(Icons.account_balance_wallet_outlined, size: 15, color: Colors.grey),
+                    const Icon(Icons.account_balance_wallet_outlined,
+                        size: 15, color: Colors.grey),
                     const SizedBox(width: 13),
                     Expanded(
                       child: DropdownButtonFormField<String>(
@@ -287,7 +287,7 @@ class _SeguimientoParqueInformaticoState
                 _buildTextFormField(
                   labelText: 'CODIGO INVENTARIO',
                   controlador: controladorCodInventario,
-                  icon: Icon(Icons.note_add, size: 15),
+                  icon: const Icon(Icons.note_add, size: 15),
                   onChanged: (value) {
                     filtroParqueInformatico.codInventario = value;
                   },
@@ -302,7 +302,7 @@ class _SeguimientoParqueInformaticoState
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[600],
+                      backgroundColor: Colors.blue[600],
                     ),
                     onPressed: () async {
                       setState(() {
@@ -317,9 +317,7 @@ class _SeguimientoParqueInformaticoState
                     child: const Text("FILTRAR"),
                   ),
                 )
-
               ],
-
             ),
           ),
         ),
@@ -336,7 +334,7 @@ class _SeguimientoParqueInformaticoState
               );
             } else {
               final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.length == 0) {
+              if (listaPersonalAux!.isEmpty) {
                 return const Center(
                   child: Text(
                     'No hay informacion',
@@ -422,8 +420,8 @@ class _SeguimientoParqueInformaticoState
                           )),
                     )),
                     if (isLoading == true)
-                      new Center(
-                        child: const CircularProgressIndicator(),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                   ],
                 );
@@ -463,16 +461,16 @@ class _SeguimientoParqueInformaticoState
 
         elevation: 8.0,
         //shadow elevation of button
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         //shape of button
 
         children: [
           SpeedDialChild(
-            child: Icon(Icons.airplay_sharp),
+            child: const Icon(Icons.airplay_sharp),
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
             label: 'REGISTRAR EQUIPO INFORMATICO',
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: const TextStyle(fontSize: 18.0),
             onTap: () async {
               final respt = await Navigator.push(
                   context,
@@ -489,16 +487,16 @@ class _SeguimientoParqueInformaticoState
             onLongPress: () => print('SECOND CHILD LONG PRESS'),
           ),
           SpeedDialChild(
-            child: Icon(Icons.pie_chart),
+            child: const Icon(Icons.pie_chart),
             foregroundColor: Colors.white,
             backgroundColor: Colors.orangeAccent,
             label: 'REPORTE EQUIPO INFORMATICO',
-            labelStyle: TextStyle(fontSize: 18.0),
+            labelStyle: const TextStyle(fontSize: 18.0),
             onTap: () async {
               final respt = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ReporteEquipoInformatico(),
+                    builder: (context) => const ReporteEquipoInformatico(),
                   ));
               if (respt == 'OK') {
                 resetlista();
@@ -511,25 +509,23 @@ class _SeguimientoParqueInformaticoState
     );
   }
 
-
   Future<List<Modelo>> obtenerModelos(String idMarca) async {
-    listaModelos=[];
-    activar=false;
+    listaModelos = [];
+    activar = false;
     List<Modelo> modelos = [];
-     try {
-      modelos = await ProviderSeguimientoParqueInformatico().listaModelos(idMarca);
+    try {
+      modelos =
+          await ProviderSeguimientoParqueInformatico().listaModelos(idMarca);
       print(jsonEncode(modelos));
     } catch (error) {
       // Manejar el error de manera apropiada
     }
     listaModelos = modelos;
     setState(() {
-      if(listaModelos.isNotEmpty){
-        activar=true;
-
-      }else {
-        activar=false;
-
+      if (listaModelos.isNotEmpty) {
+        activar = true;
+      } else {
+        activar = false;
       }
     });
 
@@ -540,7 +536,7 @@ class _SeguimientoParqueInformaticoState
     return Row(
       children: [
         const Icon(Icons.account_tree_rounded, size: 15, color: Colors.grey),
-        SizedBox(width: 13),
+        const SizedBox(width: 13),
         Expanded(
           child: Container(
             child: DropdownButtonFormField<Modelo?>(
@@ -568,14 +564,11 @@ class _SeguimientoParqueInformaticoState
     );
   }
 
-
-
-  Widget _buildTextFormField({
-    required String labelText,
-    required Icon icon,
-    required Function(String) onChanged,
-    controlador
-  }) {
+  Widget _buildTextFormField(
+      {required String labelText,
+      required Icon icon,
+      required Function(String) onChanged,
+      controlador}) {
     return TextFormField(
       controller: controlador,
       keyboardType: TextInputType.text,
@@ -587,6 +580,7 @@ class _SeguimientoParqueInformaticoState
       onChanged: onChanged,
     );
   }
+
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -623,18 +617,18 @@ class _SeguimientoParqueInformaticoState
 
   Future resetlista() async {
     cargarAnios();
-    activar=false;
+    activar = false;
     listaModelos.clear();
-   // listaModelos.clear();
+    // listaModelos.clear();
     //selectedAnio = "";
     seleccionarMarca = "Seleccionar Marca";
     seleccionarModelo = "Seleccionar Modelo";
     seleccionarUbicacion = "Seleccionar Ubicacion";
     pageIndex = 1;
-    controladorCodInventario.text= '';
-    controladorCodPatrimonial.text= '';
-    controladorDenominacion.text= '';
-     filtroParqueInformatico.anio = '';
+    controladorCodInventario.text = '';
+    controladorCodPatrimonial.text = '';
+    controladorDenominacion.text = '';
+    filtroParqueInformatico.anio = '';
     filtroParqueInformatico.codInventario = '';
     filtroParqueInformatico.codigoPatrimonial = '';
     filtroParqueInformatico.denominacion = '';
@@ -651,7 +645,7 @@ class _SeguimientoParqueInformaticoState
     });
   }
 
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     filtroParqueInformatico.pageSize = pageSize;
     filtroParqueInformatico.pageIndex = pageIndex;
     await Future.delayed(const Duration(seconds: 1));

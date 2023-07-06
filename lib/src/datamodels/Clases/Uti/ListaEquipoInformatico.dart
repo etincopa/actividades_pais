@@ -6,8 +6,8 @@ class ListaEquipoInformaticos {
   ListaEquipoInformaticos.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new ListaEquipoInformatico.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = ListaEquipoInformatico.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -119,41 +119,41 @@ class ListaEquipoInformatico {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_equipo_informatico'] = this.idEquipoInformatico;
-    data['id_tipo_equipo_informatico'] = this.idTipoEquipoInformatico;
-    data['descripcion_equipo_informatico'] = this.descripcionEquipoInformatico;
-    data['codigo_patrimonial'] = this.codigoPatrimonial;
-    data['id_modelo'] = this.idModelo;
-    data['color'] = this.color;
-    data['serie'] = this.serie;
-    data['fec_ingreso'] = this.fecIngreso;
-    data['id_proveedor'] = this.idProveedor;
-    data['fec_fin_garantia_proveedor'] = this.fecFinGarantiaProveedor;
-    data['id_archivo'] = this.idArchivo;
-    data['flg_activo'] = this.flgActivo;
-    data['id_usuario_reg'] = this.idUsuarioReg;
-    data['fecha_reg'] = this.fechaReg;
-    data['ipmaq_reg'] = this.ipmaqReg;
-    data['id_usuario_act'] = this.idUsuarioAct;
-    data['fecha_act'] = this.fechaAct;
-    data['ipmaq_act'] = this.ipmaqAct;
-    data['id_usuario_del'] = this.idUsuarioDel;
-    data['fecha_del'] = this.fechaDel;
-    data['ipmaq_del'] = this.ipmaqDel;
-    data['proveedor'] = this.proveedor;
-    data['descripcion_marca'] = this.descripcionMarca;
-    data['descripcion_modelo'] = this.descripcionModelo;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_equipo_informatico'] = idEquipoInformatico;
+    data['id_tipo_equipo_informatico'] = idTipoEquipoInformatico;
+    data['descripcion_equipo_informatico'] = descripcionEquipoInformatico;
+    data['codigo_patrimonial'] = codigoPatrimonial;
+    data['id_modelo'] = idModelo;
+    data['color'] = color;
+    data['serie'] = serie;
+    data['fec_ingreso'] = fecIngreso;
+    data['id_proveedor'] = idProveedor;
+    data['fec_fin_garantia_proveedor'] = fecFinGarantiaProveedor;
+    data['id_archivo'] = idArchivo;
+    data['flg_activo'] = flgActivo;
+    data['id_usuario_reg'] = idUsuarioReg;
+    data['fecha_reg'] = fechaReg;
+    data['ipmaq_reg'] = ipmaqReg;
+    data['id_usuario_act'] = idUsuarioAct;
+    data['fecha_act'] = fechaAct;
+    data['ipmaq_act'] = ipmaqAct;
+    data['id_usuario_del'] = idUsuarioDel;
+    data['fecha_del'] = fechaDel;
+    data['ipmaq_del'] = ipmaqDel;
+    data['proveedor'] = proveedor;
+    data['descripcion_marca'] = descripcionMarca;
+    data['descripcion_modelo'] = descripcionModelo;
     data['descripcion_tipo_equipo_informatico'] =
-        this.descripcionTipoEquipoInformatico;
-    data['empleado'] = this.empleado;
-    data['ubicacion'] = this.ubicacion;
-    data['id_marca'] = this.idMarca;
-    data['estado'] = this.estado;
-    data['jefe'] = this.jefe;
-    data['totalManto'] = this.totalManto;
-    data['total'] = this.total;
-    data['archivos'] = this.archivos;
+        descripcionTipoEquipoInformatico;
+    data['empleado'] = empleado;
+    data['ubicacion'] = ubicacion;
+    data['id_marca'] = idMarca;
+    data['estado'] = estado;
+    data['jefe'] = jefe;
+    data['totalManto'] = totalManto;
+    data['total'] = total;
+    data['archivos'] = archivos;
     return data;
   }
 }

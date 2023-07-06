@@ -57,7 +57,7 @@ class RegistroEntidadActividadModel {
 
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   String? idRegistroEntidadesYActividades = '';
   String? idProgramacionIntervenciones = '';
@@ -78,7 +78,7 @@ class RegistroEntidadActividadModel {
   String? tipoActividad = '';
   String? tipoDeUsuario = '';
 
-  RegistroEntidadActividadModel.empty() {}
+  RegistroEntidadActividadModel.empty();
 
   RegistroEntidadActividadModel({
     this.id,

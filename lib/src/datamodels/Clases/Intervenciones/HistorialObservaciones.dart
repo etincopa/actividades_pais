@@ -6,8 +6,8 @@ class ListaHistorialobservaciones{
   ListaHistorialobservaciones.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Historialobservaciones.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Historialobservaciones.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -28,11 +28,11 @@ class Historialobservaciones {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['observacion'] = this.observacion;
-    data['fecha_reg'] = this.fechaReg;
-    data['id_evaluacion'] = this.idEvaluacion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['observacion'] = observacion;
+    data['fecha_reg'] = fechaReg;
+    data['id_evaluacion'] = idEvaluacion;
     return data;
   }
 }

@@ -15,7 +15,7 @@ class CategorizacionTambosModel {
   int? idCategoria;
   String? nomCategoria;
 
-  CategorizacionTambosModel.empty() {}
+  CategorizacionTambosModel.empty();
 
   CategorizacionTambosModel(
       {this.idTambo,

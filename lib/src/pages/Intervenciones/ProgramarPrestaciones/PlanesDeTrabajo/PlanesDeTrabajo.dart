@@ -1,9 +1,5 @@
-import 'package:actividades_pais/src/Utils/utils.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/CrearPlan.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/Cronograma/Cronogramas.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/Cronograma/ListaCronograma.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/Cronograma/RegistroCronograma.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlanesDeTrabajo extends StatelessWidget {
@@ -21,7 +17,7 @@ class PlanesDeTrabajo extends StatelessWidget {
         // key: scaffoldKey,
 
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -36,7 +32,7 @@ class PlanesDeTrabajo extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 55, 10, 10),
+                  padding: const EdgeInsetsDirectional.fromSTEB(10, 55, 10, 10),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -48,28 +44,28 @@ class PlanesDeTrabajo extends StatelessWidget {
                             hintText: 'Buscar',
 
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color(0x00000000),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color(0x00000000),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color(0x00000000),
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Color(0x00000000),
                                 width: 1,
                               ),
@@ -77,7 +73,7 @@ class PlanesDeTrabajo extends StatelessWidget {
                             ),
                             filled: true,
                             fillColor: Colors.white,
-                            suffixIcon: Icon(
+                            suffixIcon: const Icon(
                               Icons.search_rounded,
                               color: Color(0xFF000000),
                               size: 50,
@@ -105,8 +101,8 @@ class PlanesDeTrabajo extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16 * fem),
                                 color: const Color(0xffffffff),
-                                boxShadow: [
-                                  const BoxShadow(
+                                boxShadow: const [
+                                  BoxShadow(
                                     color: Color(0x3f000000),
                                     offset: Offset(0, 4),
                                     blurRadius: 2,
@@ -123,7 +119,7 @@ class PlanesDeTrabajo extends StatelessWidget {
                                       fontSize: 14 * fem,
                                       fontWeight: FontWeight.w500,
                                       height: 1.2125 * fem,
-                                      color: Color(0xff000000),
+                                      color: const Color(0xff000000),
                                     ),
                                   ),
                                   SizedBox(
@@ -153,12 +149,12 @@ class PlanesDeTrabajo extends StatelessWidget {
                                 var res = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CrearPlan(),
+                                    builder: (context) => const CrearPlan(),
                                   ),
                                 );
                                 if (res == 'OK') {}
                               },
-                              child: Icon(
+                              child: const Icon(
                                 Icons.add,
                                 color: Colors.white,
                               ),
@@ -169,9 +165,11 @@ class PlanesDeTrabajo extends StatelessWidget {
                     ],
                   ),
                 ),
-SizedBox(height: 10,),
-                Container(
-                    height: height*0.65,
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                    height: height * 0.65,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 5, // Número de elementos en la lista
@@ -194,7 +192,7 @@ SizedBox(height: 10,),
                                         color: const Color(0xffffffff),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(0x3f000000),
+                                            color: const Color(0x3f000000),
                                             offset: Offset(0, 4 * fem),
                                             blurRadius: 2 * fem,
                                           ),
@@ -215,10 +213,10 @@ SizedBox(height: 10,),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(4 * fem),
-                                          color: Color(0xffd9d9d9),
+                                          color: const Color(0xffd9d9d9),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Color(0x3f000000),
+                                              color: const Color(0x3f000000),
                                               offset: Offset(0 * fem, 4 * fem),
                                               blurRadius: 2 * fem,
                                             ),
@@ -236,7 +234,7 @@ SizedBox(height: 10,),
                                     child: SizedBox(
                                       width: 181 * fem,
                                       height: 25 * fem,
-                                      child: Text(
+                                      child: const Text(
                                         'N° Plan 001 - 2023',
                                         textAlign: TextAlign.center,
                                       ),
@@ -256,7 +254,7 @@ SizedBox(height: 10,),
                                         color: const Color(0xffffffff),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color(0x3f000000),
+                                            color: const Color(0x3f000000),
                                             offset: Offset(0, 4 * fem),
                                             blurRadius: 2 * fem,
                                           ),
@@ -271,7 +269,7 @@ SizedBox(height: 10,),
                                   child: SizedBox(
                                     width: 80 * fem,
                                     height: 20 * fem,
-                                    child: Text(
+                                    child: const Text(
                                       'REGIONAL',
                                       style: TextStyle(
                                         fontSize: 16,
@@ -288,13 +286,13 @@ SizedBox(height: 10,),
                                   child: SizedBox(
                                     width: 141 * fem,
                                     height: 25 * fem,
-                                    child: Text(
+                                    child: const Text(
                                       'NECESIDADES',
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,
                                         height: 1.2125,
-                                        color: const Color(0xff000000),
+                                        color: Color(0xff000000),
                                       ),
                                     ),
                                   ),
@@ -307,7 +305,7 @@ SizedBox(height: 10,),
                                     child: SizedBox(
                                       width: 259 * fem,
                                       height: 119 * fem,
-                                      child: Text(
+                                      child: const Text(
                                         'Brindar asistencia técnico legal gratuita y/o patrocinio en materia familia, civil, penal y defensa de víctimas, desde las Plataformas de Servicios Fijas - Tambos del PNPAIS, hacia la población de escasos recursos y zonas alejadas',
                                       ),
                                     ),
@@ -319,13 +317,13 @@ SizedBox(height: 10,),
                                   child: SizedBox(
                                     width: 42 * fem,
                                     height: 20 * fem,
-                                    child: Text(
+                                    child: const Text(
                                       'TIPO:',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                         height: 1.2125,
-                                        color: const Color(0xff000000),
+                                        color: Color(0xff000000),
                                       ),
                                     ),
                                   ),
@@ -336,13 +334,13 @@ SizedBox(height: 10,),
                                   child: SizedBox(
                                     width: 59 * fem,
                                     height: 10 * fem,
-                                    child: Text(
+                                    child: const Text(
                                       'CRONOGRAMA',
                                       style: TextStyle(
                                         fontSize: 8,
                                         fontWeight: FontWeight.w500,
                                         height: 1.2125,
-                                        color: const Color(0xff000000),
+                                        color: Color(0xff000000),
                                       ),
                                     ),
                                   ),
@@ -353,11 +351,12 @@ SizedBox(height: 10,),
                                   top: 419 * fem,
                                   child: Align(
                                       child: InkWell(
-                                    onTap: () async{
+                                    onTap: () async {
                                       var res = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Cronogramas(),
+                                          builder: (context) =>
+                                              const Cronogramas(),
                                         ),
                                       );
                                       if (res == 'OK') {}

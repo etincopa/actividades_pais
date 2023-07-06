@@ -76,7 +76,7 @@ class _ProgramacionListPageState extends State<ProgramacionListPage>
         limit,
         offset,
       );
-      if (response.length == 0) {
+      if (response.isEmpty) {
         isEndPagination = true;
       } else {
         aProgramacion = aProgramacion + response;
@@ -115,7 +115,7 @@ class _ProgramacionListPageState extends State<ProgramacionListPage>
       body: Container(
         child: RefreshIndicator(
           onRefresh: () async {
-            await Future.delayed(Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 2));
             setState(() {
               isEndPagination = false;
               readJson(offset);
@@ -165,9 +165,9 @@ class _ProgramacionListPageState extends State<ProgramacionListPage>
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 245, 246, 248)),
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'No existe niguna programación',
                         style: TextStyle(color: Colors.black, fontSize: 16),

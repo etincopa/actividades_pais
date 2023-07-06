@@ -12,10 +12,10 @@ class Actividad {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_actividad'] = this.idActividad;
-    data['nombre_tipo_actividad'] = this.nombreTipoActividad;
-    data['id_entidad'] = this.idEntidad;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_actividad'] = idActividad;
+    data['nombre_tipo_actividad'] = nombreTipoActividad;
+    data['id_entidad'] = idEntidad;
     return data;
   }
 }

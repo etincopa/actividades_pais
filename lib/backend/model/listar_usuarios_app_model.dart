@@ -28,13 +28,13 @@ class UserFields {
 }
 
 class UserModel {
-  static final sRolRES = "RESIDENTE"; // Residente,
-  static final sRolSUP = "SUPERVISOR"; // Supervisor,
-  static final sRolCRP = "CRP"; // (coordinador regional del proyecto)
+  static const sRolRES = "RESIDENTE"; // Residente,
+  static const sRolSUP = "SUPERVISOR"; // Supervisor,
+  static const sRolCRP = "CRP"; // (coordinador regional del proyecto)
 
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   String? codigo = "";
   String? clave = "";
@@ -43,7 +43,7 @@ class UserModel {
   String? username = "";
   String? password = "";
 
-  UserModel.empty() {}
+  UserModel.empty();
 
   UserModel({
     this.id,

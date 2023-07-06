@@ -177,7 +177,7 @@ class _MainFooterSettingPageState extends State<MainFooterSettingPage> {
 
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => LoginPage()),
+                      MaterialPageRoute(builder: (_) => const LoginPage()),
                       (route) => false,
                     );
                   },
@@ -198,7 +198,7 @@ class PDFViewerFromUrl extends StatelessWidget {
 
   Future<Uint8List> downloadPDF() async {
     final HttpClient client = HttpClient();
-    final HttpClientRequest request = await client.getUrl(Uri.parse(this.url));
+    final HttpClientRequest request = await client.getUrl(Uri.parse(url));
     final HttpClientResponse response = await request.close();
     return await consolidateHttpClientResponseBytes(response);
   }

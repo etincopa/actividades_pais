@@ -5,20 +5,20 @@ import 'package:intl/intl.dart';
 
 class HistorialPage extends StatefulWidget {
   String dni;
-  HistorialPage({this.dni = ''});
+  HistorialPage({super.key, this.dni = ''});
   @override
   State<HistorialPage> createState() => _HistorialPageState();
 }
 
 class _HistorialPageState extends State<HistorialPage> {
   var cantidad = 0;
-  ProviderDatos _provider = ProviderDatos();
+  final ProviderDatos _provider = ProviderDatos();
   Future traertodo() async {
     await _provider.getLista();
   }
 
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 1));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 1));
 
     setState(() {
       // _provider.getLista();
@@ -40,11 +40,11 @@ class _HistorialPageState extends State<HistorialPage> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: Colors.indigo[900],
-          title: Text(
+          title: const Text(
             'Historial Registros',
             style: TextStyle(color: Colors.white),
           ),
@@ -56,31 +56,31 @@ class _HistorialPageState extends State<HistorialPage> {
               AsyncSnapshot<List<ReporteHistorial>> snapshot) {
             if (!snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros!"),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             }
             final listaPersonalAux = snapshot.data;
 
-            if (listaPersonalAux?.length == 0) {
-              return Center(
+            if (listaPersonalAux!.isEmpty) {
+              return const Center(
                 child: Text("No hay informacion"),
               );
             } else {
               return Container(
                   child: RefreshIndicator(
+                      onRefresh: refreshList,
                       child: ListView.builder(
                         itemCount: listaPersonalAux?.length,
                         itemBuilder: (context, i) {
                           return _banTitle(listaPersonalAux![i]);
                         },
-                      ),
-                      onRefresh: refreshList));
+                      )));
             }
           },
         ));
@@ -91,11 +91,11 @@ class _HistorialPageState extends State<HistorialPage> {
 
     //2022-01-25 18:00:37.516914
 
-    String fecha = band.fechaSeguimiento + ' ' + band.horaSeguimiento;
-    var now = new DateTime.now().toString();
+    String fecha = '${band.fechaSeguimiento} ${band.horaSeguimiento}';
+    var now = DateTime.now().toString();
     //value.replaceAll(".0000000", "").replaceAll("", "");
     // var now = new DateTime.now().toString();
-    var formatter = new DateFormat('dd-MM-yyyy');
+    var formatter = DateFormat('dd-MM-yyyy');
     //   String
     String formattedTime =
         DateFormat('dd-MM-yyyy kk:mm:a').format(DateTime.parse(fecha));
@@ -104,24 +104,24 @@ class _HistorialPageState extends State<HistorialPage> {
     // print(formattedDate);
     return ListTile(
       leading: CircleAvatar(
-        child: Icon(
+        backgroundColor: Colors.indigo[900],
+        child: const Icon(
           Icons.calendar_today_outlined,
           color: Colors.white,
         ),
-        backgroundColor: Colors.indigo[900],
       ),
-      title: Text(band.nombreTipoCheck + ' (' + formattedTime + ')',
-          style: TextStyle(fontSize: 13)),
-      subtitle: new Text('${band.tipoTrabajo}', style: TextStyle(fontSize: 10)),
+      title: Text('${band.nombreTipoCheck} ($formattedTime)',
+          style: const TextStyle(fontSize: 13)),
+      subtitle: Text('${band.tipoTrabajo}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
+            backgroundColor: Colors.white,
             child: Icon(
               Icons.info,
               color: Colors.indigo[900],
             ),
-            backgroundColor: Colors.white,
           ),
         ],
       ),

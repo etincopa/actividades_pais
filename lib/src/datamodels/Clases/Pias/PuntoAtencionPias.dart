@@ -6,8 +6,8 @@ class ListaPuntoAtencionPias {
   ListaPuntoAtencionPias.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new PuntoAtencionPias.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = PuntoAtencionPias.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -48,16 +48,16 @@ class PuntoAtencionPias {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['codigo_ubigeo'] = this.codigoUbigeo;
-    data['id_campania'] = this.idCampania;
-    data['id_pias'] = this.idPias;
-    data['pias'] = this.pias;
-    data['punto_atencion'] = this.puntoAtencion;
-    data['latitud'] = this.latitud;
-    data['longitud'] = this.longitud;
-    data['anio'] = this.anio;
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codigo_ubigeo'] = codigoUbigeo;
+    data['id_campania'] = idCampania;
+    data['id_pias'] = idPias;
+    data['pias'] = pias;
+    data['punto_atencion'] = puntoAtencion;
+    data['latitud'] = latitud;
+    data['longitud'] = longitud;
+    data['anio'] = anio;
+    data['id'] = id;
     return data;
   }
 

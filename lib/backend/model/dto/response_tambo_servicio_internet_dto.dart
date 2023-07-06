@@ -76,7 +76,7 @@ class TamboServicioInternetDto {
 
   List<TamboServicioInternetIncidenciaDto>? aincidencia = [];
 
-  TamboServicioInternetDto.empty() {}
+  TamboServicioInternetDto.empty();
 
   TamboServicioInternetDto({
     this.idTambo,

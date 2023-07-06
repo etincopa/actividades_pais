@@ -7,8 +7,8 @@ class ListarParticipantesIntervenciones {
   ListarParticipantesIntervenciones.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ParticipantesIntervenciones.fromJsonSERICIO(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ParticipantesIntervenciones.fromJsonSERICIO(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -55,17 +55,17 @@ class ParticipantesIntervenciones {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['id_participante'] = this.idParticipante;
-    data['DNI'] = this.dNI;
-    data['PRIMER_NOMBRE'] = this.pRIMERNOMBRE;
-    data['SEGUNDO_NOMBRE'] = this.sEGUNDONOMBRE;
-    data['APELLIDO_PATERNO'] = this.aPELLIDOPATERNO;
-    data['APELLIDO_MATERNO'] = this.aPELLIDOMATERNO;
-    data['SEXO'] = this.sEXO;
-    data['FECHA_NACIMIENTO'] = this.fECHANACIMIENTO;
-    data['UNIDAD_TERRITORIAL'] = this.uNIDADTERRITORIAL;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['id_participante'] = idParticipante;
+    data['DNI'] = dNI;
+    data['PRIMER_NOMBRE'] = pRIMERNOMBRE;
+    data['SEGUNDO_NOMBRE'] = sEGUNDONOMBRE;
+    data['APELLIDO_PATERNO'] = aPELLIDOPATERNO;
+    data['APELLIDO_MATERNO'] = aPELLIDOMATERNO;
+    data['SEXO'] = sEXO;
+    data['FECHA_NACIMIENTO'] = fECHANACIMIENTO;
+    data['UNIDAD_TERRITORIAL'] = uNIDADTERRITORIAL;
 
     return data;
   }

@@ -1,6 +1,5 @@
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioIntervencionesGeneral.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/intervemcionesHistora.dart';
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +15,7 @@ class ActividadTambook extends StatelessWidget {
         TamboServicioIntervencionesGeneral();
     aServ.tambo = 'NUEVO PARAISO';
     aServ.departamento = 'departamento';
-    aServ.descripcion =
-        '''
+    aServ.descripcion = '''
       Sesión de trabajo para estatuir la cantidad de raciones
       diarias en función al padrón de beneficiarios que
       presenta el comedor popular, realizado por miembros
@@ -39,7 +37,7 @@ class ActividadTambook extends StatelessWidget {
     listaPersonalAux.add(aServ);
     listaPersonalAux.add(aServ);
 
-    return intervencionesHistoria();
+    return const intervencionesHistoria();
   }
 
   Card cardHistrialTambosInter(

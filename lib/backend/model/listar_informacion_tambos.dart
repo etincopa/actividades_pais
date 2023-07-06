@@ -19,7 +19,7 @@ class TambosMapaModel {
   String? distrito;
   String? localidad;
 
-  TambosMapaModel.empty() {}
+  TambosMapaModel.empty();
 
   TambosMapaModel(
       {this.snip,

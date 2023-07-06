@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
@@ -13,13 +12,12 @@ import 'package:actividades_pais/src/datamodels/Clases/tipoPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/LugarPrestacion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Puesto.dart';
-import 'package:actividades_pais/src/datamodels/Clases/UnidadesOrganicas.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:flutter/material.dart';
 
 class ProviderServicios {
-  Servicios servicios = new Servicios();
+  Servicios servicios = Servicios();
 
   Future requestSqlData() async {
     await serv();
@@ -66,7 +64,7 @@ class ProviderServicios {
     String jsonString = await servicios.loadunidadesTerritoriales();
     final jsonResponse = json.decode(jsonString);
     final listadoDepart =
-        new ListarUnidadesTerritoriales.fromJsonList(jsonResponse);
+        ListarUnidadesTerritoriales.fromJsonList(jsonResponse);
 
     return listadoDepart.items;
   }
@@ -101,7 +99,7 @@ class ProviderServicios {
   Future<List<LugarPrestacion>> getLugarPrestacion() async {
     String jsonString = await servicios.loadunidadesLugarPrestacion();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListarLugarPrestacion.fromJsonList(jsonResponse);
+    final listadoDepart = ListarLugarPrestacion.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = LugarPrestacion(
@@ -119,7 +117,7 @@ class ProviderServicios {
   Future<List<Puesto>> getPuesto() async {
     String jsonString = await servicios.loadPuesto();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListarPuesto.fromJsonList(jsonResponse);
+    final listadoDepart = ListarPuesto.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Puesto(
@@ -134,7 +132,7 @@ class ProviderServicios {
   Future<List<NumerosTelef>> getNumeroTelefono() async {
     String jsonString = await servicios.loadNumeroTelefono();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListarNumerosTelef.fromJsonList(jsonResponse);
+    final listadoDepart = ListarNumerosTelef.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = NumerosTelef(
@@ -149,7 +147,7 @@ class ProviderServicios {
   Future<List<Provincia>> getProvincias() async {
     String jsonString = await servicios.loadprovincias();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new Provincias.fromJsonList(jsonResponse);
+    final listadoDepart = Provincias.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Provincia(
@@ -165,7 +163,7 @@ class ProviderServicios {
     await DatabasePr.db.deleteTipoDocumento();
     String jsonString = await servicios.loadTipoDocumento();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListarTipoDocumento.fromJsonList(jsonResponse);
+    final listadoDepart = ListarTipoDocumento.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = TipoDocumento(
@@ -182,7 +180,7 @@ class ProviderServicios {
 
     String jsonString = await servicios.loadSexo();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListarSexo.fromJsonList(jsonResponse);
+    final listadoDepart = ListarSexo.fromJsonList(jsonResponse);
 
     /*for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Sexo(
@@ -198,7 +196,7 @@ class ProviderServicios {
   Future<List<Provincia>> getSaveIntervenciones() async {
     String jsonString = await servicios.loadprovincias();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new Provincias.fromJsonList(jsonResponse);
+    final listadoDepart = Provincias.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Provincia(
@@ -215,7 +213,7 @@ class ProviderServicios {
     await DatabasePr.db.eliminarTodoAsTipoPlataforma();
     String jsonString = await servicios.loadTipoPlataforma();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new TipoPlataformas.fromJsonList(jsonResponse);
+    final listadoDepart = TipoPlataformas.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = TipoPlataforma(
@@ -233,7 +231,7 @@ class ProviderServicios {
 
     final jsonResponse = json.decode(jsonString);
     final listadoDepart =
-        new ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
+        ListaParticipantesSer.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoDepart.items.length; i++) {
             if(listadoDepart.items[i].dni==dni){
               return listadoDepart.items[i];
@@ -247,14 +245,14 @@ class ProviderServicios {
         return new Participantes();
       }*/
 
-    return new Participantes();
+    return Participantes();
   }
 
   Future<Funcionarios> getBuscarFuncionarios(dni) async {
     String jsonString = await servicios.loadFuncionarios();
     final jsonResponse = json.decode(jsonString);
     final listadoDepart =
-        new ListaFuncionarios.fromJsonList(jsonResponse["response"]);
+        ListaFuncionarios.fromJsonList(jsonResponse["response"]);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
          if(listadoDepart.items[i].dni == dni ){
@@ -265,7 +263,7 @@ class ProviderServicios {
          }
     }
 
-    return new Funcionarios();
+    return Funcionarios();
   }
 
 
@@ -274,7 +272,7 @@ class ProviderServicios {
     final jsonResponse = json.decode(jsonString);
 
     final listadoDepart =
-    new ListaFuncionarios.fromJsonList(jsonResponse["response"]);
+    ListaFuncionarios.fromJsonList(jsonResponse["response"]);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
 
@@ -284,7 +282,7 @@ class ProviderServicios {
      }
     }
 
-    return new Funcionarios();
+    return Funcionarios();
   }
 
   Future<List<Perfil>?> loadPerfiles() async {
@@ -292,14 +290,14 @@ class ProviderServicios {
     final jsonResponse = json.decode(jsonString);
 
     final listadoDepart =
-    new Perfiles.fromJsonList(jsonResponse["response"]);
+    Perfiles.fromJsonList(jsonResponse["response"]);
 
     return listadoDepart.items;
   }
   Future listarPorIdUt(idUnidadterritorial) async {
     String jsonString = await servicios.loadunidadesTerritoriales();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListarUnidadesTerritoriales.fromJsonList(jsonResponse);
+    final listadoDepart = ListarUnidadesTerritoriales.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
 
@@ -317,7 +315,7 @@ class ProviderServicios {
 
     String jsonString = await servicios.loadUnidad();
     final jsonResponse = json.decode(jsonString);
-    final listado = new ListarUnidad.fromJsonList(jsonResponse);
+    final listado = ListarUnidad.fromJsonList(jsonResponse);
     return listado.items;
   }
 

@@ -24,7 +24,7 @@ class utils {
       ));
 
   showAlertDialog(titulo, text, BuildContext context, presse) {
-    Widget okButton = TextButton(child: const Text("OK"), onPressed: presse);
+    Widget okButton = TextButton(onPressed: presse, child: const Text("OK"));
 
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
@@ -42,9 +42,9 @@ class utils {
 
   showAlertDialogGC(titulo, BuildContext context, guardar, cancelar, texto) {
     Widget okButton =
-        TextButton(child: const Text("Guardar"), onPressed: guardar);
+        TextButton(onPressed: guardar, child: const Text("Guardar"));
     Widget moButton =
-        TextButton(child: const Text("Cancelar"), onPressed: cancelar);
+        TextButton(onPressed: cancelar, child: const Text("Cancelar"));
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
       content: TextField(
@@ -69,9 +69,9 @@ class utils {
   showAlertDialogAprobar(
       titulo, BuildContext context, guardar, cancelar, texto) {
     Widget okButton =
-        TextButton(child: const Text("Confirmar"), onPressed: guardar);
+        TextButton(onPressed: guardar, child: const Text("Confirmar"));
     Widget moButton =
-        TextButton(child: const Text("Cancelar"), onPressed: cancelar);
+        TextButton(onPressed: cancelar, child: const Text("Cancelar"));
     AlertDialog alert = AlertDialog(
       title: Text(titulo),
       content: Text(texto),
@@ -110,7 +110,7 @@ class utils {
             child: Card(
               color: Colors.transparent,
               elevation: 0.0,
-              child:  Container(child: Text(title!,style: TextStyle(color: Colors.black),),width: 150,),
+              child:  SizedBox(width: 150,child: Text(title!,style: const TextStyle(color: Colors.black),),),
             ),
           ),
           actions: [
@@ -137,7 +137,7 @@ class utils {
                     ),
                     child:   Text(
                       "$texto2",
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   )
                 ],

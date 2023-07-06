@@ -9,7 +9,7 @@ class AtencionesModel {
   String? imagePath;
   int? total;
 
-  AtencionesModel.empty() {}
+  AtencionesModel.empty();
 
   AtencionesModel({
     this.title,

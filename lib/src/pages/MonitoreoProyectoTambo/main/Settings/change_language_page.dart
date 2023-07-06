@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class ChangeLanguagePage extends StatefulWidget {
+  const ChangeLanguagePage({super.key});
+
   @override
   _ChangeCountryPageState createState() => _ChangeCountryPageState();
 }
@@ -33,7 +35,7 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   'Language'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0),
@@ -52,15 +54,15 @@ class _ChangeCountryPageState extends State<ChangeLanguagePage> {
                             },
                             title: Text(
                               l,
-                              style: TextStyle(fontSize: 14),
+                              style: const TextStyle(fontSize: 14),
                             ),
                             trailing: l == currentLanguage
-                                ? Icon(
+                                ? const Icon(
                                     Icons.check_circle,
                                     color: color_13,
                                     size: 16,
                                   )
-                                : SizedBox(),
+                                : const SizedBox(),
                           ))
                       .toList(),
                 ),

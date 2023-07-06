@@ -13,7 +13,7 @@ import '../../../../util/app-config.dart';
 class Nacimientos extends StatefulWidget {
   String idUnicoReporte = '';
 
-  Nacimientos(this.idUnicoReporte);
+  Nacimientos(this.idUnicoReporte, {super.key});
 
   @override
   _NacimientosState createState() => _NacimientosState();
@@ -26,8 +26,8 @@ class _NacimientosState extends State<Nacimientos> {
   String fotonomm = 'assets/imgBb1.png';
   String fotonomm2 = 'assets/imgbb2.jpg';
   String lastSelectedValue = "", nombre_2 = "", iamgen_file = "";
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
 
   @override
   void initState() {
@@ -57,23 +57,23 @@ class _NacimientosState extends State<Nacimientos> {
             setState(() {});
           }
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: Container(
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           child: FutureBuilder<List<Nacimiento>>(
             future: DatabasePias.db.ListarNacimientoPias(widget.idUnicoReporte),
             builder: (BuildContext context,
                 AsyncSnapshot<List<Nacimiento>> snapshot) {
               Nacimiento? depatalits;
               if (!snapshot.hasData) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               final preguntas = snapshot.data;
-              if (preguntas!.length == 0) {
-                return Center(
+              if (preguntas!.isEmpty) {
+                return const Center(
                   child: Text("sin dato"),
                 );
               } else {
@@ -96,15 +96,15 @@ class _NacimientosState extends State<Nacimientos> {
   return Card(
      semanticContainer: true,
      clipBehavior: Clip.antiAliasWithSaveLayer,
-     child: Image.file(
-      s,
-       fit: BoxFit.fill,
-     ),
      shape: RoundedRectangleBorder(
        borderRadius: BorderRadius.circular(10.0),
      ),
      elevation: 5,
-     margin: EdgeInsets.all(10),
+     margin: const EdgeInsets.all(10),
+     child: Image.file(
+      s,
+       fit: BoxFit.fill,
+     ),
    );
  }
 
@@ -115,17 +115,17 @@ class _NacimientosState extends State<Nacimientos> {
     }
     return Center(
       child: Stack(
-        alignment: Alignment(0.9, 1.1),
+        alignment: const Alignment(0.9, 1.1),
         children: <Widget>[
           Container(
             height: 400,
             width: 350,
-            margin: EdgeInsets.only(right: 10.0, bottom: 10, left: 10.2),
+            margin: const EdgeInsets.only(right: 10.0, bottom: 10, left: 10.2),
             child: Material(
               elevation: 4.0,
               //    borderRadius: BorderRadius.circular(100.0),
               // ignore: unnecessary_new
-              child: new Container(
+              child: new SizedBox(
               height: 80.0,
               width: 80.0,
               child: Image.file(
@@ -151,9 +151,9 @@ class _NacimientosState extends State<Nacimientos> {
         setState(() {});
       },
       background: Container(
-          padding: EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8.0),
           color: Colors.red,
-          child: Align(
+          child: const Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Eliminar ?',
@@ -181,17 +181,17 @@ class _NacimientosState extends State<Nacimientos> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                margin: EdgeInsets.all(9),
+                margin: const EdgeInsets.all(9),
                 child: Text(
                   " ${band.detalle}",
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
 
@@ -201,17 +201,17 @@ class _NacimientosState extends State<Nacimientos> {
                   AsyncSnapshot<List<Archivos>> snapshot) {
                 Archivos? depatalits;
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
                 final preguntas = snapshot.data;
-                if (preguntas!.length == 0) {
-                  return Center(
+                if (preguntas!.isEmpty) {
+                  return const Center(
                     child: Text("sin dato"),
                   );
                 } else {
-                  return Container(
+                  return SizedBox(
                     height: 150,
                    // width: 1000,
                    // margin: EdgeInsets.only(left: 10, right: 10,),
@@ -236,8 +236,8 @@ class _NacimientosState extends State<Nacimientos> {
     );
   }
 
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     setState(() {
       DatabasePias.db.ListarNacimientoPias(widget.idUnicoReporte);
     });

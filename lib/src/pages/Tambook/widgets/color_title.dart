@@ -35,11 +35,11 @@ class ColorTile extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Icon(icon, color: color),
                 ),
-                Expanded(
+                const Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text("solor widget"),
                       Text("solor widget1"),
                     ],

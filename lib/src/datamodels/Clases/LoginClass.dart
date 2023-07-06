@@ -23,13 +23,13 @@ class LoginClass {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['token'] = this.token;
-    data['rol'] = this.rol;
-    data['username'] = this.username;
-    data['password'] = this.password;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['token'] = token;
+    data['rol'] = rol;
+    data['username'] = username;
+    data['password'] = password;
     return data;
   }
 

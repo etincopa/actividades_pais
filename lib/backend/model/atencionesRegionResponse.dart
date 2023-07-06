@@ -19,7 +19,7 @@ class AtencionesRegionModel {
   String? usuarios;
   String? idUt;
 
-  AtencionesRegionModel.empty() {}
+  AtencionesRegionModel.empty();
 
   AtencionesRegionModel(
       {this.region,

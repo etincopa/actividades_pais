@@ -10,9 +10,9 @@ class Convenios {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_convenio'] = this.idConvenio;
-    data['nombre_programa'] = this.nombrePrograma;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_convenio'] = idConvenio;
+    data['nombre_programa'] = nombrePrograma;
     return data;
   }
 }

@@ -39,7 +39,7 @@ class FabMenuItem extends StatelessWidget {
 }
 
 class ExpandedAnimationFab extends AnimatedWidget {
-  const ExpandedAnimationFab({
+  const ExpandedAnimationFab({super.key, 
     required this.items,
     required this.onPress,
     required Animation animation,

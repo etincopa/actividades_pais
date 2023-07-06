@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:isolate';
 
 import 'package:actividades_pais/src/datamodels/Clases/ArchivoTramaIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/AsistenciaClass.dart';
@@ -12,7 +10,6 @@ import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Distritos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
-import 'package:actividades_pais/src/datamodels/Clases/IncidentesNovedadesPias.dart';
 import 'package:actividades_pais/src/datamodels/Clases/InfoTelefono.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
@@ -24,7 +21,6 @@ import 'package:actividades_pais/src/datamodels/Clases/ParticipanteEjecucion.dar
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Provincia.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Puesto.dart';
-import 'package:actividades_pais/src/datamodels/Clases/ReportePias.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ServicioProgramacionParticipante.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Sexo.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/IntentosRegistrosFallecidos.dart';
@@ -32,14 +28,11 @@ import 'package:actividades_pais/src/datamodels/Clases/Tambos/ParticipantesInter
 import 'package:actividades_pais/src/datamodels/Clases/TipoDocumento.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UbicacionUsuario.dart';
-import 'package:actividades_pais/src/datamodels/Clases/UnidadesOrganicas.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesTablaPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Clases/porcentajesEnvio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/tipoPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabaseParticipantes.dart';
-import 'package:actividades_pais/src/pages/Pias/Incidentes_Actividades/incidentesNovedades.dart';
-import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -269,9 +262,9 @@ class DatabasePr {
     var sql = "DELETE FROM ";
     initDB();
     //ConfigPersonal
-    print(_db!.execute(sql + "ConfigPersonal"));
-    print(_db!.execute(sql + "DatPuesto"));
-    print(_db!.execute(sql + "DatConfigInicio"));
+    print(_db!.execute("${sql}ConfigPersonal"));
+    print(_db!.execute("${sql}DatPuesto"));
+    print(_db!.execute("${sql}DatConfigInicio"));
     // print(_db!.execute("DELETE FROM DatUnidadesOrganicas"));
     // print(_db!.execute("DELETE FROM DatUnidadTerritorial"));
     print(_db!.execute("DELETE FROM DatUnidadesTablaPlataforma"));
@@ -768,7 +761,7 @@ class DatabasePr {
     var ar = await DatabaseParticipantes.db
         .getUsuarioParticipanteDniSQLites(participantes.dni);
     print("aaassss ${ar.length}");
-    if (ar.length == 0) {
+    if (ar.isEmpty) {
       ParticipantesIntervenciones participantesIntervenciones =
           ParticipantesIntervenciones();
       participantesIntervenciones.dNI = participantes.dni;

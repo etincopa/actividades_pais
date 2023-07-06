@@ -1,7 +1,6 @@
 import 'package:actividades_pais/src/Utils/utils.dart';
 import 'package:actividades_pais/src/datamodels/Clases/EquipoMantenimiento.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaEquipoInformatico.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/CrearMantenimiento.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/DetalleEquipo/informe.dart';
@@ -14,7 +13,7 @@ import '../../../datamodels/Provider/ProviderSeguimientoParqueInformatico.dart';
 class Mantenimiento extends StatefulWidget {
   FiltroTicketEquipo filtroTicketEquipo;
 
-  Mantenimiento(this.filtroTicketEquipo);
+  Mantenimiento(this.filtroTicketEquipo, {super.key});
 
   @override
   State<Mantenimiento> createState() => _MantenimientoState();
@@ -52,7 +51,7 @@ class _MantenimientoState extends State<Mantenimiento> {
 
             /// _showAddNoteDialog(context);
           },
-          child: InkWell(
+          child: const InkWell(
             child: Icon(Icons.plus_one),
           )),
       body: FutureBuilder<List<EquipoMantenimiento>>(
@@ -67,7 +66,7 @@ class _MantenimientoState extends State<Mantenimiento> {
               );
             } else {
               final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.length == 0) {
+              if (listaPersonalAux!.isEmpty) {
                 return const Center(
                   child: Text(
                     'No hay informacion',
@@ -94,9 +93,7 @@ class _MantenimientoState extends State<Mantenimiento> {
                                         listaPersonalAux[i]
                                             .idEquipoInformaticoMantenimiento);
                                 Navigator.pop(context);
-                                setState(() {
-
-                                });
+                                setState(() {});
                               }, () {
                                 Navigator.pop(context);
                               }, "Usted Desea Eliminar el item seleccionado.?");
@@ -126,8 +123,8 @@ class _MantenimientoState extends State<Mantenimiento> {
                           )),
                     )),
                     if (isLoading == true)
-                      new Center(
-                        child: const CircularProgressIndicator(),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                   ],
                 );
@@ -192,11 +189,11 @@ class _MantenimientoState extends State<Mantenimiento> {
             ],
           ));
 
-  Future<Null> resetlista() async {
+  Future<void> resetlista() async {
     setState(() {});
   }
 
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     widget.filtroTicketEquipo.pageSize = pageSize;
     widget.filtroTicketEquipo.pageIndex = pageIndex;
     await Future.delayed(const Duration(seconds: 1));

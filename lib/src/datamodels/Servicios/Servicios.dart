@@ -75,8 +75,8 @@ class Servicios {
   }*/
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
-      border: Border.all(width: 2.0, color: Color(0xFF1E88E5)),
-      borderRadius: BorderRadius.all(
+      border: Border.all(width: 2.0, color: const Color(0xFF1E88E5)),
+      borderRadius: const BorderRadius.all(
           Radius.circular(11) //                 <--- border radius here
           ),
     );
@@ -87,10 +87,10 @@ class Servicios {
     late Directory dir;
     String fileName = "myJSONFile.json";
     bool fileExists = false;
-    var fileEncode;
+    String fileEncode = '';
     await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
-      jsonFile = new File(dir.path + "/" + fileName);
+      jsonFile = File("${dir.path}/$fileName");
       fileExists = jsonFile.existsSync();
       if (fileExists){
         fileEncode = jsonFile.readAsStringSync();
@@ -107,10 +107,10 @@ class Servicios {
     late Directory dir;
     String fileName = "jsonFuncionarios.json";
     bool fileExists = false;
-    var fileEncode;
+    String fileEncode = '';
     await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
-      jsonFile = new File(dir.path + "/" + fileName);
+      jsonFile = File("${dir.path}/$fileName");
       fileExists = jsonFile.existsSync();
       if (fileExists){
         fileEncode = jsonFile.readAsStringSync();
@@ -128,10 +128,10 @@ class Servicios {
     late Directory dir;
     String fileName = nombreArchivo;
     bool fileExists = false;
-    var fileEncode;
+    String fileEncode = '';
     await getApplicationDocumentsDirectory().then((Directory directory) {
       dir = directory;
-      jsonFile = new File(dir.path + "/" + fileName);
+      jsonFile = File("${dir.path}/$fileName");
       fileExists = jsonFile.existsSync();
       if (fileExists){
         fileEncode = jsonFile.readAsStringSync();

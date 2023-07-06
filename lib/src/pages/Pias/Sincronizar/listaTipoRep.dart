@@ -10,7 +10,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 class ListaTipoRep extends StatefulWidget {
   ReportesPias reportesPias;
 
-  ListaTipoRep(this.reportesPias);
+  ListaTipoRep(this.reportesPias, {super.key});
 
   @override
   State<ListaTipoRep> createState() => _ListaTipoRepState();
@@ -53,15 +53,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(67.0),
+        preferredSize: const Size.fromHeight(67.0),
         child: AppBar(
           leading: Util().iconbuton(() => Navigator.of(context).pop()),
           title: Text(
-            '\n' +
-                widget.reportesPias.plataforma +
-                '\n' +
-                widget.reportesPias.fechaParteDiario,
-            style: TextStyle(fontSize: 15),
+            '\n${widget.reportesPias.plataforma}\n${widget.reportesPias.fechaParteDiario}',
+            style: const TextStyle(fontSize: 15),
           ),
           backgroundColor: AppConfig.primaryColor,
         ),
@@ -71,17 +68,17 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
           children: [
             Center(
                 child: Container(
-                    margin: EdgeInsets.only(left: 10, top: 10),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 10, top: 10),
+                    child: const Text(
                       "Antes de sincronizar asegurar de tener toda la información registrada.",
                       style: TextStyle(color: Colors.black),
                     ))),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
                 child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [
                   Row(
@@ -90,7 +87,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                       Text(
                           '\n Listas de Actividades \n \n  Cantidad:   $cantidadActividades \n'),
                       envioActiv
-                          ? new InkWell(
+                          ? InkWell(
                               child: Icon(
                                 Icons.send,
                                 color: Colors.blue[900],
@@ -107,12 +104,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                 }
                               },
                             )
-                          : new Container()
+                          : Container()
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: new LinearPercentIndicator(
+                    padding: const EdgeInsets.all(15.0),
+                    child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 60,
                       animation: true,
                       lineHeight: 20.0,
@@ -127,12 +124,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                 ],
               ),
             )),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
               child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: [
                     Row(
@@ -159,12 +156,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                   }
                                 },
                               )
-                            : new Container()
+                            : Container()
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: new LinearPercentIndicator(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
                         width: MediaQuery.of(context).size.width - 60,
                         animation: true,
                         lineHeight: 20.0,
@@ -180,12 +177,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
               child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,12 +208,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                 }
                               },
                             )
-                          : new Container(),
+                          : Container(),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: new LinearPercentIndicator(
+                    padding: const EdgeInsets.all(15.0),
+                    child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 60,
                       animation: true,
                       lineHeight: 20.0,
@@ -231,12 +228,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                 ]),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
                 child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [
                   Row(
@@ -245,7 +242,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                       Text(
                           '\n Listas de Evidencias \n \n  Cantidad:   $cantidadEvidencias \n'),
                       envioEvidencias
-                          ? new InkWell(
+                          ? InkWell(
                               child: Icon(
                                 Icons.send,
                                 color: Colors.blue[900],
@@ -263,12 +260,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                 }
                               },
                             )
-                          : new Container()
+                          : Container()
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: new LinearPercentIndicator(
+                    padding: const EdgeInsets.all(15.0),
+                    child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 60,
                       animation: true,
                       lineHeight: 20.0,
@@ -283,12 +280,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                 ],
               ),
             )),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
               child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: [
                     Row(
@@ -317,12 +314,12 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                                   }
                                 },
                               )
-                            : new Container()
+                            : Container()
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: new LinearPercentIndicator(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
                         width: MediaQuery.of(context).size.width - 60,
                         animation: true,
                         lineHeight: 20.0,
@@ -340,16 +337,16 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
             ),
             Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.all(24),
+                margin: const EdgeInsets.all(24),
                 height: 38,
                 //left: 10, right: 10, top: 10
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[800],
+                      backgroundColor: Colors.blue[800],
                       //   shadowColor:
-                      textStyle: TextStyle(fontSize: 24),
-                      minimumSize: Size.fromHeight(72),
-                      shape: StadiumBorder()),
+                      textStyle: const TextStyle(fontSize: 24),
+                      minimumSize: const Size.fromHeight(72),
+                      shape: const StadiumBorder()),
                   onPressed: () async {
                     Util().showAlertDialogokno('Pendientes Envio', context,
                         () async {
@@ -361,13 +358,13 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                     }, 'Estas seguro de guardar');
                   },
                   child: _isloading
-                      ? Row(
+                      ? const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CircularProgressIndicator(
                               color: Colors.white,
                             ),
-                            const SizedBox(
+                            SizedBox(
                               width: 24,
                             ),
                             Text(
@@ -376,7 +373,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
                             )
                           ],
                         )
-                      : Text(
+                      : const Text(
                           'Guardar',
                           style: TextStyle(fontSize: 19),
                         ),
@@ -467,7 +464,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
   }
 
   Future EnvioParte() async {
-    print("1::" + widget.reportesPias.idUnicoReporte);
+    print("1::${widget.reportesPias.idUnicoReporte}");
     if (_isloading) return;
     setState(() {
       _isloading = true;
@@ -484,7 +481,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
       await EnvioAtenciones();
       await EnvioIncidente();
 
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       cargarListas();
       _isloading = false;
       if (cantidadActividades == 0 &&
@@ -513,7 +510,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
         await EnvioAtenciones();
         await EnvioIncidente();
 
-        await Future.delayed(Duration(seconds: 5));
+        await Future.delayed(const Duration(seconds: 5));
         if (cantidadActividades == 0 &&
             cantidadAtenciones == 0 &&
             cantidadIncidentes == 0) {
@@ -612,7 +609,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
   cargarPorcentajes() async {
     var res = await DatabasePias.db
         .listarPorcentajes(widget.reportesPias.idUnicoReporte, 1);
-    if (res.length > 0) {
+    if (res.isNotEmpty) {
       sincronizadoActividades = res[0].porcentaje!;
       if (sincronizadoActividades < 1.0) {
         envioActiv = true;
@@ -620,7 +617,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
     }
     var res2 = await DatabasePias.db
         .listarPorcentajes(widget.reportesPias.idUnicoReporte, 2);
-    if (res2.length > 0) {
+    if (res2.isNotEmpty) {
       sincronizadoAtenciones = res2[0].porcentaje!;
       if (sincronizadoAtenciones < 1.0) {
         envioAtenciones = true;
@@ -628,7 +625,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
     }
     var res3 = await DatabasePias.db
         .listarPorcentajes(widget.reportesPias.idUnicoReporte, 3);
-    if (res3.length > 0) {
+    if (res3.isNotEmpty) {
       sincronizadoIncidentes = res3[0].porcentaje!;
       if (sincronizadoIncidentes < 1.0) {
         envioIncidentes = true;
@@ -636,7 +633,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
     }
     var res4 = await DatabasePias.db
         .listarPorcentajes(widget.reportesPias.idUnicoReporte, 4);
-    if (res4.length > 0) {
+    if (res4.isNotEmpty) {
       sincronizadoNacidos = res4[0].porcentaje!;
       if (sincronizadoNacidos < 1.0) {
         envioNacidos = true;
@@ -644,7 +641,7 @@ class _ListaTipoRepState extends State<ListaTipoRep> {
     }
     var res5 = await DatabasePias.db
         .listarPorcentajes(widget.reportesPias.idUnicoReporte, 5);
-    if (res5.length > 0) {
+    if (res5.isNotEmpty) {
       sincronizadoEvidencias = res5[0].porcentaje!;
       if (sincronizadoEvidencias < 1.0) {
         envioEvidencias = true;

@@ -15,7 +15,7 @@ class MetasTamboModel {
   int? metaTotal;
   String? mes;
 
-  MetasTamboModel.empty() {}
+  MetasTamboModel.empty();
 
   MetasTamboModel({
     this.nombreFisicoFoto,

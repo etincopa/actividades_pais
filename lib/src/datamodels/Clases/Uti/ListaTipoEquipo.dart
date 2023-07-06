@@ -6,8 +6,8 @@ class ListarTipoEquipo {
   ListarTipoEquipo.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _lista = new TipoEquipo.fromJson(item);
-      items.add(_lista);
+      final lista = TipoEquipo.fromJson(item);
+      items.add(lista);
     }
   }
 }
@@ -26,10 +26,10 @@ class TipoEquipo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_tipo_equipo_informatico'] = this.idTipoEquipoInformatico;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_tipo_equipo_informatico'] = idTipoEquipoInformatico;
     data['descripcion_tipo_equipo_informatico'] =
-        this.descripcionTipoEquipoInformatico;
+        descripcionTipoEquipoInformatico;
     return data;
   }
 }

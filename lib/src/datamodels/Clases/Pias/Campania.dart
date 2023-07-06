@@ -4,8 +4,8 @@ class ListasCampanias {
   ListasCampanias.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Campania.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Campania.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }

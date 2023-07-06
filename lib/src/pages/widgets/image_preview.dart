@@ -1,15 +1,12 @@
-import 'dart:io';
 
 import 'package:actividades_pais/util/image_util.dart';
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 
 class ImagePreview extends StatelessWidget {
   String? imagen;
 
-  ImagePreview({this.imagen});
+  ImagePreview({super.key, this.imagen});
 
   @override
   Widget build(BuildContext context) {

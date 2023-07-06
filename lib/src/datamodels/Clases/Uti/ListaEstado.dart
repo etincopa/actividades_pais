@@ -6,8 +6,8 @@ class ListarEstado {
   ListarEstado.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _lista = new Estado.fromJson(item);
-      items.add(_lista);
+      final lista = Estado.fromJson(item);
+      items.add(lista);
     }
   }
 }
@@ -24,9 +24,9 @@ class Estado {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idEstado'] = this.idEstado;
-    data['estado'] = this.estado;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idEstado'] = idEstado;
+    data['estado'] = estado;
     return data;
   }
 }

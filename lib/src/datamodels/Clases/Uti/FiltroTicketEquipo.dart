@@ -24,13 +24,13 @@ class FiltroTicketEquipo {
     }
 
     Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
-        data['numeroTkt'] = this.numeroTkt;
-        data['asignado'] = this.asignado;
-        data['estado'] = this.estado;
-        data['pageIndex'] = this.pageIndex;
-        data['pageSize'] = this.pageSize;
-        data['id_equipo'] = this.idEquipo;
+        final Map<String, dynamic> data = <String, dynamic>{};
+        data['numeroTkt'] = numeroTkt;
+        data['asignado'] = asignado;
+        data['estado'] = estado;
+        data['pageIndex'] = pageIndex;
+        data['pageSize'] = pageSize;
+        data['id_equipo'] = idEquipo;
         return data;
     }
 }

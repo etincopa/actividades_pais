@@ -19,7 +19,7 @@ class AtencionesSectorialesModel {
   String? intervenciones;
   String? beneficiarios;
 
-  AtencionesSectorialesModel.empty() {}
+  AtencionesSectorialesModel.empty();
 
   AtencionesSectorialesModel(
       {this.anio,

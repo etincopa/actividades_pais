@@ -1,5 +1,4 @@
 import 'package:actividades_pais/card6/ui/contact_list_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Card6 extends StatelessWidget {
@@ -11,15 +10,15 @@ class Card6 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xff23202a),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           color: Colors.red,
           centerTitle: true,
-          iconTheme: const IconThemeData(
+          iconTheme: IconThemeData(
             color: Colors.white70,
           ),
         ),
         textTheme: TextTheme(
-          bodyText2: TextStyle(color: Colors.grey[800]),
+          bodyMedium: TextStyle(color: Colors.grey[800]),
         ),
         iconTheme: const IconThemeData(color: Colors.grey),
       ),

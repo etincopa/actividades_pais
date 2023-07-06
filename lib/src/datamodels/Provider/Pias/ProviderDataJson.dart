@@ -7,14 +7,14 @@ import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 
 class ProviderDataJson {
-  Servicios servicios = new Servicios();
+  Servicios servicios = Servicios();
 
   Future<List<CLima>> getSaveClima() async {
     await DatabasePias.db.initDB();
     await DatabasePias.db.eliminarTodoClima();
     String jsonString = await servicios.loadCLima();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new CLimas.fromJsonList(jsonResponse);
+    final listadoDepart = CLimas.fromJsonList(jsonResponse);
 /*
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = CLima(
@@ -32,7 +32,7 @@ class ProviderDataJson {
     await DatabasePias.db.eliminarTodoClima();
     String jsonString = await servicios.loadtipoAtencion();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListaTipoAtencion.fromJsonList(jsonResponse);
+    final listadoDepart = ListaTipoAtencion.fromJsonList(jsonResponse);
 
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = TipoAtencion(
@@ -50,7 +50,7 @@ class ProviderDataJson {
     await DatabasePias.db.eliminarCampanias();
     String jsonString = await servicios.loadCampanias();
     final jsonResponse = json.decode(jsonString);
-    final listadoDepart = new ListasCampanias.fromJsonList(jsonResponse);
+    final listadoDepart = ListasCampanias.fromJsonList(jsonResponse);
 /*
     for (var i = 0; i < listadoDepart.items.length; i++) {
       final rspt = Campania(

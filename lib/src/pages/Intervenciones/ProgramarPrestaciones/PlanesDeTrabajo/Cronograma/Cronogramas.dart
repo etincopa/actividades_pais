@@ -3,13 +3,10 @@ import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroInte
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ActividadesGit/ActividadesGit.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/CalificarIntervencion.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/Cronograma/CircleNumber.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/Cronograma/ReadMoreText.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/Cronograma/RegistroCronograma.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/PlanesDeTrabajo.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ProgramacionPrestacion.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ProgramacionesIntervenciones.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:backdrop/backdrop.dart';
@@ -31,8 +28,8 @@ class _CronogramasState extends State<Cronogramas> {
   FiltroIntervencionesTambos filtroIntervencionesTambos =
       FiltroIntervencionesTambos();
 
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
   final TextEditingController _controlleFechaInici = TextEditingController();
   final TextEditingController _controlleFechaFin = TextEditingController();
   var seleccionarUnidadTerritorial = "Seleccionar UnidadTerritorial";
@@ -143,13 +140,13 @@ class _CronogramasState extends State<Cronogramas> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 10),
+      margin: const EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16 * fem),
-        color: Color(0xffffffff),
+        color: const Color(0xffffffff),
         boxShadow: [
           BoxShadow(
-            color: Color(0x3f000000),
+            color: const Color(0x3f000000),
             offset: Offset(0 * fem, 4 * fem),
             blurRadius: 2 * fem,
           ),
@@ -166,10 +163,10 @@ class _CronogramasState extends State<Cronogramas> {
                   Navigator.pop(context);
                 }),
               ),
-              Container(
+              SizedBox(
                 width: width * 0.7,
                 height: height * 0.07,
-                child: Center(
+                child: const Center(
                   child: Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
@@ -188,10 +185,10 @@ class _CronogramasState extends State<Cronogramas> {
           _isLoading
               ? Container(
                   color: Colors.white,
-                  child: Center(
+                  child: const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         SizedBox(height: 20),
                         CircularProgressIndicator(),
                         SizedBox(height: 20),
@@ -222,7 +219,8 @@ class _CronogramasState extends State<Cronogramas> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
                         ),
                       ],
                     ),
@@ -234,40 +232,40 @@ class _CronogramasState extends State<Cronogramas> {
                               children: [
                                 Container(
                                     width: 300.0,
-                                    margin:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    child: ReadMoreText(
+                                    margin: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: const ReadMoreText(
                                         "FORTALECIMIENTO DE CAPACIDADES SOBRE EL LAVADO DE MANOS CON LA FINALIDAD DE GENERAR CONCIENCIA SOBRE UN HABITO QUE PUEDA SALVAR VIDAS A CARGO DEL PUESTO DE SALUD SAN SALVADOR DIRIGIDO A ESTUDIANTES DE LA II.EE. PRIMARIA SAN BARTOLO"))
                               ],
                             ),
                           ),
                           Container(
                             width: 300.0,
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 left: 10, right: 10, bottom: 10, top: 10),
                             child: Row(
                               children: [
                                 Container(
                                   width: 25,
-                                  margin: EdgeInsets.only(right: 10),
+                                  margin: const EdgeInsets.only(right: 10),
                                   child: Image.asset(
                                     'assets/icons/intervenciones/objetivo6.png',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 250,
                                   child: RichText(
                                     textAlign: TextAlign.start,
-                                    text: TextSpan(
-                                      style: const TextStyle(
+                                    text: const TextSpan(
+                                      style: TextStyle(
                                         fontSize: 13.2,
                                         color: Colors.black,
                                       ),
                                       children: [
                                         TextSpan(
                                           text: 'Meta',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -283,31 +281,31 @@ class _CronogramasState extends State<Cronogramas> {
                           ),
                           Container(
                             width: 300.0,
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 left: 10, right: 10, bottom: 10),
                             child: Row(
                               children: [
                                 Container(
                                   width: 25,
-                                  margin: EdgeInsets.only(right: 10),
+                                  margin: const EdgeInsets.only(right: 10),
                                   child: Image.asset(
                                     'assets/icons/intervenciones/grupo6.png',
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 250,
                                   child: RichText(
                                     textAlign: TextAlign.start,
-                                    text: TextSpan(
-                                      style: const TextStyle(
+                                    text: const TextSpan(
+                                      style: TextStyle(
                                         fontSize: 13.2,
                                         color: Colors.black,
                                       ),
                                       children: [
                                         TextSpan(
                                           text: 'Poblacion',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -324,11 +322,11 @@ class _CronogramasState extends State<Cronogramas> {
                           ),
                           Container(
                               width: 300.0,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                   left: 10, right: 10, bottom: 10),
                               child: Row(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 25,
                                     child: Image.asset(
                                       'assets/icons/intervenciones/trabajo-en-equipo6.png',
@@ -336,18 +334,18 @@ class _CronogramasState extends State<Cronogramas> {
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 10),
+                                    margin: const EdgeInsets.only(left: 10),
                                     child: RichText(
                                       textAlign: TextAlign.start,
-                                      text: TextSpan(
-                                        style: const TextStyle(
+                                      text: const TextSpan(
+                                        style: TextStyle(
                                           fontSize: 13.2,
                                           color: Colors.black,
                                         ),
                                         children: [
                                           TextSpan(
                                             text: 'Responsable',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -363,11 +361,11 @@ class _CronogramasState extends State<Cronogramas> {
                               )),
                           Container(
                               width: 300.0,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                   left: 10, right: 10, bottom: 10),
                               child: Row(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 25,
                                     child: Image.asset(
                                       'assets/icons/intervenciones/grupo6.png',
@@ -375,18 +373,18 @@ class _CronogramasState extends State<Cronogramas> {
                                     ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(left: 10),
+                                    margin: const EdgeInsets.only(left: 10),
                                     child: RichText(
                                       textAlign: TextAlign.start,
-                                      text: TextSpan(
-                                        style: const TextStyle(
+                                      text: const TextSpan(
+                                        style: TextStyle(
                                           fontSize: 13.2,
                                           color: Colors.black,
                                         ),
                                         children: [
                                           TextSpan(
                                             text: 'Unidad Medida',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -399,10 +397,10 @@ class _CronogramasState extends State<Cronogramas> {
                                   ),
                                 ],
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               CircleNumber(2, "Ene"),
@@ -413,10 +411,10 @@ class _CronogramasState extends State<Cronogramas> {
                               CircleNumber(2, "Jun"),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               CircleNumber(2, "Jul"),
@@ -446,6 +444,7 @@ class _CronogramasState extends State<Cronogramas> {
             if (value!.isEmpty) {
               return 'Por favor Ingrese dato.';
             }
+            return null;
           },
           enabled: enabled,
           controller: controller,

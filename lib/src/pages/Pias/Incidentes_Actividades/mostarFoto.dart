@@ -7,7 +7,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 class ImagenMostar extends StatelessWidget {
   String imagen;
 
-  ImagenMostar({this.imagen = ''});
+  ImagenMostar({super.key, this.imagen = ''});
 
   @override
   Widget build(BuildContext context) {

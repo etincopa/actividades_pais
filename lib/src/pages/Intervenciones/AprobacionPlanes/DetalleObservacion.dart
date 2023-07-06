@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 class DetalleObservacion extends StatefulWidget {
   String idProgramacion="";
   DatosPlanMensual datosPlanMensual = DatosPlanMensual();
-  DetalleObservacion(this.idProgramacion,{datosPlanMensual});
+  DetalleObservacion(this.idProgramacion,{super.key, datosPlanMensual});
   @override
   _DetalleObservacionState createState() => _DetalleObservacionState();
 }
 
 class _DetalleObservacionState extends State<DetalleObservacion> {
-  List<bool> _isOpenList = [false, false, false];
+  final List<bool> _isOpenList = [false, false, false];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: AppConfig.primaryColor,title:Text("DETALLES DE LA OBSERVACION / SUBSANACION", style: TextStyle(fontSize: 12),)),
+      appBar: AppBar(backgroundColor: AppConfig.primaryColor,title:const Text("DETALLES DE LA OBSERVACION / SUBSANACION", style: TextStyle(fontSize: 12),)),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: ListView(
           children: [
             ExpansionPanelList(
@@ -32,7 +32,7 @@ class _DetalleObservacionState extends State<DetalleObservacion> {
               children: [
                 ExpansionPanel(
                   headerBuilder: (context, isOpen) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text('HISTORIAL DE OBSERVACION '),
                     );
                   },
@@ -57,7 +57,7 @@ class _DetalleObservacionState extends State<DetalleObservacion> {
                         } else if (snapshot.hasError) {
                           return Text('Error al obtener datos de la API: ${snapshot.error}');
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
@@ -66,7 +66,7 @@ class _DetalleObservacionState extends State<DetalleObservacion> {
                 ),
                 ExpansionPanel(
                   headerBuilder: (context, isOpen) {
-                    return ListTile(
+                    return const ListTile(
                         title: Text('HORIAL DE SUBSANACION'),
                     );
                   },
@@ -91,7 +91,7 @@ class _DetalleObservacionState extends State<DetalleObservacion> {
                         } else if (snapshot.hasError) {
                           return Text('Error al obtener datos de la API: ${snapshot.error}');
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),

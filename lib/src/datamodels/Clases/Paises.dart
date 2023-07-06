@@ -4,8 +4,8 @@ class ListarPaises {
   ListarPaises.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new Paises.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = Paises.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -21,9 +21,9 @@ class Paises {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_pais'] = this.idPais;
-    data['pais_nombre'] = this.paisNombre;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_pais'] = idPais;
+    data['pais_nombre'] = paisNombre;
     return data;
   }
 

@@ -15,7 +15,7 @@ import '../../../../util/app-config.dart';
 class Evidencias extends StatefulWidget {
   String idUnicoReporte = '';
 
-  Evidencias(this.idUnicoReporte);
+  Evidencias(this.idUnicoReporte, {super.key});
 
   @override
   State<Evidencias> createState() => _EvidenciasState();
@@ -26,7 +26,7 @@ class _EvidenciasState extends State<Evidencias> {
   List<ArchivosEvidencia> listArc = [];
   File? _image;
   String lastSelectedValue = "";
-  Archivos ar = new Archivos();
+  Archivos ar = Archivos();
   List<ArchivosEvidencia> listArchivo = [];
 
   @override
@@ -49,27 +49,27 @@ class _EvidenciasState extends State<Evidencias> {
             selectCamera();
           },
           backgroundColor: AppConfig.primaryColor,
-          child: Icon(Icons.camera_enhance_rounded)),
+          child: const Icon(Icons.camera_enhance_rounded)),
       body: Container(
       //  color: Colors.black,
         child: ListView(
 
           children: [
             Container(
-              margin: EdgeInsets.only(left: 5, right: 5),
+              margin: const EdgeInsets.only(left: 5, right: 5),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   for (var i in listArc) tomarImagen(i.file),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   // _tomarImagen2(),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                 ],
@@ -85,11 +85,11 @@ class _EvidenciasState extends State<Evidencias> {
     var i2 = i;
     i = File.fromUri(Uri.parse(i));
     return Container(
-      margin: EdgeInsets.only(top: 5),
+      margin: const EdgeInsets.only(top: 5),
       child: Center(
 
         child: Stack(
-          alignment: Alignment(0.9, 1.1),
+          alignment: const Alignment(0.9, 1.1),
           children: <Widget>[
             Positioned(
               top: 0,
@@ -102,7 +102,7 @@ class _EvidenciasState extends State<Evidencias> {
                     await taerArchivos();
                     setState(() {});
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.red,
                   ),
@@ -112,7 +112,7 @@ class _EvidenciasState extends State<Evidencias> {
             Container(
               height: MediaQuery.of(context).size.height * 0.50,
               width: MediaQuery.of(context).size.width * 0.9,
-              margin: EdgeInsets.only(right: 1.0, top: 30, left: 10.2),
+              margin: const EdgeInsets.only(right: 1.0, top: 30, left: 10.2),
               child: Material(
                 elevation: 4.0,
                 borderRadius: BorderRadius.circular(100.0),
@@ -164,11 +164,11 @@ class _EvidenciasState extends State<Evidencias> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancelar');
             },
+            child: const Text('Cancelar'),
           )),
     );
   }

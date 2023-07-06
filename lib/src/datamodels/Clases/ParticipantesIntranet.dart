@@ -8,18 +8,18 @@ class PariticipantesIntranet {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
     total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['total'] = this.total;
+    data['total'] = total;
     return data;
   }
 }
@@ -38,8 +38,8 @@ class Data {
   String? edad;
   String? fechaNacimiento;
   String? sexo;
-  Null? paisNombre;
-  Null? tipoDocumentoSiglas;
+  String? paisNombre;
+  String? tipoDocumentoSiglas;
   String? nombrePrograma;
   String? estadoPadron;
   String? servicio;
@@ -89,26 +89,26 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['correlativo'] = this.correlativo;
-    data['id_programacion_participante'] = this.idProgramacionParticipante;
-    data['id_programacion'] = this.idProgramacion;
-    data['id_participante'] = this.idParticipante;
-    data['nombre_residencia'] = this.nombreResidencia;
-    data['nombre'] = this.nombre;
-    data['nombre2'] = this.nombre2;
-    data['apellidoPaterno'] = this.apellidoPaterno;
-    data['apellidoMaterno'] = this.apellidoMaterno;
-    data['dni'] = this.dni;
-    data['edad'] = this.edad;
-    data['fecha_nacimiento'] = this.fechaNacimiento;
-    data['sexo'] = this.sexo;
-    data['pais_nombre'] = this.paisNombre;
-    data['tipo_documento_siglas'] = this.tipoDocumentoSiglas;
-    data['nombre_programa'] = this.nombrePrograma;
-    data['estado_padron'] = this.estadoPadron;
-    data['servicio'] = this.servicio;
-    data['total'] = this.total;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['correlativo'] = correlativo;
+    data['id_programacion_participante'] = idProgramacionParticipante;
+    data['id_programacion'] = idProgramacion;
+    data['id_participante'] = idParticipante;
+    data['nombre_residencia'] = nombreResidencia;
+    data['nombre'] = nombre;
+    data['nombre2'] = nombre2;
+    data['apellidoPaterno'] = apellidoPaterno;
+    data['apellidoMaterno'] = apellidoMaterno;
+    data['dni'] = dni;
+    data['edad'] = edad;
+    data['fecha_nacimiento'] = fechaNacimiento;
+    data['sexo'] = sexo;
+    data['pais_nombre'] = paisNombre;
+    data['tipo_documento_siglas'] = tipoDocumentoSiglas;
+    data['nombre_programa'] = nombrePrograma;
+    data['estado_padron'] = estadoPadron;
+    data['servicio'] = servicio;
+    data['total'] = total;
     return data;
   }
 }

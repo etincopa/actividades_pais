@@ -23,7 +23,7 @@ class TramaRespApiDto {
   Map<String, dynamic>? response = {};
   int? idPerfil = 0;
 
-  TramaRespApiDto.empty() {}
+  TramaRespApiDto.empty();
 
   TramaRespApiDto({
     this.codResultado,

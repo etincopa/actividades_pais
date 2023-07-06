@@ -4,7 +4,7 @@ class ReadMoreText extends StatefulWidget {
   final String text;
   final int maxLength;
 
-  ReadMoreText(this.text, {this.maxLength = 100});
+  const ReadMoreText(this.text, {super.key, this.maxLength = 100});
 
   @override
   _ReadMoreTextState createState() => _ReadMoreTextState();
@@ -15,7 +15,7 @@ class _ReadMoreTextState extends State<ReadMoreText> {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? textStyle = Theme.of(context).textTheme.bodyText2;
+    final TextStyle? textStyle = Theme.of(context).textTheme.bodyMedium;
 
     return GestureDetector(
       onTap: () {
@@ -28,10 +28,12 @@ class _ReadMoreTextState extends State<ReadMoreText> {
         children: [
           Text(
             textAlign: TextAlign.justify,
-            isExpanded ? widget.text : widget.text.substring(0, widget.maxLength),
+            isExpanded
+                ? widget.text
+                : widget.text.substring(0, widget.maxLength),
             style: textStyle,
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           if (widget.text.length > widget.maxLength)
             Text(
               textAlign: TextAlign.justify,

@@ -6,8 +6,8 @@ class ListaTipoGobiernoResponse {
   ListaTipoGobiernoResponse.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _TipoGobierno = new TipoGobiernoResponse.fromJson(item);
-      items.add(_TipoGobierno);
+      final TipoGobierno = TipoGobiernoResponse.fromJson(item);
+      items.add(TipoGobierno);
     }
   }
 }
@@ -17,7 +17,7 @@ class TipoGobiernoResponse {
   int? idSector;
   String? nombre;
 
-  TipoGobiernoResponse.empty() {}
+  TipoGobiernoResponse.empty();
 
   TipoGobiernoResponse({
     this.idTipoGobierno,
@@ -34,7 +34,7 @@ class TipoGobiernoResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['idTipoGobierno'] = idTipoGobierno;
     data['idSector'] = idSector;
     data['nombre'] = nombre;

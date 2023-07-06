@@ -6,13 +6,11 @@ import 'package:actividades_pais/src/datamodels/Clases/Ccpp.dart';
 import 'package:actividades_pais/src/datamodels/Clases/CentroPoblado.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Distritos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListarEntidadFuncionario.dart';
-import 'package:actividades_pais/src/datamodels/Clases/LugarPrestacion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ParticipanteEjecucion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Provincia.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ServicioProgramacionParticipante.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Sexo.dart';
-import 'package:actividades_pais/src/datamodels/Clases/TipoDocumento.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
@@ -26,7 +24,7 @@ class ParticipantesPage extends StatefulWidget {
   int idProgramacion = 0;
   int snip = 0;
 
-  ParticipantesPage({this.idProgramacion = 0, this.snip = 0});
+  ParticipantesPage({super.key, this.idProgramacion = 0, this.snip = 0});
 
   @override
   State<ParticipantesPage> createState() => _ParticipantesPageState();
@@ -58,9 +56,9 @@ class _ParticipantesPageState extends State<ParticipantesPage>
   String provinciaUbigeo = '';
 
   late int fueraAmbito = 0;
-  var formatter = new DateFormat('yyyy-MM-dd');
+  var formatter = DateFormat('yyyy-MM-dd');
 
-  DateTime? nowfec = new DateTime.now();
+  DateTime? nowfec = DateTime.now();
   late List<ParticipanteEjecucion> listas = [];
   ServicioProgramacionParticipante participanteSr =
   ServicioProgramacionParticipante();
@@ -278,7 +276,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     ),
                   ),
                 )
-                    : new Container(),
+                    : Container(),
                 validarcontroles
                     ? SizedBox(
                   width: 350,
@@ -311,7 +309,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                     },
                   ),
                 )
-                    : new Container(),
+                    : Container(),
                 SizedBox(
                     width: 350,
                     child: TextField(
@@ -365,7 +363,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                   ),
                 ),
                 (_value == false)
-                    ? Container(
+                    ? SizedBox(
                   width: 350,
                   child: FutureBuilder<List<ListarCcpp>>(
                     future: DatabasePr.db.ListarCcpps(),
@@ -380,7 +378,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                       }
                       final preguntas = snapshot.data;
 
-                      if (preguntas!.length == 0) {
+                      if (preguntas!.isEmpty) {
                         return const Center(
                           child: Text("sin dato"),
                         );
@@ -410,7 +408,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                 )
                     : Container(),
                 (_value == true)
-                    ? Container(
+                    ? SizedBox(
                   width: 350,
                   child: FutureBuilder<List<Provincia>>(
                     future: DatabaseProvincia.db.getProvincias(),
@@ -423,7 +421,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                       }
                       final preguntas = snapshot.data;
 
-                      if (preguntas!.length == 0) {
+                      if (preguntas!.isEmpty) {
                         return const Center(
                           child: Text("sin dato"),
                         );
@@ -445,15 +443,15 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                 ubigeoProvincia = newVal.provinciaUbigeo!;
                                 setState(() {});
                               },
-                              hint: Text("$provinciaDescripcion"),
+                              hint: Text(provinciaDescripcion),
                             ));
                       }
                     },
                   ),
                 )
-                    : new Container(),
+                    : Container(),
                 (_value == true)
-                    ? Container(
+                    ? SizedBox(
                   width: 350,
                   child: FutureBuilder<List<Distrito>>(
                     future:
@@ -469,7 +467,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                       }
                       final preguntas = snapshot.data;
 
-                      if (preguntas!.length == 0) {
+                      if (preguntas!.isEmpty) {
                         return const Center(
                           child: Text("sin dato"),
                         );
@@ -496,15 +494,15 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                 });
                               },
                               //value: depatalits.,
-                              hint: Text("$distritoDescripcion"),
+                              hint: Text(distritoDescripcion),
                             ));
                       }
                     },
                   ),
                 )
-                    : new Container(),
+                    : Container(),
                 (_value == true)
-                    ? Container(
+                    ? SizedBox(
                   width: 350,
                   child: FutureBuilder<List<CentroPoblado>>(
                     future: DatabaseProvincia.db
@@ -520,7 +518,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                       }
                       final preguntas = snapshot.data;
 
-                      if (preguntas!.length == 0) {
+                      if (preguntas!.isEmpty) {
                         return const Center(
                           child: Text("sin dato"),
                         );
@@ -547,13 +545,13 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                 setState(() {});
                               },
                               //value: depatalits.,
-                              hint: Text("$centroPblado"),
+                              hint: Text(centroPblado),
                             ));
                       }
                     },
                   ),
                 )
-                    : new Container(),
+                    : Container(),
                 Row(
                   children: [
                     Checkbox(
@@ -610,7 +608,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
                                     widget.idProgramacion, id_entidad);*/
                                 setState(() {});
                               },
-                              hint: Text('$entidad'),
+                              hint: Text(entidad),
                             ));
                       }
                       return const SizedBox();
@@ -741,7 +739,7 @@ class _ParticipantesPageState extends State<ParticipantesPage>
         break;
       case 'ENCONTRADO_SERV_RENIEC':
         print(usuario.edad.toString());
-        String micadena = "${usuario.primerNombre!}";
+        String micadena = usuario.primerNombre!;
         var longitud = micadena.split(' ');
 
         if (longitud.length > 1) {
@@ -802,13 +800,13 @@ class _ParticipantesPageState extends State<ParticipantesPage>
     var cantd = await DatabasePr.db
         .buscarDni(controllerNumeroDoc.text, widget.idProgramacion);
     setState(() {});
-    if (cantd.length >= 1) {
+    if (cantd.isNotEmpty) {
       return showAlertDialog(context, "Usuario ya registrado");
     } else {
       if (entidad == "Entidad") {
         return showAlertDialog(context, "Seleccionar Entidad");
       }
-      if (listas.length <= 0) {
+      if (listas.isEmpty) {
         return showAlertDialog(context, "Seleccionar Servicios");
       }
       if (centroPblado == "Centro Poblado") {

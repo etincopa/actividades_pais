@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/reportesPias.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderDataJson.dart';
-import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderServiciosRest.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
@@ -21,7 +20,7 @@ class ListaReportesPias extends StatefulWidget {
   String campaniaCod = '';
 
   ListaReportesPias(
-      {this.plataforma = "",
+      {super.key, this.plataforma = "",
       this.unidadTeritorial = "",
       this.idPlataforma = 0,
       this.lat = '',
@@ -33,8 +32,8 @@ class ListaReportesPias extends StatefulWidget {
 }
 
 class _ListaReportesState extends State<ListaReportesPias> {
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
   var fechaselecc = '';
   Listas listas = Listas();
 
@@ -99,7 +98,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
             }
           }
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
@@ -110,15 +109,15 @@ class _ListaReportesState extends State<ListaReportesPias> {
         backgroundColor:AppConfig.primaryColor,
         actions: [
           InkWell(
-            child: Icon(Icons.cloud_upload),
+            child: const Icon(Icons.cloud_upload),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SincronizarPage()),
+                MaterialPageRoute(builder: (context) => const SincronizarPage()),
               );
             },
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
         /*  InkWell(
@@ -146,7 +145,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
 
 
                                         */
-          SizedBox(
+          const SizedBox(
             width: 15,
           )
         ],
@@ -157,14 +156,14 @@ class _ListaReportesState extends State<ListaReportesPias> {
             (BuildContext context, AsyncSnapshot<List<ReportesPias>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.hasData == false) {
-              return Center(
+              return const Center(
                 child: Text("¡No existen registros"),
               );
             } else {
               final listaPersonalAux = snapshot.data;
 
-              if (listaPersonalAux!.length == 0) {
-                return Center(
+              if (listaPersonalAux!.isEmpty) {
+                return const Center(
                   child: Text("No hay informacion"),
                 );
               } else {
@@ -210,6 +209,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
                                     Navigator.pop(context);
                                   });
                                   break;
+                                default:
                               }
                             },
                             child: listas.miCardLisReportPias(
@@ -237,7 +237,7 @@ class _ListaReportesState extends State<ListaReportesPias> {
               }
             }
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },

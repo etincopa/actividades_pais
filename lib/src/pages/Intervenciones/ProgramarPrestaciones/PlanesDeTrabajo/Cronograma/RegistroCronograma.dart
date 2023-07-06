@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class RegistroCronograma extends StatelessWidget {
   const RegistroCronograma({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
-    final fem = 1.05;
+    const fem = 1.05;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final tam = 0.75;
+    const tam = 0.75;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -15,22 +16,22 @@ class RegistroCronograma extends StatelessWidget {
           // Acción cuando se presiona el botón
         },
         backgroundColor: Colors.blue,
-        child: Icon(
+        child: const Icon(
           Icons.check,
           color: Colors.white,
         ),
       ),
-      backgroundColor: Color(0xFF8BBFD1),
+      backgroundColor: const Color(0xFF8BBFD1),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 10, top: 30, right: 5),
+              margin: const EdgeInsets.only(left: 10, top: 30, right: 5),
               height: height * 0.95,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16 * fem),
-                color: Color(0xffffffff),
-                boxShadow: [
+                color: const Color(0xffffffff),
+                boxShadow: const [
                   BoxShadow(
                     color: Color(0x3f000000),
                     offset: Offset(0 * fem, 4 * fem),
@@ -39,7 +40,7 @@ class RegistroCronograma extends StatelessWidget {
                 ],
               ),
               child: Container(
-                margin: EdgeInsets.all(30),
+                margin: const EdgeInsets.all(30),
                 child: Column(
                   children: [
                     Container(
@@ -48,7 +49,7 @@ class RegistroCronograma extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.grey,
                             offset: Offset(0, 5),
@@ -56,7 +57,7 @@ class RegistroCronograma extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
@@ -70,7 +71,7 @@ class RegistroCronograma extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(
@@ -79,7 +80,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "¿Qué se hará?",
                                   labelText: "¿Qué se hará?"),
                             ),
@@ -93,7 +94,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "¿Cuál es la finalidad?",
                                   labelText: "¿Cuál es la finalidad?"),
                             ),
@@ -108,7 +109,7 @@ class RegistroCronograma extends StatelessWidget {
                               width: width * tam,
                               child: TextFormField(
                                 maxLines: 2,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     hintText: "¿Quien lo hara?",
                                     labelText: "¿Quien lo hara?"),
                               )),
@@ -121,7 +122,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "¿A quien esta dirigido?",
                                   labelText: "¿A quien esta dirigido?"),
                             ),
@@ -135,7 +136,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Población Objetivo",
                                   labelText: "Población Objetivo"),
                             ),
@@ -149,7 +150,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Unidad Medida",
                                   labelText: "Unidad Medida"),
                             ),
@@ -163,7 +164,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Meta", labelText: "Meta"),
                             ),
                           ),
@@ -176,7 +177,7 @@ class RegistroCronograma extends StatelessWidget {
                           child: SizedBox(
                             width: width * tam,
                             child: TextFormField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Responsable",
                                   labelText: "Responsable"),
                             ),
@@ -184,7 +185,7 @@ class RegistroCronograma extends StatelessWidget {
                         )
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: [
                         SizedBox(
                           height: 50,

@@ -20,12 +20,12 @@ class CustomInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
-      margin: EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: <BoxShadow>[
+        boxShadow: const <BoxShadow>[
           BoxShadow(
               // color: Colors.black.withOpacity(0.2),
               color: Colors.black,
@@ -38,15 +38,15 @@ class CustomInput extends StatelessWidget {
           UpperCaseTextFormatter(),
         ],*/
         textCapitalization: TextCapitalization.none,
-        controller: this.textController,
+        controller: textController,
         autocorrect: false,
-        keyboardType: this.keyboardType,
+        keyboardType: keyboardType,
      //   obscureText: this.isPassword,
         decoration: InputDecoration(
-            prefixIcon: Icon(this.icon),
+            prefixIcon: Icon(icon),
             focusedBorder: InputBorder.none,
             border: InputBorder.none,
-            hintText: this.placeholder),
+            hintText: placeholder),
       ),
     );
   }

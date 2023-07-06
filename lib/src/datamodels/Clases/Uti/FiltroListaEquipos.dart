@@ -20,7 +20,9 @@ class FiltroParqueInformatico {
       this.idUbicacion = '',
       this.responsableactual = '',
       this.pageIndex = 0,
-      this.pageSize = 0, this.anio='', this.codInventario=''});
+      this.pageSize = 0,
+      this.anio = '',
+      this.codInventario = ''});
 
   FiltroParqueInformatico.fromJson(Map<String, dynamic> json) {
     codigoPatrimonial = json['codigoPatrimonial'] ?? '';
@@ -34,17 +36,17 @@ class FiltroParqueInformatico {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['codigoPatrimonial'] = this.codigoPatrimonial;
-    data['denominacion'] = this.denominacion;
-    data['id_marca'] = this.idMarca;
-    data['id_modelo'] = this.idModelo;
-    data['id_ubicacion'] = this.idUbicacion;
-    data['responsableactual'] = this.responsableactual;
-    data['pageIndex'] = this.pageIndex;
-    data['pageSize'] = this.pageSize;
-    data['anio'] = this.anio;
-    data['codInventario'] = this.codInventario;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codigoPatrimonial'] = codigoPatrimonial;
+    data['denominacion'] = denominacion;
+    data['id_marca'] = idMarca;
+    data['id_modelo'] = idModelo;
+    data['id_ubicacion'] = idUbicacion;
+    data['responsableactual'] = responsableactual;
+    data['pageIndex'] = pageIndex;
+    data['pageSize'] = pageSize;
+    data['anio'] = anio;
+    data['codInventario'] = codInventario;
     return data;
   }
 }

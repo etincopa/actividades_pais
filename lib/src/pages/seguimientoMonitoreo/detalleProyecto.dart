@@ -1048,7 +1048,7 @@ class ImagenesCourrusel {
   Image? imagen;
   String? descripcion;
 
-  ImagenesCourrusel.empty() {}
+  ImagenesCourrusel.empty();
 
   ImagenesCourrusel({
     this.num,

@@ -12,10 +12,10 @@ class Servicio {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_servicio'] = this.idServicio;
-    data['nombre_servicio'] = this.nombreServicio;
-    data['id_actividad'] = this.idActividad;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_servicio'] = idServicio;
+    data['nombre_servicio'] = nombreServicio;
+    data['id_actividad'] = idActividad;
     return data;
   }
 }

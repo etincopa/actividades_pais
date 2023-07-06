@@ -1,4 +1,3 @@
-import 'dart:io';
 
 class ArchivoTramaIntervenciones {
   List<ArchivoTramaIntervencion> items = [];
@@ -6,8 +5,8 @@ class ArchivoTramaIntervenciones {
   ArchivoTramaIntervenciones.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ArchivoTramaIntervencion.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ArchivoTramaIntervencion.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -31,13 +30,13 @@ class ArchivoTramaIntervencion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['codigoIntervencion'] = this.codigoIntervencion;
-    data['file'] = this.file;
-    data['fileEncode'] = this.fileEncode;
-    data['nmero'] = this.nmero;
-    data['id'] = this.id;
+    data['codigoIntervencion'] = codigoIntervencion;
+    data['file'] = file;
+    data['fileEncode'] = fileEncode;
+    data['nmero'] = nmero;
+    data['id'] = id;
     return data;
   }
 

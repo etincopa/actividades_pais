@@ -46,7 +46,7 @@ class _TambookHomeState extends State<TambookHome>
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => LoginPage(),
+              builder: (BuildContext context) => const LoginPage(),
             ),
           );
         },

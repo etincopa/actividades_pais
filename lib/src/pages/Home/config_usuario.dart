@@ -1,6 +1,5 @@
 // ignore_for_file: sized_box_for_whitespace, unnecessary_new
 
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -8,7 +7,7 @@ import 'package:flutter/material.dart';
 class ConfiguracionUsuarioPage extends StatefulWidget {
   String titulo;
 
-  ConfiguracionUsuarioPage({
+  ConfiguracionUsuarioPage({super.key, 
     this.titulo = '',
   });
 
@@ -21,7 +20,7 @@ class _ConfiguracionUsuarioPageState extends State<ConfiguracionUsuarioPage> {
   var _image;
   String fotonomm = 'assets/pegasologo.png';
 
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   TextEditingController password = new TextEditingController();
   @override
@@ -37,7 +36,7 @@ class _ConfiguracionUsuarioPageState extends State<ConfiguracionUsuarioPage> {
       appBar: AppBar(
         title: Text(widget.titulo),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.indigo[900],
@@ -51,20 +50,20 @@ class _ConfiguracionUsuarioPageState extends State<ConfiguracionUsuarioPage> {
     return TextFormField(
       textInputAction: TextInputAction.go,
       onChanged: (value) {},
-      cursorColor: Color(0xFF3949AB),
+      cursorColor: const Color(0xFF3949AB),
       controller: controladors,
       obscureText: false,
       style: style,
       decoration: InputDecoration(
           labelText: texto,
-          fillColor: Color(0xFF3949AB),
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          fillColor: const Color(0xFF3949AB),
+          contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: texto,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          hoverColor: Color(0xFF3949AB),
-          focusColor: Color(0xFF3949AB)),
+          hoverColor: const Color(0xFF3949AB),
+          focusColor: const Color(0xFF3949AB)),
     );
   }
 
@@ -75,7 +74,7 @@ class _ConfiguracionUsuarioPageState extends State<ConfiguracionUsuarioPage> {
       color: Colors.blue[900],
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
           /*    print(password.text);
           var result = await Provider().changePassword(password: password.text);
@@ -108,20 +107,20 @@ class _ConfiguracionUsuarioPageState extends State<ConfiguracionUsuarioPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 0.0),
+            const SizedBox(height: 0.0),
             Column(
               children: <Widget>[
                 //  _tomarImagen,
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 imputField('Cambiar Password', password),
-                SizedBox(height: 20.0),
-                SizedBox(
+                const SizedBox(height: 20.0),
+                const SizedBox(
                   height: 20.0,
                 ),
                 guardar()
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40.0,
             ),
           ],

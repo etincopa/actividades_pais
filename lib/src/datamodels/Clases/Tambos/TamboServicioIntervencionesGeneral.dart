@@ -7,9 +7,9 @@ class ListarTamboServicioIntervencionesGeneral {
       List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador =
-          new TamboServicioIntervencionesGeneral.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador =
+          TamboServicioIntervencionesGeneral.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -89,22 +89,22 @@ class TamboServicioIntervencionesGeneral {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idProgramacion'] = this.idProgramacion;
-    data['idTambo'] = this.idTambo;
-    data['tambo'] = this.tambo;
-    data['tipoUsuario'] = this.tipoUsuario;
-    data['sector'] = this.sector;
-    data['idPrograma'] = this.idPrograma;
-    data['programa'] = this.programa;
-    data['descripcion'] = this.descripcion;
-    data['tipoEvento'] = this.tipoEvento;
-    data['fecha'] = this.fecha;
-    data['imagen'] = this.imagen;
-    data['pathImagen'] = this.pathImagen;
-    data['fechaImagen'] = this.fechaImagen;
-    data['tipo'] = this.tipo;
-    data['departamento'] = this.departamento;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idProgramacion'] = idProgramacion;
+    data['idTambo'] = idTambo;
+    data['tambo'] = tambo;
+    data['tipoUsuario'] = tipoUsuario;
+    data['sector'] = sector;
+    data['idPrograma'] = idPrograma;
+    data['programa'] = programa;
+    data['descripcion'] = descripcion;
+    data['tipoEvento'] = tipoEvento;
+    data['fecha'] = fecha;
+    data['imagen'] = imagen;
+    data['pathImagen'] = pathImagen;
+    data['fechaImagen'] = fechaImagen;
+    data['tipo'] = tipo;
+    data['departamento'] = departamento;
     return data;
   }
 }

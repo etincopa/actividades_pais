@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class IntervencionesHome extends StatefulWidget {
+  const IntervencionesHome({super.key});
+
   @override
   State<IntervencionesHome> createState() => _IntervencionesHomeState();
 }
@@ -277,7 +279,8 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
                       case 'OPT1012':
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => ListaIntervecionesProgramadas(),
+                            builder: (_) =>
+                                const ListaIntervecionesProgramadas(),
                           ),
                         );
                         break;
@@ -293,7 +296,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
     ];
     return Scaffold(
       appBar: AppBar(
-          title: Text(
+          title: const Text(
             'INTERVENCIONES',
             style: TextStyle(color: Colors.black),
           ),
@@ -302,7 +305,7 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
           }),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(20),
             ),

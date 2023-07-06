@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:actividades_pais/src/datamodels/Clases/TramaIntervencion.dart';
@@ -16,6 +15,8 @@ import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import '../../../../util/app-config.dart';
 
 class PendienteSincronizar extends StatefulWidget {
+  const PendienteSincronizar({super.key});
+
  // int snip;
  // PendienteSincronizar(this.snip);
   @override
@@ -44,7 +45,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
 
   Future<void> _checkInternetConnection() async {
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       setState(() {});
 
       final result = await InternetAddress.lookup('www.google.com');
@@ -59,8 +60,8 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
     }
   }
 
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     setState(() {});
   }
 
@@ -75,7 +76,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppConfig.primaryColor,
-          title: Text("Pendientes Envio"),
+          title: const Text("Pendientes Envio"),
           leading: Util().iconbuton(() => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                     builder: (context) => Intervenciones( '')),
@@ -83,7 +84,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
           actions: [
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               if (_isOnline == true) ...[
-                Icon(
+                const Icon(
                   Icons.wifi,
                   color: Colors.green,
                 ),
@@ -91,7 +92,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
                 (Icon(Icons.wifi_off, color: Colors.red[900]))
               ]
             ]),
-            SizedBox(
+            const SizedBox(
               width: 15,
             )
           ],
@@ -102,25 +103,46 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
               AsyncSnapshot<List<TramaIntervencion>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
-                  return Center(
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
                     child: Text("No hay informacion"),
                   );
                 } else {
                   return Container(
                     child: RefreshIndicator(
+                        onRefresh: refreshList,
                         child: ListView.builder(
                           itemCount: listaPersonalAux.length,
                           itemBuilder: (context, i) => Dismissible(
                               key: Key(listaPersonalAux[i]
                                   .codigoIntervencion
                                   .toString()),
+                              background: buildSwipeActionLeft(),
+                              secondaryBackground: buildSwipeActionRigth(),
+                              onDismissed: (direction) async {
+                                switch (direction) {
+                                  case DismissDirection.endToStart:
+                                    await DatabasePr.db
+                                        .eliminarTramaIntervencionesUsPorid(
+                                            listaPersonalAux[i]
+                                                .codigoIntervencion);
+
+                                    break;
+                                  case DismissDirection.startToEnd:
+                                    await DatabasePr.db
+                                        .eliminarTramaIntervencionesUsPorid(
+                                            listaPersonalAux[i]
+                                                .codigoIntervencion);
+                                    break;
+                                  default:
+                                }
+                              },
                               child: listas.cardIntervenciones(
                                 listaPersonalAux[i],
                                 () async {
@@ -149,35 +171,15 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
                                     }
                                   }
                                 },
-                              ),
-                              background: buildSwipeActionLeft(),
-                              secondaryBackground: buildSwipeActionRigth(),
-                              onDismissed: (direction) async {
-                                switch (direction) {
-                                  case DismissDirection.endToStart:
-                                    await DatabasePr.db
-                                        .eliminarTramaIntervencionesUsPorid(
-                                            listaPersonalAux[i]
-                                                .codigoIntervencion);
-
-                                    break;
-                                  case DismissDirection.startToEnd:
-                                    await DatabasePr.db
-                                        .eliminarTramaIntervencionesUsPorid(
-                                            listaPersonalAux[i]
-                                                .codigoIntervencion);
-                                    break;
-                                }
-                              }),
+                              )),
                           /*itemBuilder: (context, i) =>
                               _banTitle(listaPersonalAux[i]), */
-                        ),
-                        onRefresh: refreshList),
+                        )),
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: Text("¡No existen registros"),
             );
           },
@@ -188,7 +190,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
 
   Widget buildSwipeActionLeft() => Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       color: Colors.transparent,
       child: Icon(
         Icons.settings_backup_restore_rounded,
@@ -197,7 +199,7 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
       ));
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.transparent,
       child: Icon(
         Icons.settings_backup_restore_rounded,
@@ -207,26 +209,26 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
   ListTile _banTitle(TramaIntervencion band) {
     return ListTile(
       leading: CircleAvatar(
+        backgroundColor: Colors.blue[800],
         child: Text(
           '${band.estado?.substring(0, 1)}',
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue[800],
       ),
-      title: Text('${band.tambo}', style: TextStyle(fontSize: 13)),
+      title: Text('${band.tambo}', style: const TextStyle(fontSize: 13)),
       subtitle:
-          new Text('${band.tipoGobierno}', style: TextStyle(fontSize: 10)),
+          Text('${band.tipoGobierno}', style: const TextStyle(fontSize: 10)),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: 70,
             child: Text(
               ' ${band.fecha}',
-              style: TextStyle(fontSize: 10),
+              style: const TextStyle(fontSize: 10),
             ),
           ),
-          Container(
+          const SizedBox(
             width: 70,
             child: Text(
               ' ',
@@ -235,23 +237,23 @@ class _PendienteSincronizarState extends State<PendienteSincronizar> {
           ),
           Text(
             ' ${band.estado}',
-            style: TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10),
           ),
         ],
       ),
       onTap: () async {
         status = ConnectionStatusModel().isOnline;
         fToast.showToast(
-          toastDuration: Duration(milliseconds: 500),
+          toastDuration: const Duration(milliseconds: 500),
           child: Material(
             color: Colors.white,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.wifi),
+                const Icon(Icons.wifi),
                 Text(
-                  " Alert! ${status}",
-                  style: TextStyle(color: Colors.black87, fontSize: 16.0),
+                  " Alert! $status",
+                  style: const TextStyle(color: Colors.black87, fontSize: 16.0),
                 )
               ],
             ),

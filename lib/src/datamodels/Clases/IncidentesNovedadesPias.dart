@@ -6,8 +6,8 @@ class ListarIncidentesNovedadesPias {
   ListarIncidentesNovedadesPias.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new IncidentesNovedadesPias.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = IncidentesNovedadesPias.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -42,14 +42,14 @@ class IncidentesNovedadesPias {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['tipo'] = this.tipo;
-    data['incidentes'] = this.incidentes;
-    data['novedades'] = this.novedades;
-    data['idUnicoReporte'] = this.idUnicoReporte;
-    data['idUsuario'] = this.idUsuario;
-    data['idParteDiario'] = this.idParteDiario;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['tipo'] = tipo;
+    data['incidentes'] = incidentes;
+    data['novedades'] = novedades;
+    data['idUnicoReporte'] = idUnicoReporte;
+    data['idUsuario'] = idUsuario;
+    data['idParteDiario'] = idParteDiario;
     return data;
   }
 

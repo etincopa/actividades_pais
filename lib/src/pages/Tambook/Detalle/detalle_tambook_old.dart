@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
-import 'package:actividades_pais/backend/model/atenciones_model.dart';
 import 'package:actividades_pais/backend/model/clima_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
@@ -425,7 +424,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   child: Text(
                                     'Operativo',
                                     textAlign: TextAlign.left,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18,
                                       letterSpacing: 0.0,
@@ -814,12 +813,13 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   _generateBorderRadius(index) {
-    if ((index + 1) == _selectedTab)
+    if ((index + 1) == _selectedTab) {
       return const BorderRadius.only(bottomRight: Radius.circular(10.0));
-    else if ((index - 1) == _selectedTab)
+    } else if ((index - 1) == _selectedTab) {
       return const BorderRadius.only(bottomLeft: Radius.circular(10.0));
-    else
+    } else {
       return BorderRadius.zero;
+    }
   }
 
 /*
@@ -983,10 +983,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   // padding: EdgeInsets.all(5.0),
                   alignment: Alignment.centerLeft,
-                  child: Card(
+                  child: const Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         ListTile(
                           title: Text('DNI'),
                           subtitle: Text(''),
@@ -1061,10 +1061,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const Divider(color: colorI),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Card(
+                  child: const Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         BubbleTimeline(
                           bubbleSize: 70,
                           // List of Timeline Bubble Items
@@ -1549,10 +1549,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const Divider(color: colorI),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Card(
+                  child: const Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         ListTile(
                           title: Text('¿TIENE SERVICIO DE ENERGÍA ELÉCTRICA?'),
                           subtitle: Text(''),
@@ -2205,7 +2205,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   double getNumber(String value) {
     try {
-      return double.parse(value.replaceAll(new RegExp(r'[^0-9]'), ''));
+      return double.parse(value.replaceAll(RegExp(r'[^0-9]'), ''));
     } catch (oError) {
       return 0;
     }
@@ -2213,7 +2213,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   String getText(String value) {
     try {
-      return value.replaceAll(new RegExp(r'[^A-Za-z]'), '');
+      return value.replaceAll(RegExp(r'[^A-Za-z]'), '');
     } catch (oError) {
       return '';
     }
@@ -2263,7 +2263,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         : (incidencias.isEmpty ? 1 : incidencias.length),
                     itemBuilder: (context, index) {
                       if (isLoading) {
-                        return ShinyWidget();
+                        return const ShinyWidget();
                       } else {
                         if (incidencias.isEmpty) {
                           return Center(
@@ -2279,6 +2279,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   )));
                         }
                       }
+                      return null;
                     })
               ],
             ),
@@ -2911,11 +2912,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     5.00,
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: Text(
@@ -3183,7 +3184,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           : (aAvance.isEmpty ? 1 : aAvance.length),
                       itemBuilder: (context, index) {
                         if (isLoading) {
-                          return ShinyWidget();
+                          return const ShinyWidget();
                         } else {
                           if (aAvance.isEmpty) {
                             return Center(
@@ -3388,10 +3389,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const Divider(color: colorI),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Card(
+                  child: const Card(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         ListTile(
                           leading: ImageIcon(
                             AssetImage(

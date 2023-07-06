@@ -24,9 +24,7 @@ class ComboItemFields {
   static String codigo2 = 'codigo2';
   static String descripcion = 'descripcion';
 
-  /**
-   * Propiedades Servicio REST
-   */
+  /// Propiedades Servicio REST
 
   static String codigo1_ = 'ID_CODIGO';
   static String codigo2_ = 'CID_CODIGO';
@@ -53,7 +51,7 @@ class ComboItemModel {
   String? codigo2 = '';
   String? descripcion = '';
 
-  ComboItemModel.empty() {}
+  ComboItemModel.empty();
 
   ComboItemModel({
     this.id,

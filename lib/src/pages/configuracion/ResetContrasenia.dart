@@ -1,8 +1,5 @@
-import 'package:actividades_pais/main.dart';
-import 'package:actividades_pais/src/datamodels/Clases/ConfigPersonal.dart';
 import 'package:actividades_pais/src/datamodels/Provider/PorviderLogin.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
-import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
@@ -12,17 +9,19 @@ import '../../datamodels/Formulario/FormularioReq.dart';
 import 'package:intl/intl.dart';
 
 class ResetContrasenia extends StatefulWidget {
+  const ResetContrasenia({super.key});
+
   @override
   State<ResetContrasenia> createState() => _ResetContraseniaState();
 }
 
 class _ResetContraseniaState extends State<ResetContrasenia> {
   /// const ResetContrasenia({Key? key}) : super(key: key);
-  TextEditingController _controllerCorreoElectronico = TextEditingController();
+  final TextEditingController _controllerCorreoElectronico = TextEditingController();
 
-  Servicios servicios = new Servicios();
-  var formatter = new DateFormat('yyyy-MM-dd');
-  DateTime? nowfec = new DateTime.now();
+  Servicios servicios = Servicios();
+  var formatter = DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
 
   var _isloading = false;
   var _mostrar = true;
@@ -72,13 +71,13 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                               width: MediaQuery.of(context).size.width,
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: AppConfig.primaryColor,
+                                    backgroundColor: AppConfig.primaryColor,
                                   ),
                                   child: _isloading
-                                      ? Row(
+                                      ? const Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: const [
+                                          children: [
                                             CircularProgressIndicator(
                                               color: Colors.white,
                                             ),
@@ -132,9 +131,9 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                             )
                           ],
                         )
-                      : new Container(),
+                      : Container(),
                   (_mostrar == false)
-                      ? Column(children: const [
+                      ? const Column(children: [
                           Text("Ya falta poco!",
                               style: TextStyle(
                                   fontSize: 17, fontWeight: FontWeight.bold)),
@@ -144,7 +143,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                               "Revise su correo electrónico para obtener un enlace\npara restablecer su contraseña. Si no aparece en\n unos pocos minutos, verifique su carpeta de correo\n no deseado.\n Este correo no tendra valor dentro de una hora."),
                           SizedBox(height: 20.0),
                         ])
-                      : new Container(),
+                      : Container(),
                   const SizedBox(height: 20.0),
                   InkWell(
                     child: const Text("Volver al Inicio de sesión",
@@ -154,7 +153,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                             color: Colors.blue)),
                     onTap: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => LoginPage()),
+                        MaterialPageRoute(builder: (_) => const LoginPage()),
                       );
                     },
                   )

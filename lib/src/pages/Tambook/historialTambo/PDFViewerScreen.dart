@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class PDFViewerScreen extends StatefulWidget {
   final String pdfPath;
 
-  PDFViewerScreen({required this.pdfPath});
+  const PDFViewerScreen({super.key, required this.pdfPath});
 
   @override
   _PDFViewerScreenState createState() => _PDFViewerScreenState();
@@ -20,7 +19,7 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Visor de PDF'),
+        title: const Text('Visor de PDF'),
       ),
       body: Stack(
         children: <Widget>[
@@ -33,10 +32,10 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
                 _totalPages = total!;
               });
             },
-            onRender: (_pages) {
+            onRender: (pages) {
               setState(() {
                 _isLoading = false;
-                _totalPages = _pages!;
+                _totalPages = pages!;
               });
             },
             onError: (error) {
@@ -47,16 +46,16 @@ class _PDFViewerScreenState extends State<PDFViewerScreen> {
             },
           ),
           _isLoading
-              ? Center(
+              ? const Center(
             child: CircularProgressIndicator(),
           )
-              : Offstage(),
+              : const Offstage(),
           Positioned(
             bottom: 10.0,
             right: 10.0,
             child: Text(
               'Página $_currentPage de $_totalPages',
-              style: TextStyle(fontSize: 20.0),
+              style: const TextStyle(fontSize: 20.0),
             ),
           ),
         ],

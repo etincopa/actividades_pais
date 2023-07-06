@@ -13,7 +13,7 @@ class ActividadesDiariasResumenModel {
   String? sinActividades;
   String? fecha;
 
-  ActividadesDiariasResumenModel.empty() {}
+  ActividadesDiariasResumenModel.empty();
 
   ActividadesDiariasResumenModel({
     this.idUt,

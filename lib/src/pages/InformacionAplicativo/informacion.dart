@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class InformmacionAplicativoPage extends StatelessWidget {
+  const InformmacionAplicativoPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +17,7 @@ class InformmacionAplicativoPage extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          Container(
+          const SizedBox(
             width: 200,
             child: Text(
                 'Este Aplicativo fue desarrollado por el Programa Nacional Pais'),

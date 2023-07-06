@@ -336,7 +336,7 @@ class TramaMonitoreoModel {
 
   int? id = 0;
   int? isEdit = 0;
-  DateTime? createdTime = null;
+  DateTime? createdTime;
 
   String? item = '';
 
@@ -434,7 +434,7 @@ class TramaMonitoreoModel {
 
   List<PartidaEjecutadaModel>? aPartidaEjecutada = [];
 
-  TramaMonitoreoModel.empty() {}
+  TramaMonitoreoModel.empty();
 
   TramaMonitoreoModel({
     this.id,

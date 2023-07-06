@@ -6,12 +6,12 @@ class ListarEquipoMantenimiento {
   ListarEquipoMantenimiento.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual =
-      new EquipoMantenimiento.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = EquipoMantenimiento.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
+
 class EquipoMantenimiento {
   String? causa;
   String? descripcion;
@@ -53,7 +53,7 @@ class EquipoMantenimiento {
   String? total;
 
   String? id_equipo;
-  List? archivos=[];
+  List? archivos = [];
 
   EquipoMantenimiento({
     this.idEquipoInformaticoMantenimiento,
@@ -113,7 +113,8 @@ class EquipoMantenimiento {
       idArchivo: json['id_archivo'],
       idEquipo: json['idEquipo'],
       idEquipoInformatico: json['id_equipo_informatico'],
-      idEquipoInformaticoMantenimiento: json['id_equipo_informatico_mantenimiento'],
+      idEquipoInformaticoMantenimiento:
+          json['id_equipo_informatico_mantenimiento'],
       idTipoMantenimiento: json['id_tipo_mantenimiento'],
       idTicket: json['id_ticket'],
       idUsuarioAct: json['id_usuario_act'],
@@ -141,47 +142,48 @@ class EquipoMantenimiento {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['causa'] = this.causa;
-    data['descripcion'] = this.descripcion;
-    data['descripcion_tipo_mantenimiento'] = this.descripcionTipoMantenimiento;
-    data['disco_duro'] = this.discoDuro;
-    data['estado'] = this.estado;
-    data['falla'] = this.falla;
-    data['fecha_act'] = this.fechaAct;
-    data['fecha_del'] = this.fechaDel;
-    data['fechaMantenimiento'] = this.fechaMantenimiento;
-    data['fecha_reg'] = this.fechaReg;
-    data['flg_activo'] = this.flgActivo;
-    data['id_archivo'] = this.idArchivo;
-    data['idEquipo'] = this.idEquipo;
-    data['id_equipo_informatico'] = this.idEquipoInformatico;
-    data['id_equipo_informatico_mantenimiento'] = this.idEquipoInformaticoMantenimiento;
-    data['id_tipo_mantenimiento'] = this.idTipoMantenimiento;
-    data['id_ticket'] = this.idTicket;
-    data['id_usuario_act'] = this.idUsuarioAct;
-    data['id_usuario_del'] = this.idUsuarioDel;
-    data['id_usuario_reg'] = this.idUsuarioReg;
-    data['id_usuario_responsable'] = this.idUsuarioResponsable;
-    data['informe_tecnico'] = this.informeTecnico;
-    data['ipmaq_act'] = this.ipmaqAct;
-    data['ipmaq_del'] = this.ipmaqDel;
-    data['ipmaq_reg'] = this.ipmaqReg;
-    data['nombres_apellidos'] = this.nombresApellidos;
-    data['observacion'] = this.observacion;
-    data['pageIndex'] = this.pageIndex;
-    data['pageSize'] = this.pageSize;
-    data['procesador'] = this.procesador;
-    data['ram'] = this.ram;
-    data['ruta_informe_tecnico'] = this.rutaInformeTecnico;
-    data['seleccionarTipoMantenimiento'] = this.seleccionarTipoMantenimiento;
-    data['sist_operativo'] = this.sistOperativo;
-    data['solucion'] = this.solucion;
-    data['tecnologia'] = this.tecnologia;
-    data['tipoMantenimiento'] = this.tipoMantenimiento;
-    data['total'] = this.total;
-    data['id_equipo'] = this.id_equipo;
-    data['archivos'] = this.archivos;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['causa'] = causa;
+    data['descripcion'] = descripcion;
+    data['descripcion_tipo_mantenimiento'] = descripcionTipoMantenimiento;
+    data['disco_duro'] = discoDuro;
+    data['estado'] = estado;
+    data['falla'] = falla;
+    data['fecha_act'] = fechaAct;
+    data['fecha_del'] = fechaDel;
+    data['fechaMantenimiento'] = fechaMantenimiento;
+    data['fecha_reg'] = fechaReg;
+    data['flg_activo'] = flgActivo;
+    data['id_archivo'] = idArchivo;
+    data['idEquipo'] = idEquipo;
+    data['id_equipo_informatico'] = idEquipoInformatico;
+    data['id_equipo_informatico_mantenimiento'] =
+        idEquipoInformaticoMantenimiento;
+    data['id_tipo_mantenimiento'] = idTipoMantenimiento;
+    data['id_ticket'] = idTicket;
+    data['id_usuario_act'] = idUsuarioAct;
+    data['id_usuario_del'] = idUsuarioDel;
+    data['id_usuario_reg'] = idUsuarioReg;
+    data['id_usuario_responsable'] = idUsuarioResponsable;
+    data['informe_tecnico'] = informeTecnico;
+    data['ipmaq_act'] = ipmaqAct;
+    data['ipmaq_del'] = ipmaqDel;
+    data['ipmaq_reg'] = ipmaqReg;
+    data['nombres_apellidos'] = nombresApellidos;
+    data['observacion'] = observacion;
+    data['pageIndex'] = pageIndex;
+    data['pageSize'] = pageSize;
+    data['procesador'] = procesador;
+    data['ram'] = ram;
+    data['ruta_informe_tecnico'] = rutaInformeTecnico;
+    data['seleccionarTipoMantenimiento'] = seleccionarTipoMantenimiento;
+    data['sist_operativo'] = sistOperativo;
+    data['solucion'] = solucion;
+    data['tecnologia'] = tecnologia;
+    data['tipoMantenimiento'] = tipoMantenimiento;
+    data['total'] = total;
+    data['id_equipo'] = id_equipo;
+    data['archivos'] = archivos;
 
     return data;
   }

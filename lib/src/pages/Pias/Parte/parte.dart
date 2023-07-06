@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:actividades_pais/src/datamodels/Clases/ConfigInicio.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ConsultarTambosPiasxUnidadTerritorial.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/Campania.dart';
 import 'package:actividades_pais/src/datamodels/Clases/UnidadesTerritoriales.dart';
-import 'package:actividades_pais/src/datamodels/Clases/tipoPlataforma.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderServiciosRest.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderConfiguracion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
@@ -17,7 +15,6 @@ import 'package:actividades_pais/src/datamodels/Clases/Pias/reportesPias.dart';
 import 'package:intl/intl.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderDataJson.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
-import 'package:logger/logger.dart';
 
 class Parte extends StatefulWidget {
   String plataforma, unidadTerritorial, idUnicoReporte;
@@ -27,7 +24,7 @@ class Parte extends StatefulWidget {
   String campaniaCod = '';
 
   Parte(
-      {this.plataforma = "",
+      {super.key, this.plataforma = "",
       this.unidadTerritorial = "",
       this.idPlataforma = 0,
       this.idUnicoReporte = '',
@@ -49,8 +46,8 @@ class _ParteState extends State<Parte> {
   final _focusNode = FocusNode();
 
   TextEditingController fecha = TextEditingController();
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
 
   TextEditingController controllerfecha = TextEditingController();
   TextEditingController controllerDetalle = TextEditingController();
@@ -93,13 +90,13 @@ class _ParteState extends State<Parte> {
   traerUltimo() async {
     var ar = await DatabasePias.db.traerUtlimoPorId(widget.idUnicoReporte);
     setState(() {
-      if (ar.length == 0) {
+      if (ar.isEmpty) {
         controllerfecha.text = widget.idUnicoReporte;
         reportePias.fechaParteDiario = controllerfecha.text;
         reportePias.idUnicoReporte = widget.idUnicoReporte;
         reportePias.longitud = widget.long;
         reportePias.latitud = widget.lat;
-      } else if (ar.length > 0) {
+      } else if (ar.isNotEmpty) {
         acnuevo = 1;
         controllerDetalle.text = ar[0].detallePuntoAtencion;
         controllerPersonal.text = ar[0].personal;
@@ -152,7 +149,7 @@ class _ParteState extends State<Parte> {
                     Icons.save,
                     color: Colors.blue[800],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Text(
@@ -177,16 +174,16 @@ class _ParteState extends State<Parte> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 1,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text("Unidad Territorial: "),
+                  const Text("Unidad Territorial: "),
                   (widget.unidadTerritorial == '')
                       ? Container(
                           child: SizedBox(
@@ -198,14 +195,14 @@ class _ParteState extends State<Parte> {
                                     AsyncSnapshot<List<UnidadesTerritoriales>>
                                         snapshot) {
                                   if (!snapshot.hasData) {
-                                    return Center(
+                                    return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   }
                                   final preguntas = snapshot.data;
 
-                                  if (preguntas!.length == 0) {
-                                    return Center(
+                                  if (preguntas!.isEmpty) {
+                                    return const Center(
                                       child: Text("sin dato"),
                                     );
                                   } else {
@@ -218,9 +215,9 @@ class _ParteState extends State<Parte> {
                                       items: snapshot.data
                                           ?.map((user) => DropdownMenuItem<
                                                   UnidadesTerritoriales>(
+                                                value: user,
                                                 child: Text(
                                                     user.unidadTerritorial),
-                                                value: user,
                                               ))
                                           .toList(),
                                       onChanged:
@@ -238,9 +235,9 @@ class _ParteState extends State<Parte> {
                                         });
                                       },
                                       hint: Text(
-                                          "$seleccionarUnidTerritoriales",
+                                          seleccionarUnidTerritoriales,
                                           style:
-                                              TextStyle(color: Colors.black)),
+                                              const TextStyle(color: Colors.black)),
                                     ));
                                   }
                                 },
@@ -250,20 +247,20 @@ class _ParteState extends State<Parte> {
                         )
                       : SizedBox(
                           width: 200.0,
-                          child: Text("${reportePias.unidadTerritorial}"),
+                          child: Text(reportePias.unidadTerritorial),
                         ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text("Plataforma: "),
+                  const Text("Plataforma: "),
                   (widget.unidadTerritorial == '')
                       ? Container(
                           child: SizedBox(
@@ -280,14 +277,14 @@ class _ParteState extends State<Parte> {
                                                   RspoTambosPiasxUnidadTerritorial>?>
                                           snapshot) {
                                     if (!snapshot.hasData) {
-                                      return Center(
+                                      return const Center(
                                         child: CircularProgressIndicator(),
                                       );
                                     }
                                     final preguntas = snapshot.data;
 
-                                    if (preguntas!.length == 0) {
-                                      return Center(
+                                    if (preguntas!.isEmpty) {
+                                      return const Center(
                                         child: Text("sin dato"),
                                       );
                                     } else {
@@ -300,9 +297,9 @@ class _ParteState extends State<Parte> {
                                         items: snapshot.data
                                             ?.map((user) => DropdownMenuItem<
                                                     RspoTambosPiasxUnidadTerritorial>(
+                                                  value: user,
                                                   child:
                                                       Text(user.nombreTambo!),
-                                                  value: user,
                                                 ))
                                             .toList(),
                                         onChanged:
@@ -341,26 +338,26 @@ class _ParteState extends State<Parte> {
                                       AsyncSnapshot<List<ConfigInicio>?>
                                           snapshot) {
                                     if (!snapshot.hasData) {
-                                      return Center(
+                                      return const Center(
                                         child: CircularProgressIndicator(),
                                       );
                                     }
                                     final preguntas = snapshot.data;
 
-                                    if (preguntas!.length == 0) {
-                                      return Center(
+                                    if (preguntas!.isEmpty) {
+                                      return const Center(
                                         child: Text("sin dato"),
                                       );
                                     } else {
                                       return Container(
                                           child: DropdownButton<ConfigInicio>(
-                                        underline: SizedBox(),
+                                        underline: const SizedBox(),
                                         isExpanded: true,
                                         items: snapshot.data
                                             ?.map((user) =>
                                                 DropdownMenuItem<ConfigInicio>(
-                                                  child: Text(user.nombreTambo),
                                                   value: user,
+                                                  child: Text(user.nombreTambo),
                                                 ))
                                             .toList(),
                                         onChanged: (ConfigInicio? newVal) {
@@ -377,8 +374,8 @@ class _ParteState extends State<Parte> {
                                           });
                                         },
                                         hint: Text(
-                                            "$seleccionarTablaPlataforma",
-                                            style: TextStyle(
+                                            seleccionarTablaPlataforma,
+                                            style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15.0)),
                                       ));
@@ -390,10 +387,10 @@ class _ParteState extends State<Parte> {
                 ],
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text("Campaña: "),
+                const Text("Campaña: "),
                 SizedBox(
                   width: 200.0,
                   child: Container(
@@ -403,25 +400,25 @@ class _ParteState extends State<Parte> {
                           AsyncSnapshot<List<Campania>> snapshot) {
                         Campania? depatalits;
                         if (!snapshot.hasData) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
                         final preguntas = snapshot.data;
 
-                        if (preguntas!.length == 0) {
-                          return Center(
+                        if (preguntas!.isEmpty) {
+                          return const Center(
                             child: Text("sin dato"),
                           );
                         } else {
                           return Container(
                               child: DropdownButton<Campania>(
-                            underline: SizedBox(),
+                            underline: const SizedBox(),
                             isExpanded: true,
                             items: snapshot.data
                                 ?.map((user) => DropdownMenuItem<Campania>(
-                                      child: Text(user.descripcion),
                                       value: user,
+                                      child: Text(user.descripcion),
                                     ))
                                 .toList(),
                             onChanged: (Campania? newVal) {
@@ -436,8 +433,8 @@ class _ParteState extends State<Parte> {
                               });
                             },
                             value: depatalits,
-                            hint: Text("$seleccionarCamapania",
-                                style: TextStyle(
+                            hint: Text(seleccionarCamapania,
+                                style: const TextStyle(
                                     color: Colors.black, fontSize: 15.0)),
                           ));
                         }
@@ -450,10 +447,10 @@ class _ParteState extends State<Parte> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text("Punto de Atencion: "),
+                  const Text("Punto de Atencion: "),
                   (widget.unidadTerritorial == '')
                       ? SizedBox(
                           width: 200.0,
@@ -468,13 +465,13 @@ class _ParteState extends State<Parte> {
                                 if (snapshot.hasData) {
                                   return Container(
                                       child: DropdownButton<PuntoAtencionPias>(
-                                    underline: SizedBox(),
+                                    underline: const SizedBox(),
                                     isExpanded: true,
                                     items: snapshot.data
                                         ?.map((user) =>
                                             DropdownMenuItem<PuntoAtencionPias>(
-                                              child: Text(user.puntoAtencion!),
                                               value: user,
+                                              child: Text(user.puntoAtencion!),
                                             ))
                                         .toList(),
                                     onChanged: (PuntoAtencionPias? newVal) {
@@ -488,11 +485,11 @@ class _ParteState extends State<Parte> {
                                             newVal.codigoUbigeo!;
                                       });
                                     },
-                                    hint: Text("$seleccionarPuntoAte",
-                                        style: TextStyle(color: Colors.black)),
+                                    hint: Text(seleccionarPuntoAte,
+                                        style: const TextStyle(color: Colors.black)),
                                   ));
                                 }
-                                return SizedBox();
+                                return const SizedBox();
                               },
                             ),
                           ),
@@ -509,13 +506,13 @@ class _ParteState extends State<Parte> {
                                 if (snapshot.hasData) {
                                   return Container(
                                       child: DropdownButton<PuntoAtencionPias>(
-                                    underline: SizedBox(),
+                                    underline: const SizedBox(),
                                     isExpanded: true,
                                     items: snapshot.data
                                         ?.map((user) =>
                                             DropdownMenuItem<PuntoAtencionPias>(
-                                              child: Text(user.puntoAtencion!),
                                               value: user,
+                                              child: Text(user.puntoAtencion!),
                                             ))
                                         .toList(),
                                     onChanged: (PuntoAtencionPias? newVal) {
@@ -528,43 +525,43 @@ class _ParteState extends State<Parte> {
                                             newVal.codigoUbigeo!;
                                       });
                                     },
-                                    hint: Text("$seleccionarPuntoAte",
-                                        style: TextStyle(
+                                    hint: Text(seleccionarPuntoAte,
+                                        style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 15.0)),
                                   ));
                                 }
-                                return SizedBox();
+                                return const SizedBox();
                               },
                             ),
                           ),
                         ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
-                  Text("Fecha: "),
+                  const Text("Fecha: "),
                   SizedBox(
-                      width: 200.0, child: Text("${controllerfecha.text}")),
+                      width: 200.0, child: Text(controllerfecha.text)),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
-                  Text('Clima'),
+                  const Text('Clima'),
                   SizedBox(
                       width: 200.0,
                       child: Container(
@@ -574,25 +571,25 @@ class _ParteState extends State<Parte> {
                               AsyncSnapshot<List<CLima>> snapshot) {
                             CLima? depatalits;
                             if (!snapshot.hasData) {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             }
                             final preguntas = snapshot.data;
 
-                            if (preguntas!.length == 0) {
-                              return Center(
+                            if (preguntas!.isEmpty) {
+                              return const Center(
                                 child: Text("sin dato"),
                               );
                             } else {
                               return Container(
                                   child: DropdownButton<CLima>(
-                                underline: SizedBox(),
+                                underline: const SizedBox(),
                                 isExpanded: true,
                                 items: snapshot.data
                                     ?.map((user) => DropdownMenuItem<CLima>(
-                                          child: Text(user.descripcion),
                                           value: user,
+                                          child: Text(user.descripcion),
                                         ))
                                     .toList(),
                                 onChanged: (CLima? newVal) {
@@ -613,11 +610,11 @@ class _ParteState extends State<Parte> {
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Card(
                     color: Colors.grey[200],
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         textCapitalization: TextCapitalization.sentences,
                         controller: controllerDetalle,
@@ -627,16 +624,16 @@ class _ParteState extends State<Parte> {
                         maxLength: 200,
                         maxLines: 5,
                         decoration:
-                            InputDecoration.collapsed(hintText: "Detalle"),
+                            const InputDecoration.collapsed(hintText: "Detalle"),
                       ),
                     )),
               ),
               Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Card(
                     color: Colors.grey[200],
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         textCapitalization: TextCapitalization.sentences,
                         controller: controllerPersonal,
@@ -646,7 +643,7 @@ class _ParteState extends State<Parte> {
                         maxLines: 1,
                         maxLength: 100,
                         //or null
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Personal:',
                         ),
                       ),
@@ -654,11 +651,11 @@ class _ParteState extends State<Parte> {
               ),
               // _lineas(),
               Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Card(
                     color: Colors.grey[200],
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         maxLength: 100,
                         textCapitalization: TextCapitalization.sentences,
@@ -668,7 +665,7 @@ class _ParteState extends State<Parte> {
                         },
                         maxLines: 1,
                         //or null
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Estados de los Equipos: ',
                         ),
                       ),
@@ -676,11 +673,11 @@ class _ParteState extends State<Parte> {
               ),
               // _lineas(),
               Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Card(
                     color: Colors.grey[200],
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         focusNode: _focusNode,
                         textCapitalization: TextCapitalization.sentences,
@@ -688,7 +685,7 @@ class _ParteState extends State<Parte> {
                         onChanged: (value) {
                           reportePias.sismonitor = value;
                         },
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Sismonitor:',
                         ),
                         maxLength: 100,
@@ -696,7 +693,7 @@ class _ParteState extends State<Parte> {
                     )),
               ),
               //_lineas(),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
             ],
@@ -714,7 +711,7 @@ class _ParteState extends State<Parte> {
                     Icons.save,
                     color: Colors.blue[800],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Text(
@@ -740,7 +737,7 @@ class _ParteState extends State<Parte> {
       ),
     ));
   }
-  _displaySnackBar(BuildContext context, mensaje, {call}) {
+  _displaySnackBar(BuildContext context, mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$mensaje'),

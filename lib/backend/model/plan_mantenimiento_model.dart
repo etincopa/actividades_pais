@@ -32,7 +32,7 @@ class PlanMantenimientoModel {
   String? nombreFoto;
   String? rutaFoto;
 
-  PlanMantenimientoModel.empty() {}
+  PlanMantenimientoModel.empty();
 
   PlanMantenimientoModel(
       {this.idRegion,

@@ -10,8 +10,8 @@ class Logo extends StatelessWidget {
     return Center(
       child: Container(
         width: 170,
-        margin: EdgeInsets.only(top: 50),
-        child: Column(
+        margin: const EdgeInsets.only(top: 50),
+        child: const Column(
           children: <Widget>[
             Image(
                 image: AssetImage(

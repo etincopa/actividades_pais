@@ -7,7 +7,6 @@ import 'package:actividades_pais/backend/model/programacion_intervenciones_tambo
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:shimmer/shimmer.dart';
@@ -290,7 +289,7 @@ class _HomeTambookState extends State<HomeTambook>
                     itemCount: isLoading ? 1 : 1,
                     itemBuilder: (context, index) {
                       if (isLoading) {
-                        return ShinyWidget();
+                        return const ShinyWidget();
                       } else {
                         return Column(
                             mainAxisSize: MainAxisSize.min,
@@ -467,10 +466,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text('Fuente: POI aprobado 2023')
+            const Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -619,10 +618,10 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text('Fuente: POI aprobado 2023')
+            const Text('Fuente: POI aprobado 2023')
           ],
         ),
       ),
@@ -677,12 +676,12 @@ class _HomeTambookState extends State<HomeTambook>
                         text: '491 TAMBOS',
                         textStyle:
                             const TextStyle(fontWeight: FontWeight.bold)),
-                    legend: Legend(
+                    legend: const Legend(
                       isVisible: true,
                       position: LegendPosition.bottom,
                       orientation: LegendItemOrientation.horizontal,
                       overflowMode: LegendItemOverflowMode.wrap,
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                         color: color_07,
                       ),
                     ),
@@ -765,7 +764,7 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   SfCartesianChart(
                     plotAreaBorderWidth: 0,
-                    legend: Legend(
+                    legend: const Legend(
                         isVisible: true,
                         position: LegendPosition.bottom,
                         overflowMode: LegendItemOverflowMode.wrap),
@@ -844,7 +843,7 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   SfCartesianChart(
                     plotAreaBorderWidth: 0,
-                    legend: Legend(
+                    legend: const Legend(
                         isVisible: true,
                         position: LegendPosition.bottom,
                         overflowMode: LegendItemOverflowMode.wrap),
@@ -934,10 +933,10 @@ class _HomeTambookState extends State<HomeTambook>
                             Container(
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(5),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(
                                     color: color_01,
                                     Icons.home_outlined,
@@ -963,10 +962,10 @@ class _HomeTambookState extends State<HomeTambook>
                             Container(
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(5),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(
                                     color: color_01,
                                     Icons.home_outlined,
@@ -992,10 +991,10 @@ class _HomeTambookState extends State<HomeTambook>
                             Container(
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(5),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(
                                     color: color_01,
                                     Icons.home_outlined,
@@ -1013,7 +1012,7 @@ class _HomeTambookState extends State<HomeTambook>
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       /*Padding(
@@ -1045,9 +1044,9 @@ class _HomeTambookState extends State<HomeTambook>
                           Row(
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(3.0),
+                                padding: EdgeInsets.all(3.0),
                                 child: Column(
-                                  children: const <Widget>[
+                                  children: <Widget>[
                                     Text(
                                       '13',
                                       style: TextStyle(fontSize: 20.0),
@@ -1059,7 +1058,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ],
                                 ),
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 35,
                               ),
                               /*Padding(
@@ -1078,9 +1077,9 @@ class _HomeTambookState extends State<HomeTambook>
                                 ),
                               ),*/
                               Padding(
-                                padding: const EdgeInsets.all(3.0),
+                                padding: EdgeInsets.all(3.0),
                                 child: Column(
-                                  children: const <Widget>[
+                                  children: <Widget>[
                                     Text(
                                       '2',
                                       style: TextStyle(fontSize: 20.0),
@@ -1094,14 +1093,14 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                             ],
                           ),
-                          const Text(
+                          Text(
                             '''|__________________|''',
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Color.fromRGBO(155, 155, 155, 1.0),
                             ),
                           ),
-                          const Text(
+                          Text(
                             '|',
                             style: TextStyle(
                               fontSize: 18.0,
@@ -1110,7 +1109,7 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text(
                                 "PIAS",
                                 style: TextStyle(
@@ -1177,7 +1176,7 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
@@ -1187,7 +1186,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: <Widget>[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   "REGION",
                                   style: TextStyle(
@@ -1201,9 +1200,9 @@ class _HomeTambookState extends State<HomeTambook>
                             Row(
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'JEFE UNIDAD TERRITORIAL (17)',
                                         style: TextStyle(fontSize: 12.0),
@@ -1211,7 +1210,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     ],
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   ' | ',
                                   style: TextStyle(
                                     fontSize: 18.0,
@@ -1219,9 +1218,9 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'MONITOR (28)',
                                         style: TextStyle(fontSize: 12.0),
@@ -1235,7 +1234,7 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                       ],
                     ),
-                    const Divider(color: colorI),
+                    Divider(color: colorI),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -1243,7 +1242,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: <Widget>[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   "TAMBOS PIAS Y UPS",
                                   style: TextStyle(
@@ -1257,9 +1256,9 @@ class _HomeTambookState extends State<HomeTambook>
                             Row(
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'GESTOR (487)',
                                         style: TextStyle(fontSize: 12.0),
@@ -1267,7 +1266,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     ],
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   ' | ',
                                   style: TextStyle(
                                     fontSize: 18.0,
@@ -1275,9 +1274,9 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'GUARDIÁN (487)',
                                         style: TextStyle(fontSize: 12.0),
@@ -2037,14 +2036,14 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                 ),
               ),
-              Column(
+              const Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Column(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text(
                               '100',
                               style: TextStyle(fontSize: 20.0),
@@ -2054,9 +2053,9 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Column(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text(
                               '100',
                               style: TextStyle(fontSize: 20.0),
@@ -2069,7 +2068,7 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text(
                         "Peter Jonathan",
                         style: TextStyle(
@@ -2081,7 +2080,7 @@ class _HomeTambookState extends State<HomeTambook>
                     ],
                   ),
                   Row(
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text(
                         "@pj",
                         style: TextStyle(
@@ -2110,6 +2109,8 @@ class AvancesData {
 }
 
 class ShinyWidget extends StatelessWidget {
+  const ShinyWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(

@@ -25,7 +25,7 @@ class TamboServicioInternetIncidenciaDto {
   String? snipInternet = "";
   String? snipTelefono = "";
 
-  TamboServicioInternetIncidenciaDto.empty() {}
+  TamboServicioInternetIncidenciaDto.empty();
 
   TamboServicioInternetIncidenciaDto({
     this.idTambo,
