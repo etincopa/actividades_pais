@@ -28,11 +28,11 @@ import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
-import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Calendario/Calendario.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/detalle_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/widgets/mostrar_alertas.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -646,11 +646,14 @@ class _HomeTambookState extends State<HomeTambook>
       } else {
         mostrarAlerta(context, "Aviso!",
             "No se encontraron registros con el mes y año seleccionado");
-        await Future.delayed(const Duration(milliseconds: 2000));
+
+        await Future.delayed(const Duration(milliseconds: 1000));
 
         BusyIndicator.hide(context);
       }
-    } on Exception catch (e) {}
+    } on Exception catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> obtenerReporteSectorial(tipo, anio, mes, sector) async {
@@ -855,12 +858,12 @@ class _HomeTambookState extends State<HomeTambook>
                         tabs: [
                           Tab(
                               icon: ImageIcon(
-                            AssetImage('assets/icons/icon_intervencion.png'),
+                            AssetImage('assets/icons/atenciones.png'),
                             size: 35,
                           )),
                           Tab(
                               icon: ImageIcon(
-                            AssetImage('assets/icons/atenciones.png'),
+                            AssetImage('assets/icons/icon_intervencion.png'),
                             size: 35,
                           )),
                           Tab(
@@ -909,6 +912,18 @@ class _HomeTambookState extends State<HomeTambook>
           },
           body: TabBarView(
             children: <Widget>[
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardAtenciones(),
+                  avanceMetas(),
+                  cardBeneficiarios(),
+                  avanceMetasUsuarios(),
+                ],
+              )),
+
               // REPORTES SECTORIALES
               SingleChildScrollView(
                   child: Column(
@@ -931,17 +946,6 @@ class _HomeTambookState extends State<HomeTambook>
                 ],
               )),
 
-              SingleChildScrollView(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 15),
-                  cardAtenciones(),
-                  avanceMetas(),
-                  cardBeneficiarios(),
-                  avanceMetasUsuarios(),
-                ],
-              )),
               SingleChildScrollView(
                   child: Column(
                 children: [
