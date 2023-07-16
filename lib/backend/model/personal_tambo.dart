@@ -7,7 +7,7 @@ class PersonalTambo {
   String? nombres;
   String? descripcion;
 
-  PersonalTambo.empty() {}
+  PersonalTambo.empty();
 
   PersonalTambo({
     this.nombres,

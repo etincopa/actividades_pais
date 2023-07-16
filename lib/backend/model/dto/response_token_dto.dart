@@ -13,7 +13,7 @@ class RespTokenDto {
   String? token = '';
   String? rol = '';
 
-  RespTokenDto.empty() {}
+  RespTokenDto.empty();
 
   RespTokenDto({
     this.id,

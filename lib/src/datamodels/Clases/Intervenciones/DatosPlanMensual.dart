@@ -5,8 +5,8 @@ class ListaDatosPlanMensual {
   ListaDatosPlanMensual.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new DatosPlanMensual.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = DatosPlanMensual.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -47,21 +47,21 @@ class DatosPlanMensual {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_programacion'] = this.idProgramacion;
-    data['plataforma_descripcion'] = this.plataformaDescripcion;
-    data['unidad_territorial_descripcion'] = this.unidadTerritorialDescripcion;
-    data['fecha'] = this.fecha;
-    data['nombre'] = this.nombre;
-    data['nombre_sector'] = this.nombreSector;
-    data['descripcion_intervencion'] = this.descripcionIntervencion;
-    data['nombre_programa'] = this.nombrePrograma;
-    data['id_evaluacion'] = this.idEvaluacion;
-    data['observacion'] = this.observacion;
-    data['id_plan_trabajo'] = this.idPlanTrabajo;
-    data['tipo_plan'] = this.tipoPlan;
-    data['codigo_plan'] = this.codigoPlan;
-    data['total'] = this.total;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_programacion'] = idProgramacion;
+    data['plataforma_descripcion'] = plataformaDescripcion;
+    data['unidad_territorial_descripcion'] = unidadTerritorialDescripcion;
+    data['fecha'] = fecha;
+    data['nombre'] = nombre;
+    data['nombre_sector'] = nombreSector;
+    data['descripcion_intervencion'] = descripcionIntervencion;
+    data['nombre_programa'] = nombrePrograma;
+    data['id_evaluacion'] = idEvaluacion;
+    data['observacion'] = observacion;
+    data['id_plan_trabajo'] = idPlanTrabajo;
+    data['tipo_plan'] = tipoPlan;
+    data['codigo_plan'] = codigoPlan;
+    data['total'] = total;
     return data;
   }
 }

@@ -49,28 +49,28 @@ class GuardarIntervencion {
     if (json['accion'] != null) {
       accion = <Accion>[];
       json['accion'].forEach((v) {
-        accion!.add(new Accion.fromJson(v));
+        accion!.add(Accion.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fecha'] = this.fecha;
-    data['descripcion'] = this.descripcion;
-    data['tipoIntervencion'] = this.tipoIntervencion;
-    data['horaInicio'] = this.horaInicio;
-    data['horaFin'] = this.horaFin;
-    data['documento'] = this.documento;
-    data['realizo'] = this.realizo;
-    data['convocadas'] = this.convocadas;
-    data['v_convenio'] = this.vConvenio;
-    data['n_convenio'] = this.nConvenio;
-    data['id_unidades_territoriales'] = this.idUnidadesTerritoriales;
-    data['id_plataforma'] = this.idPlataforma;
-    data['prog_otro_tambo'] = this.progOtroTambo;
-    if (this.accion != null) {
-      data['accion'] = this.accion!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['fecha'] = fecha;
+    data['descripcion'] = descripcion;
+    data['tipoIntervencion'] = tipoIntervencion;
+    data['horaInicio'] = horaInicio;
+    data['horaFin'] = horaFin;
+    data['documento'] = documento;
+    data['realizo'] = realizo;
+    data['convocadas'] = convocadas;
+    data['v_convenio'] = vConvenio;
+    data['n_convenio'] = nConvenio;
+    data['id_unidades_territoriales'] = idUnidadesTerritoriales;
+    data['id_plataforma'] = idPlataforma;
+    data['prog_otro_tambo'] = progOtroTambo;
+    if (accion != null) {
+      data['accion'] = accion!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -159,23 +159,23 @@ class Accion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['usuario'] = this.usuario;
-    data['sector'] = this.sector;
-    data['programa'] = this.programa;
-    data['categoria'] = this.categoria;
-    data['subcategoria'] = this.subcategoria;
-    data['actividad'] = this.actividad;
-    data['servicio'] = this.servicio;
-    data['id_gobierno'] = this.idGobierno;
-    data['id_categoria'] = this.idCategoria;
-    data['id_sector'] = this.idSector;
-    data['id_subcategoria'] = this.idSubcategoria;
-    data['id_entidad'] = this.idEntidad;
-    data['id_actividad'] = this.idActividad;
-    data['id_servicio'] = this.idServicio;
-    data['descripcion_entidad'] = this.descripcionEntidad;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['usuario'] = usuario;
+    data['sector'] = sector;
+    data['programa'] = programa;
+    data['categoria'] = categoria;
+    data['subcategoria'] = subcategoria;
+    data['actividad'] = actividad;
+    data['servicio'] = servicio;
+    data['id_gobierno'] = idGobierno;
+    data['id_categoria'] = idCategoria;
+    data['id_sector'] = idSector;
+    data['id_subcategoria'] = idSubcategoria;
+    data['id_entidad'] = idEntidad;
+    data['id_actividad'] = idActividad;
+    data['id_servicio'] = idServicio;
+    data['descripcion_entidad'] = descripcionEntidad;
     return data;
   }
 

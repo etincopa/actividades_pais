@@ -30,7 +30,7 @@ class IndicadorInternetModel {
   int? enproceso;
   String? codEnProceso;
 
-  IndicadorInternetModel.empty() {}
+  IndicadorInternetModel.empty();
 
   IndicadorInternetModel({
     this.idTambo,

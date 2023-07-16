@@ -4,8 +4,8 @@ class ReporteHistorials {
   ReporteHistorials.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ReporteHistorial.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ReporteHistorial.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }

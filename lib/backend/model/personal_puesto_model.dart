@@ -13,7 +13,7 @@ class PersonalPuestoModel {
   int? gu;
   int? st;
 
-  PersonalPuestoModel.empty() {}
+  PersonalPuestoModel.empty();
 
   PersonalPuestoModel({this.jut, this.mo, this.git, this.gu, this.st});
 

@@ -154,7 +154,7 @@ class ListViewProgramacion extends StatelessWidget {
                                 style: BorderStyle.solid),
                             borderRadius: BorderRadius.circular(12),
                             color: Color(
-                              int.parse('0xff${experienceLevelColor}'),
+                              int.parse('0xff$experienceLevelColor'),
                             ).withAlpha(20),
                           ),
                           child: const Center(

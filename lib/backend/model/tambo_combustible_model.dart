@@ -47,7 +47,7 @@ class CombustibleTamboModel {
   int? horasGelectronico = 0;
   String? fechaUltimoStock = '';
 
-  CombustibleTamboModel.empty() {}
+  CombustibleTamboModel.empty();
 
   CombustibleTamboModel({
     this.idTambo,

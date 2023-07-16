@@ -19,19 +19,19 @@ class _HistorialTambosState extends State<HistorialTambos> {
   @override
   Widget build(BuildContext context) {
     List listPages = [
-      intervencionesHistoria(),
+      const intervencionesHistoria(),
       Container(),
       Container(),
     ];
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(55.0),
+          preferredSize: const Size.fromHeight(55.0),
           child: AppBar(
             leading: Util().iconbuton(() => Navigator.of(context).pop()),
             backgroundColor: AppConfig.primaryColor,
             title: Container(
               child: Text(
-                "$titulo",
+                titulo,
                 style:
                     TextStyle(fontSize: 16, color: AppConfig.letrasColorAppBar),
               ),
@@ -61,24 +61,24 @@ class _HistorialTambosState extends State<HistorialTambos> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-              icon: Icon(Icons.pending_actions_rounded),
-              title: Text(
+              icon: const Icon(Icons.pending_actions_rounded),
+              title: const Text(
                 "INTERVENCIONES",
                 style: TextStyle(color: Colors.white, fontSize: 9),
               ),
               activeColor: Colors.white,
               inactiveColor: Colors.white),
           BottomNavyBarItem(
-              icon: Icon(Icons.map),
-              title: Text(
+              icon: const Icon(Icons.map),
+              title: const Text(
                 "MAPA",
                 style: TextStyle(color: Colors.white, fontSize: 9),
               ),
               activeColor: Colors.white,
               inactiveColor: Colors.white),
           BottomNavyBarItem(
-              icon: Icon(Add_home.hand_holding_medical),
-              title: Text(
+              icon: const Icon(Add_home.hand_holding_medical),
+              title: const Text(
                 "Atenciones Realizadas",
                 style: TextStyle(color: Colors.white, fontSize: 9),
               ),

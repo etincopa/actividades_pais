@@ -9,7 +9,7 @@ class AppBarPais extends StatefulWidget {
   String datoUt = "", nombre = "", plataforma;
   int snip;
   AppBarPais(
-      {this.datoUt = "",
+      {super.key, this.datoUt = "",
       this.nombre = "",
       this.snip = 0,
       this.plataforma = ''});
@@ -120,7 +120,7 @@ class _AppBarPaisState extends State<AppBarPais> {
 
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => LoginPage()),
+                            MaterialPageRoute(builder: (_) => const LoginPage()),
                             (route) => false,
                           );
                         },

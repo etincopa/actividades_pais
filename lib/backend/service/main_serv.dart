@@ -152,7 +152,7 @@ class MainService {
         }
       }
 
-      if (aNoConect.length > 0) {
+      if (aNoConect.isNotEmpty) {
         /**
          * Metodo recursivo: Solo reintentar los registros que no se enviaron
          * por perdida de conexión despues de 3 segundos
@@ -253,7 +253,7 @@ class MainService {
         }
       }
 
-      if (aNoConect.length > 0) {
+      if (aNoConect.isNotEmpty) {
         /**
          * Metodo recursivo: Solo reintentar los registros que no se enviaron
          * por perdida de conexión despues de 3 segundos
@@ -539,7 +539,7 @@ class MainService {
         ComboItemModel? response =
             await Get.find<MainRepo>().insertMaestraDb(oApi);
         if (response != null) {
-          aNewMonitoreo.add(response!);
+          aNewMonitoreo.add(response);
         } else {
           _log.e('Error al ingresar Maestros a la Base de Datos');
         }
@@ -550,9 +550,7 @@ class MainService {
     return aNewMonitoreo;
   }
 
-  /**
-   * Obtener Avance de Partidas
-   */
+  /// Obtener Avance de Partidas
   Future<List<UltimoAvancePartidaModel>> loadAllAvancePartida(
     int? limit,
     int? offset,
@@ -779,10 +777,10 @@ class MainService {
     var oProgResp = await Get.find<MainRepo>().insertProgramaIntervencionDb(o);
 
     if (o.registroEntidadActividades!.isNotEmpty) {
-      o.registroEntidadActividades!.forEach((object) {
+      for (var object in o.registroEntidadActividades!) {
         object.idProgramacionIntervenciones =
             oProgResp.idProgramacionIntervenciones;
-      });
+      }
 
       var aActResp = await Get.find<MainRepo>()
           .insertRegistroEntidadActividadMasiveDb(
@@ -818,16 +816,14 @@ class MainService {
       List<UserModel> aApi = await Get.find<MainRepo>().getAllUserApi();
 
       for (UserModel oApi in aApi) {
-        if (aDb.length > 0) {
+        if (aDb.isNotEmpty) {
           UserModel oUserFind = aDb.firstWhere((o) => o.codigo == oApi.codigo);
-          if (oUserFind != null) {
-            continue;
-          }
+          continue;
         }
 
         UserModel? response = await Get.find<MainRepo>().insertUserDb(oApi);
         if (response != null) {
-          aNewLoadUser.add(response!);
+          aNewLoadUser.add(response);
         } else {
           _log.e('Error al ingresar usuario a la Base de Datos');
         }

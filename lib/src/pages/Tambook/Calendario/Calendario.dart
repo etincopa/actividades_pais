@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroIntervencionesTambos.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
-import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:backdrop/backdrop.dart';
@@ -20,7 +15,7 @@ import '../../Intervenciones/ProgramarPrestaciones/Event.dart';
 class Calendario extends StatefulWidget {
   var idTambo = "x";
 
-  Calendario({this.idTambo = "x"});
+  Calendario({super.key, this.idTambo = "x"});
 
   @override
   State<Calendario> createState() => _CalendarioState();
@@ -66,9 +61,9 @@ class _CalendarioState extends State<Calendario> {
   ];
 
   List<UnidadesTerritoriales> unidadesTerrtoriales = [];
-  DateTime? nowfec = new DateTime.now();
+  DateTime? nowfec = DateTime.now();
 
-  var formatter = new DateFormat('yyyy-MM-dd');
+  var formatter = DateFormat('yyyy-MM-dd');
 
   final TextEditingController _controlleFechaInici = TextEditingController();
 
@@ -104,15 +99,13 @@ class _CalendarioState extends State<Calendario> {
   bool _isLoading = false;
 
   bringDBConfigurationHome({months}) async {
-    if (widget.idTambo == null) {
-      widget.idTambo = "x";
-    }
+    widget.idTambo ??= "x";
     month = month.length <= 1 ? '0$month' : month;
     _controlleFechaFin.text = '';
     _controlleFechaInici.text = '';
     // selectedEstado = 'x';
     // selectedTipoProgramacion = 'x';
-    filtroIntervencionesTambos.id = "${widget.idTambo}";
+    filtroIntervencionesTambos.id = widget.idTambo;
     filtroIntervencionesTambos.tipo = "x";
     filtroIntervencionesTambos.estado = selectedEstado;
     // filtroIntervencionesTambos.ut = "x";
@@ -234,10 +227,10 @@ class _CalendarioState extends State<Calendario> {
             _isLoading
                 ? Container(
                     color: Colors.white,
-                    child: Center(
+                    child: const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           CircularProgressIndicator(),
                           SizedBox(height: 20),
                           Text(
@@ -263,25 +256,25 @@ class _CalendarioState extends State<Calendario> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(-3, 0), // changes position of shadow
+                    offset: const Offset(-3, 0), // changes position of shadow
                   ),
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(3, 0), // changes position of shadow
+                    offset: const Offset(3, 0), // changes position of shadow
                   ),
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, -3), // changes position of shadow
+                    offset: const Offset(0, -3), // changes position of shadow
                   ),
                 ],
               ),
@@ -306,7 +299,7 @@ class _CalendarioState extends State<Calendario> {
                           ),
                         ),
                       ),
-                      singleMarkerBuilder: (context, date, _event) {
+                      singleMarkerBuilder: (context, date, event) {
                         //print("DÍA ${_event}");
                         return Container(
                           decoration: BoxDecoration(
@@ -456,7 +449,7 @@ class _CalendarioState extends State<Calendario> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
@@ -465,7 +458,7 @@ class _CalendarioState extends State<Calendario> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: AppConfig.primaryColor2,
+                    backgroundColor: AppConfig.primaryColor2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
@@ -526,7 +519,7 @@ class _CalendarioState extends State<Calendario> {
   }
 
   showAlertDialogAprobar(
-      BuildContext context, texto, _selectedEventss, selectDay) async {
+      BuildContext context, texto, selectedEventss, selectDay) async {
     FiltroIntervencionesTambos filtroIntervencionesTambosS =
         FiltroIntervencionesTambos();
     filtroIntervencionesTambosS.inicio =
@@ -567,7 +560,7 @@ class _CalendarioState extends State<Calendario> {
       context: context,
       builder: (BuildContext context) => buildSuccessDialog2(context,
           title: "Lista Intervenciones",
-          selectedEventss: _selectedEventss,
+          selectedEventss: selectedEventss,
           selectDay: selectDay,
           totalTamboCon: totalTamboCon,
           totalTamboSin: totalTamboSin),
@@ -621,11 +614,12 @@ class _CalendarioState extends State<Calendario> {
                   Text(
                     DateFormat('dd/MM/yyyy').format(selectDay),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 1,
               ),
               mostarUt == true
@@ -635,7 +629,7 @@ class _CalendarioState extends State<Calendario> {
                         Text(
                           "TAMBOS CON INTERVENCIONES ($totalTamboCon)",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 11, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -648,7 +642,7 @@ class _CalendarioState extends State<Calendario> {
                         Text(
                           "TAMBOS SIN INTERVENCIONES ($totalTamboSin)",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 11, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -659,7 +653,7 @@ class _CalendarioState extends State<Calendario> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          "PORCENTAJE DE TAMBOS CON INT. (${porcentaje} %)",
+                          "PORCENTAJE DE TAMBOS CON INT. ($porcentaje %)",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 11,
@@ -981,7 +975,7 @@ class _CalendarioState extends State<Calendario> {
                                                           MainAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Container(
+                                                        SizedBox(
                                                           width: MediaQuery.of(
                                                                       context)
                                                                   .size
@@ -999,8 +993,7 @@ class _CalendarioState extends State<Calendario> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text:
-                                                                      '$tamboNm',
+                                                                  text: tamboNm,
                                                                   style:
                                                                       const TextStyle(
                                                                     fontWeight:
@@ -1024,9 +1017,9 @@ class _CalendarioState extends State<Calendario> {
                                                                 ),
                                                                 TextSpan(
                                                                     text:
-                                                                        "${event!.idLugarIntervencion == '1' ? 'DENTRO DEL TAMBO' : ''}"
-                                                                        "${event!.idLugarIntervencion == '2' ? 'FUERA DEL TAMBO' : ''}"
-                                                                        "${event!.idLugarIntervencion != '1' && event.idLugarIntervencion != '2' ? 'SIN VALOR' : ''}"),
+                                                                        "${event.idLugarIntervencion == '1' ? 'DENTRO DEL TAMBO' : ''}"
+                                                                        "${event.idLugarIntervencion == '2' ? 'FUERA DEL TAMBO' : ''}"
+                                                                        "${event.idLugarIntervencion != '1' && event.idLugarIntervencion != '2' ? 'SIN VALOR' : ''}"),
                                                               ],
                                                             ),
                                                           ),

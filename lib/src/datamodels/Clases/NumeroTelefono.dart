@@ -6,8 +6,8 @@ class ListarNumerosTelef {
   ListarNumerosTelef.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new NumerosTelef.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = NumerosTelef.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -28,7 +28,7 @@ class NumerosTelef {
   }
 
   factory NumerosTelef.fromJson(Map<String, dynamic> parsedJson) =>
-      new NumerosTelef(
+      NumerosTelef(
           numeroTelefono: parsedJson['numeroTelefono'],
           idNumeroTelefono: parsedJson['idNumeroTelefono']);
 

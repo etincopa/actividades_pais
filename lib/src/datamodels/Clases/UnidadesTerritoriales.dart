@@ -6,8 +6,8 @@ class ListarUnidadesTerritoriales {
   ListarUnidadesTerritoriales.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new UnidadesTerritoriales.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = UnidadesTerritoriales.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -31,7 +31,7 @@ class UnidadesTerritoriales {
   }
 
   factory UnidadesTerritoriales.fromJson(Map<String, dynamic> parsedJson) =>
-      new UnidadesTerritoriales(
+      UnidadesTerritoriales(
           unidadTerritorial: parsedJson['unidadTerritorial'],
           id_UnidadesTerritoriales: parsedJson['id_UnidadesTerritoriales']);
 

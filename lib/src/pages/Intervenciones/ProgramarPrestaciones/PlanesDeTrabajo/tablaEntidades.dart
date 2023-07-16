@@ -8,11 +8,13 @@ class TablaEntidades extends StatelessWidget {
     {'id': '4', 'nombre': 'Elemento 4'},
   ];
 
+  TablaEntidades({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tabla con acciones'),
+        title: const Text('Tabla con acciones'),
       ),
       body: ListView.builder(
         itemCount: data.length,
@@ -24,14 +26,14 @@ class TablaEntidades extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: () {
                     // Acción de editar
                     print('Editar elemento ${item['id']}');
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () {
                     // Acción de eliminar
                     print('Eliminar elemento ${item['id']}');

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class LegalAboutPage extends StatefulWidget {
+  const LegalAboutPage({super.key});
+
   @override
   _LegalAboutPageState createState() => _LegalAboutPageState();
 }
@@ -28,7 +30,7 @@ class _LegalAboutPageState extends State<LegalAboutPage> {
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   'Legal'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0),
@@ -39,15 +41,15 @@ class _LegalAboutPageState extends State<LegalAboutPage> {
                   children: <Widget>[
                     ListTile(
                       title: Text('TermsOfUse'.tr),
-                      trailing: Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right),
                     ),
                     ListTile(
                       title: Text('PrivacyPolicy'.tr),
-                      trailing: Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right),
                     ),
                     ListTile(
                       title: Text('Penalties'.tr),
-                      trailing: Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right),
                     ),
                   ],
                 ),

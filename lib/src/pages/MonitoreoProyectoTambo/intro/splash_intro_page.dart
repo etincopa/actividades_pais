@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
@@ -12,6 +11,8 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:get/get.dart';
 
 class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
+
   @override
   _SplashPageState createState() => _SplashPageState();
 }
@@ -65,7 +66,7 @@ class _SplashPageState extends State<SplashPage>
     if (cantidad == 0) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => LoginPage(),
+          builder: (_) => const LoginPage(),
         ),
       );
       //PantallaInicio
@@ -73,12 +74,13 @@ class _SplashPageState extends State<SplashPage>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => LoginPage(),
+          builder: (BuildContext context) => const LoginPage(),
         ),
       );
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
@@ -124,8 +126,10 @@ class _SplashPageState extends State<SplashPage>
 }
 
 class Home_Asis extends StatelessWidget {
+  const Home_Asis({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return HomePagePais();
+    return const HomePagePais();
   }
 }

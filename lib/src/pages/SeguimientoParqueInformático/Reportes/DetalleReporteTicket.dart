@@ -13,7 +13,7 @@ class DetalleReporte extends StatefulWidget {
 
   //FiltroTicketEquipo filtroTicketEquipo;
 
-  DetalleReporte(this.estado);
+  DetalleReporte(this.estado, {super.key});
 
   @override
   State<DetalleReporte> createState() => _DetalleReporteState();
@@ -101,7 +101,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
               );
             } else {
               final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.length == 0) {
+              if (listaPersonalAux!.isEmpty) {
                 return const Center(
                   child: Text(
                     'No hay informacion',
@@ -163,8 +163,8 @@ class _DetalleReporteState extends State<DetalleReporte> {
                               )),
                         )),
                     if (isLoading == true)
-                      new Center(
-                        child: const CircularProgressIndicator(),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                   ],
                 );
@@ -185,7 +185,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
         return AlertDialog(
           title: const Text("FILTRO"),
           content: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -222,7 +222,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
                             children: [
                               const Icon(Icons.account_balance_wallet_outlined,
                                   size: 15, color: Colors.grey),
-                              SizedBox(width: 13),
+                              const SizedBox(width: 13),
                               Expanded(
                                 child: Container(
                                   child: StatefulBuilder(builder:
@@ -232,10 +232,10 @@ class _DetalleReporteState extends State<DetalleReporte> {
                                         ListaPersonalSoporte>(
                                       isExpanded: true,
                                       items: snapshot.data?.map((user) {
-                                        return new DropdownMenuItem<
+                                        return DropdownMenuItem<
                                             ListaPersonalSoporte>(
                                           value: user,
-                                          child: new Text(
+                                          child: Text(
                                             user.nOMBREAPELLIDOS!,
                                             style:
                                             const TextStyle(fontSize: 10),
@@ -285,7 +285,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
                             children: [
                               const Icon(Icons.account_balance_wallet_outlined,
                                   size: 15, color: Colors.grey),
-                              SizedBox(width: 13),
+                              const SizedBox(width: 13),
                               Expanded(
                                 child: Container(
                                   child: StatefulBuilder(builder:
@@ -295,10 +295,10 @@ class _DetalleReporteState extends State<DetalleReporte> {
                                         ListaTicketEstado>(
                                       isExpanded: true,
                                       items: snapshot.data?.map((user) {
-                                        return new DropdownMenuItem<
+                                        return DropdownMenuItem<
                                             ListaTicketEstado>(
                                           value: user,
-                                          child: new Text(
+                                          child: Text(
                                             user.nombre!,
                                             style:
                                             const TextStyle(fontSize: 10),
@@ -336,7 +336,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue[600],
+                    backgroundColor: Colors.blue[600],
                   ),
                   onPressed: () async {
                     setState(() {
@@ -389,7 +389,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
         ],
       ));
 
-  Future<Null> resetlista() async {
+  Future<void> resetlista() async {
     seleccionarPersonal = "Seleccionar Personal";
     seleccionarEstado = "Seleccionar Estado";
     pageIndex = 1;
@@ -409,7 +409,7 @@ class _DetalleReporteState extends State<DetalleReporte> {
     });*/
   }
 
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     filtroTicketEquipo.pageSize = pageSize;
     filtroTicketEquipo.pageIndex = pageIndex;
     await Future.delayed(const Duration(seconds: 1));

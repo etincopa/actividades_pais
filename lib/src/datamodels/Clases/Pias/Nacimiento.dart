@@ -1,4 +1,3 @@
-import 'dart:io';
 
 class Nacimiento {
   int? id;
@@ -36,14 +35,14 @@ class Nacimiento {
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['idUsuario'] = this.idUsuario;
-    data['idParteDiario'] = this.idParteDiario;
-    data['detalle'] = this.detalle;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['idUsuario'] = idUsuario;
+    data['idParteDiario'] = idParteDiario;
+    data['detalle'] = detalle;
 
-    data['idUnicoReporte'] = this.idUnicoReporte;
-    data['idParteDiarioNacimiento'] = this.idParteDiarioNacimiento;
+    data['idUnicoReporte'] = idUnicoReporte;
+    data['idParteDiarioNacimiento'] = idParteDiarioNacimiento;
 
     return data;
   }

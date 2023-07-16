@@ -39,13 +39,13 @@ class ServicioProgramacionParticipante {
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['idProgramacionesParticipante'] = this.idProgramacionesParticipante;
-    data['id_programacion'] = this.id_programacion;
+    data['idProgramacionesParticipante'] = idProgramacionesParticipante;
+    data['id_programacion'] = id_programacion;
     data['id_programacion_participante_servicio'] =
-        this.id_programacion_participante_servicio;
-    data['idServicio'] = this.idServicio;
+        id_programacion_participante_servicio;
+    data['idServicio'] = idServicio;
     data['tipo'] = tipo;
     data['idUsuario'] = idUsuario;
     data['txtIpmaq'] = txtIpmaq;

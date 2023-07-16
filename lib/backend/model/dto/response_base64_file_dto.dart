@@ -13,7 +13,7 @@ class RespBase64FileDto {
   String? tipo = '';
   String? extension = '';
 
-  RespBase64FileDto.empty() {}
+  RespBase64FileDto.empty();
 
   RespBase64FileDto({
     this.nombreDocumento,

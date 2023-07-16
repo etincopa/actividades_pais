@@ -4,8 +4,8 @@ class ListarCcppes {
   ListarCcppes.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ListarCcpp.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ListarCcpp.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -24,10 +24,10 @@ class ListarCcpp {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ubigeo_ccpp'] = this.ubigeoCcpp;
-    data['nombre_ccpp'] = this.nombreCcpp;
-    data['snip'] = this.snip;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ubigeo_ccpp'] = ubigeoCcpp;
+    data['nombre_ccpp'] = nombreCcpp;
+    data['snip'] = snip;
     return data;
   }
 

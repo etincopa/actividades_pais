@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class SuspenderIntervencion extends StatefulWidget {
   String idProgramacion = "";
 
-  SuspenderIntervencion({this.idProgramacion =""});
+  SuspenderIntervencion({super.key, this.idProgramacion =""});
 
   @override
   State<SuspenderIntervencion> createState() => _SuspenderIntervencionState();
@@ -21,14 +21,14 @@ class _SuspenderIntervencionState extends State<SuspenderIntervencion> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Suspender Intervencion"),
+        title: const Text("Suspender Intervencion"),
       ),
       body: Form(
         key: _formKey,
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: ListView(children: [
-            Text(
+            const Text(
               "¿Por que desea suspender esta Intervencion? ",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -46,7 +46,7 @@ class _SuspenderIntervencionState extends State<SuspenderIntervencion> {
                 //setState(() {});
               },
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -64,10 +64,10 @@ class _SuspenderIntervencionState extends State<SuspenderIntervencion> {
                   child: SizedBox(
                     height: 40,
                     width: width / 3,
-                    child: Center(
+                    child: const Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           Icon(Icons.save),
                           Text(
                             'SUSPENDER',
@@ -91,10 +91,10 @@ class _SuspenderIntervencionState extends State<SuspenderIntervencion> {
                   child: SizedBox(
                     height: 40,
                     width: width / 3,
-                    child: Center(
+                    child: const Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
+                        children: [
                           Icon(Icons.cancel_presentation_outlined),
                           Text(
                             'CANCELAR',

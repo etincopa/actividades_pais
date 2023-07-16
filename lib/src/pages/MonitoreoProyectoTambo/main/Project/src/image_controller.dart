@@ -8,20 +8,8 @@ class ImageController extends GetxController {
   List<String> listImagePath = [];
   Map<String, List> itemsImagesAll = {};
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   Future<void> selectMultipleImage(String nameInputImage) async {
     images = await _picker.pickMultiImage();
@@ -30,12 +18,12 @@ class ImageController extends GetxController {
     if (images != null) {
       itemsImagesAll.forEach((key, items) {
         if (key == nameInputImage) {
-          items.forEach((entry) {
+          for (var entry in items) {
             if (count < 4 && listImagePath.length < 4) {
               listImagePath.add(entry);
             }
             count++;
-          });
+          }
         }
       });
       if (count < 4) {
@@ -68,12 +56,12 @@ class ImageController extends GetxController {
       if (imageFile != null) {
         itemsImagesAll.forEach((key, items) {
           if (key == nameInputImage) {
-            items.forEach((entry) {
+            for (var entry in items) {
               if (count < 4 && listImagePath.length < 4) {
                 listImagePath.add(entry);
               }
               count++;
-            });
+            }
           }
         });
         if (count < 4) {
@@ -107,9 +95,9 @@ class ImageController extends GetxController {
     itemsImagesAll.forEach((key, items) {
       if (key == nameInputImage) {
         items.remove(index);
-        items.forEach((entry) {
+        for (var entry in items) {
           listImagePath.add(entry);
-        });
+        }
       }
     });
     itemsImagesAll[nameInputImage] = listImagePath;

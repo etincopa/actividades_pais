@@ -23,7 +23,7 @@ class ListaTambosEstadoInternetModel {
   String? cidEstado;
   String? nomEstado;
 
-  ListaTambosEstadoInternetModel.empty() {}
+  ListaTambosEstadoInternetModel.empty();
 
   ListaTambosEstadoInternetModel({
     this.idUt,

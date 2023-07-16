@@ -14,7 +14,7 @@ import 'package:actividades_pais/util/app-config.dart';
 import 'package:logger/logger.dart';
 
 class ProviderServiciosRest {
-  Dio dio = new Dio();
+  Dio dio = Dio();
   final Logger _log = Logger();
 
   // ignore: non_constant_identifier_names
@@ -28,8 +28,7 @@ class ProviderServiciosRest {
     DatabasePr.db.initDB();
     var abc = await DatabasePr.db.getAllConfigPersonal();
     http.Response usuariodb = await http.get(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
+        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultaIdUsuarioxDni/${abc[0].numeroDni}'),
         headers: headers);
     final jsonResponse = json.decode(usuariodb.body);
     var usu = jsonResponse["response"][0]["id_usuario"];
@@ -77,8 +76,7 @@ class ProviderServiciosRest {
     reportePias.idUsuario = await user();
     print(jsonEncode(reportePias));
     http.Response response = await http.post(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/pias/app/registrarParteDiarioPiasMovil'),
+        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioPiasMovil'),
         body: jsonEncode(reportePias),
         headers: headers);
     if (response.statusCode == 200) {
@@ -99,8 +97,7 @@ class ProviderServiciosRest {
     actividadesPias.idUsuario = await user();
     actividadesPias.idParteDiario = listaParticipantes[0].idParteDiario;
     http.Response response = await http.post(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/pias/app/registrarParteDiarioActividadMovil'),
+        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioActividadMovil'),
         body: jsonEncode(actividadesPias),
         headers: headers);
     print("aquii ${response.body}");
@@ -119,8 +116,7 @@ class ProviderServiciosRest {
     atencion.idUsuario = await user();
     atencion.idParteDiario = listareportePias[0].idParteDiario;
     http.Response response = await http.post(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/pias/app/registrarParteDiarioAtencionesMovil'),
+        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioAtencionesMovil'),
         body: jsonEncode(atencion),
         headers: headers);
     print("jsonEncode(atencion) ${jsonEncode(atencion)}");
@@ -140,8 +136,7 @@ class ProviderServiciosRest {
     incidentesNovedadesPias.idUsuario = await user();
     incidentesNovedadesPias.idParteDiario = listareportePias[0].idParteDiario;
     http.Response response = await http.post(
-        Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/pias/app/registrarParteDiarioIncNovMovil'),
+        Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioIncNovMovil'),
         body: jsonEncode(incidentesNovedadesPias),
         headers: headers);
     print("aquii ${response.body}");
@@ -157,7 +152,7 @@ class ProviderServiciosRest {
     print('"idParteDiario":${listareportePias[0].idParteDiario},');
     var respuesta = 0;
     var request = http.MultipartRequest(
-        'POST', Uri.parse(AppConfig.backendsismonitor + '/upload/*'));
+        'POST', Uri.parse('${AppConfig.backendsismonitor}/upload/*'));
 
     request.fields.addAll({'storage': 'reportespias'});
     request.files.add(
@@ -183,8 +178,7 @@ class ProviderServiciosRest {
       print("=============>>>>>>");
 
       http.Response responsee = await http.post(
-          Uri.parse(AppConfig.urlBackndServicioSeguro +
-              '/api-pnpais/pias/app/registrarParteDiarioEvidencia'),
+          Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioEvidencia'),
           headers: headers,
           body: '{"path":"${jsonResponse["path"]}",'
               '"url":"${jsonResponse["url"]}",'
@@ -208,12 +202,10 @@ class ProviderServiciosRest {
       rspt[i].idParteDiario = listareportePias[0].idParteDiario;
       rspt[i].idUsuario = await user();
       http.Response response = await http.post(
-          Uri.parse(AppConfig.urlBackndServicioSeguro +
-              '/api-pnpais/pias/app/registrarParteDiarioNacimientoMovil'),
+          Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioNacimientoMovil'),
           body: jsonEncode(rspt[i]),
           headers: headers);
-      _log.i(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/pias/app/registrarParteDiarioNacimientoMovil');
+      _log.i('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioNacimientoMovil');
       _log.i(jsonEncode(rspt[i]));
       _log.i(response.body);
       rspt[i].idParteDiarioNacimiento =
@@ -229,7 +221,7 @@ class ProviderServiciosRest {
 
       for (var i = 0; i < img.length; i++) {
         var request = http.MultipartRequest(
-            'POST', Uri.parse(AppConfig.backendsismonitor + '/upload/*'));
+            'POST', Uri.parse('${AppConfig.backendsismonitor}/upload/*'));
         request.fields.addAll({'storage': 'reportespias'});
         request.files
             .add(await http.MultipartFile.fromPath('file', img[i].file!));
@@ -241,12 +233,10 @@ class ProviderServiciosRest {
         });
 
         _log.i(jsonResponse);
-        _log.i(Uri.parse(AppConfig.urlBackndServicioSeguro +
-            '/api-pnpais/pias/app/registrarParteDiarioNacimientoImagenMovil'));
+        _log.i(Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioNacimientoImagenMovil'));
 
         http.Response responses = await http.post(
-            Uri.parse(AppConfig.urlBackndServicioSeguro +
-                '/api-pnpais/pias/app/registrarParteDiarioNacimientoImagenMovil'),
+            Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/pias/app/registrarParteDiarioNacimientoImagenMovil'),
             headers: headers,
             body: '{"path":"${jsonResponse["path"]}",'
                 '"name":"${jsonResponse["name"]}",'
@@ -270,5 +260,6 @@ class ProviderServiciosRest {
       }
       return response.statusCode;
     }
+    return null;
   }
 }

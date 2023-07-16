@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class CombosFld {
   static String id = 'id';
@@ -33,7 +32,7 @@ class CombosDto {
   String? descrip = '';
   String? descrip2 = '';
 
-  CombosDto.empty() {}
+  CombosDto.empty();
 
   CombosDto({
     this.id,

@@ -1,22 +1,22 @@
 class FiltroIntervencionesTambos {
-  String? id="x";
+  String? id = "x";
   String? tipo;
   String? estado;
-  String? ut="x";
-  String? inicio ="x";
+  String? ut = "x";
+  String? inicio = "x";
   String? fin;
   String? mes;
   int? anio;
 
   FiltroIntervencionesTambos(
-      {this.id="x",
-        this.tipo="x",
-        this.estado="x",
-        this.ut="x",
-        this.inicio,
-        this.fin,
-        this.mes,
-        this.anio});
+      {this.id = "x",
+      this.tipo = "x",
+      this.estado = "x",
+      this.ut = "x",
+      this.inicio,
+      this.fin,
+      this.mes,
+      this.anio});
 
   FiltroIntervencionesTambos.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -30,15 +30,15 @@ class FiltroIntervencionesTambos {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['tipo'] = this.tipo;
-    data['estado'] = this.estado;
-    data['ut'] = this.ut;
-    data['inicio'] = this.inicio;
-    data['fin'] = this.fin;
-    data['mes'] = this.mes;
-    data['anio'] = this.anio;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['tipo'] = tipo;
+    data['estado'] = estado;
+    data['ut'] = ut;
+    data['inicio'] = inicio;
+    data['fin'] = fin;
+    data['mes'] = mes;
+    data['anio'] = anio;
     return data;
   }
 }

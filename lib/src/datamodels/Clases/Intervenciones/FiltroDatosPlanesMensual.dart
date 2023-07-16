@@ -27,14 +27,14 @@ class FiltroDataPlanMensual {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['estado'] = this.estado;
-    data['ut'] = this.ut;
-    data['pageIndex'] = this.pageIndex;
-    data['pageSize'] = this.pageSize;
-    data['inicio'] = this.inicio;
-    data['fin'] = this.fin;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['estado'] = estado;
+    data['ut'] = ut;
+    data['pageIndex'] = pageIndex;
+    data['pageSize'] = pageSize;
+    data['inicio'] = inicio;
+    data['fin'] = fin;
     return data;
   }
 }

@@ -2,7 +2,6 @@
 import 'package:actividades_pais/src/Utils/utils.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Participantes.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ParticipantesIntranet.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
@@ -10,19 +9,18 @@ import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/VerImagenes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CalificarIntervencion extends StatefulWidget {
   final Evento event;
 
-  CalificarIntervencion(this.event);
+  const CalificarIntervencion(this.event, {super.key});
 
   @override
   State<CalificarIntervencion> createState() => _CalificarIntervencionState();
 }
 
 class _CalificarIntervencionState extends State<CalificarIntervencion> {
-  List<bool> _isOpenList = List.generate(3, (_) => false);
+  final List<bool> _isOpenList = List.generate(3, (_) => false);
   final _controller = TextEditingController();
   final _controllerIntervencionPertenecea = TextEditingController();
   final _horaInicio = TextEditingController();
@@ -31,13 +29,13 @@ class _CalificarIntervencionState extends State<CalificarIntervencion> {
   String unidadTerritorial = '';
   var _maxLines = 1;
   Listas listas = Listas();
-  bool _isLoading = false;
-  List<Funcionarios>? _posts = [];
-  bool _showAddPageButton = true;
+  final bool _isLoading = false;
+  final List<Funcionarios> _posts = [];
+  final bool _showAddPageButton = true;
   bool isLoading = false;
   bool isMostar = false;
   var pageIndex = 1;
-  int _currentPage = 1;
+  final int _currentPage = 1;
   var controllerObservar = TextEditingController();
 
   var cantidadParticipantes = 0;
@@ -82,11 +80,11 @@ var idTipoIntervencion=0;
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     width: width / 4,
                     child: textoCampo("HORA INICIO", _horaInicio),
                   ),
-                  Container(
+                  SizedBox(
                     width: width / 4,
                     child: textoCampo("HORA FIN", _horaFin),
                   )
@@ -103,13 +101,13 @@ var idTipoIntervencion=0;
                   ),
                 );
               },
-              child: Container(
+              child: SizedBox(
                 height: 40,
                 width: width / 1,
-                child: Center(
+                child: const Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
+                    children: [
                       Icon(Icons.view_agenda_outlined),
                       Text(
                         'VER IMAGENES',
@@ -232,7 +230,7 @@ var idTipoIntervencion=0;
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Column(
@@ -243,20 +241,20 @@ var idTipoIntervencion=0;
                     ElevatedButton(
                       onPressed: () async {
                         showAlertDialog(context);
-                        await Future.delayed(Duration(seconds: 3));
+                        await Future.delayed(const Duration(seconds: 3));
 
                         if (puntuacionActual >= 1) {
                           Navigator.pop(context);
                           Navigator.pop(context, 'OK');
                         }
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: 40,
                         width: width / 3,
-                        child: Center(
+                        child: const Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
+                            children: [
                               Icon(Icons.playlist_add_check),
                               Text(
                                 'APROBAR',
@@ -287,13 +285,13 @@ var idTipoIntervencion=0;
                           Navigator.pop(context);
                         }, controllerObservar);
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: 40,
                         width: width / 3,
-                        child: Center(
+                        child: const Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
+                            children: [
                               Icon(Icons.calendar_month),
                               Text(
                                 'OBSERVAR',
@@ -312,7 +310,7 @@ var idTipoIntervencion=0;
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 /*   Row(
@@ -344,13 +342,13 @@ var idTipoIntervencion=0;
                       onPressed: () async {
                         Navigator.pop(context);
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: 40,
                         width: width / 2,
-                        child: Center(
+                        child: const Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
+                            children: [
                               Icon(Icons.assignment_return_outlined),
                               Text(
                                 'VOLVER AL CALENDARIO',
@@ -387,8 +385,8 @@ var idTipoIntervencion=0;
 
   showAlertDialog(BuildContext context) {
     Widget moButton = TextButton(
-        child: Row(
-          children: const [Text("Cancelar")],
+        child: const Row(
+          children: [Text("Cancelar")],
         ),
         onPressed: () {
           Navigator.pop(context);
@@ -403,9 +401,9 @@ var idTipoIntervencion=0;
               children: [moButton],
             )
           ],
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [Text("CALIFICAR")],
+            children: [Text("CALIFICAR")],
           ),
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter dropDownState) {
@@ -493,7 +491,7 @@ var idTipoIntervencion=0;
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            (_posts!.isNotEmpty)
+            (_posts.isNotEmpty)
                 ? const Icon(Icons.add_circle_outline_sharp, size: 50)
                 : const Center(
                     child: Text("¡No existen registros"),
@@ -504,7 +502,7 @@ var idTipoIntervencion=0;
     );
   }
 
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     // filtroDataPlanMensual.pageSize = pageSize;
     // filtroDataPlanMensual.pageIndex = pageIndex;
     setState(() {});

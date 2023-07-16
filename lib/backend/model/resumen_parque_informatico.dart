@@ -9,7 +9,7 @@ class ResumenParqueInformatico {
   String? estado;
   int? cantidad;
 
-  ResumenParqueInformatico.empty() {}
+  ResumenParqueInformatico.empty();
 
   ResumenParqueInformatico({
     this.descripcion,

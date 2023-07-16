@@ -17,7 +17,7 @@ class _ReprogramarFechaState extends State<ReprogramarFecha> {
 
   var controllerDescripcion = TextEditingController();
   DateTime _selectedDate = DateTime.now();
-  var _curremtime = TimeOfDay.now();
+  final _curremtime = TimeOfDay.now();
   TextEditingController controllerFecha = TextEditingController();
 
   var controllerHoraIni = TextEditingController();
@@ -41,12 +41,12 @@ class _ReprogramarFechaState extends State<ReprogramarFecha> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reprogramar Fecha"),
+        title: const Text("Reprogramar Fecha"),
       ),
       body: Form(
         key: _formKey,
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: ListView(children: [
             TextFormField(
               controller: controllerFecha,
@@ -142,7 +142,7 @@ class _ReprogramarFechaState extends State<ReprogramarFecha> {
             ),
             const SizedBox(height: 16.0),
             Container(
-              margin: EdgeInsets.only(bottom: 16),
+              margin: const EdgeInsets.only(bottom: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -161,10 +161,10 @@ class _ReprogramarFechaState extends State<ReprogramarFecha> {
                           labelStyle: TextStyle(
                             color: Colors.grey[600],
                           ),
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          border: const OutlineInputBorder(),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         ),
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             value: '1',
                             child: Text('Local'),
@@ -203,10 +203,10 @@ class _ReprogramarFechaState extends State<ReprogramarFecha> {
               child: SizedBox(
                 height: 40,
                 width: width / 2,
-                child: Center(
+                child: const Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
+                    children: [
                       Icon(Icons.save),
                       Text(
                         'GUARDAR FECHA',

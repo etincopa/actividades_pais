@@ -1,15 +1,16 @@
 import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
 
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/src/pages/configuracion/ConfiguracionInicial.dart';
 
 class PantallaInicio extends StatefulWidget {
+  const PantallaInicio({super.key});
+
   @override
   _PantallaInicioState createState() => _PantallaInicioState();
 }
 
 class _PantallaInicioState extends State<PantallaInicio> {
-  ProviderServicios providerServicios = new ProviderServicios();
+  ProviderServicios providerServicios = ProviderServicios();
   // ProviderServicios providerServicios = new ProviderServicios();
   @override
   void initState() {
@@ -59,7 +60,7 @@ class _PantallaInicioState extends State<PantallaInicio> {
     return Scaffold(
       body: Container(
         color: Colors.blue,
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

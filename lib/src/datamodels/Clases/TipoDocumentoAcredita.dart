@@ -11,9 +11,9 @@ class TipoDocumentoAcredita {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_documento_acredita'] = this.idDocumentoAcredita;
-    data['nombre_documento_acredita'] = this.nombreDocumentoAcredita;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_documento_acredita'] = idDocumentoAcredita;
+    data['nombre_documento_acredita'] = nombreDocumentoAcredita;
     return data;
   }
 }

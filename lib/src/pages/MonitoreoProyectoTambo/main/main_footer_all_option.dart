@@ -7,6 +7,8 @@ import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/p
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Settings/main_footer_setting_page.dart';
 
 class MainFooterAllOptionPage extends StatefulWidget {
+  const MainFooterAllOptionPage({super.key});
+
   @override
   _MainFooterAllOptionPageState createState() =>
       _MainFooterAllOptionPageState();
@@ -23,7 +25,7 @@ class _MainFooterAllOptionPageState extends State<MainFooterAllOptionPage>
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 260),
+      duration: const Duration(milliseconds: 260),
     );
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _controller!);

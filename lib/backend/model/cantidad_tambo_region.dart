@@ -15,7 +15,7 @@ class CantidadTamboRegion {
   String? cp;
   String? distritos;
 
-  CantidadTamboRegion.empty() {}
+  CantidadTamboRegion.empty();
 
   CantidadTamboRegion(
       {this.departamentoID,

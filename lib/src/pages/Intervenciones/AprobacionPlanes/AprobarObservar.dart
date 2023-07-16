@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class AprobarObservar extends StatefulWidget {
   DatosPlanMensual datosPlanMensual;
 
-  AprobarObservar(this.datosPlanMensual);
+  AprobarObservar(this.datosPlanMensual, {super.key});
 
   @override
   State<AprobarObservar> createState() => _AprobarObservarState();
@@ -72,9 +72,9 @@ class _AprobarObservarState extends State<AprobarObservar> {
     }
     controllerCODIGO_PLAN.text = resp.codigoPlan.toString();
     if (resp.idEvaluacion == "0") {
-      this.mostrarboton = true;
+      mostrarboton = true;
     } else {
-      this.mostrarboton = false;
+      mostrarboton = false;
     }
     setState(() {});
   }
@@ -88,16 +88,16 @@ class _AprobarObservarState extends State<AprobarObservar> {
           backgroundColor: AppConfig.primaryColor,
           title: Text(
             "DETALLE DE LA INTERVENCION ${widget.datosPlanMensual.idProgramacion}",
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           )),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: ListView(
           children: [
             TextField(
               controller: controllerTIPO_PLAN,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'TIPO PLAN',
                 hintText: 'TIPO PLAN',
               ),
@@ -105,7 +105,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerCODIGO_PLAN,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'CODIGO PLAN',
                 hintText: 'CODIGO PLAN',
               ),
@@ -113,7 +113,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerPlataforma,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'PLATAFORMA',
                 hintText: 'PLATAFORMA',
               ),
@@ -121,7 +121,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerFECHA,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'FECHA',
                 hintText: 'FECHA',
               ),
@@ -129,7 +129,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerHORAINICIO,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'HORA INICIO',
                 hintText: 'HORA INICIO',
               ),
@@ -137,7 +137,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerHORAFIN,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'HORA FIN',
                 hintText: 'HORA FIN',
               ),
@@ -145,7 +145,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerLUGAR_INTERVENCION,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'LUGAR_INTERVENCION',
                 hintText: 'LUGAR_INTERVENCION',
               ),
@@ -153,7 +153,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerDOCUMENTO_ACREDITA,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'DOCUMENTO_ACREDITA',
                 hintText: 'DOCUMENTO_ACREDITA',
               ),
@@ -161,7 +161,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerTIPO_INTERVENCION,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'TIPO DE INTERVENCION',
                 hintText: 'TIPO DE INTERVENCION',
               ),
@@ -169,7 +169,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerGOBIERNO,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'GOBIERNO',
                 hintText: 'GOBIERNO',
               ),
@@ -177,7 +177,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerSECTOR,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'SECTOR',
                 hintText: 'SECTOR',
               ),
@@ -185,7 +185,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerPROGRAMA,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'PROGRAMA',
                 hintText: 'PROGRAMA',
               ),
@@ -193,7 +193,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerCATEGORIA,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'CATEGORIA',
                 hintText: 'CATEGORIA',
               ),
@@ -201,7 +201,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerSUBCATEGORIA,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'SUBCATEGORIA',
                 hintText: 'SUBCATEGORIA',
               ),
@@ -209,7 +209,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerACTIVIDAD,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'ACTIVIDAD',
                 hintText: 'ACTIVIDAD',
               ),
@@ -217,13 +217,13 @@ class _AprobarObservarState extends State<AprobarObservar> {
             TextField(
               controller: controllerSERVICIO,
               enabled: false,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'SERVICIO',
                 hintText: 'SERVICIO',
               ),
             ),
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'DESCRIPCION',
                 hintText: 'DESCRIPCION',
               ),
@@ -241,17 +241,17 @@ class _AprobarObservarState extends State<AprobarObservar> {
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 18,
             ),
             mostrarboton
                 ? Column(
                     children: [
-                      Text(
+                      const Text(
                         "¿ QUE ACCION DESEA EJECUTAR ?",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -274,7 +274,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
                                 Navigator.pop(context);
                               }, "¿Está seguro de aprobar essta programación?");
                             },
-                            child: Container(
+                            child: SizedBox(
                               height: 40,
                               width: width / 3.5,
                               child: const Center(
@@ -293,8 +293,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Color.fromARGB(255, 237, 82, 68),
-                              onPrimary: Colors.white,
+                              foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 237, 82, 68),
                               shadowColor:
                                   const Color.fromARGB(255, 53, 53, 53),
                               elevation: 5,
@@ -317,7 +316,7 @@ class _AprobarObservarState extends State<AprobarObservar> {
                                 Navigator.pop(context);
                               }, controllerObservar);
                             },
-                            child: Container(
+                            child: SizedBox(
                               height: 40,
                               width: width / 3.5,
                               child: const Center(
@@ -338,8 +337,8 @@ class _AprobarObservarState extends State<AprobarObservar> {
                       ),
                     ],
                   )
-                : new Container(),
-            ButtonBar()
+                : Container(),
+            const ButtonBar()
           ],
         ),
       ),

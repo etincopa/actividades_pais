@@ -39,7 +39,7 @@ class GuardianiaTamboModel {
   String? fecInicioContrato = '';
   String? fecFinalContrato = '';
 
-  GuardianiaTamboModel.empty() {}
+  GuardianiaTamboModel.empty();
 
   GuardianiaTamboModel({
     this.idTambo,

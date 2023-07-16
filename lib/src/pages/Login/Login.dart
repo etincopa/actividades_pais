@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Login/politicas.dart';
@@ -31,6 +30,8 @@ bool? bRepeat = false;
 MainController mainController = MainController();
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -222,7 +223,7 @@ class __FormState extends State<_Form> {
             OneSignal.shared.setSubscriptionObserver(
                 (OSSubscriptionStateChanges changes) async {
               String onesignalUserId = changes.to.userId ?? '';
-              print('Player ID CHANGED: ' + onesignalUserId);
+              print('Player ID CHANGED: $onesignalUserId');
               tocken.tocken = onesignalUserId;
               await mainCtr.insertarTockenUsuario(tockens: tocken);
             });
@@ -230,7 +231,7 @@ class __FormState extends State<_Form> {
             BusyIndicator.hide(context);
 
             await Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => HomePagePais()),
+              MaterialPageRoute(builder: (_) => const HomePagePais()),
             );
           }
         } catch (oError) {
@@ -268,7 +269,7 @@ class __FormState extends State<_Form> {
           InkWell(
             onTap: () {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => ResetContrasenia()),
+                MaterialPageRoute(builder: (_) => const ResetContrasenia()),
               );
             },
             child: const Text(

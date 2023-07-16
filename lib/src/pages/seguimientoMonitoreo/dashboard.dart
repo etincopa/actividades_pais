@@ -138,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => HomePagePais(),
+                builder: (BuildContext context) => const HomePagePais(),
               ));
         },
         iconAct: Icons.restart_alt_outlined,
@@ -212,12 +212,12 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             alignment: ChartAlignment.center,
                           ),
-                          legend: Legend(
+                          legend: const Legend(
                             isVisible: true,
                             position: LegendPosition.right,
                             orientation: LegendItemOrientation.vertical,
                             overflowMode: LegendItemOverflowMode.wrap,
-                            textStyle: const TextStyle(
+                            textStyle: TextStyle(
                               color: color_07,
                             ),
                           ),
@@ -309,6 +309,7 @@ class _DashboardState extends State<Dashboard> {
                                   if (states.contains(MaterialState.pressed)) {
                                     return colorI; // <-- Splash color
                                   }
+                                  return null;
                                 }),
                               ),
                               child: const Icon(

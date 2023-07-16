@@ -1,12 +1,8 @@
-import 'dart:convert';
 
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
-import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/util/app-config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
 class ActividadesGit extends StatefulWidget {
   const ActividadesGit({Key? key}) : super(key: key);
@@ -24,7 +20,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
   TextEditingController controllerHoraFin = TextEditingController();
   var controllerDescripcion = TextEditingController();
   DateTime _selectedDate = DateTime.now();
-  var _curremtime = TimeOfDay.now();
+  final _curremtime = TimeOfDay.now();
 
   @override
   void initState() {
@@ -70,7 +66,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
                     hintText: 'Seleccione una hora',
                     prefixIcon: Icons.access_time,
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   buildTimeFormField(
                     controller: controllerHoraFin,
                     labelText: 'Hora Fin',
@@ -108,7 +104,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.save),
                         style: ElevatedButton.styleFrom(
-                            primary: AppConfig.primaryColor,
+                            backgroundColor: AppConfig.primaryColor,
                             //   shadowColor:
                             textStyle: const TextStyle(fontSize: 16),
                             minimumSize: const Size.fromHeight(72),
@@ -125,7 +121,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
                       icon: const Icon(Icons.settings_backup_restore),
                       label: const Text('CANCELAR'),
                       style: ElevatedButton.styleFrom(
-                        primary: AppConfig.primaryColor,
+                        backgroundColor: AppConfig.primaryColor,
                         textStyle: const TextStyle(fontSize: 16),
                         minimumSize: const Size.fromHeight(72),
                         shape: const StadiumBorder(),
@@ -214,7 +210,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         final List<Map<String, dynamic>> actividades = snapshot.data!;
         return DropdownButtonFormField<String>(
@@ -234,7 +230,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
             });
             // Do something with the selected value
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Tipo de actividad',
 
           ),
@@ -250,7 +246,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         final List<Map<String, dynamic>> actividades = snapshot.data!;
         return DropdownButtonFormField<String>(
@@ -264,7 +260,7 @@ class _ActividadesGitState extends State<ActividadesGit> {
           onChanged: (String? newValue) {
             // Do something with the selected value
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Servicios',
 
           ),

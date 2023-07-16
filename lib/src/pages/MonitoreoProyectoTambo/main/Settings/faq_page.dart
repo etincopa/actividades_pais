@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class FaqPage extends StatefulWidget {
+  const FaqPage({super.key});
+
   @override
   _FaqPageState createState() => _FaqPageState();
 }
@@ -34,7 +36,7 @@ class _FaqPageState extends State<FaqPage> {
                     left: 24.0, right: 24.0, bottom: 16.0),
                 child: Text(
                   'FrequentlyAskedQuestions'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0),
@@ -51,10 +53,10 @@ class _FaqPageState extends State<FaqPage> {
                           ),
                           children: [
                             Container(
-                                padding: EdgeInsets.all(16.0),
-                                color: Color(0xffFAF1E2),
+                                padding: const EdgeInsets.all(16.0),
+                                color: const Color(0xffFAF1E2),
                                 child: Text(panel.content,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.grey, fontSize: 12)))
                           ]))
                   .toList(),

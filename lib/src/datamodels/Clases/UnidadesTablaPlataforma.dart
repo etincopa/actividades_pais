@@ -1,4 +1,3 @@
-import 'package:sqflite/sqflite.dart';
 
 class ListarUnidadesTablaPlataforma {
   List<UnidadesTablaPlataforma> items = [];
@@ -6,9 +5,9 @@ class ListarUnidadesTablaPlataforma {
   ListarUnidadesTablaPlataforma.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual =
-          new UnidadesTablaPlataforma.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual =
+          UnidadesTablaPlataforma.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -59,7 +58,7 @@ class UnidadesTablaPlataforma {
   }
 
   factory UnidadesTablaPlataforma.fromJson(Map<String, dynamic> parsedJson) =>
-      new UnidadesTablaPlataforma(
+      UnidadesTablaPlataforma(
         ID_UNIDAD_TERRITORIAL: parsedJson['ID_UNIDAD_TERRITORIAL'],
         SNIP: parsedJson['SNIP'],
         UBIGEO_CCPP: parsedJson['UBIGEO_CCPP'],

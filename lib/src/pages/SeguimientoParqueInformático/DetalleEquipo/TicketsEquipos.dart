@@ -1,5 +1,4 @@
 import 'package:actividades_pais/src/datamodels/Clases/Uti/FiltroTicketEquipo.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaMarca.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaPersonalSoporte.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEquipos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Uti/ListaTicketEstado.dart';
@@ -13,7 +12,7 @@ class TicketsEquipos extends StatefulWidget {
   // FiltroTicketEquipo filtroTicketEquipo;
   FiltroTicketEquipo filtroTicketEquipo;
 
-  TicketsEquipos(this.filtroTicketEquipo);
+  TicketsEquipos(this.filtroTicketEquipo, {super.key});
 
   @override
   State<TicketsEquipos> createState() => _TicketsEquiposState();
@@ -66,7 +65,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
           onPressed: () {
             _showAddNoteDialog(context);
           },
-          child: InkWell(
+          child: const InkWell(
             child: Icon(Icons.filter_alt_outlined),
           )),
       body: FutureBuilder<List<ListaEquiposInformaticosTicket>>(
@@ -82,7 +81,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
               );
             } else {
               final listaPersonalAux = snapshot.data;
-              if (listaPersonalAux!.length == 0) {
+              if (listaPersonalAux!.isEmpty) {
                 return const Center(
                   child: Text(
                     'No hay informacion',
@@ -144,8 +143,8 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                           )),
                     )),
                     if (isLoading == true)
-                      new Center(
-                        child: const CircularProgressIndicator(),
+                      const Center(
+                        child: CircularProgressIndicator(),
                       )
                   ],
                 );
@@ -166,7 +165,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
         return AlertDialog(
           title: const Text("FILTRO"),
           content: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -203,7 +202,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                             children: [
                               const Icon(Icons.account_balance_wallet_outlined,
                                   size: 15, color: Colors.grey),
-                              SizedBox(width: 13),
+                              const SizedBox(width: 13),
                               Expanded(
                                 child: Container(
                                   child: StatefulBuilder(builder:
@@ -213,10 +212,10 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                                         ListaPersonalSoporte>(
                                       isExpanded: true,
                                       items: snapshot.data?.map((user) {
-                                        return new DropdownMenuItem<
+                                        return DropdownMenuItem<
                                             ListaPersonalSoporte>(
                                           value: user,
-                                          child: new Text(
+                                          child: Text(
                                             user.nOMBREAPELLIDOS!,
                                             style:
                                                 const TextStyle(fontSize: 10),
@@ -266,7 +265,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                             children: [
                               const Icon(Icons.account_balance_wallet_outlined,
                                   size: 15, color: Colors.grey),
-                              SizedBox(width: 13),
+                              const SizedBox(width: 13),
                               Expanded(
                                 child: Container(
                                   child: StatefulBuilder(builder:
@@ -276,10 +275,10 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                                         ListaTicketEstado>(
                                       isExpanded: true,
                                       items: snapshot.data?.map((user) {
-                                        return new DropdownMenuItem<
+                                        return DropdownMenuItem<
                                             ListaTicketEstado>(
                                           value: user,
-                                          child: new Text(
+                                          child: Text(
                                             user.nombre!,
                                             style:
                                                 const TextStyle(fontSize: 10),
@@ -317,7 +316,7 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue[600],
+                    backgroundColor: Colors.blue[600],
                   ),
                   onPressed: () async {
                     setState(() {
@@ -387,13 +386,13 @@ class _TicketsEquiposState extends State<TicketsEquipos> {
       ));
 
 
-  Future<Null> resetlista() async {
+  Future<void> resetlista() async {
    seleccionarPersonal = "Seleccionar Personal";
     seleccionarEstado = "Seleccionar Estado";
      pageIndex = 1;
   }
 
-  Future<Null> traerPaguinado(pageSize, pageIndex) async {
+  Future<void> traerPaguinado(pageSize, pageIndex) async {
     widget.filtroTicketEquipo.pageSize = pageSize;
     widget.filtroTicketEquipo.pageIndex = pageIndex;
     await Future.delayed(const Duration(seconds: 1));

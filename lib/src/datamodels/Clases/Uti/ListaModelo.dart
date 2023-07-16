@@ -6,8 +6,8 @@ class ListaModelos {
   ListaModelos.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new Modelo.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = Modelo.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -26,10 +26,10 @@ class Modelo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_modelo'] = this.idModelo;
-    data['descripcion_modelo'] = this.descripcionModelo;
-    data['id_marca'] = this.idMarca;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_modelo'] = idModelo;
+    data['descripcion_modelo'] = descripcionModelo;
+    data['id_marca'] = idMarca;
     return data;
   }
 }

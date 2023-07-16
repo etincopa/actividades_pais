@@ -6,8 +6,8 @@ class ListarProveedores {
   ListarProveedores.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new Proveedores.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = Proveedores.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -29,11 +29,11 @@ class Proveedores {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idProveedor'] = this.idProveedor;
-    data['CID_DOCUMENTO'] = this.cIDDOCUMENTO;
-    data['proveedor'] = this.proveedor;
-    data['telefono'] = this.telefono;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idProveedor'] = idProveedor;
+    data['CID_DOCUMENTO'] = cIDDOCUMENTO;
+    data['proveedor'] = proveedor;
+    data['telefono'] = telefono;
     return data;
   }
 }

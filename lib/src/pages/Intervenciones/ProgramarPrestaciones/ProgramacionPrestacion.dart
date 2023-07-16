@@ -1,13 +1,10 @@
 import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
-import 'package:actividades_pais/src/datamodels/Clases/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
-import 'package:actividades_pais/src/datamodels/Provider/ProviderServicios.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ReprogramarFecha.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/SuspenderIntervencion.dart';
 import 'package:actividades_pais/util/app-config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 
@@ -16,19 +13,19 @@ import '../Intervenciones.dart';
 class ProgramacionPrestacion extends StatefulWidget {
   Evento event;
 
-  ProgramacionPrestacion(this.event);
+  ProgramacionPrestacion(this.event, {super.key});
 
   @override
   State<ProgramacionPrestacion> createState() => _ProgramacionPrestacionState();
 }
 
 class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
-  var _controllerCooperacionInternacional = TextEditingController();
-  var _controllerSector = TextEditingController();
-  var _controllerEntidad = TextEditingController();
-  var _controllerActividad = TextEditingController();
-  var _controllerServicio = TextEditingController();
-  var _controllerDescripn = TextEditingController();
+  final _controllerCooperacionInternacional = TextEditingController();
+  final _controllerSector = TextEditingController();
+  final _controllerEntidad = TextEditingController();
+  final _controllerActividad = TextEditingController();
+  final _controllerServicio = TextEditingController();
+  final _controllerDescripn = TextEditingController();
   var nombreTambo = '';
 
   var hora_inicio = '';
@@ -74,7 +71,7 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("PROGRAMACIÓN DE PRESTACION"),
+        title: const Text("PROGRAMACIÓN DE PRESTACION"),
         backgroundColor: AppConfig.primaryColor,
         centerTitle: true,
       ),
@@ -148,7 +145,7 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
               )
             : Container(),
         Container(
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             textoCampo("GOBIERNO", _controllerCooperacionInternacional),
@@ -157,7 +154,7 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
             textoCampo("ACTIVIDAD", _controllerActividad),
             textoCampo("SERVICIO", _controllerServicio),
             textoCampo("DESCRIPCION", _controllerDescripn),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             if (id_evaluacion == "1") ...[
@@ -183,11 +180,11 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
                               child: SizedBox(
                                 height: 40,
                                 width: width / 3,
-                                child: Center(
+                                child: const Center(
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
-                                    children: const [
+                                    children: [
                                       Icon(Icons.playlist_add_check),
                                       Text(
                                         'EJECCUCIÓN',
@@ -218,11 +215,11 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
                               child: SizedBox(
                                 height: 40,
                                 width: width / 3,
-                                child: Center(
+                                child: const Center(
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
-                                    children: const [
+                                    children: [
                                       Icon(Icons.calendar_month),
                                       Text(
                                         'REPROGRAMAR',
@@ -259,11 +256,11 @@ class _ProgramacionPrestacionState extends State<ProgramacionPrestacion> {
                               child: SizedBox(
                                 height: 40,
                                 width: width / 3,
-                                child: Center(
+                                child: const Center(
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
-                                    children: const [
+                                    children: [
                                       Icon(Icons.stop),
                                       Text(
                                         'SUSPENDER',

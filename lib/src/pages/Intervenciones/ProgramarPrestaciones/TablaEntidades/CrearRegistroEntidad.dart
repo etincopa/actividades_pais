@@ -1,16 +1,14 @@
-import 'package:actividades_pais/src/Utils/utils.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/GuardarIntervencion.dart';
 import 'package:actividades_pais/src/datamodels/Clases/ListaTipoGobierno.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/TablaEntidades/AgregarEntidad.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CrearRegistroEntidad extends StatefulWidget {
  // const CrearRegistroEntidad(bool ismostar, {Key? key}) : super(key: key);
   bool ismostar=false;
-  CrearRegistroEntidad( this.ismostar);
+  CrearRegistroEntidad( this.ismostar, {super.key});
 
   @override
   State<CrearRegistroEntidad> createState() => _CrearRegistroEntidadState();
@@ -34,7 +32,7 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
   List<TipoGobierno> tipoGobierno = [];
   List<DataRow> dataRows = [];
   bool _isActivo = true;
-  bool _ismostar= false;
+  final bool _ismostar= false;
   Future traertota() async {
     await Future.delayed(const Duration(seconds: 10));
     // var a = await DatabaseDRC.db.traersumatotal();
@@ -110,39 +108,39 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
                     ),
                   ),
                 ),
-                columns: [
+                columns: const [
                   DataColumn(
-                      label: Container(
+                      label: SizedBox(
                     width: 70,
-                    child: const Text('Usuario',
+                    child: Text('Usuario',
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.bold)),
                   )),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Sector',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Programa',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Categoria',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Sub Categoria',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Actividad',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Servicio',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
-                  const DataColumn(
+                  DataColumn(
                       label: Text('Accion',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold))),
@@ -160,9 +158,9 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
         //  key: ValueKey(data.id),
         cells: [
           DataCell(Text(data.usuario!)),
-          DataCell(Text("${data.sector!}")),
+          DataCell(Text(data.sector!)),
           DataCell(Text(data.programa!)),
-          DataCell(Text("${data.categoria!}")),
+          DataCell(Text(data.categoria!)),
           DataCell(Text(data.subcategoria!)),
           DataCell(Text(data.actividad!)),
           DataCell(Text(data.servicio!), onTap: () {
@@ -281,7 +279,7 @@ class _CrearRegistroEntidadState extends State<CrearRegistroEntidad> {
         elevation: 1.0,
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.green,
-        child: Container(
+        child: SizedBox(
           height: 20.0,
           width: 20.0,
           child: MaterialButton(

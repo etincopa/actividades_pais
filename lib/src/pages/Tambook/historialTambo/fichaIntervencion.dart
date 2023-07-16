@@ -1,17 +1,8 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/util_pdf.dart';
 import 'package:actividades_pais/util/app-config.dart';
-import 'package:actividades_pais/util/busy-indicator.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
-import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +10,7 @@ class FichaIntervencion extends StatefulWidget {
   int idIntervencion = 0;
   String fechaEjecucion = '';
 
-  FichaIntervencion(this.idIntervencion, this.fechaEjecucion);
+  FichaIntervencion(this.idIntervencion, this.fechaEjecucion, {super.key});
 
   @override
   State<FichaIntervencion> createState() => _FichaIntervencionState();
@@ -41,7 +32,7 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
 
   Future<Uint8List> _downloadPDF(String idIntervencion) async {
     final url =
-        AppConfig.backendsismonitor+'/reportesintervenciones/exportar-ficha-pdf?data=$idIntervencion';
+        '${AppConfig.backendsismonitor}/reportesintervenciones/exportar-ficha-pdf?data=$idIntervencion';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return response.bodyBytes;
@@ -73,7 +64,7 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

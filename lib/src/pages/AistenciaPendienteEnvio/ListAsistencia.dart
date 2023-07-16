@@ -3,14 +3,11 @@ import 'dart:io';
 
 import 'package:actividades_pais/src/datamodels/Clases/AsistenciaModel.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
-import 'package:actividades_pais/src/datamodels/Provider/connection_status_model.dart';
 
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_3des/flutter_3des.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 //import 'package:sendsms/sendsms.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +17,8 @@ import 'package:http/http.dart' as http;
 ///import 'package:sendsms/sendsms.dart';
 
 class ListaasistenciaPage extends StatefulWidget {
+  const ListaasistenciaPage({super.key});
+
   @override
   State<ListaasistenciaPage> createState() => _ListaasistenciaPageState();
 }
@@ -35,7 +34,7 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
   //late StreamSubscription<ConnectivityResult> conexciosubscription;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription conexciosubscription;
-  ProviderDatos _provider = ProviderDatos();
+  final ProviderDatos _provider = ProviderDatos();
   //final Connectivity _conct = new Connectivity();
 
   bool _isOnline = true;
@@ -48,7 +47,7 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
     });
 
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         _isOnline = true;
@@ -61,8 +60,8 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
   }
 
   var datas = 0;
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 1));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 1));
     var a = await DatabasePr.db.listaraEstado();
     setState(() {
       DatabasePr.db.listarasistencia();
@@ -113,11 +112,11 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: Colors.indigo[900],
-          title: Text(
+          title: const Text(
             'Sincronizar Registros',
             style: TextStyle(color: Colors.white),
           ),
@@ -165,8 +164,8 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
                       ),
                     );
                   },
-                  child: Icon(Icons.send_and_archive)),
-            SizedBox(
+                  child: const Icon(Icons.send_and_archive)),
+            const SizedBox(
               width: 10,
             )
           ],
@@ -177,19 +176,19 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
               AsyncSnapshot<List<AsistenciaModel>> snapshot) {
             if (!snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros!"),
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             }
             final listaPersonalAux = snapshot.data;
 
-            if (listaPersonalAux?.length == 0) {
-              return Center(
+            if (listaPersonalAux!.isEmpty) {
+              return const Center(
                 child: Text("No hay informacion"),
               );
             } else {
@@ -325,18 +324,18 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
 
   Widget buildSwipeActionLeft() => Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.green,
-      child: Icon(
+      child: const Icon(
         Icons.check_box,
         color: Colors.white,
         size: 32,
       ));
   Widget buildSwipeActionRigth() => Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.red,
-      child: Icon(
+      child: const Icon(
         Icons.delete,
         color: Colors.white,
         size: 32,
@@ -351,20 +350,20 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
       vbans = true;
     }
     return ListTile(
-      leading: CircleAvatar(
-        child: Icon(Icons.calendar_today_outlined),
+      leading: const CircleAvatar(
         backgroundColor: Colors.white,
+        child: Icon(Icons.calendar_today_outlined),
       ),
-      title: Text(band.tipoasistencia + '->' + band.fechaHora,
-          style: TextStyle(fontSize: 12)),
-      subtitle: new Text('${band.tipohor} ${band.imei}',
-          style: TextStyle(fontSize: 13)),
+      title: Text('${band.tipoasistencia}->${band.fechaHora}',
+          style: const TextStyle(fontSize: 12)),
+      subtitle: Text('${band.tipohor} ${band.imei}',
+          style: const TextStyle(fontSize: 13)),
       trailing: vbans
           ? Icon(
               Icons.settings_backup_restore,
               color: Colors.green[700],
             )
-          : Icon(
+          : const Icon(
               Icons.settings_backup_restore,
               color: Colors.grey,
             ),
@@ -477,9 +476,9 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
       idLugarPrestacion,
       idUnidadOrganica,
       id}) async {
-    String _text =
+    String text =
         "$snip/$tipoTrabajo/0/$dni/$tipoCheck/$latitud/$longitud/${DateTime.now()}/$idLugarPrestacion/$idUnidadOrganica";
-    _encryptHex = await Flutter3des.encryptToHex(_text, _key, iv: _iv);
+    _encryptHex = await Flutter3des.encryptToHex(text, _key, iv: _iv);
 
     setState(() {
       traerNumerosTelf(encriptado: _encryptHex, id: id);
@@ -523,8 +522,8 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
                 ' "id_unidad_territorial" : 0,'
                 '  "dni" : "$dni",'
                 '  "tipo_check" : "$tipoCheck",'
-                '   "latitud" : "${latitud}",'
-                ' "longitud" : "${longitud}",'
+                '   "latitud" : "$latitud",'
+                ' "longitud" : "$longitud",'
                 '  "fecha_hora" : "$fechaHora",'
                 ' "id_lugar_prestacion" : "$idLugarPrestacion",'
                 ' "id_unidad_organica": "$idUnidadOrganica"'
@@ -613,18 +612,18 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
         elevation: 1.0,
         borderRadius: BorderRadius.circular(20.0),
         color: Colors.red,
-        child: Container(
+        child: SizedBox(
           height: 20.0,
           width: 20.0,
           child: MaterialButton(
             minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             onPressed: () async {
               //   LoginUser(email.text, password.text);
             },
             child: Text("Eliminar",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0)
+                style: const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0)
                     .copyWith(
                         color: Colors.white, fontWeight: FontWeight.bold)),
           ),

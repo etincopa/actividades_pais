@@ -29,7 +29,7 @@ class HistorialJUTModel {
   String? estado = '';
   String? fechaNacimiento = '';
 
-  HistorialJUTModel.empty() {}
+  HistorialJUTModel.empty();
 
   HistorialJUTModel({
     this.correoPersonal,

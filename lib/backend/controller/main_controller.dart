@@ -331,7 +331,7 @@ class MainController extends GetxController {
   Future<TramaMonitoreoModel> saveMonitoreo(TramaMonitoreoModel o) async {
     DateFormat oDFormat = DateFormat('yyyy-MM-dd');
     DateFormat oDFormat2 = DateFormat('HHmmss');
-    DateTime _now = DateTime.now();
+    DateTime now = DateTime.now();
 
     if (loading.isTrue) {
       return Future.error(
@@ -379,12 +379,12 @@ class MainController extends GetxController {
     }
 
     if (o.fechaMonitoreo!.trim() == '') {
-      o.fechaMonitoreo = oDFormat.format(_now);
+      o.fechaMonitoreo = oDFormat.format(now);
     }
 
     if (o.idMonitoreo!.contains("<")) {
       String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
-      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
+      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(now));
       idBuild = idBuild.replaceAll('<CUI>', o.cui!);
       idBuild = idBuild.replaceAll('<FECHA_MONITOREO>', o.fechaMonitoreo!);
       o.idMonitoreo = idBuild;
@@ -401,7 +401,7 @@ class MainController extends GetxController {
     try {
       List<TramaProyectoModel> aSearh =
           await Get.find<MainService>().getProyectoByCUI(o.cui!);
-      if (aSearh != null && aSearh.isNotEmpty) {
+      if (aSearh.isNotEmpty) {
         TramaProyectoModel oProyecto = aSearh[0];
         if (o.snip!.trim() == '') {
           o.snip = oProyecto.numSnip;
@@ -500,13 +500,13 @@ class MainController extends GetxController {
 
     DateFormat oDFormat = DateFormat('yyyy-MM-dd');
     DateFormat oDFormat2 = DateFormat('HHmmss');
-    DateTime _now = DateTime.now();
+    DateTime now = DateTime.now();
 
     if (o.id == null || o.id! <= 0) {
       o.estadoProgramacion = ProgramacionActividadModel.sEstadoPEN;
       String idBuild = '<FECHA>_<IDE>';
-      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(_now));
-      idBuild = idBuild.replaceAll('<FECHA>', oDFormat.format(_now));
+      idBuild = idBuild.replaceAll('<IDE>', oDFormat2.format(now));
+      idBuild = idBuild.replaceAll('<FECHA>', oDFormat.format(now));
       o.idProgramacionIntervenciones = idBuild;
     }
 
@@ -548,11 +548,11 @@ class MainController extends GetxController {
       /// Evaluar que todos los monitoreos de la lista tengan el estado
       /// POR ENVIAR
       bool isOk = true;
-      a.forEach((o) {
+      for (var o in a) {
         if (o.estadoProgramacion != ProgramacionActividadModel.sEstadoPEN) {
           isOk = false;
         }
-      });
+      }
 
       if (isOk == true) {
         final aResp =
@@ -595,11 +595,11 @@ class MainController extends GetxController {
       /// Evaluar que todos los monitoreos de la lista tengan el estado
       /// POR ENVIAR
       bool isOk = true;
-      a.forEach((o) {
+      for (var o in a) {
         if (o.idEstadoMonitoreo != TramaMonitoreoModel.sIdEstadoXEN) {
           isOk = false;
         }
-      });
+      }
 
       if (isOk == true) {
         final aResp = await Get.find<MainService>().sendAllMonitoreo(a, []);
@@ -652,11 +652,11 @@ class MainController extends GetxController {
     }
 
     bool isOk = true;
-    a.forEach((o) {
+    for (var o in a) {
       if (o.estadoMonitoreo != TramaMonitoreoModel.sEstadoXEN) {
         isOk = false;
       }
-    });
+    }
 
     if (isOk == true) {
       List<TramaMonitoreoModel> aError;
@@ -785,7 +785,7 @@ class MainController extends GetxController {
 
       List<TramaProyectoModel> aSearh =
           await Get.find<MainService>().getProyectoByCUI(cui);
-      if (aSearh != null && aSearh.isNotEmpty) {
+      if (aSearh.isNotEmpty) {
         TramaProyectoModel oProyecto = aSearh[0];
 
         String idBuild = '<CUI>_<IDE>_<FECHA_MONITOREO>';
@@ -1228,7 +1228,7 @@ class MainController extends GetxController {
   Future<List<AtencionesModel>> getResumeAtenciones() async {
     ///Obtiene los registros de la DB Local
     await Future.delayed(const Duration(seconds: 1));
-    List<AtencionesModel> aFind = await AtencionesModel.categoryList;
+    List<AtencionesModel> aFind = AtencionesModel.categoryList;
     return aFind;
   }
 

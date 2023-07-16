@@ -28,11 +28,11 @@ import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Calendario/Calendario.dart';
 import 'package:actividades_pais/src/pages/Tambook/Detalle/detalle_tambook.dart';
-import 'package:actividades_pais/src/pages/Tambook/widgets/mostrar_alertas.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/home_options.dart';
@@ -266,7 +266,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     if (pickedDate != null && pickedDate != currentDate) {
       aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
-          DateFormat("yyyy-MM-dd").format(pickedDate!));
+          DateFormat("yyyy-MM-dd").format(pickedDate));
 
       if (aActividadesResumen.isNotEmpty) {
         fechaActividades = aActividadesResumen[0].fecha.toString();
@@ -290,14 +290,14 @@ class _HomeTambookState extends State<HomeTambook>
     if (selected != null) {
       BusyIndicator.show(context);
 
-      await obtenerReporteTipoUsuario('1', DateFormat("yyyy").format(selected!),
-          DateFormat("M").format(selected!), 'X');
+      await obtenerReporteTipoUsuario('1', DateFormat("yyyy").format(selected),
+          DateFormat("M").format(selected), 'X');
 
-      await obtenerReporteSectorial('2', DateFormat("yyyy").format(selected!),
-          DateFormat("M").format(selected!), 'X');
+      await obtenerReporteSectorial('2', DateFormat("yyyy").format(selected),
+          DateFormat("M").format(selected), 'X');
 
-      await obtenerReporteAtencionRegion(DateFormat("yyyy").format(selected!),
-          DateFormat("M").format(selected!), 'X');
+      await obtenerReporteAtencionRegion(DateFormat("yyyy").format(selected),
+          DateFormat("M").format(selected), 'X');
 
       BusyIndicator.hide(context);
     }
@@ -593,7 +593,7 @@ class _HomeTambookState extends State<HomeTambook>
       setState(() {
         isLoadingAtencionMensualizada = true;
       });
-    } on Exception catch (e) {
+    } on Exception {
       setState(() {
         isLoadingAtencionMensualizada = true;
       });
@@ -602,11 +602,11 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> obtenerReporteTipoUsuario(tipo, anio, mes, sector) async {
     try {
-      var _aReporteSectorial =
+      var aReporteSectorial =
           await mainCtr.getReporteSectorial(tipo, anio, mes, sector);
 
-      if (_aReporteSectorial.isNotEmpty) {
-        aReporteSectorial = _aReporteSectorial;
+      if (aReporteSectorial.isNotEmpty) {
+        aReporteSectorial = aReporteSectorial;
 
         totalValue = 0;
         chartDataPie = [];
@@ -646,41 +646,38 @@ class _HomeTambookState extends State<HomeTambook>
       } else {
         mostrarAlerta(context, "Aviso!",
             "No se encontraron registros con el mes y año seleccionado");
-
-        await Future.delayed(const Duration(milliseconds: 1000));
+        await Future.delayed(const Duration(milliseconds: 2000));
 
         BusyIndicator.hide(context);
       }
-    } on Exception catch (e) {
-      print(e.toString());
-    }
+    } on Exception {}
   }
 
   Future<void> obtenerReporteSectorial(tipo, anio, mes, sector) async {
     try {
-      var _aReporteSectorialSector =
+      var aReporteSectorialSector =
           await mainCtr.getReporteSectorial(tipo, anio, mes, sector);
 
-      if (_aReporteSectorialSector.isNotEmpty) {
-        aReporteSectorialSector = _aReporteSectorialSector;
+      if (aReporteSectorialSector.isNotEmpty) {
+        aReporteSectorialSector = aReporteSectorialSector;
         aReporteSectorialSector.sort((a, b) => int.parse(b.atenciones ?? '0')
             .compareTo(int.parse(a.atenciones ?? '0')));
       }
-    } on Exception catch (e) {}
+    } on Exception {}
   }
 
   Future<void> obtenerReporteAtencionRegion(anio, mes, region) async {
     try {
-      var _aReporteAtencionRegion =
+      var aReporteAtencionRegion =
           await mainCtr.getReporteAtencionesRegion(anio, mes, region);
 
-      if (_aReporteAtencionRegion.isNotEmpty) {
-        aReporteAtencionRegion = _aReporteAtencionRegion;
+      if (aReporteAtencionRegion.isNotEmpty) {
+        aReporteAtencionRegion = aReporteAtencionRegion;
         setState(() {
           isLoadingAtencionesSector = true;
         });
       }
-    } on Exception catch (e) {}
+    } on Exception {}
   }
 
   Future<void> obtenerIndicadorInternet() async {
@@ -858,12 +855,12 @@ class _HomeTambookState extends State<HomeTambook>
                         tabs: [
                           Tab(
                               icon: ImageIcon(
-                            AssetImage('assets/icons/atenciones.png'),
+                            AssetImage('assets/icons/icon_intervencion.png'),
                             size: 35,
                           )),
                           Tab(
                               icon: ImageIcon(
-                            AssetImage('assets/icons/icon_intervencion.png'),
+                            AssetImage('assets/icons/atenciones.png'),
                             size: 35,
                           )),
                           Tab(
@@ -912,18 +909,6 @@ class _HomeTambookState extends State<HomeTambook>
           },
           body: TabBarView(
             children: <Widget>[
-              SingleChildScrollView(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 15),
-                  cardAtenciones(),
-                  avanceMetas(),
-                  cardBeneficiarios(),
-                  avanceMetasUsuarios(),
-                ],
-              )),
-
               // REPORTES SECTORIALES
               SingleChildScrollView(
                   child: Column(
@@ -948,6 +933,17 @@ class _HomeTambookState extends State<HomeTambook>
 
               SingleChildScrollView(
                   child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardAtenciones(),
+                  avanceMetas(),
+                  cardBeneficiarios(),
+                  avanceMetasUsuarios(),
+                ],
+              )),
+              SingleChildScrollView(
+                  child: Column(
                 children: [
                   const SizedBox(height: 15),
                   cardTambosRegion(),
@@ -962,7 +958,7 @@ class _HomeTambookState extends State<HomeTambook>
                   const SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () => _selectDate(context),
-                    child: Text('SELECCIONAR FECHA DE ACTIVIDAD'),
+                    child: const Text('SELECCIONAR FECHA DE ACTIVIDAD'),
                   ),
                   const SizedBox(height: 10),
                   cardActividadesDiarias(),
@@ -998,7 +994,7 @@ class _HomeTambookState extends State<HomeTambook>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 15),
-                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  Text("ACTUALIZADO AL $fechaActual"),
                   const SizedBox(height: 15),
                   cardPersonalTambo(),
                 ],
@@ -1396,7 +1392,7 @@ class _HomeTambookState extends State<HomeTambook>
                                 oEquipoSelect.nombres ?? '',
                               ),
                               subtitle: Text(
-                                  "${tipoDescripcion} ${oEquipoSelect.descripcion ?? ''}"),
+                                  "$tipoDescripcion ${oEquipoSelect.descripcion ?? ''}"),
                             ),
                             const Divider(color: colorI),
                           ],
@@ -1529,7 +1525,7 @@ class _HomeTambookState extends State<HomeTambook>
                             ],
                           ),
                         )
-                      : Center(
+                      : const Center(
                           child: CircularProgressIndicator(
                             strokeWidth: 3,
                           ),
@@ -1652,7 +1648,7 @@ class _HomeTambookState extends State<HomeTambook>
             const SizedBox(height: 10),
             isLoadingAtencionesTipoUsuario == true
                 ? Text(
-                    'ATENCIONES DE ${(aReporteSectorial.isNotEmpty) ? obtenerNombreMesCompleto(aReporteSectorial[0].mes!) + ' DEL ' + aReporteSectorial[0].anio! : ''}')
+                    'ATENCIONES DE ${(aReporteSectorial.isNotEmpty) ? '${obtenerNombreMesCompleto(aReporteSectorial[0].mes!)} DEL ${aReporteSectorial[0].anio!}' : ''}')
                 : const Text(""),
             const SizedBox(height: 10),
             Center(child: Text("TOTAL ${formatoDecimal(totalValue.toInt())}")),
@@ -2141,7 +2137,7 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 1,
                         ),
                         Text(
-                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                       ],
                     ),
                   )
@@ -2196,7 +2192,7 @@ class _HomeTambookState extends State<HomeTambook>
             const SizedBox(height: 10),
             isLoadingAtencionesTipoUsuario == true
                 ? Text(
-                    'USUARIOS UNICOS DE ${(aReporteSectorial.isNotEmpty) ? obtenerNombreMesCompleto(aReporteSectorial[0].mes!) + ' DEL ' + aReporteSectorial[0].anio! : ''}')
+                    'USUARIOS UNICOS DE ${(aReporteSectorial.isNotEmpty) ? '${obtenerNombreMesCompleto(aReporteSectorial[0].mes!)} DEL ${aReporteSectorial[0].anio!}' : ''}')
                 : const Text(""),
             const SizedBox(height: 10),
             Center(
@@ -2687,7 +2683,7 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 1,
                         ),
                         Text(
-                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                       ],
                     ),
                   )
@@ -2699,10 +2695,10 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding reporteSectorial() {
-    String anio_mes =
-        'DE ${(aReporteSectorial.isNotEmpty) ? obtenerNombreMesCompleto(aReporteSectorial[0].mes!) + ' DEL ' + aReporteSectorial[0].anio! : ''}';
+    String anioMes =
+        'DE ${(aReporteSectorial.isNotEmpty) ? '${obtenerNombreMesCompleto(aReporteSectorial[0].mes!)} DEL ${aReporteSectorial[0].anio!}' : ''}';
 
-    var heading = 'REPORTE SECTORIAL ${anio_mes}';
+    var heading = 'REPORTE SECTORIAL $anioMes';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -2792,7 +2788,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         buildSuccessDialog2(
                                       context,
                                       title:
-                                          "${item.entidad}\n${anio_mes}\n(${aReporteSectorialEntidad.length})",
+                                          "${item.entidad}\n$anioMes\n(${aReporteSectorialEntidad.length})",
                                       child: ListView.builder(
                                         shrinkWrap: true,
                                         itemCount:
@@ -2805,20 +2801,21 @@ class _HomeTambookState extends State<HomeTambook>
                                             children: [
                                               ListTile(
                                                 dense: true,
-                                                contentPadding: EdgeInsets.only(
-                                                    left: 0.0, right: 0.0),
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 0.0, right: 0.0),
                                                 leading: Text("${index + 1}"),
                                                 title: ListTile(
                                                   title: Text(
                                                     oItem.entidad ?? '',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
                                                   subtitle: Text(
                                                     "ATENCIONES : ${formatoDecimal(int.parse(oItem.atenciones ?? '0'))}\nUSUARIOS : ${formatoDecimal(int.parse(oItem.beneficiarios ?? '0'))}",
-                                                    style:
-                                                        TextStyle(fontSize: 15),
+                                                    style: const TextStyle(
+                                                        fontSize: 15),
                                                   ),
                                                 ),
                                                 onTap: () async {},
@@ -2838,7 +2835,7 @@ class _HomeTambookState extends State<HomeTambook>
                         const SizedBox(height: 10),
                         const Text('FUENTE: INEI - PAIS'),
                         Text(
-                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2853,9 +2850,10 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding reporteAtencionRegion() {
-    String anio_mes =
-        '${(aReporteAtencionRegion.isNotEmpty) ? obtenerNombreMesCompleto(aReporteAtencionRegion[0].mes!) + ' DEL ' + aReporteAtencionRegion[0].periodo! : ''}';
-    var heading = 'RESULTADOS POR UNIDAD TERRITORIAL\n${anio_mes}';
+    String anioMes = (aReporteAtencionRegion.isNotEmpty)
+        ? '${obtenerNombreMesCompleto(aReporteAtencionRegion[0].mes!)} DEL ${aReporteAtencionRegion[0].periodo!}'
+        : '';
+    var heading = 'RESULTADOS POR UNIDAD TERRITORIAL\n$anioMes';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -2966,7 +2964,7 @@ class _HomeTambookState extends State<HomeTambook>
                         const SizedBox(height: 10),
                         const Text('FUENTE: INEI - PAIS'),
                         Text(
-                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -3008,7 +3006,7 @@ class _HomeTambookState extends State<HomeTambook>
               itemCount: isLoading ? 1 : 1,
               itemBuilder: (context, index) {
                 if (isLoading) {
-                  return ShinyWidget();
+                  return const ShinyWidget();
                 } else {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
@@ -3057,7 +3055,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     for (var indicador in aIndicadorInternet) {
       chartDataIndicador.add(ChartDataAvanceIndicador(
-          indicador.idOperadorInternet.toString()!,
+          indicador.idOperadorInternet.toString(),
           indicador.nomOperadorInternet!,
           int.parse(indicador.numAsignados!.toString()),
           obtenerColores(indicador.idOperadorInternet.toString())));
@@ -3131,7 +3129,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       buildSuccessDialog2(
                                     context,
                                     title:
-                                        "LISTA DE TAMBOS (${indicadorInternet.length})\n${proveedor}",
+                                        "LISTA DE TAMBOS (${indicadorInternet.length})\n$proveedor",
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: indicadorInternet.length,
@@ -3182,7 +3180,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 );
                               },
-                              legend: Legend(
+                              legend: const Legend(
                                   isVisible: true,
                                   toggleSeriesVisibility: false,
                                   position: LegendPosition.bottom,
@@ -3268,7 +3266,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
-                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  Text("ACTUALIZADO AL $fechaActual"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -3362,7 +3360,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       buildSuccessDialog2(
                                     context,
                                     title:
-                                        "LISTA DE TAMBOS (${indicadorInternet.length})\n${estado}",
+                                        "LISTA DE TAMBOS (${indicadorInternet.length})\n$estado",
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: indicadorInternet.length,
@@ -3413,7 +3411,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 );
                               },
-                              legend: Legend(
+                              legend: const Legend(
                                 isVisible: true,
                                 toggleSeriesVisibility: false,
                                 position: LegendPosition.bottom,
@@ -3445,7 +3443,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
-                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  Text("ACTUALIZADO AL $fechaActual"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -3545,7 +3543,7 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 10,
                         ),
                         const Text('FUENTE: PNPAIS'),
-                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        Text("ACTUALIZADO AL $fechaActual"),
                         const SizedBox(
                           height: 1,
                         ),
@@ -3568,7 +3566,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     for (var indicador in aIndicadorCategorizacion) {
       chartDataIndicador.add(ChartDataAvanceIndicador(
-          indicador.idPriorizacion.toString()!,
+          indicador.idPriorizacion.toString(),
           indicador.nomPriorizacion!,
           int.parse(indicador.numAsignados!.toString()),
           Colors.blue));
@@ -3620,7 +3618,7 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   isLoading2
                       ? Center(
-                          child: Container(
+                          child: SizedBox(
                               height: 450,
                               child: SfCartesianChart(
                                   primaryXAxis: CategoryAxis(
@@ -3663,7 +3661,7 @@ class _HomeTambookState extends State<HomeTambook>
                                               idCategoria:
                                                   idCategoria.toString(),
                                               title:
-                                                  "LISTA DE TAMBOS (${indicadorCategorizacion.length})\n${categoria}",
+                                                  "LISTA DE TAMBOS (${indicadorCategorizacion.length})\n$categoria",
                                               child: ListView.builder(
                                                 shrinkWrap: true,
                                                 itemCount:
@@ -3753,7 +3751,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
-                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  Text("ACTUALIZADO AL $fechaActual"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -3773,7 +3771,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     for (var indicador in aIndicadorServiciosLuz) {
       chartDataIndicador.add(ChartDataAvanceIndicador(
-          indicador.idTipoConexion.toString()!,
+          indicador.idTipoConexion.toString(),
           indicador.nomTipoConexion!,
           int.parse(indicador.cantidad!.toString()),
           Colors.blue));
@@ -3825,7 +3823,7 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   isLoading2
                       ? Center(
-                          child: Container(
+                          child: SizedBox(
                               height: 450,
                               child: SfCartesianChart(
                                   primaryXAxis: CategoryAxis(
@@ -3866,7 +3864,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                 buildSuccessDialog2(
                                               context,
                                               title:
-                                                  "LISTA DE TAMBOS (${indicadorLuz.length})\n${categoria}",
+                                                  "LISTA DE TAMBOS (${indicadorLuz.length})\n$categoria",
                                               child: ListView.builder(
                                                 shrinkWrap: true,
                                                 itemCount: indicadorLuz.length,
@@ -3886,7 +3884,9 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            "${oIndicadorLuz.region ?? ''}"),
+                                                            oIndicadorLuz
+                                                                    .region ??
+                                                                ''),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -3953,7 +3953,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
-                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  Text("ACTUALIZADO AL $fechaActual"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -3973,7 +3973,7 @@ class _HomeTambookState extends State<HomeTambook>
 
     for (var indicador in aIndicadorServiciosAgua) {
       chartDataIndicador.add(ChartDataAvanceIndicador(
-          indicador.idTipoConexion.toString()!,
+          indicador.idTipoConexion.toString(),
           indicador.nomTipoConexion!,
           int.parse(indicador.cantidad!.toString()),
           Colors.blue));
@@ -4025,7 +4025,7 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   isLoading2
                       ? Center(
-                          child: Container(
+                          child: SizedBox(
                               height: 450,
                               child: SfCartesianChart(
                                   primaryXAxis: CategoryAxis(
@@ -4066,7 +4066,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                 buildSuccessDialog2(
                                               context,
                                               title:
-                                                  "LISTA DE TAMBOS (${indicadorAgua.length})\n${categoria}",
+                                                  "LISTA DE TAMBOS (${indicadorAgua.length})\n$categoria",
                                               child: ListView.builder(
                                                 shrinkWrap: true,
                                                 itemCount: indicadorAgua.length,
@@ -4086,7 +4086,9 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            "${oIndicadorAgua.region ?? ''}"),
+                                                            oIndicadorAgua
+                                                                    .region ??
+                                                                ''),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -4153,7 +4155,7 @@ class _HomeTambookState extends State<HomeTambook>
                     height: 10,
                   ),
                   const Text('FUENTE: PNPAIS'),
-                  Text("ACTUALIZADO AL ${fechaActual}"),
+                  Text("ACTUALIZADO AL $fechaActual"),
                   const SizedBox(
                     height: 1,
                   ),
@@ -4233,7 +4235,7 @@ class _HomeTambookState extends State<HomeTambook>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                      'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                   const SizedBox(height: 15),
                   isLoadingSinInterAnio
                       ? Center(
@@ -4302,7 +4304,7 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                         TextButton(
                           style: TextButton.styleFrom(
-                            primary: Colors.blue,
+                            foregroundColor: Colors.blue,
                           ),
                           onPressed: () {
                             BusyIndicator.show(context);
@@ -4519,7 +4521,7 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                         TextButton(
                           style: TextButton.styleFrom(
-                            primary: Colors.blue,
+                            foregroundColor: Colors.blue,
                           ),
                           onPressed: () {
                             BusyIndicator.show(context);
@@ -4638,7 +4640,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                subtitle: Text("${oItem.region ?? ''}"),
+                                subtitle: Text(oItem.region ?? ''),
                               ),
                             ),
                             const Divider(color: colorI),
@@ -4661,7 +4663,7 @@ class _HomeTambookState extends State<HomeTambook>
   Padding cardAtenciones() {
     int totalAvance1 = 0;
     if (aAtencionUsuarios.isNotEmpty) {
-      totalAvance1 = int.parse(aAtencionUsuarios[0]!.atenciones ?? '0');
+      totalAvance1 = int.parse(aAtencionUsuarios[0].atenciones ?? '0');
     }
 
     final totalMetaTipo1 =
@@ -4718,7 +4720,7 @@ class _HomeTambookState extends State<HomeTambook>
               height: 10,
             ),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
             const SizedBox(
               height: 10,
             ),
@@ -4831,7 +4833,7 @@ class _HomeTambookState extends State<HomeTambook>
   Padding cardBeneficiarios() {
     int totalAvance1 = 0;
     if (aAtencionUsuarios.isNotEmpty) {
-      totalAvance1 = int.parse(aAtencionUsuarios[0]!.usuuarios ?? '0');
+      totalAvance1 = int.parse(aAtencionUsuarios[0].usuuarios ?? '0');
     }
     final totalMetaTipo1 =
         aMetasTipo2.fold<int>(0, (sum, item) => sum + (item.metaTotal ?? 0));
@@ -4887,7 +4889,7 @@ class _HomeTambookState extends State<HomeTambook>
               height: 10,
             ),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
             const SizedBox(
               height: 10,
             ),
@@ -5048,17 +5050,17 @@ class _HomeTambookState extends State<HomeTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "FECHA DE ACTIVIDADES : ${fechaActividades}",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          "FECHA DE ACTIVIDADES : $fechaActividades",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Divider(
+                        const Divider(
                           height: 10,
                         ),
                         if (aActividadesResumen.isNotEmpty)
                           Column(children: [
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   height: 120,
                                   child: Image.asset(
@@ -5069,10 +5071,10 @@ class _HomeTambookState extends State<HomeTambook>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "NACIONAL",
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                           decoration: TextDecoration.underline,
@@ -5080,7 +5082,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       TextButton(
                                         style: TextButton.styleFrom(
-                                          primary: Colors.black,
+                                          foregroundColor: Colors.black,
                                         ),
                                         onPressed: () {},
                                         child: Text(
@@ -5088,7 +5090,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       TextButton(
                                         style: TextButton.styleFrom(
-                                          primary: Colors.black,
+                                          foregroundColor: Colors.black,
                                         ),
                                         onPressed: () {},
                                         child: Text(
@@ -5097,14 +5099,14 @@ class _HomeTambookState extends State<HomeTambook>
                                     ]),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             const Divider(color: colorI),
                           ]),
                         for (var tambos in aActividadesResumen)
                           Column(children: [
                             Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   height: 120,
                                   child: Image.asset(
@@ -5126,7 +5128,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       TextButton(
                                         style: TextButton.styleFrom(
-                                          primary: Colors.blue,
+                                          foregroundColor: Colors.blue,
                                         ),
                                         onPressed: () async {
                                           BusyIndicator.show(context);
@@ -5136,7 +5138,7 @@ class _HomeTambookState extends State<HomeTambook>
                                               await mainCtr
                                                   .getActividadesDiarias(
                                                       DateFormat("yyyy-MM-dd")
-                                                          .format(currentDate!)
+                                                          .format(currentDate)
                                                           .toString(),
                                                       'Si',
                                                       tambos.idUt!,
@@ -5166,7 +5168,8 @@ class _HomeTambookState extends State<HomeTambook>
                                                       ListTile(
                                                         dense: true,
                                                         contentPadding:
-                                                            EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                    .only(
                                                                 left: 0.0,
                                                                 right: 0.0),
                                                         leading: Text(
@@ -5174,13 +5177,15 @@ class _HomeTambookState extends State<HomeTambook>
                                                         title: ListTile(
                                                           title: Text(
                                                             "TAMBO : ${oActividadDiaria.nomTambo ?? ''}",
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold),
                                                           ),
                                                           subtitle: Text(
-                                                            "${oActividadDiaria.actividad ?? ''}",
+                                                            oActividadDiaria
+                                                                    .actividad ??
+                                                                '',
                                                           ),
                                                         ),
                                                         subtitle: ListTile(
@@ -5230,7 +5235,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       TextButton(
                                         style: TextButton.styleFrom(
-                                          primary: Colors.blue,
+                                          foregroundColor: Colors.blue,
                                         ),
                                         onPressed: () async {
                                           BusyIndicator.show(context);
@@ -5240,7 +5245,7 @@ class _HomeTambookState extends State<HomeTambook>
                                               await mainCtr
                                                   .getActividadesDiarias(
                                                       DateFormat("yyyy-MM-dd")
-                                                          .format(currentDate!)
+                                                          .format(currentDate)
                                                           .toString(),
                                                       'No',
                                                       tambos.idUt!,
@@ -5271,7 +5276,9 @@ class _HomeTambookState extends State<HomeTambook>
                                                         leading: Text(
                                                             "${index + 1}"),
                                                         title: Text(
-                                                          "${oActividadDiaria.nomTambo ?? ''}",
+                                                          oActividadDiaria
+                                                                  .nomTambo ??
+                                                              '',
                                                         ),
                                                         subtitle: Text(
                                                             "MOTIVO : ${oActividadDiaria.motivo!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
@@ -5319,7 +5326,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     ]),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             const Divider(color: colorI),
                           ]),
                         const SizedBox(height: 10),
@@ -5517,7 +5524,7 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                         const SizedBox(height: 10),
                         const Text('FUENTE: INEI - PAIS'),
-                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        Text("ACTUALIZADO AL $fechaActual"),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -5595,7 +5602,7 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                               ListTile(
                                 leading: ImageIcon(
-                                  AssetImage(equipo!.imagen),
+                                  AssetImage(equipo.imagen),
                                   size: 120,
                                   color: Colors.black,
                                 ),
@@ -5622,7 +5629,7 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                         const SizedBox(height: 10),
                         const Text("FUENTE: PNPAIS"),
-                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        Text("ACTUALIZADO AL $fechaActual"),
                       ],
                     ),
                   ),
@@ -5683,12 +5690,12 @@ class _HomeTambookState extends State<HomeTambook>
                         text: '491 TAMBOS',
                         textStyle:
                             const TextStyle(fontWeight: FontWeight.bold)),
-                    legend: Legend(
+                    legend: const Legend(
                       isVisible: true,
                       position: LegendPosition.bottom,
                       orientation: LegendItemOrientation.horizontal,
                       overflowMode: LegendItemOverflowMode.wrap,
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                         color: color_07,
                       ),
                     ),
@@ -5776,7 +5783,7 @@ class _HomeTambookState extends State<HomeTambook>
             const SizedBox(height: 10),
             isLoadingAtencionMensualizada == true
                 ? Text(
-                    'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}')
+                    'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear')
                 : const Text(""),
             const SizedBox(height: 10),
             Container(
@@ -5787,7 +5794,7 @@ class _HomeTambookState extends State<HomeTambook>
                   isLoadingAtencionMensualizada == true
                       ? SfCartesianChart(
                           plotAreaBorderWidth: 0,
-                          legend: Legend(
+                          legend: const Legend(
                               isVisible: true,
                               position: LegendPosition.bottom,
                               overflowMode: LegendItemOverflowMode.wrap),
@@ -5902,7 +5909,7 @@ class _HomeTambookState extends State<HomeTambook>
             const SizedBox(height: 10),
             isLoadingAtencionMensualizada
                 ? Text(
-                    'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}')
+                    'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear')
                 : const Text(""),
             const SizedBox(height: 10),
             Container(
@@ -5913,7 +5920,7 @@ class _HomeTambookState extends State<HomeTambook>
                   isLoadingAtencionMensualizada
                       ? SfCartesianChart(
                           plotAreaBorderWidth: 0,
-                          legend: Legend(
+                          legend: const Legend(
                               isVisible: true,
                               position: LegendPosition.bottom,
                               overflowMode: LegendItemOverflowMode.wrap),
@@ -6034,10 +6041,10 @@ class _HomeTambookState extends State<HomeTambook>
                             Container(
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(5),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(
                                     color: color_01,
                                     Icons.home_outlined,
@@ -6063,10 +6070,10 @@ class _HomeTambookState extends State<HomeTambook>
                             Container(
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(5),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(
                                     color: color_01,
                                     Icons.home_outlined,
@@ -6092,10 +6099,10 @@ class _HomeTambookState extends State<HomeTambook>
                             Container(
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(5),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Icon(
                                     color: color_01,
                                     Icons.home_outlined,
@@ -6113,7 +6120,7 @@ class _HomeTambookState extends State<HomeTambook>
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       /*Padding(
@@ -6145,9 +6152,9 @@ class _HomeTambookState extends State<HomeTambook>
                           Row(
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(3.0),
+                                padding: EdgeInsets.all(3.0),
                                 child: Column(
-                                  children: const <Widget>[
+                                  children: <Widget>[
                                     Text(
                                       '13',
                                       style: TextStyle(fontSize: 20.0),
@@ -6159,7 +6166,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ],
                                 ),
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 width: 35,
                               ),
                               /*Padding(
@@ -6178,9 +6185,9 @@ class _HomeTambookState extends State<HomeTambook>
                                 ),
                               ),*/
                               Padding(
-                                padding: const EdgeInsets.all(3.0),
+                                padding: EdgeInsets.all(3.0),
                                 child: Column(
-                                  children: const <Widget>[
+                                  children: <Widget>[
                                     Text(
                                       '2',
                                       style: TextStyle(fontSize: 20.0),
@@ -6194,14 +6201,14 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                             ],
                           ),
-                          const Text(
+                          Text(
                             '''|__________________|''',
                             style: TextStyle(
                               fontSize: 18.0,
                               color: Color.fromRGBO(155, 155, 155, 1.0),
                             ),
                           ),
-                          const Text(
+                          Text(
                             '|',
                             style: TextStyle(
                               fontSize: 18.0,
@@ -6210,7 +6217,7 @@ class _HomeTambookState extends State<HomeTambook>
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text(
                                 "PIAS",
                                 style: TextStyle(
@@ -6277,7 +6284,7 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
-                child: Column(
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
@@ -6287,7 +6294,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: <Widget>[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   "REGION",
                                   style: TextStyle(
@@ -6301,9 +6308,9 @@ class _HomeTambookState extends State<HomeTambook>
                             Row(
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'JEFE UNIDAD TERRITORIAL (17)',
                                         style: TextStyle(fontSize: 12.0),
@@ -6311,7 +6318,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     ],
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   ' | ',
                                   style: TextStyle(
                                     fontSize: 18.0,
@@ -6319,9 +6326,9 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'MONITOR (28)',
                                         style: TextStyle(fontSize: 12.0),
@@ -6335,7 +6342,7 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                       ],
                     ),
-                    const Divider(color: colorI),
+                    Divider(color: colorI),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
@@ -6343,7 +6350,7 @@ class _HomeTambookState extends State<HomeTambook>
                           children: <Widget>[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   "TAMBOS PIAS Y UPS",
                                   style: TextStyle(
@@ -6357,9 +6364,9 @@ class _HomeTambookState extends State<HomeTambook>
                             Row(
                               children: <Widget>[
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'GESTOR (487)',
                                         style: TextStyle(fontSize: 12.0),
@@ -6367,7 +6374,7 @@ class _HomeTambookState extends State<HomeTambook>
                                     ],
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   ' | ',
                                   style: TextStyle(
                                     fontSize: 18.0,
@@ -6375,9 +6382,9 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: EdgeInsets.all(3.0),
                                   child: Column(
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'GUARDIÁN (487)',
                                         style: TextStyle(fontSize: 12.0),
@@ -7236,14 +7243,14 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                 ),
               ),
-              Column(
+              const Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Column(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text(
                               '100',
                               style: TextStyle(fontSize: 20.0),
@@ -7253,9 +7260,9 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.all(10.0),
                         child: Column(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text(
                               '100',
                               style: TextStyle(fontSize: 20.0),
@@ -7268,7 +7275,7 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text(
                         "Peter Jonathan",
                         style: TextStyle(
@@ -7280,7 +7287,7 @@ class _HomeTambookState extends State<HomeTambook>
                     ],
                   ),
                   Row(
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text(
                         "@pj",
                         style: TextStyle(
@@ -7465,6 +7472,8 @@ class AvancesData {
 }
 
 class ShinyWidgetImage extends StatelessWidget {
+  const ShinyWidgetImage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
@@ -7512,6 +7521,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class ShinyWidget extends StatelessWidget {
+  const ShinyWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(

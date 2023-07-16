@@ -13,7 +13,7 @@ class UnidadTerritorialModel {
   String? unidadTerritorialPropietario;
   String? departamentoUt;
 
-  UnidadTerritorialModel.empty() {}
+  UnidadTerritorialModel.empty();
 
   UnidadTerritorialModel({
     this.idUt,

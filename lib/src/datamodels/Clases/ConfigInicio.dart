@@ -6,8 +6,8 @@ class ListarConfigInicio {
   ListarConfigInicio.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new ConfigInicio.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = ConfigInicio.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -71,7 +71,7 @@ class ConfigInicio {
   }
 
   factory ConfigInicio.fromJson(Map<String, dynamic> parsedJson) =>
-      new ConfigInicio(
+      ConfigInicio(
           idConfigInicio: parsedJson['idConfigInicio'],
           idLugarPrestacion: parsedJson['idLugarPrestacion'],
           lugarPrestacion: parsedJson['lugarPrestacion'],

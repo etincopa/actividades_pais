@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class ProgramRespFld {
   static String estado = 'estado';
@@ -9,7 +8,7 @@ class ProgramRespDto {
   bool? estado = false;
   String? mensaje = '';
 
-  ProgramRespDto.empty() {}
+  ProgramRespDto.empty();
 
   ProgramRespDto({
     this.mensaje,

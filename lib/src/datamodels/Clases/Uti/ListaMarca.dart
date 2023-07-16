@@ -6,9 +6,9 @@ class ListaMarcas {
   ListaMarcas.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual =
-      new Marca.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual =
+      Marca.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -25,9 +25,9 @@ class Marca {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_marca'] = this.idMarca;
-    data['descripcion_marca'] = this.descripcionMarca;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_marca'] = idMarca;
+    data['descripcion_marca'] = descripcionMarca;
     return data;
   }
 }

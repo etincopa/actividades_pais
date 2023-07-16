@@ -4,8 +4,8 @@ class ListarActividadesPias {
   ListarActividadesPias.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new ActividadesPias.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = ActividadesPias.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -29,13 +29,13 @@ class ActividadesPias {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['plataforma'] = this.plataforma;
-    data['descripcion'] = this.descripcion;
-    data['idUnicoReporte'] = this.idUnicoReporte;
-    data['idUsuario'] = this.idUsuario;
-    data['idParteDiario'] = this.idParteDiario;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['plataforma'] = plataforma;
+    data['descripcion'] = descripcion;
+    data['idUnicoReporte'] = idUnicoReporte;
+    data['idUsuario'] = idUsuario;
+    data['idParteDiario'] = idParteDiario;
     return data;
   }
 

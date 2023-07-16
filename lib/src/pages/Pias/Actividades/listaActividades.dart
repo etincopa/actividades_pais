@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Funcionarios.dart';
 import 'package:actividades_pais/src/datamodels/Clases/actividadesPias.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
-import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../util/app-config.dart';
 
 class ListaActividades extends StatefulWidget {
   String idUnicoReporte = '';
-  ListaActividades(this.idUnicoReporte);
+  ListaActividades(this.idUnicoReporte, {super.key});
   @override
   State<ListaActividades> createState() => _ListaActividadesState();
 }
@@ -52,7 +49,7 @@ class _ListaActividadesState extends State<ListaActividades> {
               Navigator.pop(context);
             }, controllerActividad);
           },
-          child: Icon(
+          child: const Icon(
             Icons.add,
             color: Colors.white,
           ),
@@ -60,7 +57,7 @@ class _ListaActividadesState extends State<ListaActividades> {
         appBar: AppBar(
           elevation: 0,
            backgroundColor: Colors.transparent,
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
@@ -79,25 +76,24 @@ class _ListaActividadesState extends State<ListaActividades> {
               AsyncSnapshot<List<ActividadesPias>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
-                  return Center(
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
                     child: Text("No hay informacion"),
                   );
                 } else {
                   return Container(
                     child: RefreshIndicator(
+                        onRefresh: listarActividadesPias,
                         child: ListView.builder(
                             itemCount: listaPersonalAux.length,
                             itemBuilder: (context, i) => Dismissible(
                                   key: UniqueKey(),
-                                  child: Listas()
-                                      .cardActividadesPias(listaPersonalAux[i]),
                                   background: Util().buildSwipeActionLeft(),
                                   secondaryBackground:
                                       Util().buildSwipeActionRigth(),
@@ -132,15 +128,17 @@ class _ListaActividadesState extends State<ListaActividades> {
                                           Navigator.pop(context);
                                         });
                                         break;
+                                      default:
                                     }
                                   },
-                                )),
-                        onRefresh: listarActividadesPias),
+                                  child: Listas()
+                                      .cardActividadesPias(listaPersonalAux[i]),
+                                ))),
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },
@@ -149,8 +147,8 @@ class _ListaActividadesState extends State<ListaActividades> {
     );
   }
 
-  Future<Null> listarActividadesPias() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> listarActividadesPias() async {
+    await Future.delayed(const Duration(seconds: 0));
     setState(() {
       a.listarActividadesPias(widget.idUnicoReporte);
     });

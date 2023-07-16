@@ -33,7 +33,7 @@ class DatosJUTTamboModel {
   String? genero = '';
   String? telefono = '';
 
-  DatosJUTTamboModel.empty() {}
+  DatosJUTTamboModel.empty();
 
   DatosJUTTamboModel({
     this.idUnidadesTerritoriales,

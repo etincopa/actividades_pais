@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/Atencion.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Pias/Clima.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Pias/TipoAtencion.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderDataJson.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePias.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../util/app-config.dart';
 
 class CrearAtenciones extends StatefulWidget {
   String idUnicoReporte = '';
 
-  CrearAtenciones(this.idUnicoReporte);
+  CrearAtenciones(this.idUnicoReporte, {super.key});
 
   @override
   _CrearAtencionesState createState() => _CrearAtencionesState();
@@ -30,14 +28,14 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Agregar Atencion",
         ),
         leading: Util().iconbuton(() => Navigator.of(context).pop()),
         backgroundColor: AppConfig.primaryColor,
       ),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: ListView(
           children: [
             Container(
@@ -47,25 +45,25 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
                     AsyncSnapshot<List<TipoAtencion>> snapshot) {
                   TipoAtencion? depatalits;
                   if (!snapshot.hasData) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
                   final preguntas = snapshot.data;
-                  if (preguntas!.length == 0) {
-                    return Center(
+                  if (preguntas!.isEmpty) {
+                    return const Center(
                       child: Text("sin dato"),
                     );
                   } else {
                     return Container(
                         // decoration: servicios.myBoxDecoration(),
                         child: DropdownButton<TipoAtencion>(
-                      underline: SizedBox(),
+                      underline: const SizedBox(),
                       isExpanded: true,
                       items: snapshot.data
                           ?.map((user) => DropdownMenuItem<TipoAtencion>(
-                                child: Text(user.descripcion!),
                                 value: user,
+                                child: Text(user.descripcion!),
                               ))
                           .toList(),
                       onChanged: (TipoAtencion? newVal) {
@@ -77,7 +75,7 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
                         setState(() {});
                       },
                       value: depatalits,
-                      hint: Text("${seleccionarClima} "),
+                      hint: Text("$seleccionarClima "),
                     ));
                   }
                 },
@@ -90,7 +88,7 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
                 onChanged: (value) {
                   atencion.atendidos = int.parse(value);
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Atendidos',
                   //   hintText: 'Atendidos',
                 ),
@@ -103,13 +101,13 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
                   atencion.atenciones = int.parse(value);
                 },
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Atenciones',
                   //   hintText: 'Atendidos',
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             SizedBox(
@@ -117,7 +115,7 @@ class _CrearAtencionesState extends State<CrearAtenciones> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(AppConfig.primaryColor),
                 ),
-                child: Text(
+                child: const Text(
                   'Guardar',
                   style: TextStyle(color: Colors.white),
                 ),

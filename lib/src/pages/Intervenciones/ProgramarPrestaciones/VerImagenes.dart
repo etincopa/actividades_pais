@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class VerImagenes extends StatefulWidget {
   String idProgramacion='';
-  VerImagenes({required this.idProgramacion});
+  VerImagenes({super.key, required this.idProgramacion});
   @override
   State<VerImagenes> createState() => _VerImagenesState();
 }

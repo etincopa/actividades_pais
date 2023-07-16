@@ -1,8 +1,5 @@
 import 'package:actividades_pais/src/Utils/utils.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroIntervencionesTambos.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/TambosDependientes.dart';
-import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
-import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ActividadesGit/ActividadesGit.dart';
@@ -45,8 +42,8 @@ class _ListaCronogramaState extends State<ListaCronograma> {
     {"value": '2', "descripcion": 'ACTIVIDADES - GIT'},
     {"value": '3', "descripcion": 'SOPORTE'},
   ];
-  DateTime? nowfec = new DateTime.now();
-  var formatter = new DateFormat('yyyy-MM-dd');
+  DateTime? nowfec = DateTime.now();
+  var formatter = DateFormat('yyyy-MM-dd');
   final TextEditingController _controlleFechaInici = TextEditingController();
   final TextEditingController _controlleFechaFin = TextEditingController();
   var seleccionarUnidadTerritorial = "Seleccionar UnidadTerritorial";
@@ -175,13 +172,13 @@ class _ListaCronogramaState extends State<ListaCronograma> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 10),
+      margin: const EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16 * fem),
-        color: Color(0xffffffff),
+        color: const Color(0xffffffff),
         boxShadow: [
           BoxShadow(
-            color: Color(0x3f000000),
+            color: const Color(0x3f000000),
             offset: Offset(0 * fem, 4 * fem),
             blurRadius: 2 * fem,
           ),
@@ -201,10 +198,10 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                   Navigator.pop(context);
                 }),
               ),
-              Container(
+              SizedBox(
                 width: width * 0.7,
                 height: height * 0.07,
-                child: Center(
+                child: const Center(
                   child: Padding(
                     padding: EdgeInsets.all(5),
                     child: Text(
@@ -223,10 +220,10 @@ class _ListaCronogramaState extends State<ListaCronograma> {
           _isLoading
               ? Container(
                   color: Colors.white,
-                  child: Center(
+                  child: const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         SizedBox(height: 20),
                         CircularProgressIndicator(),
                         SizedBox(height: 20),
@@ -239,7 +236,7 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                   ),
                 )
               : Container(),
-    /*      Container(
+          /*      Container(
             width: width * 1,
             height: height * 0.07,
             child: Center(
@@ -269,13 +266,13 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(3, 0),
+                      offset: const Offset(3, 0),
                     ),
                   ],
                 ),
@@ -354,7 +351,7 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                     var res = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RegistroCronograma(),
+                        builder: (context) => const RegistroCronograma(),
                       ),
                     );
                     if (res == 'refrescar') {
@@ -363,7 +360,7 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                     }
                   },
                   backgroundColor: Colors.blue,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     color: Colors.white,
                   ),
@@ -402,7 +399,8 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
                         ),
                       ],
                     ),
@@ -563,7 +561,11 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          Container(
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.78,
                                             child: Text(
                                               textAlign: TextAlign.justify,
                                               "$tamboNm - ${elementos3[1]}",
@@ -571,10 +573,6 @@ class _ListaCronogramaState extends State<ListaCronograma> {
                                                 fontSize: 13.2,
                                               ),
                                             ),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.78,
                                           )
                                         ],
                                       ),
@@ -599,6 +597,7 @@ class _ListaCronogramaState extends State<ListaCronograma> {
             if (value!.isEmpty) {
               return 'Por favor Ingrese dato.';
             }
+            return null;
           },
           enabled: enabled,
           controller: controller,

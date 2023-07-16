@@ -15,7 +15,7 @@ class ActividadTamboModel {
   String? hora = '';
   String? descripcion = '';
 
-  ActividadTamboModel.empty() {}
+  ActividadTamboModel.empty();
 
   ActividadTamboModel({
     this.idTambo,

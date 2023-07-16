@@ -6,8 +6,8 @@ class ListaUnidadesTerritoriales{
   ListaUnidadesTerritoriales.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new UnidadesTerritoriales.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = UnidadesTerritoriales.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }
@@ -24,9 +24,9 @@ class UnidadesTerritoriales {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_unidades_territoriales'] = this.idUnidadesTerritoriales;
-    data['unidad_territorial_descripcion'] = this.unidadTerritorialDescripcion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_unidades_territoriales'] = idUnidadesTerritoriales;
+    data['unidad_territorial_descripcion'] = unidadTerritorialDescripcion;
     return data;
   }
 }

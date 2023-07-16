@@ -6,9 +6,9 @@ class ListarEntidad {
   ListarEntidad.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual =
-      new Entidad.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual =
+      Entidad.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -44,7 +44,7 @@ class Entidad {
   }
 
   factory Entidad.fromJson(Map<String, dynamic> parsedJson) =>
-      new Entidad(
+      Entidad(
 
         //id: parsedJson['id'],
         id_accion_programacion: parsedJson['id_accion_programacion'],

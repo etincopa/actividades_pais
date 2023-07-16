@@ -80,9 +80,7 @@ class Http {
       var oData;
 
       try {
-        oData = response.data["response"] == null
-            ? response.data
-            : response.data["response"];
+        oData = response.data["response"] ?? response.data;
       } catch (oError) {
         if (response.data is String) {
           oData = jsonDecode(response.data);
@@ -135,7 +133,7 @@ class Http {
       var request = http.MultipartRequest(
           'POST', Uri.parse('${_dio.options.baseUrl}$path'));
       if (headers != null) {
-        request.headers.addAll(headers!);
+        request.headers.addAll(headers);
       }
 
       request.fields.addAll(data!);

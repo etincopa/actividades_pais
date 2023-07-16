@@ -24,7 +24,7 @@ class PlanMantenimientoInfraestructuraModel {
   String? pozoTierra;
   String? cambioBaterias;
 
-  PlanMantenimientoInfraestructuraModel.empty() {}
+  PlanMantenimientoInfraestructuraModel.empty();
 
   PlanMantenimientoInfraestructuraModel(
       {this.snip,

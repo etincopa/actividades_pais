@@ -10,14 +10,13 @@ class ProviderConfiguracion {
   Future<List<RspoTambosPiasxUnidadTerritorial>?>
       listaTambosPiasxUnidadTerritorial(tambo, idUnidadTerr) async {
     http.Response response = await http.get(
-      Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/consultarTambosPiasxUnidadTerritorial/$tambo/$idUnidadTerr'),
+      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/consultarTambosPiasxUnidadTerritorial/$tambo/$idUnidadTerr'),
     );
     print(response.body);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final listadostraba =
-          new ConsultarTambosPiasxUnidadTerritorial.fromJson(jsonResponse);
+          ConsultarTambosPiasxUnidadTerritorial.fromJson(jsonResponse);
 
       return listadostraba.response;
     } else if (response.statusCode == 400) {}
@@ -25,17 +24,15 @@ class ProviderConfiguracion {
   }
 
   Future<ConfigPersonal> buscarUsuarioApp(codigo) async {
-    print(AppConfig.urlBackndServicioSeguro +
-        '/api-pnpais/app/listarUsuariosApp');
+    print('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarUsuariosApp');
     http.Response response = await http.get(
-      Uri.parse(AppConfig.urlBackndServicioSeguro +
-          '/api-pnpais/app/listarUsuariosApp'),
+      Uri.parse('${AppConfig.urlBackndServicioSeguro}/api-pnpais/app/listarUsuariosApp'),
     );
     print(response.body);
 
     final jsonResponse = json.decode(response.body);
     final listadoUsuario =
-        new ListasUsuarios.fromJsonList(jsonResponse["response"]);
+        ListasUsuarios.fromJsonList(jsonResponse["response"]);
     for (var i = 0; i < listadoUsuario.items.length; i++) {
       if (listadoUsuario.items[i].codigo == codigo) {
         print(codigo);
@@ -43,17 +40,17 @@ class ProviderConfiguracion {
         return listadoUsuario.items[i];
       }
     }
-    return new ConfigPersonal();
+    return ConfigPersonal();
   }
 
   Future<Participantes> buscarUsuarioDni(dni) async {
     http.Response responseReniec = await http.get(
       Uri.parse(
-          AppConfig.backendsismonitor + '/programaciongit/validar-dni/$dni'),
+          '${AppConfig.backendsismonitor}/programaciongit/validar-dni/$dni'),
     );
     if (responseReniec.statusCode == 200) {
       final jsonResponse = json.decode(responseReniec.body);
-      final listadostraba = new Participantes.fromJsonReniec(jsonResponse);
+      final listadostraba = Participantes.fromJsonReniec(jsonResponse);
 
       return listadostraba;
     } else {

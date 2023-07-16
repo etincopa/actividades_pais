@@ -2,13 +2,10 @@ import 'package:actividades_pais/src/datamodels/Clases/Tambos/TamboServicioInter
 import 'package:actividades_pais/src/datamodels/Clases/Tambos/TipoGobiernoResponse.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderTambok.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
-import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:backdrop/backdrop.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/util/Constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class intervencionesHistoria extends StatefulWidget {
@@ -63,7 +60,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
     }
   }
 
-  Future<Null> traerPaguinado(pageSize) async {
+  Future<void> traerPaguinado(pageSize) async {
     // await Future.delayed(const Duration(seconds: 1));
     //  pageIndexQ = pageIndex;
     await ProviderTambok().listaTamboServicioIntervencionesGeneral(
@@ -71,14 +68,14 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
     setState(() {});
   }
 
-  Future<Null> obtenerListaTipoGobierno(tipo) async {
-    TipoGobiernoResponse _default = TipoGobiernoResponse();
-    _default.idSector = 0;
-    _default.idTipoGobierno = 0;
-    _default.nombre = "TODOS LOS TIPOS DE GOBIERNO";
+  Future<void> obtenerListaTipoGobierno(tipo) async {
+    TipoGobiernoResponse oDefault = TipoGobiernoResponse();
+    oDefault.idSector = 0;
+    oDefault.idTipoGobierno = 0;
+    oDefault.nombre = "TODOS LOS TIPOS DE GOBIERNO";
 
     tipoGobiernos = await ProviderTambok().obtenerTipoGobierno(tipo) ?? [];
-    tipoGobiernos.add(_default);
+    tipoGobiernos.add(oDefault);
     tipoGobiernos
         .sort((a, b) => a.idTipoGobierno!.compareTo(b.idTipoGobierno!));
 
@@ -117,8 +114,8 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
             style: TextStyle(fontSize: 15, color: Colors.black),
           ),
           centerTitle: true,
-          actions: <Widget>[
-            const BackdropToggleButton(
+          actions: const <Widget>[
+            BackdropToggleButton(
               color: Colors.black,
               icon: AnimatedIcons.list_view,
             ),
@@ -144,7 +141,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
-                if (listaPersonalAux!.length == 0) {
+                if (listaPersonalAux!.isEmpty) {
                   return const Center(
                     child: Text(
                       'No hay informacion',
@@ -184,8 +181,8 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                                 ),
                               ))),
                       if (isLoading == true)
-                        new Center(
-                          child: const CircularProgressIndicator(),
+                        const Center(
+                          child: CircularProgressIndicator(),
                         )
                     ],
                   );
@@ -244,23 +241,23 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                           child: DropdownButtonFormField<String>(
                             value: idTipoGobierno,
                             onChanged: (String? newValue) async {
-                              var _sectores = await ProviderTambok()
+                              var sectores = await ProviderTambok()
                                       .obtenerTipoGobierno(newValue) ??
                                   [];
 
-                              TipoGobiernoResponse _default =
+                              TipoGobiernoResponse oDefault =
                                   TipoGobiernoResponse();
-                              _default.idSector = 0;
-                              _default.idTipoGobierno = 0;
-                              _default.nombre = "TODOS LOS SECTORES";
+                              oDefault.idSector = 0;
+                              oDefault.idTipoGobierno = 0;
+                              oDefault.nombre = "TODOS LOS SECTORES";
 
-                              _sectores.add(_default);
+                              sectores.add(oDefault);
 
-                              _sectores.sort(
+                              sectores.sort(
                                   (a, b) => a.idSector!.compareTo(b.idSector!));
 
                               setState(() {
-                                sectores = _sectores;
+                                sectores = sectores;
                                 idTipoGobierno = newValue;
                                 idSector = "0";
                               });
@@ -319,7 +316,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: AppConfig.primaryColor,
+                            backgroundColor: AppConfig.primaryColor,
                           ),
                           onPressed: () async {
                             await ProviderTambok()

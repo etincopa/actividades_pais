@@ -13,7 +13,7 @@ class ClimaModel {
   int? code;
   String? tiempo;
 
-  ClimaModel.empty() {}
+  ClimaModel.empty();
 
   ClimaModel({
     this.temp,

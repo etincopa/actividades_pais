@@ -308,8 +308,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     if (pickedDate != null && pickedDate != currentDate) {
       aAvance = await mainCtr.progIntervencionTambo(
         '${oTambo.idTambo}',
-        DateFormat("yyyy").format(pickedDate!),
-        DateFormat("MM").format(pickedDate!),
+        DateFormat("yyyy").format(pickedDate),
+        DateFormat("MM").format(pickedDate),
         'X',
         'X',
         'X',
@@ -887,10 +887,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 },
               );
             } else {
-              Center(
+              const Center(
                 child: Text(
                   'SIN EQUIPOS ASIGNADOS',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontWeight: FontWeight.w700,
                     fontStyle: FontStyle.normal,
@@ -900,6 +900,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               );
             }
+            return null;
           },
         ),
       ),
@@ -1416,7 +1417,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         const SizedBox(height: 10),
                         const Text('FUENTE: PNPAIS'),
                         const SizedBox(height: 2),
-                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        Text("ACTUALIZADO AL $fechaActual"),
                         const SizedBox(height: 10),
                         const SizedBox(height: 15),
                         cardEquipoTecnologico(),
@@ -1635,12 +1636,13 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   _generateBorderRadius(index) {
-    if ((index + 1) == _selectedTab)
+    if ((index + 1) == _selectedTab) {
       return const BorderRadius.only(bottomRight: Radius.circular(10.0));
-    else if ((index - 1) == _selectedTab)
+    } else if ((index - 1) == _selectedTab) {
       return const BorderRadius.only(bottomLeft: Radius.circular(10.0));
-    else
+    } else {
       return BorderRadius.zero;
+    }
   }
 
 /*
@@ -1778,7 +1780,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -1886,7 +1888,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -1950,7 +1952,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           // List of Timeline Bubble Items
                           items: [
                             if (isLoadingHistorialGestor)
-                              for (var gestor in aHistorialGestor!)
+                              for (var gestor in aHistorialGestor)
                                 TimelineItem(
                                   title: '${gestor.nombres}',
                                   subtitle:
@@ -2110,7 +2112,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (aPriorizacion.isNotEmpty)
-                          for (var priorizacion in aPriorizacion!)
+                          for (var priorizacion in aPriorizacion)
                             ListTile(
                               iconColor: const Color.fromARGB(255, 0, 0, 0),
                               title: Row(children: [
@@ -2218,7 +2220,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ),
                         const SizedBox(height: 10),
                         Text(
-                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                            'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                         const SizedBox(height: 10),
                         const Text('FUENTE: PNPAIS'),
                         const SizedBox(
@@ -2297,7 +2299,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           width: 150,
                           imgDefault: 'assets/icons/user-male-2.png',
                         )
-                      : Center(),
+                      : const Center(),
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
@@ -2340,7 +2342,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -2579,8 +2581,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                         if (oTambo.montoAdjudicado != "")
                           ListTile(
                             title: const Text('MONTO CONTRATADO'),
-                            subtitle: Text(
-                                "${formatoDecimal(double.parse(oTambo.montoAdjudicado ?? '0'))}"),
+                            subtitle: Text(formatoDecimal(
+                                double.parse(oTambo.montoAdjudicado ?? '0'))),
                           ),
                         const SizedBox(height: 10),
                         const Text('FUENTE: BANCO DE INVERSIONES - MEF'),
@@ -2660,7 +2662,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -2731,7 +2733,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -2812,7 +2814,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const Divider(color: colorI),
             const SizedBox(height: 10),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -2984,7 +2986,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const Divider(color: colorI),
             const SizedBox(height: 10),
             Text(
-                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL ${sCurrentYear}'),
+                'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -3151,7 +3153,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             : aPlanMantenimientoInformatico.length),
                     itemBuilder: (context, index) {
                       if (isLoadingMantenimientoEquipos) {
-                        return ShinyWidget();
+                        return const ShinyWidget();
                       } else {
                         return Padding(
                             padding: const EdgeInsets.all(1.0),
@@ -3162,17 +3164,19 @@ class _DetalleTambookState extends State<DetalleTambook>
                                           'MANTENIMIENTO PROGRAMADO PARA EL MES DE ',
                                       children: [
                                     TextSpan(
-                                        text:
-                                            "${obtenerNombreMes(aPlanMantenimientoInformatico[index].mes ?? '')}",
+                                        text: obtenerNombreMes(
+                                            aPlanMantenimientoInformatico[index]
+                                                    .mes ??
+                                                ''),
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold)),
-                                    TextSpan(text: " DEL AÑO "),
+                                    const TextSpan(text: " DEL AÑO "),
                                     TextSpan(
                                         text:
                                             "${aPlanMantenimientoInformatico[index].anio}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold)),
-                                    TextSpan(text: ".")
+                                    const TextSpan(text: ".")
                                   ]))),
                               const ListTile(
                                 title: Text('SOPORTE DE UTI ASIGNADO : '),
@@ -3208,7 +3212,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       ),
                                     ),
                                     placeholder: (context, url) =>
-                                        ShinyWidgetImage(),
+                                        const ShinyWidgetImage(),
                                     errorWidget: (context, url, error) =>
                                         const Icon(Icons.error),
                                   ),
@@ -3259,7 +3263,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -3329,7 +3333,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             : aPlanMantenimientoInfraestructura.length),
                     itemBuilder: (context, index) {
                       if (isLoadingMantenimientoInfraestructura) {
-                        return ShinyWidget();
+                        return const ShinyWidget();
                       } else {
                         if (aPlanMantenimientoInfraestructura.isNotEmpty) {
                           return Padding(
@@ -3345,7 +3349,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                                         ListTile(
                                           title: const Text('SITUACIÓN:'),
                                           subtitle: Text(
-                                              '${aPlanMantenimientoInfraestructura[index].situacion!.toUpperCase()}'),
+                                              aPlanMantenimientoInfraestructura[
+                                                      index]
+                                                  .situacion!
+                                                  .toUpperCase()),
                                         ),
                                         if ((double.tryParse(
                                                     aPlanMantenimientoInfraestructura[
@@ -3396,7 +3403,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 const SizedBox(height: 10),
                                 const Text('FUENTE: PNPAIS'),
                                 const SizedBox(height: 2),
-                                Text("ACTUALIZADO AL ${fechaActual}"),
+                                Text("ACTUALIZADO AL $fechaActual"),
                                 const SizedBox(height: 10),
                               ]));
                         } else {
@@ -3627,19 +3634,19 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ? Text(oSrvInter.estadoInternet!,
                                   style: const TextStyle(color: Colors.green))
                               : Text(
-                                  "${oSrvInter.estadoInternet!}\n${(incidencias.isNotEmpty) ? "(${incidencias![0].fechaAveria})" : ''}",
+                                  "${oSrvInter.estadoInternet!}\n${(incidencias.isNotEmpty) ? "(${incidencias[0].fechaAveria})" : ''}",
                                   style: const TextStyle(color: Colors.red),
                                 ),
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD BAJADA'),
                           subtitle: Text(
-                              "${oSrvInter.veloBaja!} (${(oSrvInter.veloMinBajaPtje != "") ? formatoDecimal((int.parse(oSrvInter.veloMinBajaPtje!.replaceAll(new RegExp(r'[^0-9]'), '')) ?? 0) / 100) : ''} %)"),
+                              "${oSrvInter.veloBaja!} (${(oSrvInter.veloMinBajaPtje != "") ? formatoDecimal((int.parse(oSrvInter.veloMinBajaPtje!.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0) / 100) : ''} %)"),
                         ),
                         ListTile(
                           title: const Text('VELOCIDAD SUBIDA'),
                           subtitle: Text(
-                              "${oSrvInter.veloSube!} (${(oSrvInter.veloMinSubePtje != "") ? formatoDecimal((int.parse(oSrvInter.veloMinSubePtje!.replaceAll(new RegExp(r'[^0-9]'), '')) ?? 0) / 100) : ''} %)"),
+                              "${oSrvInter.veloSube!} (${(oSrvInter.veloMinSubePtje != "") ? formatoDecimal((int.parse(oSrvInter.veloMinSubePtje!.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0) / 100) : ''} %)"),
                         ),
                       ],
                     ),
@@ -3693,7 +3700,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ),
                 ),
 
-                Divider(
+                const Divider(
                   height: 4,
                 ),
                 const ListTile(
@@ -3745,7 +3752,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const SizedBox(height: 10),
             const Text('FUENTE: PNPAIS'),
             const SizedBox(height: 2),
-            Text("ACTUALIZADO AL ${fechaActual}"),
+            Text("ACTUALIZADO AL $fechaActual"),
             const SizedBox(height: 10),
           ],
         ),
@@ -3761,7 +3768,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   double getNumber(String value) {
     try {
-      return double.parse(value.replaceAll(new RegExp(r'[^0-9]'), ''));
+      return double.parse(value.replaceAll(RegExp(r'[^0-9]'), ''));
     } catch (oError) {
       return 0;
     }
@@ -3769,7 +3776,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   String getText(String value) {
     try {
-      return value.replaceAll(new RegExp(r'[^A-Za-z]'), '');
+      return value.replaceAll(RegExp(r'[^A-Za-z]'), '');
     } catch (oError) {
       return '';
     }
@@ -3825,7 +3832,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         : (incidencias.isEmpty ? 1 : incidencias.length),
                     itemBuilder: (context, index) {
                       if (isLoading) {
-                        return ShinyWidget();
+                        return const ShinyWidget();
                       } else {
                         if (incidencias.isEmpty) {
                           return Center(
@@ -3865,7 +3872,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                             const SizedBox(height: 10),
                             const Text('FUENTE: PNPAIS'),
                             const SizedBox(height: 2),
-                            Text("ACTUALIZADO AL ${fechaActual}"),
+                            Text("ACTUALIZADO AL $fechaActual"),
                             const SizedBox(height: 10),
                           ],
                         );
@@ -3896,7 +3903,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const SizedBox(height: 10),
             const Text('FUENTE: PNPAIS'),
             const SizedBox(height: 2),
-            Text("ACTUALIZADO AL ${fechaActual}"),
+            Text("ACTUALIZADO AL $fechaActual"),
             const SizedBox(height: 10),
             if (aInterAmbDir.isEmpty && statusLoadActividad == 0)
               ListTile(
@@ -4099,7 +4106,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const SizedBox(height: 10),
             const Text('FUENTE: PNPAIS'),
             const SizedBox(height: 2),
-            Text("ACTUALIZADO AL ${fechaActual}"),
+            Text("ACTUALIZADO AL $fechaActual"),
             const SizedBox(height: 10),
             if (aInterSopEnt.isEmpty && statusLoadActividad == 0)
               ListTile(
@@ -4154,7 +4161,7 @@ class _DetalleTambookState extends State<DetalleTambook>
             const SizedBox(height: 10),
             const Text('FUENTE: PNPAIS'),
             const SizedBox(height: 2),
-            Text("ACTUALIZADO AL ${fechaActual}"),
+            Text("ACTUALIZADO AL $fechaActual"),
             const SizedBox(height: 10),
             if (aCoordinacio.isEmpty && statusLoadActividad == 0)
               ListTile(
@@ -4223,7 +4230,7 @@ class _DetalleTambookState extends State<DetalleTambook>
           borderRadius: BorderRadius.all(Radius.circular(20))),
       actions: const <Widget>[],
       content: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: double.maxFinite,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -4347,11 +4354,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                     5.00,
                   ),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
+                  children: [
                     Padding(
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: Text(
@@ -4631,7 +4638,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           : (aAvance.isEmpty ? 1 : aAvance.length),
                       itemBuilder: (context, index) {
                         if (isLoading) {
-                          return ShinyWidget();
+                          return const ShinyWidget();
                         } else {
                           if (aAvance.isEmpty) {
                             return Center(
@@ -4737,7 +4744,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   color: Colors.black,
                 ),
                 title: Text(
-                  '$heading',
+                  heading,
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -4753,10 +4760,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (aActividadesDiarias.isEmpty)
-                          Center(
-                            child: const Text("SIN REGISTROS"),
+                          const Center(
+                            child: Text("SIN REGISTROS"),
                           ),
-                        for (var actividades in aActividadesDiarias!)
+                        for (var actividades in aActividadesDiarias)
                           Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
@@ -4816,7 +4823,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: PNPAIS'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -5057,7 +5064,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 const SizedBox(height: 10),
                 const Text('FUENTE: OPEN-METEO'),
                 const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
+                Text("ACTUALIZADO AL $fechaActual"),
                 const SizedBox(height: 10),
               ],
             ),
@@ -5163,7 +5170,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                         const SizedBox(height: 10),
                         const Text('FUENTE: PNPAIS'),
                         const SizedBox(height: 2),
-                        Text("ACTUALIZADO AL ${fechaActual}"),
+                        Text("ACTUALIZADO AL $fechaActual"),
                         const SizedBox(height: 10),
                       ],
                     ),

@@ -425,7 +425,7 @@ class _MonitoringDetailNewEditPageState
                 for (DataRow oDataRow in aDataRow) {
                   LocalKey oKey = oDataRow.key!;
                   int iKey = int.parse(
-                      oKey.toString().replaceAll(new RegExp(r'[^0-9]'), ''));
+                      oKey.toString().replaceAll(RegExp(r'[^0-9]'), ''));
                   if (iKey == o.sequence) {
                     break;
                   }
@@ -459,7 +459,7 @@ class _MonitoringDetailNewEditPageState
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => MainFooterAllOptionPage(),
+                  builder: (BuildContext context) => const MainFooterAllOptionPage(),
                 ),
               )
             }
@@ -955,7 +955,7 @@ class _MonitoringDetailNewEditPageState
                                       .firstWhere((map) =>
                                           map.codigo1 == _valuePartidaEje);
 
-                                  final initialValue = 0;
+                                  const initialValue = 0;
 
                                   var iSec = aPartidaEjecutada.fold(
                                       initialValue,
@@ -1018,7 +1018,7 @@ class _MonitoringDetailNewEditPageState
                       ],
                     ),
                   )
-                : SizedBox(),
+                : const SizedBox(),
             /**
              * OBSERVACIONES
              */
@@ -1716,7 +1716,7 @@ class _MonitoringDetailNewEditPageState
                       )
                     ],
                   )
-                : Row(),
+                : const Row(),
           ],
         ),
       ),

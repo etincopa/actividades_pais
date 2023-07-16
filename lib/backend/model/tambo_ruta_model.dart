@@ -15,7 +15,7 @@ class RutaTamboModel {
   String? txtDescripcion;
   String? txtEncuenta;
 
-  RutaTamboModel.empty() {}
+  RutaTamboModel.empty();
 
   RutaTamboModel({
     this.idTambo,

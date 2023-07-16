@@ -21,7 +21,7 @@ class ProgramacionMantenimientoModel {
   String? setiembre;
   String? octubre;
 
-  ProgramacionMantenimientoModel.empty() {}
+  ProgramacionMantenimientoModel.empty();
 
   ProgramacionMantenimientoModel(
       {this.ut,

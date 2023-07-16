@@ -6,8 +6,8 @@ class ListaUbicacion {
   ListaUbicacion.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new Ubicacion.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = Ubicacion.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -23,9 +23,9 @@ class Ubicacion {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_ubicacion'] = this.idUbicacion;
-    data['ubicacion'] = this.ubicacion;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_ubicacion'] = idUbicacion;
+    data['ubicacion'] = ubicacion;
     return data;
   }
 }

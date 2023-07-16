@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:isolate';
 import 'package:actividades_pais/src/datamodels/Clases/Distritos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Provincia.dart';
 import 'package:logger/logger.dart';

@@ -25,7 +25,7 @@ class CierreActividadesPage extends StatefulWidget {
       idUnidadesOrganicas,
       idPlataforma;
   CierreActividadesPage(
-      {this.dni,
+      {super.key, this.dni,
       this.latitud,
       this.longitud,
       this.fechaHora,
@@ -34,24 +34,24 @@ class CierreActividadesPage extends StatefulWidget {
       this.idUnidTerritoriales,
       this.idUnidadesOrganicas,
       this.idPlataforma});
-  static Color primaryColor = Color(0xFF3949AB);
+  static Color primaryColor = const Color(0xFF3949AB);
 
   @override
   State<CierreActividadesPage> createState() => _CierreActividadesPageState();
 }
 
 class _CierreActividadesPageState extends State<CierreActividadesPage> {
-  TextEditingController _controllerNDocumento = TextEditingController();
+  final TextEditingController _controllerNDocumento = TextEditingController();
 
-  TextEditingController _controllerApPaterno = TextEditingController();
+  final TextEditingController _controllerApPaterno = TextEditingController();
 
-  TextEditingController _controllerApMaterno = TextEditingController();
+  final TextEditingController _controllerApMaterno = TextEditingController();
 
-  TextEditingController _controllerNombres = TextEditingController();
+  final TextEditingController _controllerNombres = TextEditingController();
 
-  TextEditingController _controllerCargo = TextEditingController();
+  final TextEditingController _controllerCargo = TextEditingController();
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   var _image;
 
@@ -68,7 +68,7 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
         appBar: AppBar(
             backgroundColor: Colors.blue[800],
             leading: Util().iconbuton(() => Navigator.of(context).pop()),
-            title: Row(
+            title: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Actividad"),
@@ -76,11 +76,11 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
             )),
         body: SingleChildScrollView(
           child: Container(
-              margin: EdgeInsets.all(25),
+              margin: const EdgeInsets.all(25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                   Container(
@@ -114,18 +114,18 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
                     ),
                   ),
                   Column(
-                    children: <Widget>[SizedBox(height: 20.0), _tomarImagen],
+                    children: <Widget>[const SizedBox(height: 20.0), _tomarImagen],
                   ),
-                  SizedBox(height: 25.0),
-                  Container(
+                  const SizedBox(height: 25.0),
+                  SizedBox(
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     // ignore: deprecated_member_use
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF3949AB),
+                          backgroundColor: const Color(0xFF3949AB),
                         ),
-                        child: Text(
+                        child: const Text(
                           "REGISTRAR",
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white),
@@ -191,12 +191,12 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
   Widget get _tomarImagen {
     return Center(
       child: Stack(
-        alignment: Alignment(0.9, 1.1),
+        alignment: const Alignment(0.9, 1.1),
         children: <Widget>[
           Container(
             height: 200,
             width: 200,
-            margin: EdgeInsets.only(right: 10.0, left: 10.2),
+            margin: const EdgeInsets.only(right: 10.0, left: 10.2),
             child: Material(
               elevation: 4.0,
               //    borderRadius: BorderRadius.circular(100.0),
@@ -204,15 +204,15 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
               child: new ClipRRect(
                   //     borderRadius: new BorderRadius.circular(100.0),
                   child: _image == null
-                      ? new GestureDetector(
+                      ? GestureDetector(
                           onTap: () {
                             selectCamera();
                           },
-                          child: new Container(
+                          child: SizedBox(
                               height: 80.0,
                               width: 80.0,
                               // color: primaryColor,
-                              child: new FadeInImage.assetNetwork(
+                              child: FadeInImage.assetNetwork(
                                   placeholder: fotonomm,
                                   imageErrorBuilder: (BuildContext context,
                                       Object exception,
@@ -220,11 +220,11 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
                                     return Image.asset(fotonomm);
                                   },
                                   image: '')))
-                      : new GestureDetector(
+                      : GestureDetector(
                           onTap: () {
                             selectCamera();
                           },
-                          child: new Container(
+                          child: SizedBox(
                             height: 80.0,
                             width: 80.0,
                             child: Image.file(
@@ -283,11 +283,11 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancelar'),
             isDefaultAction: true,
             onPressed: () {
               Navigator.pop(context, 'Cancelar');
             },
+            child: const Text('Cancelar'),
           )),
     );
   }
@@ -299,7 +299,7 @@ class _CierreActividadesPageState extends State<CierreActividadesPage> {
       _imageby = File(gallery!.path);
       _image = gallery;
     });
-    List<int> bytes = await new File(_imageby!.path).readAsBytesSync();
+    List<int> bytes = File(_imageby!.path).readAsBytesSync();
     image64 = base64Encode(bytes);
   }
 

@@ -4,8 +4,8 @@ class ListarTipoDocumento {
   ListarTipoDocumento.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarTrabajador = new TipoDocumento.fromJson(item);
-      items.add(_listarTrabajador);
+      final listarTrabajador = TipoDocumento.fromJson(item);
+      items.add(listarTrabajador);
     }
   }
 }

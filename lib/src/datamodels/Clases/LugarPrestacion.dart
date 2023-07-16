@@ -4,8 +4,8 @@ class ListarLugarPrestacion {
   ListarLugarPrestacion.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new LugarPrestacion.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = LugarPrestacion.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -27,7 +27,7 @@ class LugarPrestacion {
   }
 
   factory LugarPrestacion.fromJson(Map<String, dynamic> parsedJson) =>
-      new LugarPrestacion(
+      LugarPrestacion(
           nombreLugarPrestacion: parsedJson['nombreLugarPrestacion'],
           idLugarPrestacion: parsedJson['idLugarPrestacion']);
 

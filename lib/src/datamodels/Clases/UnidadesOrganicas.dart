@@ -1,4 +1,3 @@
-import 'package:sqflite/sqflite.dart';
 
 class ListarUnidadesOrganicas {
   List<UnidadesOrganicas> items = [];
@@ -6,8 +5,8 @@ class ListarUnidadesOrganicas {
   ListarUnidadesOrganicas.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new UnidadesOrganicas.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = UnidadesOrganicas.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -28,7 +27,7 @@ class UnidadesOrganicas {
   }
 
   factory UnidadesOrganicas.fromJson(Map<String, dynamic> parsedJson) =>
-      new UnidadesOrganicas(
+      UnidadesOrganicas(
           UNIDAD_ORGANICA: parsedJson['UNIDAD_ORGANICA'],
           IDUO: parsedJson['IDUO']);
 

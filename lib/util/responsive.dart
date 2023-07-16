@@ -11,12 +11,12 @@ class Responsive {
   static Responsive of(BuildContext context) => Responsive(context);
   Responsive(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    this._width = size.width;
-    this._heigth = size.height;
+    _width = size.width;
+    _heigth = size.height;
 
     // c2+ a2+02 => C= sqrt(a2+b2)
 
-    this._diagonal = math.sqrt(math.pow(_width, 2) + math.pow(_heigth, 2));
+    _diagonal = math.sqrt(math.pow(_width, 2) + math.pow(_heigth, 2));
   }
 
   double wp(double porcent) => _width * porcent / 100;

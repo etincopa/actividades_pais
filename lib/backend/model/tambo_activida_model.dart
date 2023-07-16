@@ -34,7 +34,7 @@ class TamboActividadModel {
   String? fechaCreacionImagen = '';
   String? base64Temp = '';
 
-  TamboActividadModel.empty() {}
+  TamboActividadModel.empty();
 
   TamboActividadModel({
     this.idTambo,

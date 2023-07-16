@@ -1,8 +1,9 @@
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 
 class backdrofile extends StatefulWidget {
+  const backdrofile({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -17,11 +18,11 @@ class _HomePageState extends State<backdrofile> {
   void filterList(String query) {
     List<String> filtered = [];
     if (query.isNotEmpty) {
-      items.forEach((item) {
+      for (var item in items) {
         if (item.toLowerCase().contains(query.toLowerCase())) {
           filtered.add(item);
         }
-      });
+      }
     } else {
       filtered = List.from(items);
     }
@@ -36,31 +37,31 @@ class _HomePageState extends State<backdrofile> {
     filteredItems = List.from(items);
   }
 
-  int _currentIndex = 0;
+  final int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    int _currentIndex = 0;
-    final List<Widget> _pages = [Container(), Container()];
+    int currentIndex = 0;
+    final List<Widget> pages = [Container(), Container()];
     return MaterialApp(
       title: 'Backdrop Demo',
       home: BackdropScaffold(
         appBar: BackdropAppBar(
-          title: Text("Navigation Example"),
-          actions: <Widget>[
+          title: const Text("Navigation Example"),
+          actions: const <Widget>[
             BackdropToggleButton(
               icon: AnimatedIcons.list_view,
             )
           ],
         ),
 
-        frontLayer: _pages[_currentIndex],
+        frontLayer: pages[currentIndex],
         backLayer: BackdropNavigationBackLayer(
-          items: [
+          items: const [
             ListTile(title: Text("Widget 1")),
             ListTile(title: Text("Widget 2")),
           ],
-          onTap: (int position) => {setState(() => _currentIndex = position)},
+          onTap: (int position) => {setState(() => currentIndex = position)},
         ),
       ),
     );

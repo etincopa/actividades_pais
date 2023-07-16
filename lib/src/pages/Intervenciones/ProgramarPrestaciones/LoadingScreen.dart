@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LoadingScreen extends StatelessWidget {
   final String loadingMessage;
 
-  LoadingScreen({this.loadingMessage = 'Cargando...'});
+  const LoadingScreen({super.key, this.loadingMessage = 'Cargando...'});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class LoadingScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 20),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 20),
               Text(
                 loadingMessage,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),

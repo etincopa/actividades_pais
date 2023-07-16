@@ -2,7 +2,6 @@ import 'package:actividades_pais/src/Utils/add_home_icons.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:actividades_pais/src/datamodels/Provider/Pias/ProviderDataJson.dart';
 import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/src/pages/Pias/Actividades/listaActividades.dart';
@@ -20,7 +19,7 @@ class ReporteDiario extends StatefulWidget {
   String lat = '';
   String campaniaCod = '';
 
-  ReporteDiario({
+  ReporteDiario({super.key, 
     this.plataforma = "",
     this.unidadTeritorial = "",
     this.idPlataforma = 0,

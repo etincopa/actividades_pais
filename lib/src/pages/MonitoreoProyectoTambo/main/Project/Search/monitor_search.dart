@@ -71,7 +71,7 @@ class MonitorSearchDelegate extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     final String searched = query;
-    if (searched == null || !_data.contains(searched)) {
+    if (!_data.contains(searched)) {
       final splitted = searched.split(' - ');
       for (var item in searchMonitor) {
         if (item.idMonitoreo == splitted[0]) {

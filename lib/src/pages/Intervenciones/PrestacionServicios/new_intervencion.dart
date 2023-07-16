@@ -40,7 +40,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
   String? _valueAcreEvento = _itemAcreEvento[0];
   String? _valueRealizoEvento = _itemRealizoEvento[0];
   String? _valueTPlanTrabajo = _itemTPlanTrabajo[0];
-  String? _valueAnioPT = _itemAnioPT[0];
+  final String _valueAnioPT = _itemAnioPT[0];
   String? _valueTipoAccion = _itemTipoAccion[0];
 
   IntervencionISOK? _charIsOK = IntervencionISOK.si;
@@ -63,7 +63,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Center(
           child: Text(
@@ -128,7 +128,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
                       );
                     }).toList(),
                   )
-                : Center(),
+                : const Center(),
             _chekIPOtambo!
                 ? DropdownButtonFormField(
                     decoration: const InputDecoration(labelText: "Plataforma"),
@@ -146,7 +146,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
                       );
                     }).toList(),
                   )
-                : Center(),
+                : const Center(),
             /**
              * Fecha de Intervenciones
              */
@@ -350,7 +350,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.add_to_queue),
-                  color: Color.fromARGB(255, 69, 90, 210),
+                  color: const Color.fromARGB(255, 69, 90, 210),
                   onPressed: () async {
                     await _showMyDialog(
                       context,
@@ -630,13 +630,12 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 12, 124, 205),
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 12, 124, 205),
                     shadowColor: const Color.fromARGB(255, 53, 53, 53),
                     elevation: 5,
                   ),
                   onPressed: () {},
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: width / 3.5,
                     child: const Center(
@@ -655,13 +654,12 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(255, 226, 82, 30),
-                    onPrimary: Colors.white,
+                    foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 226, 82, 30),
                     shadowColor: const Color.fromARGB(255, 53, 53, 53),
                     elevation: 5,
                   ),
                   onPressed: () {},
-                  child: Container(
+                  child: SizedBox(
                     height: 50,
                     width: width / 3.5,
                     child: const Center(
@@ -796,7 +794,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -819,7 +817,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -842,7 +840,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -865,7 +863,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -889,7 +887,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -912,7 +910,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -935,7 +933,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -979,7 +977,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -1002,7 +1000,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),
@@ -1025,7 +1023,7 @@ class _IntervencionCreateState extends State<IntervencionCreate> {
               value: value,
               child: Text(
                 value,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
             );
           }).toList(),

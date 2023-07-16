@@ -6,7 +6,7 @@ abstract class BusyIndicator {
     showCupertinoModalPopup(
       context: context,
       builder: (_) {
-        return FullScreenLoader(); // Container
+        return const FullScreenLoader(); // Container
       },
     );
   }
@@ -19,7 +19,7 @@ abstract class BusyIndicator {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => FullScreenLoader(),
+      builder: (context) => const FullScreenLoader(),
     );
   }
 
@@ -29,6 +29,8 @@ abstract class BusyIndicator {
 }
 
 class FullScreenLoader extends StatelessWidget {
+  const FullScreenLoader({super.key});
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -46,7 +48,7 @@ class FullScreenLoader extends StatelessWidget {
             ),
           ), // Center
         ),
-        SizedBox(
+        const SizedBox(
           height: 90,
         ),
       ]),

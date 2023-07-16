@@ -17,7 +17,7 @@ class ListasParaEnvio extends StatefulWidget {
   String codigoIntervencion;
   String tambo;
 
-  ListasParaEnvio(this.codigoIntervencion, this.tambo);
+  ListasParaEnvio(this.codigoIntervencion, this.tambo, {super.key});
 
   @override
   State<ListasParaEnvio> createState() => _ListasParaEnvioState();
@@ -62,22 +62,22 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
   cargarPorcentajes() async {
     var res =
         await DatabasePr.db.listarPorcentajes(widget.codigoIntervencion, 1);
-    if (res.length > 0) {
+    if (res.isNotEmpty) {
       sincronizadoArchivos = res[0].porcentaje!;
     }
     var res2 =
         await DatabasePr.db.listarPorcentajes(widget.codigoIntervencion, 2);
-    if (res2.length > 0) {
+    if (res2.isNotEmpty) {
       sincronizadoFuncionario = res2[0].porcentaje!;
     }
     var res3 =
         await DatabasePr.db.listarPorcentajes(widget.codigoIntervencion, 3);
-    if (res3.length > 0) {
+    if (res3.isNotEmpty) {
       sincronizadoParticipante = res3[0].porcentaje!;
     }
     var res4 =
         await DatabasePr.db.listarPorcentajes(widget.codigoIntervencion, 4);
-    if (res4.length > 0) {
+    if (res4.isNotEmpty) {
       sincronizadoExtrangeros = res4[0].porcentaje!;
     }
   }
@@ -147,7 +147,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
         await DatabasePr.db.listarFuncionariosDB(widget.codigoIntervencion);
     funcionarios = listaParticipantes[0];
     setState(() {});
-    var resp;
+    int resp;
     for (var i = 0; i < listaParticipantes.length; i++) {
       resp = await ProviderDatos().subirFuncionarios(listaParticipantes[i]);
       listafnscr.add(resp);
@@ -171,12 +171,12 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
   EnvioParticipantes() async {
     var listaParticipantes = await DatabasePr.db
         .listarParticipantes(widget.codigoIntervencion, 'participantes');
-    if(listaParticipante.length>0){
+    if(listaParticipante.isNotEmpty){
       participantes = listaParticipantes[0];
       setState(() {});
     }
 
-    var resp;
+    int resp;
     for (var i = 0; i < listaParticipantes.length; i++) {
       resp = await ProviderDatos().subirParticipantes(listaParticipantes[i]);
       listaParticipante.add(resp);
@@ -203,7 +203,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
         .listarParticipantes(widget.codigoIntervencion, 'extrangeros');
     participantes = listaParticipantes[0];
     setState(() {});
-    var resp;
+    int resp;
     for (var i = 0; i < listaParticipantes.length; i++) {
       resp = await ProviderDatos().subirParticipantes(listaParticipantes[i]);
       listaParticipanteEx.add(resp);
@@ -271,7 +271,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
         await DatabasePr.db.cierreTRama(widget.codigoIntervencion);
     //participantes = listaParticipantes[0];
 
-    var resp;
+    int resp;
 
     resp = await ProviderDatos().subirCierre(listaParticipantes[0]);
     respuestaCierre = resp;
@@ -292,7 +292,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
       await  Navigator.of(context).pushReplacement(
         MaterialPageRoute(
             builder: (context) =>
-                PendienteSincronizar()),
+                const PendienteSincronizar()),
       );
       setState(() {});
     }
@@ -302,14 +302,14 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(67.0),
+        preferredSize: const Size.fromHeight(67.0),
         child: AppBar(
           leading: Util().iconbuton(() => Navigator.of(context).pop()),
           title: Text(
-            widget.tambo + '\n' + widget.codigoIntervencion,
-            style: TextStyle(fontSize: 15),
+            '${widget.tambo}\n${widget.codigoIntervencion}',
+            style: const TextStyle(fontSize: 15),
           ),
-          backgroundColor: Color(0xFF78b8cd),
+          backgroundColor: const Color(0xFF78b8cd),
         ),
       ),
       body: Center(
@@ -317,17 +317,17 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
           children: [
             Center(
                 child: Container(
-                    margin: EdgeInsets.only(left: 10, top: 10),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: 10, top: 10),
+                    child: const Text(
                       " Antes de sincronizar asegurar de tener toda la información registrada.",
                       style: TextStyle(color: Colors.red),
                     ))),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Card(
                 child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [
                   Row(
@@ -336,9 +336,9 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                       Text(
                           '\n Listas de Fotos \n \n  Cantidad:   $cantidadImg \n'),
                       InkWell(
-                        child: Icon(
+                        child: const Icon(
                           Icons.send,
-                          color: const Color(0xFF78b8cd),
+                          color: Color(0xFF78b8cd),
                         ),
                         onTap: () {
                           cargarListas();
@@ -357,8 +357,8 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: new LinearPercentIndicator(
+                    padding: const EdgeInsets.all(15.0),
+                    child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 60,
                       animation: true,
                       lineHeight: 20.0,
@@ -373,12 +373,12 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                 ],
               ),
             )),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
               child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: [
                     Row(
@@ -407,8 +407,8 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: new LinearPercentIndicator(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
                         width: MediaQuery.of(context).size.width - 60,
                         animation: true,
                         lineHeight: 20.0,
@@ -424,12 +424,12 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
               child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -437,9 +437,9 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                       Text(
                           '\n  Listas de Participantes \n \n  Cantidad:  $cantidadParticipantes \n '),
                       InkWell(
-                        child: Icon(
+                        child: const Icon(
                           Icons.send,
-                          color: const Color(0xFF78b8cd),
+                          color: Color(0xFF78b8cd),
                         ),
                         onTap: () async {
                           cargarListas();
@@ -457,8 +457,8 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: new LinearPercentIndicator(
+                    padding: const EdgeInsets.all(15.0),
+                    child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 60,
                       animation: true,
                       lineHeight: 20.0,
@@ -473,12 +473,12 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                 ]),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
               child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: [
                     Row(
@@ -487,9 +487,9 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                         Text(
                             '\n  Listas de Extranjeros \n \n  Cantidad:  $cantidadPartExtranjeros \n '),
                         InkWell(
-                          child: Icon(
+                          child: const Icon(
                             Icons.send,
-                            color: const Color(0xFF78b8cd),
+                            color: Color(0xFF78b8cd),
                           ),
                           onTap: () {
                              cargarListas();
@@ -508,8 +508,8 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: new LinearPercentIndicator(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
                         width: MediaQuery.of(context).size.width - 60,
                         animation: true,
                         lineHeight: 20.0,
@@ -527,16 +527,16 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
             ),
             Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.all(25),
+                margin: const EdgeInsets.all(25),
                 height: 38,
                 //left: 10, right: 10, top: 10
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: AppConfig.primaryColor,
+                      backgroundColor: AppConfig.primaryColor,
                       //   shadowColor:
-                      textStyle: TextStyle(fontSize: 24),
-                      minimumSize: Size.fromHeight(72),
-                      shape: StadiumBorder()),
+                      textStyle: const TextStyle(fontSize: 24),
+                      minimumSize: const Size.fromHeight(72),
+                      shape: const StadiumBorder()),
                   onPressed: () async {
                     Util().showAlertDialogokno('Pendientes Envio', context, () {
                       Navigator.pop(context);
@@ -546,13 +546,13 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                     }, 'Estas seguro de cerrar');
                   },
                   child: _isloading
-                      ? Row(
+                      ? const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CircularProgressIndicator(
                               color: Colors.white,
                             ),
-                            const SizedBox(
+                            SizedBox(
                               width: 24,
                             ),
                             Text(
@@ -561,7 +561,7 @@ class _ListasParaEnvioState extends State<ListasParaEnvio> {
                             )
                           ],
                         )
-                      : Text(
+                      : const Text(
                           'Guardar',
                           style: TextStyle(fontSize: 19),
                         ),

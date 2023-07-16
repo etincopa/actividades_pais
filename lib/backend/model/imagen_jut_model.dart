@@ -19,7 +19,7 @@ class ImagenJUTModel {
   String? path;
   String? imagenJUT;
 
-  ImagenJUTModel.empty() {}
+  ImagenJUTModel.empty();
 
   ImagenJUTModel({
     this.idUT,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyImageMultiple extends StatefulWidget {
-  MyImageMultiple({
+  const MyImageMultiple({
     Key? key,
     required this.controller,
     required this.nameField,
@@ -27,9 +27,9 @@ class _MyImageMultipleState extends State<MyImageMultiple> {
     var selectedItemCount = 0.obs;
     widget.controller.itemsImagesAll.forEach((key, items) {
       if (key == widget.nameField) {
-        items.forEach((entry) {
+        for (var entry in items) {
           itemsImagePath.add(entry);
-        });
+        }
       }
     });
     return ListView(

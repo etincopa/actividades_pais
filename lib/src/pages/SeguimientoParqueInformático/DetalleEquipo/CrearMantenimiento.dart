@@ -10,7 +10,7 @@ import '../../../datamodels/Servicios/Servicios.dart';
 class CrearMantenimiento extends StatefulWidget {
   int idEquipoInformatico = 0;
 
-  CrearMantenimiento(this.idEquipoInformatico);
+  CrearMantenimiento(this.idEquipoInformatico, {super.key});
 
   @override
   State<CrearMantenimiento> createState() => _CrearMantenimientoState();
@@ -44,12 +44,12 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: Text(
+          title: const Text(
             "REGISTRAR MANTENIMIENTO EQUIPO INFORMATICO",
             style: TextStyle(fontSize: 13),
           )),
       body: Container(
-          margin: EdgeInsets.all(15),
+          margin: const EdgeInsets.all(15),
           child: ListView(
             children: [
               /*{
@@ -71,7 +71,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
               _textFormField(
                 controlador: controladorFechaMantenimiento,
                 labelText: 'FECHA MANTENIMIENTO',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onTab: () {
                   _selectDate(context, controladorFechaMantenimiento);
                   print(controladorFechaMantenimiento.text);
@@ -86,7 +86,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                 lineas: 2,
                 controlador: controladorFalla,
                 labelText: 'FALLA',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.falla = value;
                 },
@@ -95,7 +95,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                 lineas: 2,
                 controlador: controladorCausa,
                 labelText: 'CAUSA',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.causa = value;
                 },
@@ -104,7 +104,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                 lineas: 3,
                 controlador: controladorSolucion,
                 labelText: 'SOLUCION',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.solucion = value;
                 },
@@ -113,7 +113,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                 lineas: 4,
                 controlador: controladorObservacion,
                 labelText: 'OBSERVACION',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.descripcion = value;
                 },
@@ -121,7 +121,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
               _textFormField(
                 controlador: controladorTecnologia,
                 labelText: 'TECNOLOGIA',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.tecnologia = value;
                 },
@@ -129,7 +129,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
               _textFormField(
                 controlador: controladorProcesador,
                 labelText: 'PROCESADOR',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.procesador = value;
                 },
@@ -137,7 +137,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
               _textFormField(
                 controlador: controladorRam,
                 labelText: 'RAM',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.ram = value;
                 },
@@ -145,7 +145,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
               _textFormField(
                 controlador: controladorDiscoDuro,
                 labelText: 'DISCO DURO',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.discoDuro = value;
                 },
@@ -153,7 +153,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
               _textFormField(
                 controlador: controladorSistemaOperativo,
                 labelText: 'SISTEMA OPERATIVO',
-                icon: Icon(Icons.note_add, size: 15),
+                icon: const Icon(Icons.note_add, size: 15),
                 onChanged: (value) {
                   equipoMantenimiento.sistOperativo = value;
                 },
@@ -165,7 +165,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue[600],
+                      backgroundColor: Colors.blue[600],
                     ),
                     onPressed: () async {
                       equipoMantenimiento.fechaMantenimiento =
@@ -223,7 +223,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
         } else {
           return Stack(
             children: [
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "          TIPO MANTENIMIENTO",
@@ -235,7 +235,7 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 5),
+                margin: const EdgeInsets.only(top: 5),
                 child: Row(
                   children: [
                     const Icon(Icons.account_balance_wallet_outlined,
@@ -247,22 +247,22 @@ class _CrearMantenimientoState extends State<CrearMantenimiento> {
                         isExpanded: true,
                         items: snapshot.data
                             ?.map((user) => DropdownMenuItem<TipoMantenimiento>(
-                                  child:
-                                      Text(user.descripcionTipoMantenimiento!),
                                   value: user,
+                                  child:
+                                      Text(user.descripcionTipoMantenimiento),
                                 ))
                             .toList(),
                         onChanged: (TipoMantenimiento? value) async {
                           setState(() {
                             seleccionarTipoMantenimiento =
-                                value!.descripcionTipoMantenimiento!;
+                                value!.descripcionTipoMantenimiento;
                             equipoMantenimiento.tipoMantenimiento =
                                 value.idTipoMantenimiento.toString();
                           });
                         },
                         hint: Text(
-                          "$seleccionarTipoMantenimiento",
-                          style: TextStyle(color: Colors.black),
+                          seleccionarTipoMantenimiento,
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
                     ),

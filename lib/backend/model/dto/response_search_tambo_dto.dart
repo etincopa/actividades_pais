@@ -20,7 +20,7 @@ class BuscarTamboDto {
   String? gestor;
   String? extensionFoto;
 
-  BuscarTamboDto.empty() {}
+  BuscarTamboDto.empty();
 
   BuscarTamboDto({
     this.nombreFisicoFoto,

@@ -17,7 +17,6 @@ import 'package:actividades_pais/src/pages/Login/Login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 //late ObjectBoxDbPnPais OBoxDbPnPais;
@@ -33,7 +32,7 @@ void main() async {
 
   final mainApi = GetIt.instance<PnPaisApi>();
   final mainApi2 = GetIt.instance<PnPaisApi2>();
-  final mainDb = await DatabasePnPais.instance;
+  final mainDb = DatabasePnPais.instance;
   final mainRepo = MainRepo(mainApi, mainDb);
   final mainRepo2 = Main2Repo(mainApi2, mainDb);
   final mainServ = MainService();
@@ -42,10 +41,12 @@ void main() async {
   Get.put(mainServ);
   Get.put(MainController()); // Se ejecuta loadInitialData();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return OverlaySupport.global(
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
 
-        home: SplashPage(), //PdfPage(), //Card6(),
+        home: const SplashPage(), //PdfPage(), //Card6(),
 
         locale: MyTraslation.locale,
         fallbackLocale: MyTraslation.fallbackLocale,
@@ -76,6 +77,8 @@ class MyApp extends StatelessWidget {
 }
 
 class LoadingScreen extends StatefulWidget {
+  const LoadingScreen({super.key});
+
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -93,7 +96,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       // providerServicios.requestSqlData();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => LoginPage(),
+          builder: (_) => const LoginPage(),
         ),
       );
       //PantallaInicio
@@ -104,7 +107,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => LoginPage(),
+          builder: (BuildContext context) => const LoginPage(),
         ),
       );
     }
@@ -158,10 +161,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return Scaffold(
       body: Container(
         color: Colors.blue,
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Text(
                 'Iniciando... ',
                 textAlign: TextAlign.center,
@@ -179,8 +182,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
 }
 
 class Home_Asis extends StatelessWidget {
+  const Home_Asis({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return HomePagePais();
+    return const HomePagePais();
   }
 }

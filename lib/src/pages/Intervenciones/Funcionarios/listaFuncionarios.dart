@@ -11,23 +11,23 @@ import '../../../../util/app-config.dart';
 class ListaFuncionariosVw extends StatefulWidget {
   TramaIntervencion tramaIntervencion;
 
-  ListaFuncionariosVw(this.tramaIntervencion);
+  ListaFuncionariosVw(this.tramaIntervencion, {super.key});
 
   @override
   _ListaFuncionariosVwState createState() => _ListaFuncionariosVwState();
 }
 
 class _ListaFuncionariosVwState extends State<ListaFuncionariosVw> {
-  Future<Null> refreshList() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> refreshList() async {
+    await Future.delayed(const Duration(seconds: 0));
     await DatabasePr.db
         .listarFuncionarios(widget.tramaIntervencion.codigoIntervencion);
     // await DatabasePr.db.listarParticipantes(widget.idProgramacion);
     //  await DatabasePr.db.listarPartExtrangeros(widget.idProgramacion);
   }
 
-  Future<Null> listaFuniconario() async {
-    await Future.delayed(Duration(seconds: 0));
+  Future<void> listaFuniconario() async {
+    await Future.delayed(const Duration(seconds: 0));
     setState(() {
       DatabasePr.db
           .listarFuncionarios(widget.tramaIntervencion.codigoIntervencion);
@@ -55,7 +55,7 @@ class _ListaFuncionariosVwState extends State<ListaFuncionariosVw> {
               listaFuniconario();
             }
           },
-          child: Icon(
+          child: const Icon(
             Icons.person_add,
             color: Colors.white,
           ),
@@ -63,7 +63,7 @@ class _ListaFuncionariosVwState extends State<ListaFuncionariosVw> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          title: Center(
+          title: const Center(
               child: Text(
             "Funcionarios",
             style: TextStyle(
@@ -91,25 +91,24 @@ class _ListaFuncionariosVwState extends State<ListaFuncionariosVw> {
               AsyncSnapshot<List<Funcionarios>> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.hasData == false) {
-                return Center(
+                return const Center(
                   child: Text("¡No existen registros"),
                 );
               } else {
                 final listaPersonalAux = snapshot.data;
 
-                if (listaPersonalAux!.length == 0) {
-                  return Center(
+                if (listaPersonalAux!.isEmpty) {
+                  return const Center(
                     child: Text("No hay informacion"),
                   );
                 } else {
                   return Container(
                     child: RefreshIndicator(
+                        onRefresh: listaFuniconario,
                         child: ListView.builder(
                             itemCount: listaPersonalAux.length,
                             itemBuilder: (context, i) => Dismissible(
                                   key: UniqueKey(),
-                                  child: Listas()
-                                      .cardFuncionarios(listaPersonalAux[i]),
                                   background: Util().buildSwipeActionLeft(),
                                   secondaryBackground:
                                       Util().buildSwipeActionRigth(),
@@ -153,15 +152,17 @@ class _ListaFuncionariosVwState extends State<ListaFuncionariosVw> {
                                           Navigator.pop(context);
                                         });
                                         break;
+                                      default:
                                     }
                                   },
-                                )),
-                        onRefresh: listaFuniconario),
+                                  child: Listas()
+                                      .cardFuncionarios(listaPersonalAux[i]),
+                                ))),
                   );
                 }
               }
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

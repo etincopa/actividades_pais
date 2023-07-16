@@ -11,6 +11,8 @@ import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 class SettingsPage extends StatelessWidget {
   SharedPreferences? _prefs;
 
+  SettingsPage({super.key});
+
   Future<void> loadPreferences() async {
     _prefs = await SharedPreferences.getInstance();
   }
@@ -41,7 +43,7 @@ class SettingsPage extends StatelessWidget {
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: Text(
                                 'General'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0),
@@ -52,14 +54,14 @@ class SettingsPage extends StatelessWidget {
                               leading: Image.asset('assets/icons/language.png'),
                               onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (_) => ChangeLanguagePage())),
+                                      builder: (_) => const ChangeLanguagePage())),
                             ),
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 8.0, bottom: 8.0),
                               child: Text(
                                 'Account'.tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18.0),
@@ -71,7 +73,7 @@ class SettingsPage extends StatelessWidget {
                                   Image.asset('assets/icons/change_pass.png'),
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => ChangePasswordPage(),
+                                  builder: (_) => const ChangePasswordPage(),
                                 ),
                               ),
                             ),
@@ -93,7 +95,7 @@ class SettingsPage extends StatelessWidget {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => LoginPage()),
+                                      builder: (_) => const LoginPage()),
                                   (route) => false,
                                 );
                               },

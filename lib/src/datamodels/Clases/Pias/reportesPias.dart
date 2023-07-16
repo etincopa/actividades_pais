@@ -66,27 +66,27 @@ class ReportesPias {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['fechaParteDiario'] = this.fechaParteDiario;
-    data['codigoUbigeo'] = this.codigoUbigeo;
-    data['idPlataforma'] = this.idPlataforma;
-    data['plataforma'] = this.plataforma;
-    data['idUnidadTerritorial'] = this.idUnidadTerritorial;
-    data['unidadTerritorial'] = this.unidadTerritorial;
-    data['clima'] = this.clima;
-    data['idClima'] = this.idClima;
-    data['detallePuntoAtencion'] = this.detallePuntoAtencion;
-    data['personal'] = this.personal;
-    data['estadoEquipos'] = this.estadoEquipos;
-    data['sismonitor'] = this.sismonitor;
-    data['idUnicoReporte'] = this.idUnicoReporte;
-    data['latitud'] = this.latitud;
-    data['longitud'] = this.longitud;
-    data['campania'] = this.campania;
-    data['puntoAtencion'] = this.puntoAtencion;
-    data['idUsuario'] = this.idUsuario;
-    data['idParteDiario'] = this.idParteDiario;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['fechaParteDiario'] = fechaParteDiario;
+    data['codigoUbigeo'] = codigoUbigeo;
+    data['idPlataforma'] = idPlataforma;
+    data['plataforma'] = plataforma;
+    data['idUnidadTerritorial'] = idUnidadTerritorial;
+    data['unidadTerritorial'] = unidadTerritorial;
+    data['clima'] = clima;
+    data['idClima'] = idClima;
+    data['detallePuntoAtencion'] = detallePuntoAtencion;
+    data['personal'] = personal;
+    data['estadoEquipos'] = estadoEquipos;
+    data['sismonitor'] = sismonitor;
+    data['idUnicoReporte'] = idUnicoReporte;
+    data['latitud'] = latitud;
+    data['longitud'] = longitud;
+    data['campania'] = campania;
+    data['puntoAtencion'] = puntoAtencion;
+    data['idUsuario'] = idUsuario;
+    data['idParteDiario'] = idParteDiario;
 
     return data;
   }

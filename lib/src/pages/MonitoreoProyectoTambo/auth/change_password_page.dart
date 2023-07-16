@@ -16,6 +16,8 @@ MainController mainController = MainController();
 SharedPreferences? _prefs;
 
 class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key});
+
   @override
   _ChangePasswordPageState createState() => _ChangePasswordPageState();
 }
@@ -84,7 +86,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       await mainController.insertUser(oUser);
 
       if (psw != "") {
-        _prefs!.setString("clave", oUserInfo.contrasenia!);
+        _prefs!.setString("clave", oUserInfo.contrasenia);
       }
 
       Fluttertoast.showToast(

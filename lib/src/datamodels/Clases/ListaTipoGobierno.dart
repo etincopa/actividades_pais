@@ -10,9 +10,9 @@ class TipoGobierno {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_tipo_gobierno'] = this.idTipoGobierno;
-    data['nombre'] = this.nombre;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id_tipo_gobierno'] = idTipoGobierno;
+    data['nombre'] = nombre;
     return data;
   }
 }

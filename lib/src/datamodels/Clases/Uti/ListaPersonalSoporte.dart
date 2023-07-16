@@ -6,8 +6,8 @@ class ListaPersonalSoportes {
   ListaPersonalSoportes.fromJsonList(List<dynamic> jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      final _listarasistenciaActual = new ListaPersonalSoporte.fromJson(item);
-      items.add(_listarasistenciaActual);
+      final listarasistenciaActual = ListaPersonalSoporte.fromJson(item);
+      items.add(listarasistenciaActual);
     }
   }
 }
@@ -26,10 +26,10 @@ nOMBREAPELLIDOS = json['NOMBRE_APELLIDOS']??'';
 }
 
 Map<String, dynamic> toJson() {
-final Map<String, dynamic> data = new Map<String, dynamic>();
-data['id_empleado'] = this.idEmpleado;
-data['DNI'] = this.dNI;
-data['NOMBRE_APELLIDOS'] = this.nOMBREAPELLIDOS;
+final Map<String, dynamic> data = <String, dynamic>{};
+data['id_empleado'] = idEmpleado;
+data['DNI'] = dNI;
+data['NOMBRE_APELLIDOS'] = nOMBREAPELLIDOS;
 return data;
 }
 }

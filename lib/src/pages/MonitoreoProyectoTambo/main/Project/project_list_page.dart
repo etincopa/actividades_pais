@@ -6,8 +6,6 @@ import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/src/pages/Home/home.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/ListView/list_view_Projectos.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_list_page.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_dto.dart';
-import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/report_project.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Search/project_search.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Monitor/monitoring_detail_form_page.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Components/fab.dart';
@@ -87,7 +85,7 @@ class _ProjectListPageState extends State<ProjectListPage>
         limit,
         offset,
       );
-      if (response.length == 0) {
+      if (response.isEmpty) {
         isEndPagination = true;
       } else {
         aProyecto = aProyecto + response;
@@ -141,7 +139,7 @@ class _ProjectListPageState extends State<ProjectListPage>
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => HomePagePais(),
+                builder: (BuildContext context) => const HomePagePais(),
               ),
               (route) => false),
         },
@@ -208,9 +206,9 @@ class _ProjectListPageState extends State<ProjectListPage>
                 width: MediaQuery.of(context).size.width,
                 decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 245, 246, 248)),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'No existe nigún proyecto asignado',
                       style: TextStyle(color: Colors.black, fontSize: 16),
@@ -293,7 +291,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                 await mainController.syncLoadInitialData();
                 BusyIndicator.hide(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => HomePagePais(),
+                  builder: (context) => const HomePagePais(),
                 ));
                 Fluttertoast.showToast(
                   msg: 'Los registros se sincronizan con éxito',
@@ -342,7 +340,7 @@ class _ProjectListPageState extends State<ProjectListPage>
                     BusyIndicator.hide(context);
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => HomePagePais(),
+                        builder: (context) => const HomePagePais(),
                       ),
                     );
                     Fluttertoast.showToast(

@@ -1112,7 +1112,7 @@ class DatabasePnPais {
           whereArgs: [id],
         );
 
-        if (aRegAct.length > 0) {
+        if (aRegAct.isNotEmpty) {
           var aFormat = aRegAct
               .map<RegistroEntidadActividadModel>(
                   (json) => RegistroEntidadActividadModel.fromJson(json))
@@ -1205,9 +1205,9 @@ class DatabasePnPais {
         tableNameRegistroActividadEntidad, a, RegistroEntidadActividadFields);
 
     List<RegistroEntidadActividadModel> aResp = [];
-    result.forEach((element) {
+    for (var element in result) {
       aResp.add(element);
-    });
+    }
 
     //result.cast<RegistroEntidadActividadModel>()
     return aResp;
