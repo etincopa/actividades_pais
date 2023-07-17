@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "pe.gob.pais" "\0"
-            VALUE "FileDescription", "actividades_pais" "\0"
+            VALUE "CompanyName", "com.pnpais.sifpnpais.app" "\0"
+            VALUE "FileDescription", "SIFPNPAIS" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "actividades_pais" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 pe.gob.pais. All rights reserved." "\0"
+            VALUE "InternalName", "SIFPNPAIS" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 com.pnpais.sifpnpais.app. All rights reserved." "\0"
             VALUE "OriginalFilename", "actividades_pais.exe" "\0"
-            VALUE "ProductName", "actividades_pais" "\0"
+            VALUE "ProductName", "SIFPNPAIS" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
