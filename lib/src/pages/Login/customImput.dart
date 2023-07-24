@@ -34,14 +34,14 @@ class CustomInput extends StatelessWidget {
         ],
       ),
       child: TextField(
-       /* inputFormatters: [
+        /* inputFormatters: [
           UpperCaseTextFormatter(),
         ],*/
         textCapitalization: TextCapitalization.none,
         controller: textController,
         autocorrect: false,
         keyboardType: keyboardType,
-     //   obscureText: this.isPassword,
+        obscureText: this.isPassword,
         decoration: InputDecoration(
             prefixIcon: Icon(icon),
             focusedBorder: InputBorder.none,

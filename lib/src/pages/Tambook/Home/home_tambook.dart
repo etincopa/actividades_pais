@@ -5690,7 +5690,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         fontWeight: FontWeight.bold),
                                   ),
                                   subtitle: Text(
-                                    "TAMBOS EN SERVICIO: ${tambos.cantidad} \n \nC.P. REGIONAL: ${formatoDecimal((double.tryParse(tambos.cpTotal!) ?? 0).toInt())}  \nC.P. ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.cp!) ?? 0).toInt())} \n% C.P. ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.cpPorcentaje!) ?? 0).toInt())} \n \nDISTRITOS REGIONAL: ${formatoDecimal((double.tryParse(tambos.distritosTotal!) ?? 0).toInt())} \nDISTRITOS ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.distritos!) ?? 0).toInt())} \n% DISTRITOS ATEND.: ${formatoDecimal((double.tryParse(tambos.distritosPorcentaje!) ?? 0).toInt())}\n \nPOBLACIÓN OBJETIVO ATENDIDO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
+                                    "TAMBOS EN SERVICIO: ${tambos.cantidad} \n \nC.P. REGIONAL: ${formatoDecimal((double.tryParse(tambos.cpTotal!) ?? 0).toInt())}  \nC.P. ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.cp!) ?? 0).toInt())} \n% C.P. ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.cpPorcentaje!) ?? 0).toInt())} \n \nDISTRITOS REGIONAL: ${formatoDecimal((double.tryParse(tambos.distritosTotal!) ?? 0).toInt())} \nDISTRITOS ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.distritos!) ?? 0).toInt())} \n% DISTRITOS ATEND.: ${formatoDecimal((double.tryParse(tambos.distritosPorcentaje!) ?? 0).toInt())}\n \nPOBLACIÓN OBJETIVO ATENDIDA: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       color: Colors.black,
@@ -7592,7 +7592,7 @@ class _HomeTambookState extends State<HomeTambook>
   String obtenerDatosIncidencia(int idOperador, int tipo) {
     var total = incidencias.where((e) =>
         e.idOPeradorInternet == idOperador &&
-        e.idIncidenciaEstado == "3" &&
+        //e.idIncidenciaEstado == "3" &&
         e.tipoAveria == "SIN INTERNET");
     if (tipo == 1) {
       return total.length.toString();
@@ -7600,7 +7600,7 @@ class _HomeTambookState extends State<HomeTambook>
       var suma =
           total.fold(0, (sum, item) => sum + int.parse(item.diasPasados!));
       return ((suma / total.length) > 0
-          ? (suma / total.length).round().toString()
+          ? (suma / total.length).toStringAsFixed(2).toString()
           : '');
     }
   }

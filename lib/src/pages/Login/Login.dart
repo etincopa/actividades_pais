@@ -147,8 +147,8 @@ class _LoginPageState extends State<LoginPage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton.icon(
-                  onPressed: () async{
-                   await DatabasePr.db. deletelogin();
+                  onPressed: () async {
+                    await DatabasePr.db.deletelogin();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -265,7 +265,7 @@ class __FormState extends State<_Form> {
             icon: Icons.lock_outline,
             placeholder: 'Ingrese su Contraseña',
             textController: passCtrl,
-            //isPassword: false,
+            isPassword: true,
           ),
           InkWell(
             onTap: () {

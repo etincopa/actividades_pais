@@ -13,6 +13,7 @@ class ServiciosBasicosFld {
   static String nomServicio = 'nomServicio';
   static String idProveedorServicio = 'idProveedorServicio';
   static String proveedorServicio = 'proveedorServicio';
+  static String fecha = 'fecha';
 }
 
 class ServiciosBasicosResumenModel {
@@ -30,25 +31,26 @@ class ServiciosBasicosResumenModel {
   String? nomServicio = '';
   int? idProveedorServicio = 0;
   String? proveedorServicio = '';
+  String? fecha = '';
 
   ServiciosBasicosResumenModel.empty();
 
-  ServiciosBasicosResumenModel({
-    this.idTipoConexion,
-    this.nomTipoConexion,
-    this.cantidad,
-    this.idUterritorial,
-    this.region,
-    this.provincia,
-    this.distrito,
-    this.idTambo,
-    this.nomTambo,
-    this.snip,
-    this.idServicio,
-    this.nomServicio,
-    this.idProveedorServicio,
-    this.proveedorServicio,
-  });
+  ServiciosBasicosResumenModel(
+      {this.idTipoConexion,
+      this.nomTipoConexion,
+      this.cantidad,
+      this.idUterritorial,
+      this.region,
+      this.provincia,
+      this.distrito,
+      this.idTambo,
+      this.nomTambo,
+      this.snip,
+      this.idServicio,
+      this.nomServicio,
+      this.idProveedorServicio,
+      this.proveedorServicio,
+      this.fecha});
 
   factory ServiciosBasicosResumenModel.fromJson(Map<String, dynamic> json) {
     return ServiciosBasicosResumenModel(
@@ -65,6 +67,7 @@ class ServiciosBasicosResumenModel {
         idServicio: json[ServiciosBasicosFld.idServicio],
         nomServicio: json[ServiciosBasicosFld.nomServicio],
         idProveedorServicio: json[ServiciosBasicosFld.idProveedorServicio],
-        proveedorServicio: json[ServiciosBasicosFld.proveedorServicio]);
+        proveedorServicio: json[ServiciosBasicosFld.proveedorServicio],
+        fecha: json[ServiciosBasicosFld.fecha]);
   }
 }
