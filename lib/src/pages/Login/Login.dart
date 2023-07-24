@@ -147,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async{
+                   await DatabasePr.db. deletelogin();
                     Navigator.push(
                       context,
                       MaterialPageRoute(

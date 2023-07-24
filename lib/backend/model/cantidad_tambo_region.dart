@@ -4,7 +4,11 @@ class CantidadTamboRegionFld {
   static String cantidad = "cantidad";
   static String nombre = "nombre";
   static String cp = "cp";
+  static String cp_total = "cpTotal";
+  static String cp_porcentaje = "cpPorcentaje";
   static String distritos = "distritos";
+  static String distritos_total = "distritosTotal";
+  static String distritos_porcentaje = "distritosPorcentaje";
 }
 
 class CantidadTamboRegion {
@@ -13,7 +17,11 @@ class CantidadTamboRegion {
   String? cantidad;
   String? nombre;
   String? cp;
+  String? cpTotal;
+  String? cpPorcentaje;
   String? distritos;
+  String? distritosTotal;
+  String? distritosPorcentaje;
 
   CantidadTamboRegion.empty();
 
@@ -23,7 +31,11 @@ class CantidadTamboRegion {
       this.cantidad,
       this.nombre,
       this.cp,
-      this.distritos});
+      this.cpTotal,
+      this.cpPorcentaje,
+      this.distritos,
+      this.distritosTotal,
+      this.distritosPorcentaje});
 
   factory CantidadTamboRegion.fromJson(Map<String, dynamic> json) {
     return CantidadTamboRegion(
@@ -32,7 +44,11 @@ class CantidadTamboRegion {
       cantidad: json[CantidadTamboRegionFld.cantidad],
       nombre: json[CantidadTamboRegionFld.nombre],
       cp: json[CantidadTamboRegionFld.cp],
+      cpTotal: json[CantidadTamboRegionFld.cp_total],
+      cpPorcentaje: json[CantidadTamboRegionFld.cp_porcentaje],
       distritos: json[CantidadTamboRegionFld.distritos],
+      distritosTotal: json[CantidadTamboRegionFld.distritos_total],
+      distritosPorcentaje: json[CantidadTamboRegionFld.distritos_porcentaje],
     );
   }
 

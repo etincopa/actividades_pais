@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           Locale('es', 'ES'),
         ],
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red, //Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
 

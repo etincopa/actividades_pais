@@ -31,7 +31,7 @@ class FabMenuItem extends StatelessWidget {
         children: <Widget>[
           Text(item.title),
           const SizedBox(width: 8),
-          Icon(item.icon, color: color_06),
+          Icon(item.icon, color: rojo),
         ],
       ),
     );
@@ -39,7 +39,8 @@ class FabMenuItem extends StatelessWidget {
 }
 
 class ExpandedAnimationFab extends AnimatedWidget {
-  const ExpandedAnimationFab({super.key, 
+  const ExpandedAnimationFab({
+    super.key,
     required this.items,
     required this.onPress,
     required Animation animation,
@@ -90,7 +91,7 @@ class ExpandedAnimationFab extends AnimatedWidget {
           ),
         ),
         FloatingActionButton(
-          backgroundColor: color_06,
+          backgroundColor: rojo,
           onPressed: onPress,
           child: AnimatedIcon(
             icon: AnimatedIcons.menu_close,

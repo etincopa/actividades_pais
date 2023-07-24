@@ -17,6 +17,9 @@ class Evento {
   final String idUnidadesTerritoriales;
   final String unidadTerritorialDescripcion;
   String idLugarIntervencion;
+  int? totalTambo;
+  int? totalIntervenciones;
+  int? totalTambosIntervenciones;
 
   Evento({
     required this.idProgramacion,
@@ -31,6 +34,9 @@ class Evento {
     required this.idUnidadesTerritoriales,
     required this.unidadTerritorialDescripcion,
     required this.idLugarIntervencion,
+      this.totalTambo,
+      this.totalIntervenciones,
+      this.totalTambosIntervenciones,
   });
 
   factory Evento.fromJson(Map<String, dynamic> json) {
@@ -48,6 +54,9 @@ class Evento {
       unidadTerritorialDescripcion:
           json['unidad_territorial_descripcion'] ?? '',
       idLugarIntervencion: json['id_lugar_intervencion'] ?? '',
+      totalTambo: json['totalTambo'] ?? 0,
+      totalIntervenciones: json['totalIntervenciones'] ?? 0,
+      totalTambosIntervenciones: json['totalTambosIntervenciones'] ?? 0,
     );
   }
 }

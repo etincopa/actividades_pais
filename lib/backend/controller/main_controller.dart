@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/ListaMonitorResponse.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
@@ -32,6 +33,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
+import 'package:actividades_pais/backend/model/monitorResponse.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
@@ -1018,6 +1020,14 @@ class MainController extends GetxController {
     return aResp;
   }
 
+  Future<List<MonitorTamboModel>> getMonitoresTambo(
+    String? idTambo,
+  ) async {
+    List<MonitorTamboModel> aResp =
+        await Get.find<MainService>().getMonitoresTambo(idTambo);
+    return aResp;
+  }
+
   Future<List<HistorialGestorModel>> getHistorialGestor(
     String? ut,
   ) async {
@@ -1262,9 +1272,16 @@ class MainController extends GetxController {
     return oResp;
   }
 
-  Future<List<IncidentesInternetModel>> getIncidenciasInternet(int snip) async {
+  Future<List<IncidentesInternetModel>> getIncidenciasInternet(
+      int snip, int anio) async {
     List<IncidentesInternetModel> oResp =
-        await Get.find<MainService>().incidenciasInternetTambo(snip);
+        await Get.find<MainService>().incidenciasInternetTambo(snip, anio);
+    return oResp;
+  }
+
+  Future<List<ListaMonitorTamboModel>> obtenerMonitores(String idTambo) async {
+    List<ListaMonitorTamboModel> oResp =
+        await Get.find<MainService>().obtenerMonitores(idTambo);
     return oResp;
   }
 
@@ -1291,6 +1308,28 @@ class MainController extends GetxController {
   Future<RespBase64FileDto> getReporteTambosPoblacion(String ut) async {
     RespBase64FileDto oResp =
         await Get.find<MainService>().getReporteTambosPoblacion(ut);
+    return oResp;
+  }
+
+  Future<RespBase64FileDto> getReporteTambosSectorial(
+      String anio, String mes) async {
+    RespBase64FileDto oResp =
+        await Get.find<MainService>().getReporteTambosSectorial(anio, mes);
+    return oResp;
+  }
+
+  Future<RespBase64FileDto> getReporteIntervenciones(
+      String tambo,
+      String tipo,
+      String estado,
+      String ut,
+      String fechaInicio,
+      String fechaFin,
+      String mes,
+      String anio) async {
+    RespBase64FileDto oResp = await Get.find<MainService>()
+        .getReporteIntervenciones(
+            tambo, tipo, estado, ut, fechaInicio, fechaFin, mes, anio);
     return oResp;
   }
 

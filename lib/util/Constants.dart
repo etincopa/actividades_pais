@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 const Color colorGB = Color(0xFFFBFBFB);
 const Color colorP = Color(0xFFBC0514);
 const Color colorA = Color(0xFF8F9D9F);
-const Color colorI = Color(0xFF79B7CC);
+const Color colorI = Color(0xFFB40404);
 const Color colorS = Color(0xFF65A33E);
 
 /*
@@ -30,11 +30,12 @@ const Color color_06 = Color(0XFF00C1DB);
 const Color color_07 = Color(0XFF22C1E4);
 const Color color_08o80 = Color(0x5228AEC0); //80% Opacidad
 const Color color_09 = Color(0XFF89BFD2);
-const Color color_10o15 = Color(0xDCA0D9F6); //15% Opacidad
+const Color color_10o15 = Color.fromARGB(220, 225, 238, 245); //15% Opacidad
 const Color color_11 = Color(0XFFC12C37);
 const Color color_12 = Color(0XFFE06DBF);
 const Color color_13 = Color(0XFFFF8E00);
-
+const Color rojo = Color(0xFFB40404);
+const Color rojo2 = Color.fromARGB(255, 243, 111, 111);
 /*
  * OTROS COLORES
  */

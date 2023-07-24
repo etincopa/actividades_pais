@@ -2,6 +2,8 @@ class IndicadorInternetField {
   static String idTambo = "idTambo";
   static String nomTambo = "nomTambo";
   static String region = "region";
+  static String provincia = "provincia";
+  static String distrito = "distrito";
   static String snip = "snip";
   static String idOperadorInternet = "idOperadorInternet";
   static String nomOperadorInternet = "nomOperadorInternet";
@@ -20,6 +22,8 @@ class IndicadorInternetModel {
   String? nomTambo;
   String? snip;
   String? region;
+  String? provincia;
+  String? distrito;
   int? idOperadorInternet;
   String? nomOperadorInternet;
   int? numAsignados;
@@ -36,6 +40,8 @@ class IndicadorInternetModel {
     this.idTambo,
     this.nomTambo,
     this.region,
+    this.provincia,
+    this.distrito,
     this.snip,
     this.idOperadorInternet,
     this.nomOperadorInternet,
@@ -53,6 +59,8 @@ class IndicadorInternetModel {
       idTambo: json[IndicadorInternetField.idTambo],
       nomTambo: json[IndicadorInternetField.nomTambo],
       region: json[IndicadorInternetField.region],
+      provincia: json[IndicadorInternetField.provincia],
+      distrito: json[IndicadorInternetField.distrito],
       snip: json[IndicadorInternetField.snip],
       idOperadorInternet: json[IndicadorInternetField.idOperadorInternet],
       nomOperadorInternet: json[IndicadorInternetField.nomOperadorInternet],

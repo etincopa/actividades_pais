@@ -1,5 +1,6 @@
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/ListaMonitorResponse.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
@@ -31,6 +32,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
+import 'package:actividades_pais/backend/model/monitorResponse.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
@@ -986,9 +988,15 @@ class MainService {
   }
 
   Future<List<IncidentesInternetModel>> incidenciasInternetTambo(
-      int snip) async {
+      int snip, int anio) async {
     List<IncidentesInternetModel> aFind =
-        await Get.find<MainRepo>().indicenciasInternetTambo(snip);
+        await Get.find<MainRepo>().indicenciasInternetTambo(snip, anio);
+    return aFind;
+  }
+
+  Future<List<ListaMonitorTamboModel>> obtenerMonitores(String idTambo) async {
+    List<ListaMonitorTamboModel> aFind =
+        await Get.find<MainRepo>().obtenerMonitores(idTambo);
     return aFind;
   }
 
@@ -1133,6 +1141,14 @@ class MainService {
   ) async {
     List<ServicioBasicoTamboModel> aResp =
         await Get.find<MainRepo>().getServicioBasicoTambo(idTambo);
+    return aResp;
+  }
+
+  Future<List<MonitorTamboModel>> getMonitoresTambo(
+    String? idTambo,
+  ) async {
+    List<MonitorTamboModel> aResp =
+        await Get.find<MainRepo>().getMonitoresTambo(idTambo);
     return aResp;
   }
 
@@ -1305,6 +1321,30 @@ class MainService {
     ///Obtiene fich tecnica PDF del tambo en formato Base64
     RespBase64FileDto aFind =
         await Get.find<MainRepo>().getReporteTambosPoblacion(ut);
+    return aFind;
+  }
+
+  Future<RespBase64FileDto> getReporteTambosSectorial(
+      String anio, String mes) async {
+    ///Obtiene fich tecnica PDF del tambo en formato Base64
+    RespBase64FileDto aFind =
+        await Get.find<MainRepo>().getReporteTambosSectorial(anio, mes);
+    return aFind;
+  }
+
+  Future<RespBase64FileDto> getReporteIntervenciones(
+      String tambo,
+      String tipo,
+      String estado,
+      String ut,
+      String fechaInicio,
+      String fechaFin,
+      String mes,
+      String anio) async {
+    ///Obtiene fich tecnica PDF del tambo en formato Base64
+    RespBase64FileDto aFind = await Get.find<MainRepo>()
+        .getReporteIntervenciones(
+            tambo, tipo, estado, ut, fechaInicio, fechaFin, mes, anio);
     return aFind;
   }
 }

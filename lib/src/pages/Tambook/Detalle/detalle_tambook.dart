@@ -15,6 +15,7 @@ import 'package:actividades_pais/backend/model/historial_jefe_ut_model.dart';
 import 'package:actividades_pais/backend/model/imagen_jut_model.dart';
 import 'package:actividades_pais/backend/model/lista_equipamiento_informatico.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
+import 'package:actividades_pais/backend/model/monitorResponse.dart';
 import 'package:actividades_pais/backend/model/plan_mantenimiento_model.dart';
 import 'package:actividades_pais/backend/model/priorizacion_model.dart';
 import 'package:actividades_pais/backend/model/programacion_intervenciones_tambos_model.dart';
@@ -92,6 +93,9 @@ class _DetalleTambookState extends State<DetalleTambook>
   late TamboModel oTambo = TamboModel.empty();
   late DatosJUTTamboModel oJUT = DatosJUTTamboModel.empty();
   late UnidadTerritorialModel oUT = UnidadTerritorialModel.empty();
+
+  late List<MonitorTamboModel> oMonitor = [];
+
   late List<TamboActividadModel> aActividad = [];
   List<AvanceMetasModel> aMetasMensualizada = [];
 
@@ -129,6 +133,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   bool isLoadingSrvBasico = true;
   bool isLoadingGuardian = false;
+  bool isLoadingMonitor = false;
   bool isLoadingJUT = false;
   bool isLoadingImagenJUT = false;
   bool isLoading2 = false;
@@ -224,6 +229,7 @@ class _DetalleTambookState extends State<DetalleTambook>
     isLoadingTambo = true;
 
     jutTambo(oTambo.nSnip ?? 0);
+    monitoresTambo(oTambo.idTambo ?? 0);
     jutTamboImagen(oTambo.nSnip.toString() ?? '0');
     guardianTambo(oTambo.nSnip ?? 0);
     rutaTambo(oTambo.nSnip ?? 0);
@@ -441,8 +447,16 @@ class _DetalleTambookState extends State<DetalleTambook>
     setState(() {});
   }
 
+  Future<void> monitoresTambo(int idTambo) async {
+    isLoadingMonitor = false;
+    oMonitor = await mainCtr.getMonitoresTambo(idTambo.toString());
+    isLoadingMonitor = true;
+    setState(() {});
+  }
+
   Future<void> incidenciasInternet(int snip) async {
-    incidencias = await mainCtr.getIncidenciasInternet(snip);
+    incidencias =
+        await mainCtr.getIncidenciasInternet(snip, int.parse(sCurrentYear));
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
       isLoading = false;
@@ -924,6 +938,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       pinned: true,
       snap: false,
       centerTitle: true,
+      backgroundColor: const Color(0xFFB40404),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
@@ -1002,7 +1017,7 @@ class _DetalleTambookState extends State<DetalleTambook>
       ],
     );
     return Scaffold(
-      backgroundColor: color_10o15,
+      backgroundColor: color_10o15, // PARA CAMBIAR EL COLOR DE FONDO
       body: SafeArea(
         child: Stack(
           children: [
@@ -1349,6 +1364,11 @@ class _DetalleTambookState extends State<DetalleTambook>
                           * NUESTRO GESTOR
                           */
                         cardNuestroGestor(),
+                        const SizedBox(height: 10),
+                        /*
+                          * NUESTRO MONITOR
+                          */
+                        cardNuestroMonitor(),
                         const SizedBox(height: 10),
                         //cardHistorialGestores(),
                         //const SizedBox(height: 10),
@@ -1719,6 +1739,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               // padding: EdgeInsets.all(5.0),
                               alignment: Alignment.centerLeft,
                               child: Card(
+                                elevation: 0,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1759,6 +1780,157 @@ class _DetalleTambookState extends State<DetalleTambook>
                                       title: const Text('TIPO CONTRATO'),
                                       subtitle:
                                           Text(oTambo.gestorTipoContrato ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: Text('CAPACITACIONES'),
+                                      subtitle: Text(''),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ])
+                        : Center(
+                            child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                child: const Text(
+                                  'TAMBO SIN GESTOR',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                )))
+                    : const CircularProgressIndicator(),
+                const SizedBox(height: 10),
+                const Text('FUENTE: PNPAIS'),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL $fechaActual"),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+/*
+ * -----------------------------------------------
+ *            MONITOR
+ * -----------------------------------------------
+ */
+  Padding cardNuestroMonitor() {
+    var heading = 'MONITOR (A)';
+    var subheading = (isLoadingMonitor
+            ? '${oMonitor[0].nombre ?? ''} ${oMonitor[0].apePaterno ?? ''} ${oMonitor[0].apeMaterno ?? ''}'
+            : '')
+        .toUpperCase();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: colorI,
+          ),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 5), // changes position of shadow
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            ExpansionTile(
+              tilePadding: const EdgeInsets.only(left: 0, right: 10),
+              initiallyExpanded: true,
+              title: ListTile(
+                visualDensity: const VisualDensity(vertical: -4),
+                leading: const ImageIcon(
+                  AssetImage("assets/iconos_card/gestores.png"),
+                  size: 40,
+                  color: Colors.black,
+                ),
+                title: Text(
+                  heading,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
+                subtitle: Text(
+                  subheading,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              children: <Widget>[
+                isLoadingMonitor
+                    ? oMonitor[0].nombre!.isNotEmpty
+                        ? Column(children: [
+                            const Divider(color: colorI),
+                            SizedBox(
+                              height: 150.0,
+                              child: ImageUtil.ImageUrl(
+                                "https://www.pais.gob.pe/backendsismonitor/public/storage/${oMonitor[0].path ?? ''}",
+                                width: 150,
+                                imgDefault: 'assets/icons/user-male-2.png',
+                              ),
+                            ),
+                            Container(
+                              // padding: EdgeInsets.all(5.0),
+                              alignment: Alignment.centerLeft,
+                              child: Card(
+                                elevation: 0,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      title: const Text('DNI'),
+                                      subtitle: Text(oMonitor[0]
+                                              .documento!
+                                              .toUpperCase() ??
+                                          ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('SEXO'),
+                                      subtitle: Text(
+                                          oMonitor[0].genero!.toUpperCase() ??
+                                              ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('ESTADO CIVIL'),
+                                      subtitle: Text(oMonitor[0]
+                                              .estadoCivil!
+                                              .toUpperCase() ??
+                                          ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('CELULAR'),
+                                      subtitle: Text(oMonitor[0].celular ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('EMAIL'),
+                                      subtitle: Text(oMonitor[0].correo ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('UNIDAD TERRITORIAL'),
+                                      subtitle: Text(
+                                          oMonitor[0].unidadTerritorial ?? ''),
+                                    ),
+                                    ListTile(
+                                      title: const Text('DIRECCIÓN UT'),
+                                      subtitle:
+                                          Text(oMonitor[0].utDireccion ?? ''),
                                     ),
                                   ],
                                 ),
@@ -1853,6 +2025,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   // padding: EdgeInsets.all(5.0),
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -1863,10 +2036,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         ListTile(
                           title: const Text('SEXO'),
                           subtitle: Text(oGuardia.sexo!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('CELULAR'),
-                          subtitle: Text(oGuardia.celular!.toUpperCase() ?? ''),
                         ),
                         ListTile(
                           title: const Text('TIPO CONTRATO'),
@@ -1944,6 +2113,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2026,6 +2196,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2108,6 +2279,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2201,6 +2373,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2304,6 +2477,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2398,6 +2572,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2427,7 +2602,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                           subtitle: Text("${oTambo.altitudCcpp ?? ''} msnm"),
                         ),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: INEI'),
+                        const Text('FUENTE: INEI 2007'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2487,6 +2662,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2509,7 +2685,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               0)),
                         ),
                         const SizedBox(height: 10),
-                        const Text('FUENTE: INEI'),
+                        const Text('FUENTE: INEI 2007'),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -2569,6 +2745,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2645,6 +2822,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2718,6 +2896,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2765,8 +2944,8 @@ class _DetalleTambookState extends State<DetalleTambook>
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
     var heading = 'ATENCIONES $sCurrentYear';
-    late ValueNotifier<double> valueNotifier =
-        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
+    late ValueNotifier<double> valueNotifier = ValueNotifier(
+        (totalPorcen1.isNaN || totalPorcen1.isInfinite) ? 0 : totalPorcen1);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -2828,13 +3007,17 @@ class _DetalleTambookState extends State<DetalleTambook>
                             size: 150,
                             maxValue: 100,
                             valueNotifier: valueNotifier,
-                            backColor: Colors.black.withOpacity(0.4),
+                            progressColors: const [
+                              Color(0xFFB40404),
+                              Color(0xFFB40404)
+                            ],
+                            backColor: Colors.black.withOpacity(0.2),
                             progressStrokeWidth: 10,
                             backStrokeWidth: 10,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
-                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                '${(totalPorcen1.isNaN || totalPorcen1.isInfinite) ? 0 : totalPorcen1}%',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 35,
@@ -2936,9 +3119,9 @@ class _DetalleTambookState extends State<DetalleTambook>
         .toStringAsFixed(2)
         .replaceFirst(RegExp(r'\.?0*$'), ''));
 
-    var heading = 'USUARIOS $sCurrentYear - (USUARIOS ÚNICOS ACUMULADOS)';
-    late ValueNotifier<double> valueNotifier =
-        ValueNotifier(totalPorcen1.isNaN ? 0 : totalPorcen1);
+    var heading = 'USUARIOS ÚNICOS $sCurrentYear';
+    late ValueNotifier<double> valueNotifier = ValueNotifier(
+        (totalPorcen1.isNaN || totalPorcen1.isInfinite) ? 0 : totalPorcen1);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -3000,13 +3183,17 @@ class _DetalleTambookState extends State<DetalleTambook>
                             size: 150,
                             maxValue: 100,
                             valueNotifier: valueNotifier,
-                            backColor: Colors.black.withOpacity(0.4),
+                            progressColors: const [
+                              Color(0xFFB40404),
+                              Color(0xFFB40404)
+                            ],
+                            backColor: Colors.black.withOpacity(0.2),
                             progressStrokeWidth: 10,
                             backStrokeWidth: 10,
                             mergeMode: true,
                             onGetText: (double value) {
                               return Text(
-                                '${totalPorcen1.isNaN ? 0 : totalPorcen1}%',
+                                '${(totalPorcen1.isNaN || totalPorcen1.isInfinite) ? 0 : totalPorcen1}%',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 35,
@@ -3161,7 +3348,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                               ListTile(
                                   title: Text.rich(TextSpan(
                                       text:
-                                          'MANTENIMIENTO PROGRAMADO PARA EL MES DE ',
+                                          'MANTENIMIENTO ${obtenerTextMantenimiento(int.parse(aPlanMantenimientoInformatico[index].mes ?? '0'))} EL MES DE ',
                                       children: [
                                     TextSpan(
                                         text: obtenerNombreMes(
@@ -3230,6 +3417,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 // padding: EdgeInsets.all(5.0),
                                 alignment: Alignment.centerLeft,
                                 child: Card(
+                                  elevation: 0,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -3343,6 +3531,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   // padding: EdgeInsets.all(5.0),
                                   alignment: Alignment.centerLeft,
                                   child: Card(
+                                    elevation: 0,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -3613,6 +3802,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -3700,9 +3890,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                   ),
                 ),
 
-                const Divider(
-                  height: 4,
-                ),
+                const Divider(height: 4, color: rojo),
                 const ListTile(
                   title: Text(
                     'VELOCIDAD DE SUBIDA Mbps',
@@ -3870,8 +4058,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                             ),
                             const Divider(color: colorI),
                             const SizedBox(height: 10),
-                            const Text('FUENTE: PNPAIS'),
-                            const SizedBox(height: 2),
                             Text("ACTUALIZADO AL $fechaActual"),
                             const SizedBox(height: 10),
                           ],
@@ -4525,6 +4711,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -4756,6 +4943,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -4792,23 +4980,17 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 Row(
                                   children: [
                                     Chip(
-                                      label: Text(
-                                        'Fecha : ${actividades.fechaActividad ?? ''}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        label: Text(
+                                          'Fecha : ${actividades.fechaActividad ?? ''}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 5,
-                                        horizontal: 10,
-                                      ),
-                                      backgroundColor: (actividades
-                                                  .gitLaborando!
-                                                  .toString() ==
-                                              'SI')
-                                          ? Colors.blue
-                                          : Colors.red,
-                                    ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 5,
+                                          horizontal: 10,
+                                        ),
+                                        backgroundColor: rojo),
                                   ],
                                 ),
 
@@ -5027,6 +5209,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -5125,57 +5308,63 @@ class _DetalleTambookState extends State<DetalleTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        for (var oRuta in aRuta)
-                          Column(
-                            children: [
-                              Text(
-                                oRuta.cidNombre ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              ListTile(
-                                leading: ImageIcon(
-                                  AssetImage(oRuta.cidNombre!.contains("AÉREA")
-                                      ? "assets/avion.png"
-                                      : "assets/carro.png"),
-                                  size: 40,
-                                  color: Colors.black,
-                                ),
-                                iconColor: const Color.fromARGB(255, 0, 0, 0),
-                                title: ListTile(
-                                  title: Text(
-                                    oRuta.txtDescripcion ?? '',
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    oRuta.txtEncuenta ?? '',
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                    ),
+                        if (aRuta.isNotEmpty)
+                          for (var oRuta in aRuta)
+                            Column(
+                              children: [
+                                Text(
+                                  oRuta.cidNombre ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ),
-                              const Divider(color: colorI),
-                            ],
-                          ),
-                        const SizedBox(height: 10),
-                        const Text('FUENTE: PNPAIS'),
-                        const SizedBox(height: 2),
-                        Text("ACTUALIZADO AL $fechaActual"),
-                        const SizedBox(height: 10),
+                                ListTile(
+                                  leading: ImageIcon(
+                                    AssetImage(
+                                        oRuta.cidNombre!.contains("AÉREA")
+                                            ? "assets/avion.png"
+                                            : "assets/carro.png"),
+                                    size: 40,
+                                    color: Colors.black,
+                                  ),
+                                  iconColor: const Color.fromARGB(255, 0, 0, 0),
+                                  title: ListTile(
+                                    title: Text(
+                                      oRuta.txtDescripcion ?? '',
+                                      textAlign: TextAlign.justify,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      oRuta.txtEncuenta ?? '',
+                                      textAlign: TextAlign.justify,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Divider(color: colorI),
+                              ],
+                            ),
                       ],
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                const Text(
+                  'FUENTE: PNPAIS',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 2),
+                Text("ACTUALIZADO AL $fechaActual"),
+                const SizedBox(height: 10),
               ],
             ),
           ],
@@ -5246,6 +5435,20 @@ class _DetalleTambookState extends State<DetalleTambook>
         break;
     }
     return nombreMes;
+  }
+
+  String obtenerTextMantenimiento(int mes) {
+    String texto = "PROGRAMADO PARA";
+
+    var now = new DateTime.now();
+    var formatter = new DateFormat('MM');
+    int month = int.parse(formatter.format(now));
+    print(month);
+    if (month > mes) {
+      texto = "EJECUTADO";
+    }
+
+    return texto;
   }
 
   String obtenerNombreMes(String mes) {

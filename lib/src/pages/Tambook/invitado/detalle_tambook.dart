@@ -439,7 +439,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> incidenciasInternet(int snip) async {
-    incidencias = await mainCtr.getIncidenciasInternet(snip);
+    incidencias = await mainCtr.getIncidenciasInternet(snip, 2023);
     await Future.delayed(const Duration(seconds: 2));
     setState(() {
       isLoading = false;

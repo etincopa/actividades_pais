@@ -4,6 +4,8 @@ class ServiciosBasicosFld {
   static String cantidad = 'cantidad';
   static String idUterritorial = 'idUterritorial';
   static String region = 'region';
+  static String provincia = 'provincia';
+  static String distrito = 'distrito';
   static String idTambo = 'idTambo';
   static String nomTambo = 'nomTambo';
   static String snip = 'snip';
@@ -19,6 +21,8 @@ class ServiciosBasicosResumenModel {
   int? cantidad = 0;
   int? idUterritorial = 0;
   String? region = '';
+  String? provincia = '';
+  String? distrito = '';
   int? idTambo = 0;
   String? nomTambo = '';
   String? snip = '';
@@ -35,6 +39,8 @@ class ServiciosBasicosResumenModel {
     this.cantidad,
     this.idUterritorial,
     this.region,
+    this.provincia,
+    this.distrito,
     this.idTambo,
     this.nomTambo,
     this.snip,
@@ -51,6 +57,8 @@ class ServiciosBasicosResumenModel {
         cantidad: json[ServiciosBasicosFld.cantidad],
         idUterritorial: json[ServiciosBasicosFld.idUterritorial],
         region: json[ServiciosBasicosFld.region],
+        provincia: json[ServiciosBasicosFld.provincia],
+        distrito: json[ServiciosBasicosFld.distrito],
         idTambo: json[ServiciosBasicosFld.idTambo],
         nomTambo: json[ServiciosBasicosFld.nomTambo],
         snip: json[ServiciosBasicosFld.snip],

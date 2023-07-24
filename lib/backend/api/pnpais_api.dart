@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/ListaMonitorResponse.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
@@ -31,6 +32,7 @@ import 'package:actividades_pais/backend/model/listar_trama_monitoreo_model.dart
 import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
+import 'package:actividades_pais/backend/model/monitorResponse.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
@@ -519,6 +521,20 @@ class PnPaisApi {
     );
   }
 
+  Future<HttpResponse<List<MonitorTamboModel>>> getMonitoresTambo(
+      String? idTambo) async {
+    var sidTambo = idTambo != null ? '/$idTambo' : '';
+    return await _http.request<List<MonitorTamboModel>>(
+      '${basePathApp3}obtenerMonitorTambo$sidTambo',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => MonitorTamboModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
   Future<HttpResponse<List<HistorialGestorModel>>> getHistorialGestor(
       String? snip) async {
     return await _http.request<List<HistorialGestorModel>>(
@@ -879,14 +895,26 @@ class PnPaisApi {
   }
 
   Future<HttpResponse<List<IncidentesInternetModel>>> getIncidenciasInternet(
-    int snip,
-  ) async {
+      int snip, int anio) async {
     return await _http.request<List<IncidentesInternetModel>>(
-      '${basePathApp3}tamboIncidenciaInternet/$snip/2023',
+      '${basePathApp3}tamboIncidenciaInternet/$snip/$anio',
       method: "GET",
       parser: (data) {
         return (data as List)
             .map((e) => IncidentesInternetModel.fromJson(e))
+            .toList();
+      },
+    );
+  }
+
+  Future<HttpResponse<List<ListaMonitorTamboModel>>> obtenerMonitores(
+      String idTambo) async {
+    return await _http.request<List<ListaMonitorTamboModel>>(
+      '${basePathApp3}obtenerMonitorUT/$idTambo',
+      method: "GET",
+      parser: (data) {
+        return (data as List)
+            .map((e) => ListaMonitorTamboModel.fromJson(e))
             .toList();
       },
     );
@@ -946,6 +974,35 @@ class PnPaisApi {
   ) async {
     return await _http.request<RespBase64FileDto>(
       '${basePathApp3}reporteTambosPorUT/$ut',
+      method: "GET",
+      parser: (data) {
+        return RespBase64FileDto.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<RespBase64FileDto>> getReporteTambosSectorial(
+      String anio, String mes) async {
+    return await _http.request<RespBase64FileDto>(
+      '${basePathApp3}reporteSectorial/${anio}/${mes}',
+      method: "GET",
+      parser: (data) {
+        return RespBase64FileDto.fromJson(data);
+      },
+    );
+  }
+
+  Future<HttpResponse<RespBase64FileDto>> getReporteIntervenciones(
+      String tambo,
+      String tipo,
+      String estado,
+      String ut,
+      String fechaInicio,
+      String fechaFin,
+      String mes,
+      String anio) async {
+    return await _http.request<RespBase64FileDto>(
+      '${basePathApp3}reporteIntervencionesTambo/${tambo}/${tipo}/${estado}/${ut}/${fechaInicio}/${fechaFin}/${mes}/${anio}',
       method: "GET",
       parser: (data) {
         return RespBase64FileDto.fromJson(data);

@@ -144,7 +144,7 @@ class _MapTambookState extends State<MapTambook>
                           text: TextSpan(
                             children: [
                               const TextSpan(
-                                text: " Región: ",
+                                text: " REGIÓN: ",
                                 style: TextStyle(
                                   color: color_01,
                                   fontSize: 14,

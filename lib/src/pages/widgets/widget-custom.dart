@@ -15,14 +15,14 @@ class WidgetCustoms {
     PreferredSizeWidget? bottom,
   }) =>
       AppBar(
-        backgroundColor: color_10o15,
+        backgroundColor: rojo,
         shadowColor: color_10o15,
         systemOverlayStyle: systemOverlayStyle,
         title: Center(
           child: Text(
             title,
             style: const TextStyle(
-              color: color_01,
+              color: Colors.white,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
               fontSize: 18.0,
@@ -32,7 +32,7 @@ class WidgetCustoms {
         leading: IconButton(
           icon: Icon(
             icon ?? Icons.arrow_back,
-            color: color_01,
+            color: Colors.white,
           ),
           onPressed: onPressed ??
               () {

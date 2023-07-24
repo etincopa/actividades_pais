@@ -10,6 +10,12 @@ class IncidenciasField {
   static String ticket = "ticket";
   static String estadoInternet = "estadoInternet";
   static String fechaCierre = "fechaCierre";
+
+  static String tipoAveria = "tipoAveria";
+  static String region = "region";
+  static String provincia = "provincia";
+  static String distrito = "distrito";
+  static String idOPeradorInternet = "idOPeradorInternet";
 }
 
 class IncidentesInternetModel {
@@ -25,6 +31,12 @@ class IncidentesInternetModel {
   String? estadoInternet;
   String? fechaCierre;
 
+  String? tipoAveria;
+  String? region;
+  String? provincia;
+  String? distrito;
+  int? idOPeradorInternet;
+
   IncidentesInternetModel.empty();
 
   IncidentesInternetModel(
@@ -38,7 +50,12 @@ class IncidentesInternetModel {
       this.nomEstado,
       this.ticket,
       this.estadoInternet,
-      this.fechaCierre});
+      this.fechaCierre,
+      this.tipoAveria,
+      this.region,
+      this.provincia,
+      this.distrito,
+      this.idOPeradorInternet});
 
   factory IncidentesInternetModel.fromJson(Map<String, dynamic> json) {
     return IncidentesInternetModel(
@@ -48,10 +65,15 @@ class IncidentesInternetModel {
         idIncidencia: json[IncidenciasField.idIncidencia],
         fechaAveria: json[IncidenciasField.fechaAveria],
         fechaCierre: json[IncidenciasField.fechaCierre],
+        tipoAveria: json[IncidenciasField.tipoAveria],
         diasPasados: json[IncidenciasField.diasPasados],
         idIncidenciaEstado: json[IncidenciasField.idIncidenciaEstado],
         nomEstado: json[IncidenciasField.nomEstado],
         ticket: json[IncidenciasField.ticket],
-        estadoInternet: json[IncidenciasField.estadoInternet]);
+        estadoInternet: json[IncidenciasField.estadoInternet],
+        region: json[IncidenciasField.region],
+        provincia: json[IncidenciasField.provincia],
+        distrito: json[IncidenciasField.distrito],
+        idOPeradorInternet: json[IncidenciasField.idOPeradorInternet]);
   }
 }
