@@ -2,6 +2,7 @@ import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:actividades_pais/backend/database/pnpais_db.dart';
 import 'package:actividades_pais/backend/model/CCPP_model.dart';
 import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/ListaMonitorResponse.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
@@ -31,6 +32,7 @@ import 'package:actividades_pais/backend/model/listar_trama_proyecto_model.dart'
 import 'package:actividades_pais/backend/model/listar_usuarios_app_model.dart';
 import 'package:actividades_pais/backend/model/dto/response_search_tambo_dto.dart';
 import 'package:actividades_pais/backend/model/mantenimiento_infraestructura_model.dart';
+import 'package:actividades_pais/backend/model/monitorResponse.dart';
 import 'package:actividades_pais/backend/model/monitoreo_registro_partida_ejecutada_model.dart';
 import 'package:actividades_pais/backend/model/obtener_metas_tambo_model.dart';
 import 'package:actividades_pais/backend/model/obtener_ultimo_avance_partida_model.dart';
@@ -513,9 +515,20 @@ class MainRepo {
   }
 
   Future<List<IncidentesInternetModel>> indicenciasInternetTambo(
-      int snip) async {
+      int snip, int anio) async {
     List<IncidentesInternetModel> aResp = [];
-    final response = await _pnPaisApi.getIncidenciasInternet(snip);
+    final response = await _pnPaisApi.getIncidenciasInternet(snip, anio);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<ListaMonitorTamboModel>> obtenerMonitores(String idTambo) async {
+    List<ListaMonitorTamboModel> aResp = [];
+    final response = await _pnPaisApi.obtenerMonitores(idTambo);
     if (response.error == null) {
       aResp = response.data!;
     } else {
@@ -728,6 +741,19 @@ class MainRepo {
   ) async {
     List<ServicioBasicoTamboModel> aResp = [];
     final response = await _pnPaisApi.getServicioBasicoTambo(idTambo);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<List<MonitorTamboModel>> getMonitoresTambo(
+    String? idTambo,
+  ) async {
+    List<MonitorTamboModel> aResp = [];
+    final response = await _pnPaisApi.getMonitoresTambo(idTambo);
     if (response.error == null) {
       aResp = response.data!;
     } else {
@@ -1041,6 +1067,38 @@ class MainRepo {
   ) async {
     RespBase64FileDto aResp = RespBase64FileDto.empty();
     final response = await _pnPaisApi.getReporteTambosPoblacion(ut);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<RespBase64FileDto> getReporteTambosSectorial(
+      String anio, String mes) async {
+    RespBase64FileDto aResp = RespBase64FileDto.empty();
+    final response = await _pnPaisApi.getReporteTambosSectorial(anio, mes);
+    if (response.error == null) {
+      aResp = response.data!;
+    } else {
+      _log.e(response.error.message);
+    }
+    return aResp;
+  }
+
+  Future<RespBase64FileDto> getReporteIntervenciones(
+      String tambo,
+      String tipo,
+      String estado,
+      String ut,
+      String fechaInicio,
+      String fechaFin,
+      String mes,
+      String anio) async {
+    RespBase64FileDto aResp = RespBase64FileDto.empty();
+    final response = await _pnPaisApi.getReporteIntervenciones(
+        tambo, tipo, estado, ut, fechaInicio, fechaFin, mes, anio);
     if (response.error == null) {
       aResp = response.data!;
     } else {

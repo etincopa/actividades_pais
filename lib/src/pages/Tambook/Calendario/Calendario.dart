@@ -1,11 +1,20 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/dto/response_base64_file_dto.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/FiltroIntervencionesTambos.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Intervenciones/UnidadesTerritoriales.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderAprobacionPlanes.dart';
 import 'package:actividades_pais/src/datamodels/Provider/ProviderRegistarInterv.dart';
+import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
 import 'package:actividades_pais/util/app-config.dart';
+import 'package:actividades_pais/util/busy-indicator.dart';
+import 'package:actividades_pais/util/check_connection.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -22,16 +31,26 @@ class Calendario extends StatefulWidget {
 }
 
 class _CalendarioState extends State<Calendario> {
+  Color darken(Color color, [double amount = .1]) {
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+
   bool mostarUt = true;
   int porcentaje = 0;
   Color colorPorcentaje = Colors.red;
+  MainController mainCtr = MainController();
+
   @override
   void initState() {
+    loadEvents();
     if (widget.idTambo == "x") {
       mostarUt = true;
     } else {
       selectedEstado = "x";
-      loadEvents();
+
       mostarUt = false;
     }
     super.initState();
@@ -125,7 +144,7 @@ class _CalendarioState extends State<Calendario> {
     });
 
     eventos = await ProviderRegistarInterv()
-        .cargarEventosTamb(filtroIntervencionesTambos);
+        .cargarEventosTambGet(filtroIntervencionesTambos);
     _loadEventsForDay();
     setState(() {
       _isLoading = false;
@@ -141,8 +160,8 @@ class _CalendarioState extends State<Calendario> {
     });
 
     eventos = await ProviderRegistarInterv()
-        .cargarEventosTamb(filtroIntervencionesTambos);
-    _loadEventsForDay();
+        .cargarEventosTambGet(filtroIntervencionesTambos);
+    await _loadEventsForDay();
     setState(() {
       _isLoading = false;
     });
@@ -168,6 +187,32 @@ class _CalendarioState extends State<Calendario> {
     unidadesTerrtoriales = (await ProviderAprobacionPlanes()
         .ListarUnidadesTerritorialesTambook())!;
     setState(() {});
+  }
+
+  Color getColor(DateTime date) {
+    var color1 = Colors.red[100];
+    var color2 = Colors.yellow[100];
+    var color3 = Colors.green[100];
+
+    var evento_ =
+        eventos.where((evento) => isSameDay(evento.fecha, date)).toList();
+
+    if (evento_.isEmpty) {
+      return Colors.white;
+    }
+
+    var totalTambo = evento_[0].totalTambo;
+    var totalIntervenciones = evento_[0].totalTambosIntervenciones;
+
+    var porcentaje = (totalIntervenciones! / totalTambo!) * 100;
+
+    if (porcentaje >= 0 && porcentaje <= 50) {
+      return color1!;
+    } else if (porcentaje > 50 && porcentaje <= 90) {
+      return color2!;
+    } else {
+      return color3!;
+    }
   }
 
   @override
@@ -231,19 +276,26 @@ class _CalendarioState extends State<Calendario> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircularProgressIndicator(),
+                          CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                          ),
                           SizedBox(height: 20),
                           Text(
-                            "CARGANDO INTERVENCIONES",
-                            style: TextStyle(fontSize: 16),
+                            "CARGANDO INTERVENCIONES ...",
+                            style: TextStyle(fontSize: 13),
                           ),
                         ],
                       ),
                     ),
                   )
                 : Container(),
-            const SizedBox(height: 1),
-            const Text("Clic en la lupa para buscar intervenciones"),
+            // const SizedBox(height: 1),
+            !_isLoading
+                ? Text(
+                    "Haz clic en el ícono lupa para buscar intervenciones",
+                    style: TextStyle(fontSize: 11),
+                  )
+                : Container(),
             const SizedBox(height: 4),
             Container(
               padding: const EdgeInsets.only(
@@ -254,64 +306,83 @@ class _CalendarioState extends State<Calendario> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
+                    spreadRadius: 0,
                     blurRadius: 5,
                     offset: const Offset(0, 3), // changes position of shadow
                   ),
-                  BoxShadow(
+                  /*BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(-3, 0), // changes position of shadow
-                  ),
+                  ),*/
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(3, 0), // changes position of shadow
                   ),
-                  BoxShadow(
+/*  BoxShadow(
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, -3), // changes position of shadow
-                  ),
+                  ),*/
                 ],
               ),
-
-              // height: MediaQuery.of(context).size.height*0.511,
-              //  color: Colors.white,
               child: Column(
                 children: [
                   TableCalendar(
-                    rowHeight: 37,
+                    rowHeight: 36,
                     calendarBuilders: CalendarBuilders(
-                      defaultBuilder: (context, date, events) => Container(
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                        child: Text(
-                          '${date.day}',
-                          style: const TextStyle(
-                            fontSize: 13, // ajusta el tamaño de la fuente
-                          ),
-                        ),
-                      ),
+                      defaultBuilder: (context, date, events) {
+                        if (mostarUt == true) {
+                          var color = getColor(
+                              date); // Usamos la función getColor para obtener el color
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  color: date == _selectedDay
+                                      ? color.withOpacity(0.7)
+                                      : color,
+                                ),
+                              ),
+                              Text(
+                                '${date.day}',
+                                style: const TextStyle(
+                                  fontSize: 13, // ajusta el tamaño de la fuente
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                      },
                       singleMarkerBuilder: (context, date, event) {
-                        //print("DÍA ${_event}");
-                        return Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: date == _selectedDay
-                                  ? Colors.white
-                                  : Colors.grey), //Change color
-                          width: 5.0,
-                          height: 5.0,
-                          //   color: Colors.black,
-                          margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                        );
+                        if (mostarUt == false) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: date == _selectedDay
+                                    ? Colors.white
+                                    : Colors.grey), //Change color
+                            width: 5.0,
+                            height: 5.0,
+                            //   color: Colors.black,
+                            margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                          );
+                        } else {
+                          return Container(
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle, color: null),
+                            width: 5.0,
+                            height: 5.0,
+                            //   color: Colors.black,
+                            margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                          );
+                        }
                       },
                     ),
                     onPageChanged: (s) {
@@ -325,29 +396,49 @@ class _CalendarioState extends State<Calendario> {
                     },
                     formatAnimationCurve: Curves.linear,
                     headerVisible: true,
-                    calendarStyle: const CalendarStyle(
-                      todayDecoration: BoxDecoration(
-                        color: blue100, // Establece el color del día actual
-                        shape: BoxShape.circle,
-                      ),
-                      selectedDecoration: BoxDecoration(
-                        color: blue400,
-                        // Establece el color del día seleccionado
-                        shape: BoxShape.circle,
-                      ),
-                      selectedTextStyle: TextStyle(
+                    calendarStyle: CalendarStyle(
+                      todayDecoration: mostarUt
+                          ? BoxDecoration(
+                              color: getColor(DateTime.now()).withOpacity(
+                                  0.7), // Usa getColor para el día actual
+                              shape: BoxShape.rectangle,
+                              border: Border.all(color: Colors.red), //
+                            )
+                          : BoxDecoration(
+                              color: Colors
+                                  .transparent, // Usa getColor para el día actual
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.red), //
+                            ),
+                      selectedDecoration: mostarUt
+                          ? BoxDecoration(
+                              color: _selectedDay != null
+                                  ? getColor(_selectedDay!).withOpacity(0.8)
+                                  : Colors.transparent,
+                              shape: BoxShape.rectangle,
+                              border: Border.all(
+                                  color: getColor(_selectedDay!).withOpacity(
+                                      1)), // Agrega esta línea para eliminar el borde blanco
+                            )
+                          : BoxDecoration(
+                              color: Colors
+                                  .grey, // Usa getColor para el día actual
+                              shape: BoxShape.circle,
+                              // border: Border.all(color: Colors.red), //
+                            ),
+                      selectedTextStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 15,
                           color: Colors
-                              .white // ajusta el tamaño de la fuente del día seleccionado
+                              .black // ajusta el color de la fuente del día seleccionado
                           ),
-                      cellPadding: EdgeInsets.symmetric(vertical: 4),
+                      cellPadding: const EdgeInsets.symmetric(vertical: 4),
                       rangeHighlightColor: Colors.green,
-                      todayTextStyle: TextStyle(
+                      todayTextStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 15,
                           color: Colors
-                              .white // ajusta el tamaño de la fuente del día actual
+                              .blueGrey // ajusta el tamaño de la fuente del día actual
                           ),
                     ),
                     daysOfWeekStyle: const DaysOfWeekStyle(
@@ -376,8 +467,11 @@ class _CalendarioState extends State<Calendario> {
                             .toList();
                       });
                       if (_selectedEvents.isNotEmpty) {
-                        showAlertDialogAprobar(
-                            context, "Detalle", _selectedEvents, _selectedDay);
+                        BusyIndicator.show(context);
+
+                        showAlertDialogAprobar(context, _selectedDay);
+
+                        // "Detalle", _selectedEvents,
                       }
                     },
                     firstDay: kFirstDays,
@@ -385,7 +479,50 @@ class _CalendarioState extends State<Calendario> {
                     focusedDay: _focusedDay,
                     calendarFormat: CalendarFormat.month,
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 15.0),
+                  mostarUt
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red[
+                                    100], // Cambia el color según tus necesidades
+                              ),
+                            ),
+                            Text(" 0 AL 50%"),
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.yellow[
+                                    100], // Cambia el color según tus necesidades
+                              ),
+                            ),
+                            Text(" 51 AL 90%"),
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.green[
+                                    100], // Cambia el color según tus necesidades
+                              ),
+                            ),
+                            Text(" 91 AL 100%"),
+                          ],
+                        )
+                      : Container(),
+                  mostarUt
+                      ? Text(
+                          "% de Tambos con Actividades Programadas y/o Ejecutadas",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      : Container(),
                   const Text(
                     "FUENTE: PNPAIS",
                     style: TextStyle(fontWeight: FontWeight.bold),
@@ -458,7 +595,7 @@ class _CalendarioState extends State<Calendario> {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppConfig.primaryColor2,
+                    backgroundColor: const Color(0xFFB40404),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
@@ -518,20 +655,26 @@ class _CalendarioState extends State<Calendario> {
     );
   }
 
-  showAlertDialogAprobar(
-      BuildContext context, texto, selectedEventss, selectDay) async {
+  showAlertDialogAprobar(BuildContext context, selectDay) async {
     FiltroIntervencionesTambos filtroIntervencionesTambosS =
         FiltroIntervencionesTambos();
     filtroIntervencionesTambosS.inicio =
-        DateFormat('dd/MM/yyyy').format(selectDay);
+        DateFormat('dd-MM-yyyy').format(selectDay);
     filtroIntervencionesTambosS.fin =
-        DateFormat('dd/MM/yyyy').format(selectDay);
-
-    filtroIntervencionesTambosS.ut = filtroIntervencionesTambos.ut;
+        DateFormat('dd-MM-yyyy').format(selectDay);
+    filtroIntervencionesTambosS.id = filtroIntervencionesTambos.id;
+    filtroIntervencionesTambosS.mes = filtroIntervencionesTambos.mes;
+    filtroIntervencionesTambosS.anio = filtroIntervencionesTambos.anio;
+    //filtroIntervencionesTambosS.anio =
+    //    int.parse(DateFormat('yyyy').format(selectDay));
+    //filtroIntervencionesTambosS.mes = DateFormat('MM').format(selectDay);
     filtroIntervencionesTambosS.estado = filtroIntervencionesTambos.estado;
-    filtroIntervencionesTambosS.anio =
-        int.parse(DateFormat('yyyy').format(selectDay));
-    filtroIntervencionesTambosS.mes = DateFormat('MM').format(selectDay);
+    filtroIntervencionesTambosS.ut = filtroIntervencionesTambos.ut;
+
+    print(filtroIntervencionesTambosS.inicio);
+
+    var selectedEventss = await ProviderRegistarInterv()
+        .cargarEventosTamb(filtroIntervencionesTambosS);
     var totalTambos = '';
     var totalTamboCon = '';
     var totalTamboSin = '';
@@ -543,10 +686,6 @@ class _CalendarioState extends State<Calendario> {
         totalTamboCon = values[1];
         totalTamboSin = values[2];
       });
-      print('TOTAL_TAMBOS: $totalTambos');
-      print('TOTAL_TAMBO_CON: $totalTamboCon');
-      print('TOTAL_TAMBO_SIN: $totalTamboSin');
-
       porcentaje =
           ((int.parse(totalTamboCon) / int.parse(totalTambos)) * 100).toInt();
 
@@ -556,10 +695,12 @@ class _CalendarioState extends State<Calendario> {
               ? Colors.amber
               : Colors.green));
     });
+    BusyIndicator.hide(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) => buildSuccessDialog2(context,
-          title: "Lista Intervenciones",
+          title: "LISTA DE INTERVENCIONES NIVEL NACIONAL",
           selectedEventss: selectedEventss,
           selectDay: selectDay,
           totalTamboCon: totalTamboCon,
@@ -588,21 +729,44 @@ class _CalendarioState extends State<Calendario> {
         .where((element) => element.tipoProgramacion.contains('2'))
         .toList()
         .length;
+
+    var dentro = selectedEventss
+        .where((element) => element.idLugarIntervencion.contains('1'))
+        .toList()
+        .length;
+    var fuera = selectedEventss
+        .where((element) => element.idLugarIntervencion.contains('2'))
+        .toList()
+        .length;
+    var SV = selectedEventss
+        .where((element) =>
+            element.idLugarIntervencion == null ||
+            element.idLugarIntervencion == '0')
+        .toList()
+        .length;
+
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter sstdotstate) {
       return AlertDialog(
         title: SizedBox(
-          height: mostarUt ? 188 : 145,
+          height: mostarUt ? 286 : 260,
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
+                  Expanded(
+                      child: Text(
                     title!,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    softWrap: false,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )),
                 ],
               ),
               const SizedBox(
@@ -620,14 +784,14 @@ class _CalendarioState extends State<Calendario> {
                 ],
               ),
               const SizedBox(
-                height: 1,
+                height: 10,
               ),
               mostarUt == true
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          "TAMBOS CON INTERVENCIONES ($totalTamboCon)",
+                          "TAMBOS CON INTERVENCIONES ($totalTamboCon) ($porcentaje %)",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 11, fontWeight: FontWeight.bold),
@@ -640,7 +804,7 @@ class _CalendarioState extends State<Calendario> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          "TAMBOS SIN INTERVENCIONES ($totalTamboSin)",
+                          "TAMBOS SIN INTERVENCIONES ($totalTamboSin) (${100 - porcentaje} %)",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 11, fontWeight: FontWeight.bold),
@@ -648,21 +812,36 @@ class _CalendarioState extends State<Calendario> {
                       ],
                     )
                   : Container(),
-              mostarUt == true
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "PORCENTAJE DE TAMBOS CON INT. ($porcentaje %)",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: colorPorcentaje),
-                        ),
-                      ],
-                    )
-                  : Container(),
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "DENTRO DEL TAMBO : $dentro",
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "FUERA DEL TAMBO : $fuera",
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "SIN VALOR : $SV",
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              //  : Container(),
               const SizedBox(
                 height: 10,
               ),
@@ -754,6 +933,68 @@ class _CalendarioState extends State<Calendario> {
                   ],
                 ),
               ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Exportar Detalle ',
+                      style: TextStyle(fontSize: 15),
+                    ), // Texto para mostrar al lado del icono
+
+                    IconButton(
+                      icon: const Icon(Icons.download),
+                      onPressed: () async {
+                        try {
+                          print(DateFormat('dd/MM/yyyy').format(selectDay));
+
+                          BusyIndicator.show(context);
+                          bool isConnec =
+                              await CheckConnection.isOnlineWifiMobile();
+                          if (isConnec) {
+                            RespBase64FileDto oB64 =
+                                await mainCtr.getReporteIntervenciones(
+                                    (filtroIntervencionesTambos.id == '0'
+                                        ? 'X'
+                                        : filtroIntervencionesTambos.id ?? 'X'),
+                                    (filtroIntervencionesTambos.tipo == '0'
+                                        ? 'X'
+                                        : filtroIntervencionesTambos.tipo ??
+                                            'X'),
+                                    (filtroIntervencionesTambos.estado == '0'
+                                        ? 'X'
+                                        : filtroIntervencionesTambos.estado ??
+                                            'X'),
+                                    (filtroIntervencionesTambos.ut == '0'
+                                        ? 'X'
+                                        : filtroIntervencionesTambos.ut ?? 'X'),
+                                    DateFormat('dd-MM-yyyy').format(selectDay),
+                                    DateFormat('dd-MM-yyyy').format(selectDay),
+                                    (filtroIntervencionesTambos.mes == '0'
+                                        ? 'X'
+                                        : filtroIntervencionesTambos.mes ??
+                                            'X'),
+                                    filtroIntervencionesTambos.anio.toString());
+                            Uint8List dataPdf =
+                                convertBase64(oB64.base64 ?? '');
+
+                            BusyIndicator.hide(context);
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PdfPreviewPage2(dataPdf: dataPdf),
+                              ),
+                            );
+                            return;
+                          } else {}
+                        } catch (oError) {}
+                        BusyIndicator.hide(context);
+                      },
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -1043,4 +1284,8 @@ class _CalendarioState extends State<Calendario> {
       );
     });
   }
+}
+
+Uint8List convertBase64(String base64String) {
+  return const Base64Decoder().convert(base64String.split(',').last);
 }

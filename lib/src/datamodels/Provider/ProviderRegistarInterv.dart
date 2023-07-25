@@ -52,17 +52,16 @@ class ProviderRegistarInterv {
 
   Future cargarEventosTamb(
       FiltroIntervencionesTambos filtroIntervencionesTambos) async {
-    print('{'
-        '"id": "${filtroIntervencionesTambos.id}",'
-        '"tipo": "${filtroIntervencionesTambos.tipo}",'
-        '"estado": "${filtroIntervencionesTambos.estado}",'
-        '"ut": "${filtroIntervencionesTambos.ut}",'
-        '"inicio": "${filtroIntervencionesTambos.inicio}",'
-        '"fin": "${filtroIntervencionesTambos.fin}",'
-        '"mes": "${filtroIntervencionesTambos.mes}",'
-        '"anio": ${filtroIntervencionesTambos.anio}'
-        '}');
 
+    if (filtroIntervencionesTambos.estado == "0") {
+      filtroIntervencionesTambos.estado = "x";
+    }
+    if (filtroIntervencionesTambos.id == "0") {
+      filtroIntervencionesTambos.id = "x";
+    }
+    if (filtroIntervencionesTambos.ut == "0") {
+      filtroIntervencionesTambos.ut = "x";
+    }
     http.Response response = await http.post(
         Uri.parse(
             '${AppConfig.backendsismonitor}/programaciongit/filtroTambook'),
@@ -77,6 +76,7 @@ class ProviderRegistarInterv {
             '"mes": "${filtroIntervencionesTambos.mes}",'
             '"anio": ${filtroIntervencionesTambos.anio}'
             '}');
+
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
       return eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
@@ -85,18 +85,37 @@ class ProviderRegistarInterv {
     }
   }
 
+  Future<List<Evento>> cargarEventosTambGet(FiltroIntervencionesTambos filtroIntervencionesTambos) async {
+     if (filtroIntervencionesTambos.id == "x") {
+      filtroIntervencionesTambos.id = "0";
+    }
+     if (filtroIntervencionesTambos.tipo == "x") {
+      filtroIntervencionesTambos.tipo = "0";
+    }
+    if (filtroIntervencionesTambos.estado == "x") {
+      filtroIntervencionesTambos.estado = "0";
+    }
+    if (filtroIntervencionesTambos.ut == "x") {
+      filtroIntervencionesTambos.ut = "0";
+    }
+
+    final url = '${AppConfig.urlBackndServicioSeguro}/api-pnpais/tambook/app/obtenerIntervencionesTamboResumen/${filtroIntervencionesTambos.id}/${filtroIntervencionesTambos.tipo}/${filtroIntervencionesTambos.estado}/${filtroIntervencionesTambos.ut}/0/${filtroIntervencionesTambos.mes}/${filtroIntervencionesTambos.anio}';
+
+    final response = await http.get(Uri.parse(url), headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200) {
+      final jsonList = json.decode(response.body)['response'] as List<dynamic>;
+      final eventos = jsonList.map((json) => Evento.fromJson(json)).toList();
+      return eventos;
+    } else {
+      return [];
+    }
+  }
+
+
   Future cantidadTambo(
       FiltroIntervencionesTambos filtroIntervencionesTambos) async {
-    print('{'
-        '"idPlataforma": "${filtroIntervencionesTambos.id}",'
-        '"numTipo": "${filtroIntervencionesTambos.tipo}",'
-        '"numEstado": "${filtroIntervencionesTambos.estado}",'
-        '"idUTerritorial": "${filtroIntervencionesTambos.ut}",'
-        '"fecInicio": "${filtroIntervencionesTambos.inicio}",'
-        '"fecFinal": "${filtroIntervencionesTambos.fin}",'
-        '"numMes": "${filtroIntervencionesTambos.mes}",'
-        '"numAnio": ${filtroIntervencionesTambos.anio}'
-        '}');
+
     http.Response response = await http.post(
         Uri.parse(
             '${AppConfig.backendsismonitor}/programaciongit/cantidadTambo'),

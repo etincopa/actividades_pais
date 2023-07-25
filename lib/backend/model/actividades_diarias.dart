@@ -9,6 +9,9 @@ class ActividadesDiariasField {
 
   static String actividad = "actividad";
   static String lugar = "lugar";
+  static String fechaIncio = "fechaIniSituacion";
+  static String fechaFin = "fechaFinSituacion";
+
   static String tipoIntervencion = "tipoIntervencion";
 }
 
@@ -20,7 +23,8 @@ class ActividadesDiariasModel {
   String? fechaActividad;
   String? gitLaborando;
   String? motivo;
-
+  String? fechaInicio;
+  String? fechaFin;
   String? actividad;
   String? lugar;
   String? tipoIntervencion;
@@ -35,6 +39,8 @@ class ActividadesDiariasModel {
       this.fechaActividad,
       this.gitLaborando,
       this.motivo,
+      this.fechaInicio,
+      this.fechaFin,
       this.actividad,
       this.lugar,
       this.tipoIntervencion});
@@ -48,6 +54,8 @@ class ActividadesDiariasModel {
       fechaActividad: json[ActividadesDiariasField.fechaActividad],
       gitLaborando: json[ActividadesDiariasField.gitLaborando],
       motivo: json[ActividadesDiariasField.motivo],
+      fechaInicio: json[ActividadesDiariasField.fechaIncio],
+      fechaFin: json[ActividadesDiariasField.fechaFin],
       actividad: json[ActividadesDiariasField.actividad],
       lugar: json[ActividadesDiariasField.lugar],
       tipoIntervencion: json[ActividadesDiariasField.tipoIntervencion],

@@ -1,6 +1,8 @@
 class ListaTambosEstadoInternetField {
   static String idUt = "idUt";
   static String region = "region";
+  static String provincia = "provincia";
+  static String distrito = "distrito";
   static String idTambo = "idTambo";
   static String nomTambo = "nomTambo";
   static String snip = "snip";
@@ -14,6 +16,8 @@ class ListaTambosEstadoInternetField {
 class ListaTambosEstadoInternetModel {
   String? idUt;
   String? region;
+  String? provincia;
+  String? distrito;
   String? idTambo;
   String? nomTambo;
   String? snip;
@@ -28,6 +32,8 @@ class ListaTambosEstadoInternetModel {
   ListaTambosEstadoInternetModel({
     this.idUt,
     this.region,
+    this.provincia,
+    this.distrito,
     this.idTambo,
     this.nomTambo,
     this.snip,
@@ -42,6 +48,8 @@ class ListaTambosEstadoInternetModel {
     return ListaTambosEstadoInternetModel(
       idUt: json[ListaTambosEstadoInternetField.idUt],
       region: json[ListaTambosEstadoInternetField.region],
+      provincia: json[ListaTambosEstadoInternetField.provincia],
+      distrito: json[ListaTambosEstadoInternetField.distrito],
       idTambo: json[ListaTambosEstadoInternetField.idTambo],
       nomTambo: json[ListaTambosEstadoInternetField.nomTambo],
       snip: json[ListaTambosEstadoInternetField.snip],

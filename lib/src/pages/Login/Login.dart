@@ -74,6 +74,18 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Container(
               width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: h / 22),
+              child: SizedBox(
+                height: h / 15,
+                //width: w / 90,
+                child: Image.asset(
+                  'assets/LOGO PAIS_OK2.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: h / 12),
               decoration: const BoxDecoration(
                 gradient: mainButton5,
@@ -82,16 +94,16 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: w / 2,
-                    height: h / 6,
+                    width: w / 4,
+                    height: h / 5,
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.asset(
-                          'assets/paislogo.png',
-                          width: w / 3.5,
-                          height: h / 7,
+                          'assets/LOGO_SIG.png',
+                          width: w / 5.5,
+                          height: h / 19,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -147,7 +159,8 @@ class _LoginPageState extends State<LoginPage> {
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
+                    await DatabasePr.db.deletelogin();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -249,11 +262,16 @@ class __FormState extends State<_Form> {
     }
 
     return Container(
-      margin: EdgeInsets.only(top: h / 20),
+      margin: EdgeInsets.only(top: h / 195),
       padding: EdgeInsets.symmetric(horizontal: w / 16),
       child: Column(
         children: <Widget>[
-          const SizedBox(height: 10),
+          const Text(
+            "SISTEMA DE INFORMACIÓN Y GESTIÓN",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 40),
           CustomInput(
             icon: Icons.supervised_user_circle,
             placeholder: 'Ingrese su DNI',
@@ -264,7 +282,7 @@ class __FormState extends State<_Form> {
             icon: Icons.lock_outline,
             placeholder: 'Ingrese su Contraseña',
             textController: passCtrl,
-            //isPassword: false,
+            isPassword: true,
           ),
           InkWell(
             onTap: () {

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:actividades_pais/backend/controller/main_controller.dart';
+import 'package:actividades_pais/backend/model/IncidentesInternetModel.dart';
+import 'package:actividades_pais/backend/model/ListaMonitorResponse.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias.dart';
 import 'package:actividades_pais/backend/model/actividades_diarias_resumen.dart';
 import 'package:actividades_pais/backend/model/atencion_intervencion_beneficiario_resumen_model.dart';
@@ -28,6 +30,7 @@ import 'package:actividades_pais/backend/model/servicios_basicos.dart';
 import 'package:actividades_pais/backend/model/tambo_no_intervencion_model.dart';
 import 'package:actividades_pais/backend/model/tambo_pias_model.dart';
 import 'package:actividades_pais/backend/model/tambos_estado_internet_model.dart';
+import 'package:actividades_pais/backend/model/unidad_ut_jefe_model.dart';
 import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/pdf_preview_page2.dart';
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/Reportes/ReporteEquipoInfomatico.dart';
@@ -123,6 +126,13 @@ class _HomeTambookState extends State<HomeTambook>
   List<HomeOptions> aPersonalTambo = [];
   List<HomeOptions> aPlataforma = [];
 
+  String anioReporteSectorial = "0";
+  String mesReporteSectorial = "0";
+
+  late List<IncidentesInternetModel> incidencias = [];
+
+  late List<ListaMonitorTamboModel> oListaMonitores = [];
+
   DateTime currentDate = DateTime.now();
 
   String fechaActividades = "";
@@ -158,6 +168,7 @@ class _HomeTambookState extends State<HomeTambook>
     buildPersonalTambo();
     obtenerAvanceMetasPorMes();
     getMetasGeneral();
+    incidenciasInternet();
     getCantidadTambosPIAS();
     getCantidadTotalMetas();
     getActividadesDiariasResumen("0");
@@ -251,6 +262,17 @@ class _HomeTambookState extends State<HomeTambook>
     isLoadingSinInterAnio = true;
   }
 
+  Future<void> incidenciasInternet() async {
+    incidencias =
+        await mainCtr.getIncidenciasInternet(0, int.parse(sCurrentYear));
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
+  Future<void> obtenerMonitores() async {
+    oListaMonitores = await mainCtr.obtenerMonitores("0");
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     BusyIndicator.show(context);
 
@@ -262,7 +284,21 @@ class _HomeTambookState extends State<HomeTambook>
         locale: const Locale("es", "ES"),
         helpText: "SELECCIONAR FECHA DE ACTIVIDAD",
         cancelText: "CANCELAR",
-        confirmText: "SELECCIONAR");
+        confirmText: "SELECCIONAR",
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Color(0xFFB40404),
+                onPrimary: Colors.white,
+                surface: Color(0xFFB40404),
+                onSurface: Colors.black,
+              ),
+              dialogBackgroundColor: Colors.white,
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedDate != null && pickedDate != currentDate) {
       aActividadesResumen = await mainCtr.getActividadesDiariasResumen(
@@ -289,6 +325,9 @@ class _HomeTambookState extends State<HomeTambook>
 
     if (selected != null) {
       BusyIndicator.show(context);
+
+      anioReporteSectorial = DateFormat("yyyy").format(selected);
+      mesReporteSectorial = DateFormat("M").format(selected);
 
       await obtenerReporteTipoUsuario('1', DateFormat("yyyy").format(selected),
           DateFormat("M").format(selected), 'X');
@@ -378,7 +417,7 @@ class _HomeTambookState extends State<HomeTambook>
     List<PersonalPuestoModel> aPersonal = await mainCtr.getPersonalPuesto();
 
     String icon1 = 'assets/icons/JUT.png';
-    String icon2 = 'assets/icons/MONITOR.png';
+    String icon2 = 'assets/icons/MO.png';
     String icon3 = 'assets/icons/GESTORES.png';
     String icon4 = 'assets/icons/GUARDIAN.png';
     String icon5 = 'assets/icons/persona2.png';
@@ -590,6 +629,11 @@ class _HomeTambookState extends State<HomeTambook>
       aMetasMensualizada =
           await mainCtr.getAvanceMetasMensualizada(sCurrentYear);
 
+      anioReporteSectorial =
+          aMetasMensualizada[aMetasMensualizada.length - 1].anio!;
+      mesReporteSectorial =
+          aMetasMensualizada[aMetasMensualizada.length - 1].mes!;
+
       setState(() {
         isLoadingAtencionMensualizada = true;
       });
@@ -728,7 +772,7 @@ class _HomeTambookState extends State<HomeTambook>
     );*/
 
     return DefaultTabController(
-      length: 8, // cambiar aqui para mas pestañas
+      length: 7, // cambiar aqui para mas pestañas
       child: Scaffold(
         backgroundColor: color_10o15,
         body: NestedScrollView(
@@ -740,6 +784,7 @@ class _HomeTambookState extends State<HomeTambook>
                   pinned: false,
                   floating: false,
                   snap: false,
+                  backgroundColor: Color(0xFFB40404),
                   //actionsIconTheme: IconThemeData(opacity: 0.0),
                   flexibleSpace: FlexibleSpaceBar(
                     background: Stack(
@@ -817,6 +862,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
+                                    color: Color(0xFFB40404),
                                   ),
                                   scrollAxis:
                                       Axis.horizontal, //scroll direction
@@ -849,15 +895,16 @@ class _HomeTambookState extends State<HomeTambook>
                       color: Colors.white70,
                       child: TabBar(
                         labelColor: Colors.black87,
+                        indicatorColor: Color(0xFFB40404),
                         unselectedLabelColor: Colors.grey,
                         padding: EdgeInsets.all(5.0),
                         isScrollable: true,
                         tabs: [
-                          Tab(
+                          /*Tab(
                               icon: ImageIcon(
                             AssetImage('assets/icons/icon_intervencion.png'),
                             size: 35,
-                          )),
+                          )),*/
                           Tab(
                               icon: ImageIcon(
                             AssetImage('assets/icons/atenciones.png'),
@@ -910,18 +957,56 @@ class _HomeTambookState extends State<HomeTambook>
           body: TabBarView(
             children: <Widget>[
               // REPORTES SECTORIALES
-              SingleChildScrollView(
+              /*        SingleChildScrollView(
                   child: Column(
                 children: [
                   const SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () => _selectMonth(context),
-                    child: const Text('SELECCIONAR MES'),
+
+                  ListTile(
+                    title: ElevatedButton(
+                      onPressed: () => _selectMonth(context),
+                      child: const Text('SELECCIONAR MES'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFFB40404)),
+                      ),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.download),
+                      onPressed: () async {
+                        try {
+                          print("mes y anio ${mesReporteSectorial}");
+                          BusyIndicator.show(context);
+                          bool isConnec =
+                              await CheckConnection.isOnlineWifiMobile();
+                          if (isConnec) {
+                            RespBase64FileDto oB64 =
+                                await mainCtr.getReporteTambosSectorial(
+                                    anioReporteSectorial, mesReporteSectorial);
+                            Uint8List dataPdf =
+                                convertBase64(oB64.base64 ?? '');
+
+                            BusyIndicator.hide(context);
+                            _controller!.reverse();
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PdfPreviewPage2(dataPdf: dataPdf),
+                              ),
+                            );
+                            return;
+                          } else {}
+                        } catch (oError) {}
+                        BusyIndicator.hide(context);
+                      },
+                    ),
                   ),
+
                   const SizedBox(height: 10),
-                  reporteSectorialTipoUsuarioAtencion(),
+                  //reporteSectorialTipoUsuarioAtencion(),
                   const SizedBox(height: 10),
-                  reporteSectorialTipoUsuarioBeneficiarios(),
+                  //reporteSectorialTipoUsuarioBeneficiarios(),
                   const SizedBox(height: 10),
                   reporteSectorial(),
                   const SizedBox(height: 10),
@@ -930,7 +1015,7 @@ class _HomeTambookState extends State<HomeTambook>
                   //cardPlataforma(),
                 ],
               )),
-
+    */
               SingleChildScrollView(
                   child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -957,9 +1042,12 @@ class _HomeTambookState extends State<HomeTambook>
                 children: [
                   const SizedBox(height: 15),
                   ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: const Text('SELECCIONAR FECHA DE ACTIVIDAD'),
-                  ),
+                      onPressed: () => _selectDate(context),
+                      child: Text('SELECCIONAR FECHA DE ACTIVIDAD'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xFFB40404)),
+                      )),
                   const SizedBox(height: 10),
                   cardActividadesDiarias(),
                   const SizedBox(height: 15),
@@ -1350,11 +1438,75 @@ class _HomeTambookState extends State<HomeTambook>
                   sPersonalCode = 'JUT';
                   tipoPersonal = 'JEFES DE UNIDADES TERRITORIALES';
                   tipoDescripcion = 'UT: ';
+
+                  List<UnidadTerritorialModel> aPersonalDetTambo =
+                      await mainCtr.UnidadTerritorial('0');
+
+                  BusyIndicator.hide(context);
+
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => buildSuccessDialog2(
+                      context,
+                      title: tipoPersonal,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: aPersonalDetTambo.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var oEquipoSelect = aPersonalDetTambo[index];
+                          return Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  oEquipoSelect.unidadTerritorialPropietario ??
+                                      '',
+                                ),
+                                subtitle: Text(
+                                    "$tipoDescripcion ${oEquipoSelect.nombreUt ?? ''} \n ${oEquipoSelect.celularUt ?? ''} \n ${oEquipoSelect.correoUt ?? ''}"),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  );
                 }
                 if (oOption.code == 'OPT3002') {
                   sPersonalCode = 'MO';
                   tipoPersonal = 'MONITORES';
                   tipoDescripcion = 'CANTIDAD: ';
+
+                  oListaMonitores = await mainCtr.obtenerMonitores("0");
+
+                  BusyIndicator.hide(context);
+
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => buildSuccessDialog2(
+                      context,
+                      title: tipoPersonal,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: oListaMonitores.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var oMonitor = oListaMonitores[index];
+                          return Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  "${oMonitor.nombres} ${oMonitor.apaterno} ${oMonitor.amaterno}",
+                                ),
+                                subtitle: Text(
+                                    "${oMonitor.unidadTerritorial} \n${oMonitor.celular} \n${oMonitor.correo}"),
+                              ),
+                              const Divider(color: colorI),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  );
                 }
                 if (oOption.code == 'OPT3003') {
                   sPersonalCode = 'GIT';
@@ -1370,37 +1522,6 @@ class _HomeTambookState extends State<HomeTambook>
                   sPersonalCode = 'ST';
                   tipoPersonal = 'SOPORTE TÉCNICO - UTI';
                 }
-                List<PersonalTambo> aPersonalDetTambo =
-                    await mainCtr.getPersonalPuestoTambo(sPersonalCode);
-
-                BusyIndicator.hide(context);
-
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => buildSuccessDialog2(
-                    context,
-                    title: tipoPersonal,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: aPersonalDetTambo.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var oEquipoSelect = aPersonalDetTambo[index];
-                        return Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                oEquipoSelect.nombres ?? '',
-                              ),
-                              subtitle: Text(
-                                  "$tipoDescripcion ${oEquipoSelect.descripcion ?? ''}"),
-                            ),
-                            const Divider(color: colorI),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                );
               },
             );
           },
@@ -1675,9 +1796,12 @@ class _HomeTambookState extends State<HomeTambook>
                                         size: 100,
                                         maxValue: 100,
                                         valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[0]
-                                                            .atenciones ??
-                                                        '0') /
+                                            (((aReporteSectorial.isNotEmpty
+                                                        ? double.parse(
+                                                            aReporteSectorial[0]
+                                                                    .atenciones ??
+                                                                '0')
+                                                        : 0) /
                                                     totalValue) *
                                                 100)),
                                         backColor:
@@ -1699,14 +1823,17 @@ class _HomeTambookState extends State<HomeTambook>
                                       ListTile(
                                         title: Center(
                                             child: Text(
-                                          aReporteSectorial[0].entidad ?? '',
+                                          (aReporteSectorial.isNotEmpty
+                                              ? aReporteSectorial![0].entidad ??
+                                                  ''
+                                              : ''),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12),
                                         )),
                                         subtitle: Center(
                                             child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[0].atenciones ?? '0'))})")),
+                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[0].atenciones ?? '0' : '0'))})")),
                                       )
                                     ],
                                   ),
@@ -1725,9 +1852,12 @@ class _HomeTambookState extends State<HomeTambook>
                                         size: 100,
                                         maxValue: 100,
                                         valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[1]
-                                                            .atenciones ??
-                                                        '0') /
+                                            ((double.parse(aReporteSectorial
+                                                            .isNotEmpty
+                                                        ? aReporteSectorial[1]
+                                                                .atenciones ??
+                                                            '0'
+                                                        : '0') /
                                                     totalValue) *
                                                 100)),
                                         backColor:
@@ -1749,14 +1879,17 @@ class _HomeTambookState extends State<HomeTambook>
                                       ListTile(
                                         title: Center(
                                             child: Text(
-                                          aReporteSectorial[1].entidad ?? '',
+                                          aReporteSectorial.isNotEmpty
+                                              ? aReporteSectorial[1].entidad ??
+                                                  ''
+                                              : '',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12),
                                         )),
                                         subtitle: Center(
                                             child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[1].atenciones ?? '0'))})")),
+                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[1].atenciones ?? '0' : '0'))})")),
                                       )
                                     ],
                                   ),
@@ -1779,9 +1912,12 @@ class _HomeTambookState extends State<HomeTambook>
                                         size: 100,
                                         maxValue: 100,
                                         valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[2]
-                                                            .atenciones ??
-                                                        '0') /
+                                            ((double.parse(aReporteSectorial
+                                                            .isNotEmpty
+                                                        ? aReporteSectorial[2]
+                                                                .atenciones ??
+                                                            '0'
+                                                        : '0') /
                                                     totalValue) *
                                                 100)),
                                         backColor:
@@ -1803,14 +1939,17 @@ class _HomeTambookState extends State<HomeTambook>
                                       ListTile(
                                         title: Center(
                                             child: Text(
-                                          aReporteSectorial[2].entidad ?? '',
+                                          aReporteSectorial.isNotEmpty
+                                              ? aReporteSectorial[2].entidad ??
+                                                  ''
+                                              : '',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12),
                                         )),
                                         subtitle: Center(
                                             child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[2].atenciones ?? '0'))})")),
+                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[2].atenciones ?? '0' : '0'))})")),
                                       )
                                     ],
                                   ),
@@ -1829,9 +1968,12 @@ class _HomeTambookState extends State<HomeTambook>
                                         size: 100,
                                         maxValue: 100,
                                         valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[3]
-                                                            .atenciones ??
-                                                        '0') /
+                                            ((double.parse(aReporteSectorial
+                                                            .isNotEmpty
+                                                        ? aReporteSectorial[3]
+                                                                .atenciones ??
+                                                            '0'
+                                                        : '0') /
                                                     totalValue) *
                                                 100)),
                                         backColor:
@@ -1841,7 +1983,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         mergeMode: true,
                                         onGetText: (double value) {
                                           return Text(
-                                            '${((double.parse(aReporteSectorial[3].atenciones ?? '0') / totalValue) * 100).round()}%',
+                                            '${((double.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[3].atenciones ?? '0' : '0') / totalValue) * 100).round()}%',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -1853,20 +1995,26 @@ class _HomeTambookState extends State<HomeTambook>
                                       ListTile(
                                         title: Center(
                                             child: Text(
-                                          aReporteSectorial[3].entidad ?? '',
+                                          aReporteSectorial.isNotEmpty
+                                              ? aReporteSectorial[3].entidad ??
+                                                  ''
+                                              : '',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12),
                                         )),
                                         subtitle: Center(
                                             child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[3].atenciones ?? '0'))})")),
+                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[3].atenciones ?? '0' : '0'))})")),
                                       )
                                     ],
                                   ),
                                 ),
                               ),
                             ]),
+
+                        /*
+
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -2128,7 +2276,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                               ),
-                            ]),
+                            ]),*/
                         const SizedBox(
                           height: 10,
                         ),
@@ -2221,9 +2369,12 @@ class _HomeTambookState extends State<HomeTambook>
                                         size: 100,
                                         maxValue: 100,
                                         valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[0]
-                                                            .beneficiarios ??
-                                                        '0') /
+                                                    .parse(aReporteSectorial
+                                                            .isNotEmpty
+                                                        ? aReporteSectorial[0]
+                                                                .beneficiarios ??
+                                                            '0'
+                                                        : '0') /
                                                 totalValueTipoBeneficiario) *
                                             100)),
                                         backColor:
@@ -2245,14 +2396,17 @@ class _HomeTambookState extends State<HomeTambook>
                                       ListTile(
                                         title: Center(
                                             child: Text(
-                                          aReporteSectorial[0].entidad ?? '',
+                                          aReporteSectorial.isNotEmpty
+                                              ? aReporteSectorial[0].entidad ??
+                                                  ''
+                                              : '',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12),
                                         )),
                                         subtitle: Center(
                                             child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[0].beneficiarios ?? '0'))})")),
+                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[0].beneficiarios ?? '0' : '0'))})")),
                                       )
                                     ],
                                   ),
@@ -2271,9 +2425,12 @@ class _HomeTambookState extends State<HomeTambook>
                                         size: 100,
                                         maxValue: 100,
                                         valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[1]
-                                                            .beneficiarios ??
-                                                        '0') /
+                                                    .parse(aReporteSectorial
+                                                            .isNotEmpty
+                                                        ? aReporteSectorial[1]
+                                                                .beneficiarios ??
+                                                            '0'
+                                                        : '0') /
                                                 totalValueTipoBeneficiario) *
                                             100)),
                                         backColor:
@@ -2283,7 +2440,7 @@ class _HomeTambookState extends State<HomeTambook>
                                         mergeMode: true,
                                         onGetText: (double value) {
                                           return Text(
-                                            '${((double.parse(aReporteSectorial[1].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
+                                            '${((double.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[1].beneficiarios ?? '0' : '0') / totalValueTipoBeneficiario) * 100).round()}%',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
@@ -2295,20 +2452,26 @@ class _HomeTambookState extends State<HomeTambook>
                                       ListTile(
                                         title: Center(
                                             child: Text(
-                                          aReporteSectorial[1].entidad ?? '',
+                                          aReporteSectorial.isNotEmpty
+                                              ? aReporteSectorial[1].entidad ??
+                                                  ''
+                                              : '',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 12),
                                         )),
                                         subtitle: Center(
                                             child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[1].beneficiarios ?? '0'))})")),
+                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[1].beneficiarios ?? '0' : '0'))})")),
                                       )
                                     ],
                                   ),
                                 ),
                               ),
                             ]),
+
+/*
+
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -2674,7 +2837,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   ),
                                 ),
                               ),
-                            ]),
+                            ]),*/
                         const SizedBox(
                           height: 10,
                         ),
@@ -2740,6 +2903,7 @@ class _HomeTambookState extends State<HomeTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2894,6 +3058,7 @@ class _HomeTambookState extends State<HomeTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -2997,6 +3162,7 @@ class _HomeTambookState extends State<HomeTambook>
         ],
       ),
       child: Card(
+        elevation: 0,
         margin: const EdgeInsets.all(7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -3146,7 +3312,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                     '',
                                               ),
                                               subtitle: Text(
-                                                  oIndicadorInternet.region!),
+                                                  "U.T.: ${oIndicadorInternet.region!} \nPROV.: ${oIndicadorInternet.provincia!} \nDist.: ${oIndicadorInternet.distrito!}"),
                                               onTap: () async {
                                                 BusyIndicator.show(context);
 
@@ -3302,7 +3468,7 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           border: Border.all(
             width: 1,
-            color: colorI,
+            color: rojo,
           ),
           color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -3377,7 +3543,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                     '',
                                               ),
                                               subtitle: Text(
-                                                  "${oIndicadorInternet.region}\n${oIndicadorInternet.proveedor}"),
+                                                  "${oIndicadorInternet.proveedor} \nU.T.: ${oIndicadorInternet.region} \nPROV.: ${oIndicadorInternet.provincia} \nDIST.: ${oIndicadorInternet.distrito}"),
                                               onTap: () async {
                                                 BusyIndicator.show(context);
 
@@ -3498,6 +3664,7 @@ class _HomeTambookState extends State<HomeTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -3535,6 +3702,16 @@ class _HomeTambookState extends State<HomeTambook>
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w900))
                                     ]),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                  "CANTIDAD DE CAIDAS REPORTADAS ${obtenerDatosIncidencia(indicador.idOperadorInternet!, 1)}",
+                                  style: const TextStyle(fontSize: 12)),
+                              Text(
+                                "TIEMPO PROMEDIO DE ATENCIÓN AL ${sCurrentYear} : ${obtenerDatosIncidencia(indicador.idOperadorInternet!, 2)} DÍAS",
+                                style: const TextStyle(fontSize: 12),
                               ),
                               const Divider(color: colorI),
                             ],
@@ -3684,7 +3861,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            "${oIndicadorCategoria.region ?? ''}\n${oIndicadorCategoria.nomCategoria ?? ''} "),
+                                                            "U.T.: ${oIndicadorCategoria.region ?? ''}\nPROV.: ${oIndicadorCategoria.provincia ?? ''}\nDIST.: ${oIndicadorCategoria.distrito ?? ''} "),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -3732,6 +3909,12 @@ class _HomeTambookState extends State<HomeTambook>
                                             (ChartDataAvanceIndicador data,
                                                     _) =>
                                                 data.y,
+                                        sortingOrder: SortingOrder.descending,
+                                        // Sorting based on the specified field
+                                        sortFieldValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.x,
                                         // Width of the bars
                                         width: 0.9,
                                         // Spacing between the bars
@@ -3774,7 +3957,7 @@ class _HomeTambookState extends State<HomeTambook>
           indicador.idTipoConexion.toString(),
           indicador.nomTipoConexion!,
           int.parse(indicador.cantidad!.toString()),
-          Colors.blue));
+          Color(0xFFB40404)));
     }
 
     return Padding(
@@ -3884,9 +4067,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            oIndicadorLuz
-                                                                    .region ??
-                                                                ''),
+                                                            "U.T.: ${oIndicadorLuz.region ?? ''} \nPROV.: ${oIndicadorLuz.provincia ?? ''} \nDIST.: ${oIndicadorLuz.distrito ?? ''} "),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -3927,13 +4108,22 @@ class _HomeTambookState extends State<HomeTambook>
                                         },
                                         dataSource: chartDataIndicador,
                                         xValueMapper:
+                                            (ChartDataAvanceIndicador data, _) =>
+                                                data.x,
+                                        yValueMapper:
+                                            (ChartDataAvanceIndicador data, _) =>
+                                                data.y,
+                                        pointColorMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.color,
+                                        sortingOrder: SortingOrder.descending,
+// Sorting based on the specified field
+                                        sortFieldValueMapper:
                                             (ChartDataAvanceIndicador data,
                                                     _) =>
                                                 data.x,
-                                        yValueMapper:
-                                            (ChartDataAvanceIndicador data,
-                                                    _) =>
-                                                data.y,
+
                                         // Width of the bars
                                         width: 0.9,
                                         // Spacing between the bars
@@ -4086,9 +4276,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            oIndicadorAgua
-                                                                    .region ??
-                                                                ''),
+                                                            "U.T.: ${oIndicadorAgua.region ?? ''} \nPROV.: ${oIndicadorAgua.provincia ?? ''} \nDIST.: ${oIndicadorAgua.distrito ?? ''}"),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -4136,6 +4324,13 @@ class _HomeTambookState extends State<HomeTambook>
                                             (ChartDataAvanceIndicador data,
                                                     _) =>
                                                 data.y,
+                                        sortingOrder: SortingOrder.descending,
+                                        // Sorting based on the specified field
+                                        sortFieldValueMapper:
+                                            (ChartDataAvanceIndicador data,
+                                                    _) =>
+                                                data.x,
+
                                         // Width of the bars
                                         width: 0.9,
                                         // Spacing between the bars
@@ -4243,7 +4438,11 @@ class _HomeTambookState extends State<HomeTambook>
                             size: 150,
                             maxValue: 100,
                             valueNotifier: valueNotifier,
-                            backColor: Colors.black.withOpacity(0.4),
+                            progressColors: const [
+                              Color(0xFFB40404),
+                              Color(0xFFB40404)
+                            ],
+                            backColor: Colors.black.withOpacity(0.2),
                             progressStrokeWidth: 10,
                             backStrokeWidth: 10,
                             mergeMode: true,
@@ -4304,7 +4503,7 @@ class _HomeTambookState extends State<HomeTambook>
                         ),
                         TextButton(
                           style: TextButton.styleFrom(
-                            foregroundColor: Colors.blue,
+                            foregroundColor: color_02o27,
                           ),
                           onPressed: () {
                             BusyIndicator.show(context);
@@ -4317,7 +4516,7 @@ class _HomeTambookState extends State<HomeTambook>
                                   buildSuccessDialog2(
                                 context,
                                 title:
-                                    "LISTA DE TAMBOS (${aSinIntervencion.length})",
+                                    "LISTA DE TAMBOS SIN INTERVENCIÓN (${aSinIntervencion.length})",
                                 child: ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: aSinIntervencion.length,
@@ -4332,8 +4531,8 @@ class _HomeTambookState extends State<HomeTambook>
                                           title: Text(
                                             oIndicadorInter.nomTambo ?? '',
                                           ),
-                                          subtitle:
-                                              Text(oIndicadorInter.region!),
+                                          subtitle: Text(
+                                              "U.T.: ${oIndicadorInter.region!} \nProv.: ${oIndicadorInter.provincia!}\nDist.: ${oIndicadorInter.distrito!}"),
                                           onTap: () async {
                                             BusyIndicator.show(context);
 
@@ -4373,6 +4572,7 @@ class _HomeTambookState extends State<HomeTambook>
                           height: 20,
                         ),
                         const Text('FUENTE: PNPAIS'),
+                        Text("ACTUALIZADO AL $fechaActual"),
                         const SizedBox(
                           height: 1,
                         ),
@@ -4624,6 +4824,7 @@ class _HomeTambookState extends State<HomeTambook>
               children: <Widget>[
                 const Divider(color: colorI),
                 Card(
+                  elevation: 0,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -4688,7 +4889,7 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           border: Border.all(
             width: 1,
-            color: colorI,
+            color: rojo,
           ),
           color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -4715,7 +4916,7 @@ class _HomeTambookState extends State<HomeTambook>
             ),
           ),
           children: <Widget>[
-            const Divider(color: colorI),
+            const Divider(color: rojo),
             const SizedBox(
               height: 10,
             ),
@@ -4736,7 +4937,11 @@ class _HomeTambookState extends State<HomeTambook>
                             size: 150,
                             maxValue: 100,
                             valueNotifier: valueNotifier,
-                            backColor: Colors.black.withOpacity(0.4),
+                            progressColors: const [
+                              Color(0xFFB40404),
+                              Color(0xFFB40404)
+                            ],
+                            backColor: Colors.black.withOpacity(0.2),
                             progressStrokeWidth: 10,
                             backStrokeWidth: 10,
                             mergeMode: true,
@@ -4905,7 +5110,11 @@ class _HomeTambookState extends State<HomeTambook>
                             size: 150,
                             maxValue: 100,
                             valueNotifier: valueNotifier,
-                            backColor: Colors.black.withOpacity(0.4),
+                            progressColors: const [
+                              Color(0xFFB40404),
+                              Color(0xFFB40404)
+                            ],
+                            backColor: Colors.black.withOpacity(0.2),
                             progressStrokeWidth: 10,
                             backStrokeWidth: 10,
                             mergeMode: true,
@@ -5005,7 +5214,7 @@ class _HomeTambookState extends State<HomeTambook>
  * -----------------------------------------------
  */
   Padding cardActividadesDiarias() {
-    var heading = 'ACTIVIDADES DIARIAS DE LOS TAMBOS';
+    var heading = 'INTERVENCIONES DIARIAS DE LOS TAMBOS POR U.T.';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -5046,6 +5255,7 @@ class _HomeTambookState extends State<HomeTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -5062,9 +5272,9 @@ class _HomeTambookState extends State<HomeTambook>
                               children: [
                                 SizedBox(
                                   width: 100,
-                                  height: 120,
+                                  height: 140,
                                   child: Image.asset(
-                                      "assets/regiones/MAPA_COSTA_SIERRA_SELVA.png",
+                                      "assets/regiones/mapa-peru.png",
                                       fit: BoxFit.cover),
                                 ),
                                 Column(
@@ -5128,7 +5338,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       TextButton(
                                         style: TextButton.styleFrom(
-                                          foregroundColor: Colors.blue,
+                                          foregroundColor: color_02o27,
                                         ),
                                         onPressed: () async {
                                           BusyIndicator.show(context);
@@ -5235,7 +5445,7 @@ class _HomeTambookState extends State<HomeTambook>
                                       ),
                                       TextButton(
                                         style: TextButton.styleFrom(
-                                          foregroundColor: Colors.blue,
+                                          foregroundColor: color_02o27,
                                         ),
                                         onPressed: () async {
                                           BusyIndicator.show(context);
@@ -5281,7 +5491,7 @@ class _HomeTambookState extends State<HomeTambook>
                                                               '',
                                                         ),
                                                         subtitle: Text(
-                                                            "MOTIVO : ${oActividadDiaria.motivo!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
+                                                            "MOTIVO : ${oActividadDiaria.fechaInicio == "" ? oActividadDiaria.motivo! : oActividadDiaria.motivo! + " DESDE " + oActividadDiaria.fechaInicio! + " HASTA " + oActividadDiaria.fechaFin!}\nFECHA : ${oActividadDiaria.fechaActividad!}"),
                                                         onTap: () async {
                                                           BusyIndicator.show(
                                                               context);
@@ -5350,7 +5560,7 @@ class _HomeTambookState extends State<HomeTambook>
  * -----------------------------------------------
  */
   Padding cardTambosRegion() {
-    var heading = 'TAMBOS POR UNIDAD TERRITORIAL Y SU POBLACIÓN OBJETIVO';
+    var heading = 'TAMBOS POR UNIDAD TERRITORIAL';
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -5391,6 +5601,7 @@ class _HomeTambookState extends State<HomeTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -5398,9 +5609,9 @@ class _HomeTambookState extends State<HomeTambook>
                           children: [
                             ListTile(
                               leading: SizedBox(
-                                  height: 150.0,
+                                  height: 170.0,
                                   child: Image.asset(
-                                      "assets/regiones/MAPA_COSTA_SIERRA_SELVA.png")),
+                                      "assets/regiones/mapa-peru.png")),
 
                               // AssetImage("assets/regiones/AYACUCHO.png"),
 
@@ -5479,11 +5690,11 @@ class _HomeTambookState extends State<HomeTambook>
                                         fontWeight: FontWeight.bold),
                                   ),
                                   subtitle: Text(
-                                    "TAMBOS EN SERVICIO: ${tambos.cantidad}\nCENTROS POBLADOS: ${formatoDecimal((double.tryParse(tambos.cp!) ?? 0).toInt())}\nDISTRITOS: ${formatoDecimal((double.tryParse(tambos.distritos!) ?? 0).toInt())}\nPOBLACIÓN OBJETIVO: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
+                                    "TAMBOS EN SERVICIO: ${tambos.cantidad} \n \nC.P. REGIONAL: ${formatoDecimal((double.tryParse(tambos.cpTotal!) ?? 0).toInt())}  \nC.P. ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.cp!) ?? 0).toInt())} \n% C.P. ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.cpPorcentaje!) ?? 0).toInt())} \n \nDISTRITOS REGIONAL: ${formatoDecimal((double.tryParse(tambos.distritosTotal!) ?? 0).toInt())} \nDISTRITOS ATENDIDOS: ${formatoDecimal((double.tryParse(tambos.distritos!) ?? 0).toInt())} \n% DISTRITOS ATEND.: ${formatoDecimal((double.tryParse(tambos.distritosPorcentaje!) ?? 0).toInt())}\n \nPOBLACIÓN OBJETIVO ATENDIDA: ${formatoDecimal(double.parse(tambos.poblacion ?? '0').toInt())}",
                                     textAlign: TextAlign.justify,
                                     style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 12,
+                                      fontSize: 11,
                                     ),
                                   ),
                                 ),
@@ -5585,6 +5796,7 @@ class _HomeTambookState extends State<HomeTambook>
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Card(
+                    elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -5601,12 +5813,13 @@ class _HomeTambookState extends State<HomeTambook>
                                 textAlign: TextAlign.left,
                               ),
                               ListTile(
-                                leading: ImageIcon(
-                                  AssetImage(equipo.imagen),
-                                  size: 120,
-                                  color: Colors.black,
+                                leading: Container(
+                                  height: double.infinity,
+                                  child: Image.asset(equipo.imagen,
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 400),
                                 ),
-                                iconColor: const Color.fromARGB(255, 0, 0, 0),
                                 title: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -5752,7 +5965,7 @@ class _HomeTambookState extends State<HomeTambook>
           ),
           border: Border.all(
             width: 1,
-            color: colorI,
+            color: rojo,
           ),
           color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -5779,7 +5992,7 @@ class _HomeTambookState extends State<HomeTambook>
             ),
           ),
           children: <Widget>[
-            const Divider(color: colorI),
+            const Divider(color: rojo),
             const SizedBox(height: 10),
             isLoadingAtencionMensualizada == true
                 ? Text(
@@ -5804,7 +6017,7 @@ class _HomeTambookState extends State<HomeTambook>
                               labelIntersectAction:
                                   AxisLabelIntersectAction.multipleRows,
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
-                              autoScrollingMode: AutoScrollingMode.end,
+                              autoScrollingMode: AutoScrollingMode.start,
                               visibleMaximum: 3),
                           zoomPanBehavior: ZoomPanBehavior(
                             enablePanning: true,
@@ -7173,6 +7386,7 @@ class _HomeTambookState extends State<HomeTambook>
       height: MediaQuery.of(context).size.height * 0.25,
       width: 180,
       child: Card(
+        elevation: 0,
         color: const Color(0xfffaf5f5),
         child: Column(
           children: <Widget>[
@@ -7373,6 +7587,22 @@ class _HomeTambookState extends State<HomeTambook>
         break;
     }
     return nombreMes;
+  }
+
+  String obtenerDatosIncidencia(int idOperador, int tipo) {
+    var total = incidencias.where((e) =>
+        e.idOPeradorInternet == idOperador &&
+        //e.idIncidenciaEstado == "3" &&
+        e.tipoAveria == "SIN INTERNET");
+    if (tipo == 1) {
+      return total.length.toString();
+    } else {
+      var suma =
+          total.fold(0, (sum, item) => sum + int.parse(item.diasPasados!));
+      return ((suma / total.length) > 0
+          ? (suma / total.length).toStringAsFixed(2).toString()
+          : '');
+    }
   }
 
   String obtenerNombreMes(String mes) {

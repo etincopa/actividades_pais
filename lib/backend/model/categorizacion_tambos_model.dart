@@ -5,6 +5,8 @@ class CategorizacionTambosField {
   static String snip = "snip";
   static String idCategorizacion = "idCategorizacion";
   static String nomCategorizacion = "nomCategorizacion";
+  static String provincia = "provincia";
+  static String distrito = "distrito";
 }
 
 class CategorizacionTambosModel {
@@ -14,6 +16,8 @@ class CategorizacionTambosModel {
   String? snip;
   int? idCategoria;
   String? nomCategoria;
+  String? provincia;
+  String? distrito;
 
   CategorizacionTambosModel.empty();
 
@@ -23,7 +27,9 @@ class CategorizacionTambosModel {
       this.region,
       this.snip,
       this.idCategoria,
-      this.nomCategoria});
+      this.nomCategoria,
+      this.provincia,
+      this.distrito});
 
   factory CategorizacionTambosModel.fromJson(Map<String, dynamic> json) {
     return CategorizacionTambosModel(
@@ -33,6 +39,8 @@ class CategorizacionTambosModel {
       snip: json[CategorizacionTambosField.snip],
       idCategoria: json[CategorizacionTambosField.idCategorizacion],
       nomCategoria: json[CategorizacionTambosField.nomCategorizacion],
+      provincia: json[CategorizacionTambosField.provincia],
+      distrito: json[CategorizacionTambosField.distrito],
     );
   }
 }

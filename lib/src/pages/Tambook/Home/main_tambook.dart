@@ -3,9 +3,9 @@ import 'package:actividades_pais/src/pages/Tambook/Home/actividad_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/search/search_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/home_tambook.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/mapa_tambook.dart';
+import 'package:actividades_pais/src/pages/Tambook/widgets/app-custom.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:flutter/material.dart';
-import 'package:actividades_pais/src/pages/widgets/widget-custom.dart';
 
 class TambookHome extends StatefulWidget {
   const TambookHome({super.key});
@@ -41,6 +41,7 @@ class _TambookHomeState extends State<TambookHome>
       appBar: WidgetCustoms.appBar(
         'BUSCAR TAMBO',
         context: context,
+        color: const Color(0xFFB40404),
         icon: Icons.arrow_back,
         onPressed: () {
           Navigator.pushReplacement(
@@ -62,8 +63,8 @@ class _TambookHomeState extends State<TambookHome>
       body: pages[pageIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: color_10o15,
-        foregroundColor: Colors.black,
+        backgroundColor: const Color(0xFFB40404),
+        foregroundColor: Colors.white,
         onPressed: () {
           showSearch(
             context: context,
@@ -89,6 +90,7 @@ class _TambookHomeState extends State<TambookHome>
             label: 'Intervenciones',
           ),
         ],
+        selectedItemColor: const Color(0xFFB40404),
       ),
     );
   }

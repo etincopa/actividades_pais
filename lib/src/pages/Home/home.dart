@@ -11,6 +11,7 @@ import 'package:actividades_pais/src/pages/ProgramacionActividades/monitoreo_sus
 import 'package:actividades_pais/src/pages/SeguimientoParqueInform%C3%A1tico/SeguimientoParqueInformatico.dart';
 import 'package:actividades_pais/src/pages/Tambook/Home/main_tambook.dart';
 import 'package:actividades_pais/src/pages/seguimientoMonitoreo/dashboard.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/cupertino.dart';
@@ -206,7 +207,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileParqueInfomatico'.tr,
               types: const ['Ver'],
               image: icon6,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -215,7 +216,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'SEGUIMIENTO Y MONITOREO',
               types: const ['Ver'],
               image: icon5,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -224,7 +225,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
 
@@ -237,7 +238,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileParqueInfomatico'.tr,
               types: const ['Ver'],
               image: icon6,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -246,7 +247,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'SEGUIMIENTO Y MONITOREO',
               types: const ['Ver'],
               image: icon5,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -255,7 +256,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
 
@@ -268,7 +269,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           break;
@@ -279,7 +280,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileParqueInfomatico'.tr,
               types: const ['Ver'],
               image: icon6,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           break;
@@ -291,7 +292,7 @@ class _HomePagePais extends State<HomePagePais> {
                 name: 'TileIntervencion'.tr,
                 types: const ['Ver'],
                 image: icon4,
-                color: const Color(0xFF78b8cd),
+                color: blanco,
               ),
             );
           }
@@ -309,7 +310,7 @@ class _HomePagePais extends State<HomePagePais> {
                 name: 'TilePias'.tr,
                 types: const ['Ver'],
                 image: sImagePias,
-                color: const Color(0xFF78b8cd),
+                color: blanco,
               ),
             );
           }
@@ -328,7 +329,7 @@ class _HomePagePais extends State<HomePagePais> {
                 name: 'TilePias'.tr,
                 types: const ['Ver'],
                 image: sImagePias,
-                color: const Color(0xFF78b8cd),
+                color: blanco,
               ),
             );
           }
@@ -341,7 +342,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           break;
@@ -353,7 +354,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'SEGUIMIENTO Y MONITOREO',
               types: const ['Ver'],
               image: icon5,
-              color: const Color(0xFF78b8cd),
+              color: blanco,
             ),
           );
           break;
@@ -460,7 +461,7 @@ class _HomePagePais extends State<HomePagePais> {
         name: 'TAMBOOK',
         types: const ['Ver'],
         image: icon8,
-        color: const Color(0xFF78b8cd),
+        color: blanco,
       ),
     );
     if (dniPrueba == 47532262 || dniPrueba == 48400113) {
@@ -492,7 +493,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TAMBOOK',
             types: const ['Ver'],
             image: icon8,
-            color: const Color(0xFF78b8cd),
+            color: blanco,
           ),
         );
       } else {
@@ -502,7 +503,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileProyectTambo'.tr,
             types: const ['Ver'],
             image: icon5,
-            color: const Color(0xFF78b8cd),
+            color: blanco,
           ),
         );
       }
@@ -602,7 +603,7 @@ class _HomePagePais extends State<HomePagePais> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         image: const DecorationImage(
-                          image: AssetImage("assets/icons/botones 1-01.png"),
+                          image: AssetImage("assets/icons/botones 1-02.png"),
                           fit: BoxFit.cover,
                         ),
                         color: homeOption.color,
@@ -632,6 +633,7 @@ class _HomePagePais extends State<HomePagePais> {
                                   width: 40,
                                   height: 40,
                                   alignment: Alignment.center,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -641,7 +643,7 @@ class _HomePagePais extends State<HomePagePais> {
                                 child: Text(
                                   homeOption.name!,
                                   style: const TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontStyle: FontStyle.normal,
                                     fontSize: 11.0,
