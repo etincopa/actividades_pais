@@ -69,29 +69,16 @@ class _LoginPageState extends State<LoginPage> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: const Color(0xffF2F2F2),
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: h / 22),
-              child: SizedBox(
-                height: h / 15,
-                //width: w / 90,
-                child: Image.asset(
-                  'assets/LOGO PAIS_OK2.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: h / 12),
               decoration: const BoxDecoration(
                 gradient: mainButton5,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: [
                   SizedBox(
                     width: w / 4,
@@ -110,6 +97,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: h / 22),
+              child: SizedBox(
+                height: h / 15,
+                child: Image.asset(
+                  'assets/LOGO PAIS_OK2.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             Transform.translate(

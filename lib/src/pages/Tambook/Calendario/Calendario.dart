@@ -749,7 +749,7 @@ class _CalendarioState extends State<Calendario> {
         builder: (BuildContext context, StateSetter sstdotstate) {
       return AlertDialog(
         title: SizedBox(
-          height: mostarUt ? 286 : 260,
+          height: mostarUt ? 300 : 280,
           child: Column(
             children: [
               Row(
