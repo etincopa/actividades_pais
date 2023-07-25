@@ -9,7 +9,8 @@ class AppBarPais extends StatefulWidget {
   String datoUt = "", nombre = "", plataforma;
   int snip;
   AppBarPais(
-      {super.key, this.datoUt = "",
+      {super.key,
+      this.datoUt = "",
       this.nombre = "",
       this.snip = 0,
       this.plataforma = ''});
@@ -88,7 +89,7 @@ class _AppBarPaisState extends State<AppBarPais> {
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: const TextStyle(
-                              color: Colors.black,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 11,
                             ),
@@ -100,7 +101,7 @@ class _AppBarPaisState extends State<AppBarPais> {
                   IconButton(
                     icon: const Icon(
                       Icons.power_settings_new,
-                      color: colorP,
+                      color: Colors.white,
                     ),
                     onPressed: () async {
                       final alert = AlertQuestion(
@@ -120,7 +121,8 @@ class _AppBarPaisState extends State<AppBarPais> {
 
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => const LoginPage()),
+                            MaterialPageRoute(
+                                builder: (_) => const LoginPage()),
                             (route) => false,
                           );
                         },
@@ -156,9 +158,7 @@ class _AppBarPaisState extends State<AppBarPais> {
       backgroundColor: bgColor,
       body: Container(
         height: dHeight,
-        decoration: const BoxDecoration(
-          gradient: mainButton5,
-        ),
+        color: rojo,
         child: Stack(
           children: [
             if (text() != null) text(),

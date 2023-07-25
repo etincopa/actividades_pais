@@ -207,7 +207,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileParqueInfomatico'.tr,
               types: const ['Ver'],
               image: icon6,
-              color: rojo2,
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -216,7 +216,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'SEGUIMIENTO Y MONITOREO',
               types: const ['Ver'],
               image: icon5,
-              color: rojo2,
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -225,7 +225,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: rojo2,
+              color: blanco,
             ),
           );
 
@@ -238,7 +238,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileParqueInfomatico'.tr,
               types: const ['Ver'],
               image: icon6,
-              color: rojo2,
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -247,7 +247,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'SEGUIMIENTO Y MONITOREO',
               types: const ['Ver'],
               image: icon5,
-              color: rojo2,
+              color: blanco,
             ),
           );
           aHomeOptions.add(
@@ -256,7 +256,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: rojo2,
+              color: blanco,
             ),
           );
 
@@ -269,7 +269,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: rojo2,
+              color: blanco,
             ),
           );
           break;
@@ -280,7 +280,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileParqueInfomatico'.tr,
               types: const ['Ver'],
               image: icon6,
-              color: rojo2,
+              color: blanco,
             ),
           );
           break;
@@ -292,7 +292,7 @@ class _HomePagePais extends State<HomePagePais> {
                 name: 'TileIntervencion'.tr,
                 types: const ['Ver'],
                 image: icon4,
-                color: rojo2,
+                color: blanco,
               ),
             );
           }
@@ -310,7 +310,7 @@ class _HomePagePais extends State<HomePagePais> {
                 name: 'TilePias'.tr,
                 types: const ['Ver'],
                 image: sImagePias,
-                color: rojo2,
+                color: blanco,
               ),
             );
           }
@@ -329,7 +329,7 @@ class _HomePagePais extends State<HomePagePais> {
                 name: 'TilePias'.tr,
                 types: const ['Ver'],
                 image: sImagePias,
-                color: rojo2,
+                color: blanco,
               ),
             );
           }
@@ -342,7 +342,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'TileIntervencion'.tr,
               types: const ['Ver'],
               image: icon4,
-              color: rojo2,
+              color: blanco,
             ),
           );
           break;
@@ -354,7 +354,7 @@ class _HomePagePais extends State<HomePagePais> {
               name: 'SEGUIMIENTO Y MONITOREO',
               types: const ['Ver'],
               image: icon5,
-              color: rojo2,
+              color: blanco,
             ),
           );
           break;
@@ -461,7 +461,7 @@ class _HomePagePais extends State<HomePagePais> {
         name: 'TAMBOOK',
         types: const ['Ver'],
         image: icon8,
-        color: rojo2,
+        color: blanco,
       ),
     );
     if (dniPrueba == 47532262 || dniPrueba == 48400113) {
@@ -493,7 +493,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TAMBOOK',
             types: const ['Ver'],
             image: icon8,
-            color: rojo2,
+            color: blanco,
           ),
         );
       } else {
@@ -503,7 +503,7 @@ class _HomePagePais extends State<HomePagePais> {
             name: 'TileProyectTambo'.tr,
             types: const ['Ver'],
             image: icon5,
-            color: rojo2,
+            color: blanco,
           ),
         );
       }
@@ -603,7 +603,7 @@ class _HomePagePais extends State<HomePagePais> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         image: const DecorationImage(
-                          image: AssetImage("assets/icons/botones 1-01.png"),
+                          image: AssetImage("assets/icons/botones 1-02.png"),
                           fit: BoxFit.cover,
                         ),
                         color: homeOption.color,
@@ -633,7 +633,7 @@ class _HomePagePais extends State<HomePagePais> {
                                   width: 40,
                                   height: 40,
                                   alignment: Alignment.center,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -643,7 +643,7 @@ class _HomePagePais extends State<HomePagePais> {
                                 child: Text(
                                   homeOption.name!,
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontStyle: FontStyle.normal,
                                     fontSize: 11.0,

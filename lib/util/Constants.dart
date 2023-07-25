@@ -36,6 +36,7 @@ const Color color_12 = Color(0XFFE06DBF);
 const Color color_13 = Color(0XFFFF8E00);
 const Color rojo = Color(0xFFB40404);
 const Color rojo2 = Color.fromARGB(255, 243, 111, 111);
+const Color blanco = Colors.white;
 /*
  * OTROS COLORES
  */
