@@ -7,6 +7,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/util/utils.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class IntervencionesHome extends StatefulWidget {
@@ -29,8 +30,15 @@ class _IntervencionesHomeState extends State<IntervencionesHome> {
   void initState() {
     // TODO: implement initState
     _fetchData();
+    verificargps();
     mostrarTmbo();
     super.initState();
+  }
+
+  Future verificargps() async {
+    bool servicestatus = await Geolocator.isLocationServiceEnabled();
+    if (servicestatus) {
+    } else {}
   }
 
   Future<void> _fetchData() async {

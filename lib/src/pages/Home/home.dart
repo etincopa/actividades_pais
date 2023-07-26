@@ -82,7 +82,7 @@ class _HomePagePais extends State<HomePagePais> {
     perfil();
     mostrarTmbo();
     traerdato();
-    verificargps();
+    //verificargps();
     datosParaPerfil();
     mostrarNombre();
     //initPlatform();
@@ -110,11 +110,13 @@ class _HomePagePais extends State<HomePagePais> {
     }
   }
 
+/*
   Future verificargps() async {
     bool servicestatus = await Geolocator.isLocationServiceEnabled();
     if (servicestatus) {
     } else {}
   }
+  */
 
   traerdato() async {
     await ProviderDatos().verificacionpesmiso();

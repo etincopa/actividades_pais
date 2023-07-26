@@ -3,6 +3,7 @@ import 'package:actividades_pais/src/datamodels/Clases/Tambos/TipoGobiernoRespon
 import 'package:actividades_pais/src/datamodels/Provider/ProviderTambok.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/Listas/Listas.dart';
 import 'package:actividades_pais/src/pages/Tambook/historialTambo/fichaIntervencion.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
@@ -316,7 +317,7 @@ class _intervencionesHistoriaState extends State<intervencionesHistoria> {
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConfig.primaryColor,
+                            backgroundColor: rojo,
                           ),
                           onPressed: () async {
                             await ProviderTambok()

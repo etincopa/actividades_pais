@@ -38,7 +38,7 @@ dependencies:
   image:
   archive:
   fluttertoast: ^8.0.9
-  flutter_3des: ^0.0.4
+#  flutter_3des: ^0.0.4
 #  flutter_3des: path: C:\Users\User\Desktop\PAIS\actividades_pais\LIBRERIAS\flutter_3des-0.0.4
   provider: ^6.0.3
   image_picker:

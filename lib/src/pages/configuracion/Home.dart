@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:actividades_pais/src/datamodels/Clases/UserLocation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 //import 'package:sendsms/sendsms.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,13 +20,19 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     //  getUsers();
-
+    verificargps();
     //  _datdb.initDB();
     setState(() {
       //  mostrarDatos();
     });
 
     super.initState();
+  }
+
+  Future verificargps() async {
+    bool servicestatus = await Geolocator.isLocationServiceEnabled();
+    if (servicestatus) {
+    } else {}
   }
 
   /*void mostrarDatos() async {
@@ -64,8 +70,8 @@ class _HomeState extends State<Home> {
         width: 360.0,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(80.0),
-            gradient:
-                const LinearGradient(colors: [Color(0xFF3949AB), Color(0xFF3949AB)])),
+            gradient: const LinearGradient(
+                colors: [Color(0xFF3949AB), Color(0xFF3949AB)])),
       ));
   @override
   Widget build(BuildContext context) {
@@ -223,7 +229,8 @@ class _HomeState extends State<Home> {
                   height: 20,
                 ),
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3949AB)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF3949AB)),
                     child: const Text(
                       "Registrar",
                       textAlign: TextAlign.center,

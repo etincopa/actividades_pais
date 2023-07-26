@@ -7,7 +7,6 @@ import 'package:actividades_pais/src/datamodels/Provider/Provider.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_3des/flutter_3des.dart';
 
 //import 'package:sendsms/sendsms.dart';
 import 'package:http/http.dart' as http;
@@ -476,9 +475,9 @@ class _ListaasistenciaPageState extends State<ListaasistenciaPage> {
       idLugarPrestacion,
       idUnidadOrganica,
       id}) async {
-    String text =
-        "$snip/$tipoTrabajo/0/$dni/$tipoCheck/$latitud/$longitud/${DateTime.now()}/$idLugarPrestacion/$idUnidadOrganica";
-    _encryptHex = await Flutter3des.encryptToHex(text, _key, iv: _iv);
+    String text = "";
+    //"$snip/$tipoTrabajo/0/$dni/$tipoCheck/$latitud/$longitud/${DateTime.now()}/$idLugarPrestacion/$idUnidadOrganica";
+    //_encryptHex = await Flutter3des.encryptToHex(text, _key, iv: _iv);
 
     setState(() {
       traerNumerosTelf(encriptado: _encryptHex, id: id);

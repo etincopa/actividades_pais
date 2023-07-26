@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:actividades_pais/src/pages/MonitoreoProyectoTambo/main/Project/Report/pdf/util_pdf.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
@@ -47,7 +48,7 @@ class _FichaIntervencionState extends State<FichaIntervencion> {
         title: Text(
           'INTERVENCION - ${widget.idIntervencion.toString()}',
         ),
-        backgroundColor: AppConfig.primaryColor,
+        backgroundColor: rojo,
       ),
       body: FutureBuilder<Uint8List>(
         future: _downloadPDF(widget.idIntervencion.toString()),

@@ -1,6 +1,7 @@
 import 'package:actividades_pais/src/datamodels/Provider/PorviderLogin.dart';
 import 'package:actividades_pais/src/datamodels/Servicios/Servicios.dart';
 import 'package:actividades_pais/src/pages/Login/Login.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,7 +18,8 @@ class ResetContrasenia extends StatefulWidget {
 
 class _ResetContraseniaState extends State<ResetContrasenia> {
   /// const ResetContrasenia({Key? key}) : super(key: key);
-  final TextEditingController _controllerCorreoElectronico = TextEditingController();
+  final TextEditingController _controllerCorreoElectronico =
+      TextEditingController();
 
   Servicios servicios = Servicios();
   var formatter = DateFormat('yyyy-MM-dd');
@@ -38,7 +40,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
               style: TextStyle(fontSize: 20),
             ),
             centerTitle: true,
-            backgroundColor: AppConfig.primaryColor),
+            backgroundColor: rojo),
         body: SingleChildScrollView(
           child: Container(
               margin: const EdgeInsets.all(25),
@@ -60,8 +62,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                             const SizedBox(height: 20.0),
                             Container(
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 2.0, color: AppConfig.primaryColor),
+                                border: Border.all(width: 2.0, color: rojo),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(
                                         11) //                 <--- border radius here
@@ -71,7 +72,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                               width: MediaQuery.of(context).size.width,
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppConfig.primaryColor,
+                                    backgroundColor: rojo,
                                   ),
                                   child: _isloading
                                       ? const Row(
@@ -101,9 +102,11 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                                               color: Colors.white),
                                         ),
                                   onPressed: () async {
-                                    if (_controllerCorreoElectronico.text == "") {
+                                    if (_controllerCorreoElectronico.text ==
+                                        "") {
                                       Fluttertoast.showToast(
-                                          msg: "Ingresar un correo electronico valido",
+                                          msg:
+                                              "Ingresar un correo electronico valido",
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.CENTER,
                                           timeInSecForIosWeb: 1,
@@ -118,14 +121,14 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
 
                                       var reponse = await ProviderLogin()
                                           .forgotPassword(
-                                          _controllerCorreoElectronico.text);
+                                              _controllerCorreoElectronico
+                                                  .text);
                                       if (reponse == true) {
-                                         setState(() {
+                                        setState(() {
                                           _mostrar = false;
                                           _isloading = false;
                                         });
                                       }
-
                                     }
                                   }),
                             )
@@ -150,7 +153,7 @@ class _ResetContraseniaState extends State<ResetContrasenia> {
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue)),
+                            color: Colors.grey)),
                     onTap: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (_) => const LoginPage()),

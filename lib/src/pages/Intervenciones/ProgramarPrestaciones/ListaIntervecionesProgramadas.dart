@@ -9,6 +9,7 @@ import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/Event.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/PlanesDeTrabajo/PlanesDeTrabajo.dart';
 import 'package:actividades_pais/src/pages/Intervenciones/ProgramarPrestaciones/ProgramacionesIntervenciones.dart';
+import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/util/app-config.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
@@ -473,7 +474,7 @@ class _MyAppState extends State<ListaIntervecionesProgramadas> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppConfig.primaryColor2,
+                        backgroundColor: rojo,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
