@@ -16,7 +16,9 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## Create Project
+-- com.domainname.appname
 flutter create --org com.pnpais.sifpnpais.app actividades_pais
+
 
 ## Git Ignore
 Clear cache
