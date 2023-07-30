@@ -19,6 +19,7 @@ flutter pub upgrade --major-versions
 
 ## BUILD APP IOS
 flutter build ipa --release
+flutter build ios --release
 
 
 ## ERROR BUILD

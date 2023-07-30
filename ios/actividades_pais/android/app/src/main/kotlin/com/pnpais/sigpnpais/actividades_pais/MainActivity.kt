@@ -1,4 +1,4 @@
-package com.pnpais.sig.actividades_pais
+package com.pnpais.sigpnpais.actividades_pais
 
 import io.flutter.embedding.android.FlutterActivity
 

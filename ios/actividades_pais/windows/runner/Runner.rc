@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.pnpais.sig" "\0"
-            VALUE "FileDescription", "SIG PNPAIS" "\0"
+            VALUE "FileDescription", "sig pnpais" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "SIG PNPAIS" "\0"
+            VALUE "InternalName", "sig pnpais" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.pnpais.sig. All rights reserved." "\0"
             VALUE "OriginalFilename", "actividades_pais.exe" "\0"
-            VALUE "ProductName", "SIG PNPAIS" "\0"
+            VALUE "ProductName", "sig pnpais" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

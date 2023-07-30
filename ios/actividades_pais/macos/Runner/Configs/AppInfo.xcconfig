@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = SIG PNPAIS;
+PRODUCT_NAME = sig pnpais;
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.pnpais.sig;
+PRODUCT_BUNDLE_IDENTIFIER = com.pnpais.sigpnpais;
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.pnpais.sig. All rights reserved.

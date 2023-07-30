@@ -31,7 +31,7 @@
     -->
 
     <application
-        android:label="SIG PNPAIS"
+        android:label="sig pnpais"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
