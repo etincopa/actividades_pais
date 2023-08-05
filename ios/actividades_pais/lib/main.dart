@@ -9,7 +9,7 @@ import 'package:actividades_pais/helpers/dependecy_injection.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
 import 'package:actividades_pais/src/pages/widgets/intro/splash_intro_page.dart';
 import 'package:actividades_pais/resource/Internationalization.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:flutter/material.dart';
 
 import 'package:actividades_pais/src/pages/Home/home.dart';
@@ -133,13 +133,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   Future<void> initPlatform() async {
+    /*
     await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
 
     await OneSignal.shared
         .getDeviceState()
         .then((value) => {print(value!.userId)});
 
-    /*OneSignal.shared
+    OneSignal.shared
         .promptUserForPushNotificationPermission()
         .then((accepted) {});
     await OneSignal.shared

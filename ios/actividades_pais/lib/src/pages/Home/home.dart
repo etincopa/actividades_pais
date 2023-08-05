@@ -11,9 +11,8 @@ import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:actividades_pais/src/datamodels/database/DatabasePr.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'appbar/AppBar.dart';
 
@@ -30,7 +29,6 @@ class HomePagePais extends StatefulWidget {
 
 class _HomePagePais extends State<HomePagePais> {
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  
 
   int currenIndex = 0;
   var cantidadDB = 0;
@@ -149,181 +147,9 @@ class _HomePagePais extends State<HomePagePais> {
       hp65 = responsive.wp(15);
     }
 
-    String icon0 = 'assets/icons/icon_user_setting.png';
-    String icon1 = 'assets/icons/icon_account_balance.png';
-    String icon2 = 'assets/icons/icon_boat.png';
-    String icon3 = 'assets/icons/icon_fligth.png';
-    String icon4 = 'assets/icons/icon_intervencion.png';
-    String icon5 = 'assets/icons/monitoreo.png';
-    String icon6 = 'assets/icons/parque_informatico.png';
-    String icon7 = 'assets/icons/actividades.png';
     String icon8 = 'assets/icons/libro-abierto.png';
 
     List<HomeOptions> aHomeOptions = [];
-
-    for (int i = 0; i < idMenuPadre.length; i++) {
-      switch (idMenuPadre[i].idMenuPadre) {
-        //1 :
-        case '1':
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1009',
-              name: 'TileParqueInfomatico'.tr,
-              types: const ['Ver'],
-              image: icon6,
-              color: blanco,
-            ),
-          );
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1007',
-              name: 'SEGUIMIENTO Y MONITOREO',
-              types: const ['Ver'],
-              image: icon5,
-              color: blanco,
-            ),
-          );
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1003',
-              name: 'TileIntervencion'.tr,
-              types: const ['Ver'],
-              image: icon4,
-              color: blanco,
-            ),
-          );
-
-          break;
-
-        case '80':
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1009',
-              name: 'TileParqueInfomatico'.tr,
-              types: const ['Ver'],
-              image: icon6,
-              color: blanco,
-            ),
-          );
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1007',
-              name: 'SEGUIMIENTO Y MONITOREO',
-              types: const ['Ver'],
-              image: icon5,
-              color: blanco,
-            ),
-          );
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1003',
-              name: 'TileIntervencion'.tr,
-              types: const ['Ver'],
-              image: icon4,
-              color: blanco,
-            ),
-          );
-
-          break;
-
-        case '110':
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1003',
-              name: 'TileIntervencion'.tr,
-              types: const ['Ver'],
-              image: icon4,
-              color: blanco,
-            ),
-          );
-          break;
-        case '77':
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1009',
-              name: 'TileParqueInfomatico'.tr,
-              types: const ['Ver'],
-              image: icon6,
-              color: blanco,
-            ),
-          );
-          break;
-        case '115':
-          if (tipoPlataforma != 'PIAS') {
-            aHomeOptions.add(
-              HomeOptions(
-                code: 'OPT1003',
-                name: 'TileIntervencion'.tr,
-                types: const ['Ver'],
-                image: icon4,
-                color: blanco,
-              ),
-            );
-          }
-
-          if (tipoPlataforma == 'PIAS' &&
-              (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
-            String sImagePias = modalidad == '1'
-                ? icon2
-                : modalidad == '2'
-                    ? icon3
-                    : icon1;
-            aHomeOptions.add(
-              HomeOptions(
-                code: 'OPT1004',
-                name: 'TilePias'.tr,
-                types: const ['Ver'],
-                image: sImagePias,
-                color: blanco,
-              ),
-            );
-          }
-          break;
-        case '136':
-          if (tipoPlataforma == 'PIAS' &&
-              (modalidad == '1' || modalidad == '2' || modalidad == '3')) {
-            String sImagePias = modalidad == '1'
-                ? icon2
-                : modalidad == '2'
-                    ? icon3
-                    : icon1;
-            aHomeOptions.add(
-              HomeOptions(
-                code: 'OPT1004',
-                name: 'TilePias'.tr,
-                types: const ['Ver'],
-                image: sImagePias,
-                color: blanco,
-              ),
-            );
-          }
-          break;
-
-        case '119':
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1003',
-              name: 'TileIntervencion'.tr,
-              types: const ['Ver'],
-              image: icon4,
-              color: blanco,
-            ),
-          );
-          break;
-
-        case '133':
-          aHomeOptions.add(
-            HomeOptions(
-              code: 'OPT1007',
-              name: 'SEGUIMIENTO Y MONITOREO',
-              types: const ['Ver'],
-              image: icon5,
-              color: blanco,
-            ),
-          );
-          break;
-      }
-    }
 
     aHomeOptions.add(
       HomeOptions(
@@ -334,31 +160,6 @@ class _HomePagePais extends State<HomePagePais> {
         color: blanco,
       ),
     );
-    if (dniPrueba == 47532262 || dniPrueba == 48400113) {}
-
-    if (aUnidad.contains("UPS")) {
-      if (token != null) {
-        aHomeOptions.add(
-          HomeOptions(
-            code: 'OPT1008',
-            name: 'TAMBOOK',
-            types: const ['Ver'],
-            image: icon8,
-            color: blanco,
-          ),
-        );
-      } else {
-        aHomeOptions.add(
-          HomeOptions(
-            code: 'OPT1005',
-            name: 'TileProyectTambo'.tr,
-            types: const ['Ver'],
-            image: icon5,
-            color: blanco,
-          ),
-        );
-      }
-    }
 
     List listPages = [
       Container(
@@ -519,6 +320,7 @@ class _HomePagePais extends State<HomePagePais> {
     tocken.idUsuario = res[0].id.toString();
     tocken.ipmaq = '0.0.0.0';
 
+    /*
     await OneSignal.shared.setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
 
     await OneSignal.shared
@@ -538,5 +340,6 @@ class _HomePagePais extends State<HomePagePais> {
       TramaRespApiDto resp =
           await mainCtr.insertarTockenUsuario(tockens: tocken);
     });
+    */
   }
 }

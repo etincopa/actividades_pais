@@ -19,7 +19,7 @@ import 'package:actividades_pais/src/pages/Login/mostrarAlerta.dart';
 import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../datamodels/Provider/PorviderLogin.dart';
 
@@ -212,10 +212,11 @@ class __FormState extends State<_Form> {
             String toquen = '';
             tocken.idUsuario = res[0].id.toString();
             tocken.ipmaq = '0.0.0.0';
-
+            /*
             await OneSignal.shared
                 .setAppId("0564bdcf-196f-4335-90e4-2ea60c71c86b");
 
+            
             await OneSignal.shared
                 .promptUserForPushNotificationPermission()
                 .then((aceptado) {
@@ -225,12 +226,7 @@ class __FormState extends State<_Form> {
             await OneSignal.shared
                 .getDeviceState()
                 .then((value) => {toquen = value!.userId ?? ''});
-
-            if (toquen != '' && toquen.isNotEmpty && toquen != '0') {
-              tocken.tocken = toquen;
-              await mainCtr.insertarTockenUsuario(tockens: tocken);
-            }
-
+            
             OneSignal.shared.setSubscriptionObserver(
                 (OSSubscriptionStateChanges changes) async {
               String onesignalUserId = changes.to.userId ?? '';
@@ -238,7 +234,13 @@ class __FormState extends State<_Form> {
               tocken.tocken = onesignalUserId;
               await mainCtr.insertarTockenUsuario(tockens: tocken);
             });
+            */
 
+            if (toquen != '' && toquen.isNotEmpty && toquen != '0') {
+              tocken.tocken = toquen;
+              await mainCtr.insertarTockenUsuario(tockens: tocken);
+            }
+            
             BusyIndicator.hide(context);
 
             await Navigator.of(context).pushReplacement(
