@@ -90,6 +90,19 @@ class _HomeTambookState extends State<HomeTambook>
   late String numTambos = "";
   late String banerTambosPias = "---                 ----                ---";
 
+  late ValueNotifier<double> vNReporteAtencionSectorial = ValueNotifier(0.0);
+  late String tituloReporteAtencionSectorial = "";
+  late String cantidadReporteAtencionSectorial = "";
+  late ValueNotifier<double> vNReporteUsuariosSectorial = ValueNotifier(0.0);
+  late String tituloReporteUsuarioSectorial = "";
+  late String cantidadReporteUsuarioSectorial = "";
+
+  late String aTituloReporteSectorial = "";
+
+  final GlobalKey<FormFieldState> _keyAtencion = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> _keyUsuarios = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> _keySector = GlobalKey<FormFieldState>();
+
   TamboPias oTamboPias = TamboPias.empty();
   late ResumenParqueDataSource _resumenParqueInformatico;
 
@@ -106,6 +119,8 @@ class _HomeTambookState extends State<HomeTambook>
   late List<AtencionesSectorialesModel> aReporteSectorial = [];
   late List<AtencionesSectorialesModel> aReporteSectorialSector = [];
   late List<AtencionesRegionModel> aReporteAtencionRegion = [];
+
+  late List<ChartDataAvance> chartDataReporteSectorial = [];
 
   List<AtencionesUsuariosTotalModel> aAtencionUsuarios = [];
 
@@ -128,6 +143,7 @@ class _HomeTambookState extends State<HomeTambook>
 
   String anioReporteSectorial = "0";
   String mesReporteSectorial = "0";
+  String aMesSectorial = "0";
 
   late List<IncidentesInternetModel> incidencias = [];
 
@@ -337,6 +353,10 @@ class _HomeTambookState extends State<HomeTambook>
 
       await obtenerReporteAtencionRegion(DateFormat("yyyy").format(selected),
           DateFormat("M").format(selected), 'X');
+
+      _keyAtencion.currentState!.reset();
+      _keyUsuarios.currentState!.reset();
+      _keySector.currentState!.reset();
 
       BusyIndicator.hide(context);
     }
@@ -646,11 +666,11 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> obtenerReporteTipoUsuario(tipo, anio, mes, sector) async {
     try {
-      var aReporteSectorial =
+      var areporteSectorial =
           await mainCtr.getReporteSectorial(tipo, anio, mes, sector);
 
-      if (aReporteSectorial.isNotEmpty) {
-        aReporteSectorial = aReporteSectorial;
+      if (areporteSectorial.isNotEmpty) {
+        aReporteSectorial = areporteSectorial;
 
         totalValue = 0;
         chartDataPie = [];
@@ -666,31 +686,27 @@ class _HomeTambookState extends State<HomeTambook>
         totalValueTipoBeneficiario = aReporteSectorial.fold(
             0, (sum, item) => sum + int.parse(item.beneficiarios ?? '0'));
 
-        /*for (var sector in aReporteSectorial) {
-          chartDataPie.add(ChartDataPie(sector.entidad!,
-              double.parse(sector.atenciones!), Colors.greenAccent));
-        }
+        tituloReporteAtencionSectorial = aReporteSectorial[0].entidad ?? '';
+        cantidadReporteAtencionSectorial =
+            aReporteSectorial[0].atenciones ?? '0';
 
-        for (var element in chartDataPie) {
-          totalValue += element.y;
-        }
+        vNReporteAtencionSectorial.value =
+            double.parse(aReporteSectorial[0].atenciones ?? '0');
 
-        for (var sector in aReporteSectorial) {
-          chartDataPieTipoBeneficiarios.add(ChartDataPie(sector.entidad!,
-              double.parse(sector.beneficiarios!), Colors.greenAccent));
-        }
+        tituloReporteUsuarioSectorial = aReporteSectorial[0].entidad ?? '';
+        cantidadReporteUsuarioSectorial =
+            aReporteSectorial[0].beneficiarios ?? '0';
 
-        for (var element in chartDataPie) {
-          totalValueTipoBeneficiario += element.y;
-        }*/
+        vNReporteUsuariosSectorial.value =
+            double.parse(aReporteSectorial[0].beneficiarios ?? '0');
 
         setState(() {
           isLoadingAtencionesTipoUsuario = true;
         });
       } else {
-        mostrarAlerta(context, "Aviso!",
+        mostrarAlertaReporte(context, "Aviso!",
             "No se encontraron registros con el mes y año seleccionado");
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await Future.delayed(const Duration(milliseconds: 1000));
 
         BusyIndicator.hide(context);
       }
@@ -699,24 +715,37 @@ class _HomeTambookState extends State<HomeTambook>
 
   Future<void> obtenerReporteSectorial(tipo, anio, mes, sector) async {
     try {
-      var aReporteSectorialSector =
+      var areporteSectorialSector =
           await mainCtr.getReporteSectorial(tipo, anio, mes, sector);
 
-      if (aReporteSectorialSector.isNotEmpty) {
-        aReporteSectorialSector = aReporteSectorialSector;
+      if (areporteSectorialSector.isNotEmpty) {
+        aReporteSectorialSector = areporteSectorialSector;
         aReporteSectorialSector.sort((a, b) => int.parse(b.atenciones ?? '0')
             .compareTo(int.parse(a.atenciones ?? '0')));
+        //setState(() {
+
+        aMesSectorial = aReporteSectorialSector[0].mes!;
+
+        aTituloReporteSectorial = aReporteSectorialSector[0].entidad!;
+
+        chartDataReporteSectorial = [
+          ChartDataAvance(
+              obtenerNombreMesCompleto(aReporteSectorialSector[0].mes!),
+              double.parse(aReporteSectorialSector[0].atenciones!),
+              double.parse(aReporteSectorialSector[0].beneficiarios!))
+        ];
+        //});
       }
     } on Exception {}
   }
 
   Future<void> obtenerReporteAtencionRegion(anio, mes, region) async {
     try {
-      var aReporteAtencionRegion =
+      var areporteAtencionRegion =
           await mainCtr.getReporteAtencionesRegion(anio, mes, region);
 
-      if (aReporteAtencionRegion.isNotEmpty) {
-        aReporteAtencionRegion = aReporteAtencionRegion;
+      if (areporteAtencionRegion.isNotEmpty) {
+        aReporteAtencionRegion = areporteAtencionRegion;
         setState(() {
           isLoadingAtencionesSector = true;
         });
@@ -772,7 +801,7 @@ class _HomeTambookState extends State<HomeTambook>
     );*/
 
     return DefaultTabController(
-      length: 7, // cambiar aqui para mas pestañas
+      length: 8, // cambiar aqui para mas pestañas
       child: Scaffold(
         backgroundColor: color_10o15,
         body: NestedScrollView(
@@ -900,14 +929,15 @@ class _HomeTambookState extends State<HomeTambook>
                         padding: EdgeInsets.all(5.0),
                         isScrollable: true,
                         tabs: [
-                          /*Tab(
-                              icon: ImageIcon(
-                            AssetImage('assets/icons/icon_intervencion.png'),
-                            size: 35,
-                          )),*/
+                          
                           Tab(
                               icon: ImageIcon(
                             AssetImage('assets/icons/atenciones.png'),
+                            size: 35,
+                          )),
+                          Tab(
+                              icon: ImageIcon(
+                            AssetImage('assets/icons/icon_intervencion.png'),
                             size: 35,
                           )),
                           Tab(
@@ -956,8 +986,21 @@ class _HomeTambookState extends State<HomeTambook>
           },
           body: TabBarView(
             children: <Widget>[
-              // REPORTES SECTORIALES
-              /*        SingleChildScrollView(
+              
+              SingleChildScrollView(
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 15),
+                  cardAtenciones(),
+                  avanceMetas(),
+                  cardBeneficiarios(),
+                  avanceMetasUsuarios(),
+                ],
+              )),
+
+// REPORTES SECTORIALES
+              SingleChildScrollView(
                   child: Column(
                 children: [
                   const SizedBox(height: 15),
@@ -975,14 +1018,15 @@ class _HomeTambookState extends State<HomeTambook>
                       icon: const Icon(Icons.download),
                       onPressed: () async {
                         try {
-                          print("mes y anio ${mesReporteSectorial}");
+                          print(
+                              "mes y anio ${anioReporteSectorial} ${aMesSectorial}");
                           BusyIndicator.show(context);
                           bool isConnec =
                               await CheckConnection.isOnlineWifiMobile();
                           if (isConnec) {
                             RespBase64FileDto oB64 =
                                 await mainCtr.getReporteTambosSectorial(
-                                    anioReporteSectorial, mesReporteSectorial);
+                                    anioReporteSectorial, aMesSectorial);
                             Uint8List dataPdf =
                                 convertBase64(oB64.base64 ?? '');
 
@@ -1004,9 +1048,9 @@ class _HomeTambookState extends State<HomeTambook>
                   ),
 
                   const SizedBox(height: 10),
-                  //reporteSectorialTipoUsuarioAtencion(),
+                  reporteSectorialTipoUsuarioAtencion(),
                   const SizedBox(height: 10),
-                  //reporteSectorialTipoUsuarioBeneficiarios(),
+                  reporteSectorialTipoUsuarioBeneficiarios(),
                   const SizedBox(height: 10),
                   reporteSectorial(),
                   const SizedBox(height: 10),
@@ -1015,18 +1059,7 @@ class _HomeTambookState extends State<HomeTambook>
                   //cardPlataforma(),
                 ],
               )),
-    */
-              SingleChildScrollView(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 15),
-                  cardAtenciones(),
-                  avanceMetas(),
-                  cardBeneficiarios(),
-                  avanceMetasUsuarios(),
-                ],
-              )),
+
               SingleChildScrollView(
                   child: Column(
                 children: [
@@ -1726,7 +1759,7 @@ class _HomeTambookState extends State<HomeTambook>
 */
 
   Padding reporteSectorialTipoUsuarioAtencion() {
-    var heading = 'GRÁFICA DE ATENCIONES POR SECTOR';
+    var heading = 'ATENCIONES POR TIPO DE GOBIERNO';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -1777,506 +1810,78 @@ class _HomeTambookState extends State<HomeTambook>
                 ? Container(
                     alignment: Alignment.centerLeft,
                     //height: 800,
+                    margin: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            (((aReporteSectorial.isNotEmpty
-                                                        ? double.parse(
-                                                            aReporteSectorial[0]
-                                                                    .atenciones ??
-                                                                '0')
-                                                        : 0) /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[0].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          (aReporteSectorial.isNotEmpty
-                                              ? aReporteSectorial![0].entidad ??
-                                                  ''
-                                              : ''),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[0].atenciones ?? '0' : '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial
-                                                            .isNotEmpty
-                                                        ? aReporteSectorial[1]
-                                                                .atenciones ??
-                                                            '0'
-                                                        : '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[1].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial.isNotEmpty
-                                              ? aReporteSectorial[1].entidad ??
-                                                  ''
-                                              : '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[1].atenciones ?? '0' : '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial
-                                                            .isNotEmpty
-                                                        ? aReporteSectorial[2]
-                                                                .atenciones ??
-                                                            '0'
-                                                        : '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[2].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial.isNotEmpty
-                                              ? aReporteSectorial[2].entidad ??
-                                                  ''
-                                              : '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[2].atenciones ?? '0' : '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial
-                                                            .isNotEmpty
-                                                        ? aReporteSectorial[3]
-                                                                .atenciones ??
-                                                            '0'
-                                                        : '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[3].atenciones ?? '0' : '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial.isNotEmpty
-                                              ? aReporteSectorial[3].entidad ??
-                                                  ''
-                                              : '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[3].atenciones ?? '0' : '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),
+                        DropdownButtonFormField<String>(
+                          key: _keyAtencion,
+                          value: (aReporteSectorial.isNotEmpty)
+                              ? aReporteSectorial[0].entidad
+                              : '',
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              tituloReporteAtencionSectorial = newValue ?? '';
+                              cantidadReporteAtencionSectorial =
+                                  aReporteSectorial
+                                          .where((e) => e.entidad == newValue)
+                                          .toList()[0]
+                                          .atenciones ??
+                                      '0';
 
-                        /*
-
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[4]
-                                                            .atenciones ??
-                                                        '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[4].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[4].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[4].atenciones ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              vNReporteAtencionSectorial.value = double.parse(
+                                  cantidadReporteAtencionSectorial);
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'SELECCIONE TIPO DE GOBIERNO',
+                          ),
+                          items: aReporteSectorial.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.entidad,
+                              child: Text(
+                                item.entidad!,
+                                style: const TextStyle(fontSize: 10),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[5]
-                                                            .atenciones ??
-                                                        '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[5].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[5].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[5].atenciones ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 30),
+                        SimpleCircularProgressBar(
+                          size: 150,
+                          maxValue: double.parse(totalValue.toString()),
+                          valueNotifier: vNReporteAtencionSectorial,
+                          progressColors: const [
+                            Color(0xFFB40404),
+                            Color(0xFFB40404)
+                          ],
+                          backColor: Colors.black.withOpacity(0.2),
+                          progressStrokeWidth: 10,
+                          backStrokeWidth: 10,
+                          mergeMode: true,
+                          animationDuration: 3,
+                          onGetText: (double value) {
+                            return Text(
+                              '${((double.parse(cantidadReporteAtencionSectorial) / totalValue) * 100).round()}%',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 35,
                               ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[6]
-                                                            .atenciones ??
-                                                        '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[6].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[6].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[6].atenciones ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[7]
-                                                            .atenciones ??
-                                                        '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[7].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[7].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[7].atenciones ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(
-                                            ((double.parse(aReporteSectorial[8]
-                                                            .atenciones ??
-                                                        '0') /
-                                                    totalValue) *
-                                                100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[8].atenciones ?? '0') / totalValue) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[8].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[8].atenciones ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),*/
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ListTile(
+                          title: Center(
+                              child: Text(
+                            tituloReporteAtencionSectorial,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          )),
+                          subtitle: Center(
+                              child: Text(
+                                  "(${formatoDecimal(int.parse(cantidadReporteAtencionSectorial.isNotEmpty ? cantidadReporteAtencionSectorial : '0'))})")),
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -2297,7 +1902,7 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Padding reporteSectorialTipoUsuarioBeneficiarios() {
-    var heading = 'GRÁFICA DE USUARIOS POR SECTOR';
+    var heading = 'USUARIOS POR TIPO DE GOBIERNO';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -2349,495 +1954,80 @@ class _HomeTambookState extends State<HomeTambook>
             isLoadingAtencionesTipoUsuario == true
                 ? Container(
                     alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.all(20),
                     //height: 800,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial
-                                                            .isNotEmpty
-                                                        ? aReporteSectorial[0]
-                                                                .beneficiarios ??
-                                                            '0'
-                                                        : '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[0].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial.isNotEmpty
-                                              ? aReporteSectorial[0].entidad ??
-                                                  ''
-                                              : '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[0].beneficiarios ?? '0' : '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial
-                                                            .isNotEmpty
-                                                        ? aReporteSectorial[1]
-                                                                .beneficiarios ??
-                                                            '0'
-                                                        : '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[1].beneficiarios ?? '0' : '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial.isNotEmpty
-                                              ? aReporteSectorial[1].entidad ??
-                                                  ''
-                                              : '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial.isNotEmpty ? aReporteSectorial[1].beneficiarios ?? '0' : '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),
+                        DropdownButtonFormField<String>(
+                          key: _keyUsuarios,
+                          value: (aReporteSectorial.isNotEmpty)
+                              ? aReporteSectorial[0].entidad
+                              : '',
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              tituloReporteUsuarioSectorial = newValue ?? '';
+                              cantidadReporteUsuarioSectorial =
+                                  aReporteSectorial
+                                          .where((e) => e.entidad == newValue)
+                                          .toList()[0]
+                                          .beneficiarios ??
+                                      '0';
 
-/*
-
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[2]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[2].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[2].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[2].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              vNReporteUsuariosSectorial.value =
+                                  double.parse(cantidadReporteUsuarioSectorial);
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'SELECCIONE TIPO DE GOBIERNO',
+                          ),
+                          items: aReporteSectorial.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.entidad,
+                              child: Text(
+                                item.entidad!,
+                                style: const TextStyle(fontSize: 10),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[3]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[3].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[3].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[3].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 30),
+                        SimpleCircularProgressBar(
+                          size: 150,
+                          maxValue: double.parse(
+                              totalValueTipoBeneficiario.toString()),
+                          valueNotifier: vNReporteUsuariosSectorial,
+                          progressColors: const [
+                            Color(0xFFB40404),
+                            Color(0xFFB40404)
+                          ],
+                          animationDuration: 3,
+                          backColor: Colors.black.withOpacity(0.2),
+                          progressStrokeWidth: 10,
+                          backStrokeWidth: 10,
+                          mergeMode: true,
+                          onGetText: (double value) {
+                            return Text(
+                              '${((double.parse(cantidadReporteUsuarioSectorial) / totalValueTipoBeneficiario) * 100).round()}%',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 35,
                               ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[4]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[4].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[4].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[4].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[5]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[5].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[5].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[5].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[6]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[6].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[6].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[6].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[7]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[7].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[7].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[7].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SimpleCircularProgressBar(
-                                        size: 100,
-                                        maxValue: 100,
-                                        valueNotifier: ValueNotifier(((double
-                                                    .parse(aReporteSectorial[8]
-                                                            .beneficiarios ??
-                                                        '0') /
-                                                totalValueTipoBeneficiario) *
-                                            100)),
-                                        backColor:
-                                            Colors.black.withOpacity(0.4),
-                                        progressStrokeWidth: 10,
-                                        backStrokeWidth: 10,
-                                        mergeMode: true,
-                                        onGetText: (double value) {
-                                          return Text(
-                                            '${((double.parse(aReporteSectorial[8].beneficiarios ?? '0') / totalValueTipoBeneficiario) * 100).round()}%',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ListTile(
-                                        title: Center(
-                                            child: Text(
-                                          aReporteSectorial[8].entidad ?? '',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
-                                        )),
-                                        subtitle: Center(
-                                            child: Text(
-                                                "(${formatoDecimal(int.parse(aReporteSectorial[8].beneficiarios ?? '0'))})")),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ]),*/
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        ListTile(
+                          title: Center(
+                              child: Text(
+                            tituloReporteUsuarioSectorial,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          )),
+                          subtitle: Center(
+                              child: Text(
+                                  "(${formatoDecimal(int.parse(cantidadReporteUsuarioSectorial.isNotEmpty ? cantidadReporteUsuarioSectorial : '0'))})")),
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
@@ -2862,6 +2052,8 @@ class _HomeTambookState extends State<HomeTambook>
         'DE ${(aReporteSectorial.isNotEmpty) ? '${obtenerNombreMesCompleto(aReporteSectorial[0].mes!)} DEL ${aReporteSectorial[0].anio!}' : ''}';
 
     var heading = 'REPORTE SECTORIAL $anioMes';
+
+    //}
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -2901,22 +2093,223 @@ class _HomeTambookState extends State<HomeTambook>
               children: <Widget>[
                 const Divider(color: colorI),
                 Container(
+                  margin: const EdgeInsets.all(20),
                   alignment: Alignment.centerLeft,
                   child: Card(
                     elevation: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        DropdownButtonFormField<String>(
+                          key: _keySector,
+                          isExpanded: true,
+                          value: (aReporteSectorialSector.isNotEmpty)
+                              ? aReporteSectorialSector[0].entidad
+                              : '',
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              aTituloReporteSectorial = newValue!;
+
+                              var oResultadoSectorial = aReporteSectorialSector
+                                  .where((e) => e.entidad == newValue)
+                                  .toList();
+
+                              chartDataReporteSectorial = [
+                                ChartDataAvance(
+                                    obtenerNombreMesCompleto(
+                                        oResultadoSectorial[0].mes!),
+                                    double.parse(
+                                        oResultadoSectorial[0].atenciones!),
+                                    double.parse(
+                                        oResultadoSectorial[0].beneficiarios!))
+                              ];
+                            });
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'SELECCIONE SECTOR',
+                          ),
+                          items: aReporteSectorialSector.map((item) {
+                            return DropdownMenuItem<String>(
+                              value: item.entidad,
+                              child: Text(
+                                item.entidad!,
+                                style: const TextStyle(fontSize: 10),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 30),
+                        Center(
+                            child: Text(
+                          aTituloReporteSectorial,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        )),
+                        SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          legend: const Legend(
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.wrap),
+                          primaryXAxis: CategoryAxis(
+                            labelIntersectAction:
+                                AxisLabelIntersectAction.multipleRows,
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                          ),
+                          primaryYAxis: NumericAxis(
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            numberFormat: NumberFormat.decimalPattern(),
+                          ),
+                          series: <CartesianSeries>[
+                            // Renders line chart
+
+                            ColumnSeries<ChartDataAvance, String>(
+                                name: 'ATENCIONES',
+                                onPointTap: (ChartPointDetails details) async {
+                                  BusyIndicator.show(context);
+
+                                  List<AtencionesSectorialesModel>
+                                      aReporteSectorialEntidad =
+                                      await mainCtr.getReporteSectorial(
+                                          '3',
+                                          anioReporteSectorial,
+                                          aMesSectorial,
+                                          aTituloReporteSectorial);
+
+                                  BusyIndicator.hide(context);
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        buildSuccessDialog2(
+                                      context,
+                                      title:
+                                          "${aTituloReporteSectorial}\n$anioMes\n(${aReporteSectorialEntidad.length})",
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            aReporteSectorialEntidad.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          var oItem =
+                                              aReporteSectorialEntidad[index];
+                                          return Column(
+                                            children: [
+                                              ListTile(
+                                                dense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 0.0, right: 0.0),
+                                                leading: Text("${index + 1}"),
+                                                title: ListTile(
+                                                  title: Text(
+                                                    oItem.entidad ?? '',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  subtitle: Text(
+                                                    "ATENCIONES : ${formatoDecimal(int.parse(oItem.atenciones ?? '0'))}\nUSUARIOS : ${formatoDecimal(int.parse(oItem.beneficiarios ?? '0'))}",
+                                                    style: const TextStyle(
+                                                        fontSize: 15),
+                                                  ),
+                                                ),
+                                                onTap: () async {},
+                                              ),
+                                              const Divider(color: colorI),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                                dataSource: chartDataReporteSectorial,
+                                dataLabelSettings: const DataLabelSettings(
+                                  isVisible: true,
+                                ),
+                                xValueMapper: (ChartDataAvance data, _) =>
+                                    data.x,
+                                yValueMapper: (ChartDataAvance data, _) =>
+                                    data.y),
+                            ColumnSeries<ChartDataAvance, String>(
+                                name: 'USUARIOS',
+                                onPointTap: (ChartPointDetails details) async {
+                                  BusyIndicator.show(context);
+
+                                  List<AtencionesSectorialesModel>
+                                      aReporteSectorialEntidad =
+                                      await mainCtr.getReporteSectorial(
+                                          '3',
+                                          anioReporteSectorial,
+                                          aMesSectorial,
+                                          aTituloReporteSectorial);
+
+                                  BusyIndicator.hide(context);
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        buildSuccessDialog2(
+                                      context,
+                                      title:
+                                          "${aTituloReporteSectorial}\n$anioMes\n(${aReporteSectorialEntidad.length})",
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            aReporteSectorialEntidad.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          var oItem =
+                                              aReporteSectorialEntidad[index];
+                                          return Column(
+                                            children: [
+                                              ListTile(
+                                                dense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 0.0, right: 0.0),
+                                                leading: Text("${index + 1}"),
+                                                title: ListTile(
+                                                  title: Text(
+                                                    oItem.entidad ?? '',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  subtitle: Text(
+                                                    "ATENCIONES : ${formatoDecimal(int.parse(oItem.atenciones ?? '0'))}\nUSUARIOS : ${formatoDecimal(int.parse(oItem.beneficiarios ?? '0'))}",
+                                                    style: const TextStyle(
+                                                        fontSize: 15),
+                                                  ),
+                                                ),
+                                                onTap: () async {},
+                                              ),
+                                              const Divider(color: colorI),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                                dataSource: chartDataReporteSectorial,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                                xValueMapper: (ChartDataAvance data, _) =>
+                                    data.x,
+                                yValueMapper: (ChartDataAvance data, _) =>
+                                    data.y1),
+                          ],
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                        ),
+
+/*
                         for (var item in aReporteSectorialSector)
                           Column(
                             children: [
                               ListTile(
-                                /*leading: SizedBox(
-                                    height: 150.0,
-                                    child: Image.asset(
-                                        "assets/regiones/peru.png")),*/
-
-                                // AssetImage("assets/regiones/AYACUCHO.png"),
+                               
 
                                 iconColor: const Color.fromARGB(255, 0, 0, 0),
                                 title: ListTile(
@@ -2995,9 +2388,9 @@ class _HomeTambookState extends State<HomeTambook>
                               ),
                               const Divider(color: colorI),
                             ],
-                          ),
+                          ),*/
                         const SizedBox(height: 10),
-                        const Text('FUENTE: INEI - PAIS'),
+                        const Text('FUENTE: PNPAIS'),
                         Text(
                             'ACTUALIZADO HASTA ${(aMetasMensualizada.isNotEmpty ? (obtenerNombreMesCompleto(aMetasMensualizada[aMetasMensualizada.length - 1].mes!)) : '')} DEL $sCurrentYear'),
                         const SizedBox(height: 10),

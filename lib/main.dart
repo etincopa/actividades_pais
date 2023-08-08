@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
     return OverlaySupport.global(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'SIF PNPAIS',
+        title: 'SIG PNPAIS',
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

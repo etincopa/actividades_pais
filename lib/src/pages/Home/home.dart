@@ -110,7 +110,7 @@ class _HomePagePais extends State<HomePagePais> {
     }
   }
 
-/*
+  /*
   Future verificargps() async {
     bool servicestatus = await Geolocator.isLocationServiceEnabled();
     if (servicestatus) {

@@ -2378,6 +2378,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
+                          title: const Text('INICIO DE ACTIVIDADES'),
+                          subtitle: Text('${oTambo.fechaInicioServicio}'),
+                        ),
+                        ListTile(
                           title: const Text('ATENCIONES'),
                           subtitle: Text(
                               '${aAtenInterBene.fold(0, (sum, item) => sum + item.atenciones!)}'),
