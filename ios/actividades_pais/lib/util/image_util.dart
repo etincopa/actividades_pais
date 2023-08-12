@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-
 class ImageUtil {
   Future<String> networkImageToBase64(String sUrl) async {
     http.Response response = await http.get(Uri.parse(sUrl));
@@ -52,10 +51,9 @@ class ImageUtil {
         fit: fit ?? BoxFit.cover,
         alignment: alignment ?? Alignment.center,
         errorBuilder: (context, error, stackTrace) {
-          return Container(
-            alignment: alignment ?? Alignment.center,
-            height: 50.0,
-            child: Image.asset('assets/TAMBO_DEFECTO.jpeg'),
+          return Image.asset(
+            imgDefault!,
+            fit: BoxFit.cover,
           );
         },
       );

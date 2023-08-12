@@ -18,6 +18,7 @@ import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //late ObjectBoxDbPnPais OBoxDbPnPais;
 void main() async {
@@ -41,18 +42,31 @@ void main() async {
   Get.put(mainServ);
   Get.put(MainController()); // Se ejecuta loadInitialData();
 
-  runApp(const MyApp());
+  runApp(MyApp());
+}
+
+class AuthService {
+  Future<bool> isAuthenticated() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getBool('loggIn');
+    if (token != null) {
+      // Validate token on the server
+      return true;
+    }
+    return false;
+  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
     return OverlaySupport.global(
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'SIF PNPAIS',
+        title: 'SIG PNPAIS',
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -65,9 +79,24 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.red, //Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-
-        home: const SplashPage(), //PdfPage(), //Card6(),
-
+        home: FutureBuilder<bool>(
+          future: _authService.isAuthenticated(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              if (snapshot.data == true) {
+                // User is authenticated, navigate to the main screen
+                return const HomePagePais();
+              } else {
+                // User is not authenticated, show login screen
+                return const SplashPage();
+              }
+            }
+          },
+        ),
         locale: MyTraslation.locale,
         fallbackLocale: MyTraslation.fallbackLocale,
         translations: MyTraslation(),

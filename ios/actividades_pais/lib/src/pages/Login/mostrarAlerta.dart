@@ -35,3 +35,14 @@ mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
             ],
           ));
 }
+
+mostrarAlertaReporte(BuildContext context, String titulo, String subtitulo) {
+  if (Platform.isAndroid) {
+    return showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              title: Text(titulo),
+              content: Text(subtitulo),
+            ));
+  }
+}

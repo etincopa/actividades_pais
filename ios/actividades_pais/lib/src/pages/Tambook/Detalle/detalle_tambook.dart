@@ -123,6 +123,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
+  bool isLoadingClima = false;
   bool isLoadingTambo = false;
   bool isLoadingActividades = false;
   bool isLoadingRuta = false;
@@ -441,9 +442,7 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> servicioBasicoTambo(int idTambo) async {
-    isLoadingGuardian = false;
     aSrvBasico = await mainCtr.servicioBasicoTambo(idTambo.toString());
-    isLoadingGuardian = true;
     setState(() {});
   }
 
@@ -471,9 +470,8 @@ class _DetalleTambookState extends State<DetalleTambook>
     if (response.statusCode == 200) {
       clima =
           ClimaModel.fromJson(json.decode(response.body)['current_weather']);
-    } else {
-      print("Error con la respuesta");
     }
+    isLoadingClima = true;
   }
 
   Future<void> TamboIntervencionAtencionIncidencia() async {
@@ -605,73 +603,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
       );
     }
-
-    /*String icon1 = 'assets/icons/computadora.png';
-    String icon2 = 'assets/icons/laptop.png';
-    String icon3 = 'assets/icons/proyector.png';
-    String icon4 = 'assets/icons/wifi.png';
-    String icon5 = 'assets/icons/impresora.png';
-    String icon6 = 'assets/icons/parlante.png';
-
-    var cpu = equipamiento['CPU']?.length ?? '0';
-    var laptop = equipamiento['LAPTOP']?.length ?? '0';
-    var proyector = equipamiento['PROYECTOR']?.length ?? '0';
-    var impresora = equipamiento['IMPRESORA']?.length ?? '0';
-
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2001',
-        name: 'PC \n(${cpu.toString()})',
-        types: const ['Ver'],
-        image: icon1,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2002',
-        name: 'LAPTOP \n(${laptop.toString()})',
-        types: const ['Ver'],
-        image: icon2,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2003',
-        name: 'PROYECTOR \n(${proyector.toString()})',
-        types: const ['Ver'],
-        image: icon3,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2004',
-        name: 'ANTENA WIFI \n(1047)',
-        types: const ['Ver'],
-        image: icon4,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2005',
-        name: 'IMPRESORAS \n(${impresora.toString()})',
-        types: const ['Ver'],
-        image: icon5,
-        color: Colors.white,
-      ),
-    );
-    aEquipoInformatico.add(
-      HomeOptions(
-        code: 'OPT2006',
-        name: 'PARLANTES \n(1047)',
-        types: const ['Ver'],
-        image: icon6,
-        color: Colors.white,
-      ),
-    );*/
   }
 
   Widget equipoInformatico() {
@@ -998,9 +929,8 @@ class _DetalleTambookState extends State<DetalleTambook>
             minScale: 0.5,
             maxScale: 2,
             child: ImageUtil.ImageUrl(
-              'https://www.pais.gob.pe/tambook_/FILES/portadas-imagenes/${oTambo.idTambo}/${oTambo.idTambo}.jpg',
-              //fit: BoxFit.fitHeight,
-            ),
+                'https://www.pais.gob.pe/tambook_/FILES/portadas-imagenes/${oTambo.idTambo}/${oTambo.idTambo}.jpg',
+                imgDefault: 'assets/TAMBO_DEFECTO.jpeg'),
           ),
         ),
       ),
@@ -1222,32 +1152,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 ),
                               ),
 
-                              /*Tab(
-                                icon: ImageIcon(
-                                  AssetImage('assets/grifo.png'),
-                                  size: 55,
-                                ),
-                              ),*/
-
-                              /*Tooltip(
-                                waitDuration: Duration(seconds: 1),
-                                showDuration: Duration(seconds: 2),
-                                padding: EdgeInsets.all(5),
-                                height: 35,
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                                triggerMode: TooltipTriggerMode.longPress,
-                                message: ' ACTIVIDADES PROGRAMADAS APROBADAS',
-                                child: Tab(
-                                  icon: ImageIcon(
-                                    AssetImage('assets/calendario.png'),
-                                    size: 55,
-                                  ),
-                                ),
-                              ),*/
-
                               Tooltip(
                                 waitDuration: Duration(seconds: 1),
                                 showDuration: Duration(seconds: 2),
@@ -1284,24 +1188,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                                   ),
                                 ),
                               ),
-                              /*Tooltip(
-                                waitDuration: Duration(seconds: 1),
-                                showDuration: Duration(seconds: 2),
-                                padding: EdgeInsets.all(5),
-                                height: 35,
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                                triggerMode: TooltipTriggerMode.longPress,
-                                message: 'CALENDARIO',
-                                child: Tab(
-                                  icon: ImageIcon(
-                                    AssetImage('assets/calendario.png'),
-                                    size: 55,
-                                  ),
-                                ),
-                              ),*/
                             ],
                           ),
                         ),
@@ -1445,32 +1331,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                       ],
                     )),
 
-//const TabScreen("COMBUSTIBLE"),
-
-                    /*ListView(
-                      children: [
-                        cardCombustible(),
-                        const SizedBox(height: 40),
-                      ],
-                    ),*/
-
-                    //const TabScreen("ACTIVIDADES PROGRAMADAS"),
-
-                    /*ListView(
-                      children: [
-                        const SizedBox(height: 15),
-                        Column(children: [
-                          ElevatedButton(
-                            onPressed: () => _selectDate(context),
-                            child: Text('SELECCIONAR MES DE ACTIVIDADES'),
-                          )
-                        ]),
-                        const SizedBox(height: 10),
-                        cardActividadProgramada(),
-                        const SizedBox(height: 40),
-                      ],
-                    ),*/
-
                     //const TabScreen("Clima"),
 
                     ListView(
@@ -1488,99 +1348,6 @@ class _DetalleTambookState extends State<DetalleTambook>
                         cardCamino(),
                       ],
                     ),
-
-                    //const TabScreen("INTERVENCIONES"),
-                    /* DefaultTabController(
-                      length: 2,
-                      child: Column(
-                        children: <Widget>[
-                          Material(
-                            color: Colors.grey.shade300,
-                            child: TabBar(
-                              //isScrollable: true,
-                              unselectedLabelColor: Colors.blue,
-                              labelColor: Colors.blue,
-                              indicatorColor: Colors.white,
-                              controller: _tabController,
-                              labelPadding: const EdgeInsets.all(0.0),
-                              tabs: [
-                                _getTab(
-                                  0,
-                                  const Center(
-                                    child: Text(
-                                      "PRESTACIÓN DE SERVICIO",
-                                      style: TextStyle(
-                                        color: colorS,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                                _getTab(
-                                  1,
-                                  const Center(
-                                    child: Text(
-                                      "EJECUCIÓN DE SOPORTE",
-                                      style: TextStyle(
-                                        color: colorI,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                                /*_getTab(
-                                  2,
-                                  const Center(
-                                    child: Text(
-                                      "COORDINACIONES Y ACTIVIDADES",
-                                      style: TextStyle(
-                                        color: colorP,
-                                        fontWeight: FontWeight.w700,
-                                        fontStyle: FontStyle.normal,
-                                        fontSize: 12.0,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),*/
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              controller: _tabController,
-                              children: [
-                                ListView(
-                                  children: [
-                                    cardDatosIntervencionCod1(),
-                                    const SizedBox(height: 40),
-                                  ],
-                                ),
-                                ListView(
-                                  children: [
-                                    cardDatosIntervencionCod2(),
-                                    const SizedBox(height: 40),
-                                  ],
-                                ),
-                                /*ListView(
-                                  children: [
-                                    cardDatosIntervencionCod4(),
-                                    const SizedBox(height: 40),
-                                  ],
-                                ),*/
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),*/
                   ],
                 ),
               ),
@@ -1732,7 +1499,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                               child: ImageUtil.ImageUrl(
                                 "https://www.pais.gob.pe/backendsismonitor/public/storage/${oTambo.gestorFotoExtencion ?? ''}",
                                 width: 150,
-                                imgDefault: 'assets/icons/user-male-2.png',
+                                imgDefault: obtenerImagenDefecto(
+                                    oTambo.gestorSexo!.toUpperCase()),
                               ),
                             ),
                             Container(
@@ -1822,7 +1590,7 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardNuestroMonitor() {
     var heading = 'MONITOR (A)';
-    var subheading = (isLoadingMonitor
+    var subheading = (isLoadingMonitor && oMonitor.isNotEmpty
             ? '${oMonitor[0].nombre ?? ''} ${oMonitor[0].apePaterno ?? ''} ${oMonitor[0].apeMaterno ?? ''}'
             : '')
         .toUpperCase();
@@ -1874,10 +1642,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
               children: <Widget>[
+                const Divider(color: colorI),
                 isLoadingMonitor
-                    ? oMonitor[0].nombre!.isNotEmpty
+                    ? oMonitor.isNotEmpty
                         ? Column(children: [
-                            const Divider(color: colorI),
                             SizedBox(
                               height: 150.0,
                               child: ImageUtil.ImageUrl(
@@ -1942,7 +1710,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 20, 20, 20),
                                 child: const Text(
-                                  'TAMBO SIN GESTOR',
+                                  'TAMBO SIN MONITOR',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -2026,32 +1794,51 @@ class _DetalleTambookState extends State<DetalleTambook>
                   alignment: Alignment.centerLeft,
                   child: Card(
                     elevation: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('DNI'),
-                          subtitle: Text(oGuardia.numeroDocumento ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('SEXO'),
-                          subtitle: Text(oGuardia.sexo!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('TIPO CONTRATO'),
-                          subtitle:
-                              Text(oGuardia.tipoContrato!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA INICIO CONTRATO'),
-                          subtitle: Text(oGuardia.fecInicioContrato ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA FIN CONTRATO'),
-                          subtitle: Text(oGuardia.fecFinalContrato ?? ''),
-                        ),
-                      ],
-                    ),
+                    child: isLoadingGuardian
+                        ? oGuardia.empleadoNombre != ""
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    title: const Text('DNI'),
+                                    subtitle:
+                                        Text(oGuardia.numeroDocumento ?? ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('SEXO'),
+                                    subtitle: Text(
+                                        oGuardia.sexo!.toUpperCase() ?? ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('TIPO CONTRATO'),
+                                    subtitle: Text(
+                                        oGuardia.tipoContrato!.toUpperCase() ??
+                                            ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('FECHA INICIO CONTRATO'),
+                                    subtitle:
+                                        Text(oGuardia.fecInicioContrato ?? ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('FECHA FIN CONTRATO'),
+                                    subtitle:
+                                        Text(oGuardia.fecFinalContrato ?? ''),
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 20, 20, 20),
+                                    child: const Text(
+                                      'TAMBO SIN GUARDIÁN',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    )))
+                        : const CircularProgressIndicator(),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -2377,6 +2164,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        ListTile(
+                          title: const Text('INICIO DE ACTIVIDADES'),
+                          subtitle: Text('${oTambo.fechaInicioServicio}'),
+                        ),
                         ListTile(
                           title: const Text('ATENCIONES'),
                           subtitle: Text(
@@ -5013,149 +4804,6 @@ class _DetalleTambookState extends State<DetalleTambook>
         ),
       ),
     );
-
-    /*var heading = 'ACTIVIDADES DIARIAS';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 1,
-            color: colorI,
-          ),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 5), // changes position of shadow
-            ),
-          ],
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Column(
-          children: [
-            ExpansionTile(
-              tilePadding: const EdgeInsets.only(left: 0, right: 10),
-              initiallyExpanded: true,
-              title: ListTile(
-                visualDensity: const VisualDensity(vertical: -4),
-                leading: const ImageIcon(
-                  AssetImage("assets/iconos_card/actividades.png"),
-                  size: 40,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  heading,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black),
-                ),
-              ),
-              children: <Widget>[
-                const Divider(color: colorI),
-                const SizedBox(height: 10),
-                const Text('FUENTE: PNPAIS'),
-                const SizedBox(height: 2),
-                Text("ACTUALIZADO AL ${fechaActual}"),
-                const SizedBox(height: 10),
-                const Divider(color: colorI),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: SizedBox(
-                    height: 420,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: isLoadingActividades
-                          ? 4
-                          : (aActividadesDiarias.isEmpty
-                              ? 1
-                              : aActividadesDiarias.length),
-                      itemBuilder: (context, index) {
-                        if (isLoadingActividades) {
-                          return ShinyWidget();
-                        } else {
-                          if (aActividadesDiarias.isEmpty) {
-                            return Center(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                                child: const Text(
-                                  'NO EXISTE ACTIVIDADES',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                              ),
-                            );
-                          }
-
-                          return Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              children: [
-                                if (aActividadesDiarias[index].gitLaborando! ==
-                                    'Si')
-                                  Text(
-                                    "ACTIVIDAD: ${aActividadesDiarias[index].actividad.toString()}\n\nLUGAR: ${aActividadesDiarias[index].lugar.toString()}\n\nTIPO INTERVENCIÓN: ${aActividadesDiarias[index].tipoIntervencion.toString()}",
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ), //Textstyle
-                                  ),
-                                if (aActividadesDiarias[index].gitLaborando! ==
-                                    'No')
-                                  Text(
-                                    "SIN ACTIVIDAD\n\nMOTIVO: ${aActividadesDiarias[index].motivo.toString()}",
-                                    textAlign: TextAlign.justify,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ), //Textstyle
-                                  ), //Text
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Chip(
-                                      label: Text(
-                                        'Fecha : ${aActividadesDiarias[index].fechaActividad ?? ''}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 5,
-                                        horizontal: 10,
-                                      ),
-                                      backgroundColor:
-                                          (aActividadesDiarias[index]
-                                                      .gitLaborando! ==
-                                                  'Si')
-                                              ? Colors.blue
-                                              : Colors.red,
-                                    ),
-                                  ],
-                                ),
-
-                                const Divider(color: colorI), //SizedBox
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );*/
   }
 
 /*
@@ -5210,38 +4858,58 @@ class _DetalleTambookState extends State<DetalleTambook>
                   alignment: Alignment.centerLeft,
                   child: Card(
                     elevation: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('TEMPERATURA:'),
-                          subtitle: Text(
-                            '${clima.temp} °',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('VELOCIDAD DEL VIENTO:'),
-                          subtitle: Text(
-                            '${clima.speed} km/h',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('DIRECCIÓN DEL VIENTO:'),
-                          subtitle: Text(
-                            '${clima.direction}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: isLoadingClima
+                        ? clima.temp != null
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    iconColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    title: const Text('TEMPERATURA:'),
+                                    subtitle: Text(
+                                      '${clima.temp} °',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    iconColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    title: const Text('VELOCIDAD DEL VIENTO:'),
+                                    subtitle: Text(
+                                      '${clima.speed} km/h',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    iconColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    title: const Text('DIRECCIÓN DEL VIENTO:'),
+                                    subtitle: Text(
+                                      '${clima.direction}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 20, 20, 20),
+                                    child: const Text(
+                                      'SIN INFORMACIÓN',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    )))
+                        : const CircularProgressIndicator(),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -5449,6 +5117,13 @@ class _DetalleTambookState extends State<DetalleTambook>
     }
 
     return texto;
+  }
+
+  String obtenerImagenDefecto(String genero) {
+    if (genero == "MASCULINO") {
+      return "assets/masculino.png";
+    }
+    return "assets/femenino.jpg";
   }
 
   String obtenerNombreMes(String mes) {

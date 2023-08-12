@@ -22,6 +22,7 @@ import 'package:actividades_pais/backend/api/pnpais_api.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../datamodels/Provider/PorviderLogin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 bool? checkGuardarDatos = false;
 bool? check = false;
@@ -241,6 +242,9 @@ class __FormState extends State<_Form> {
               await mainCtr.insertarTockenUsuario(tockens: tocken);
             }
             
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setBool("loggIn", true);
+
             BusyIndicator.hide(context);
 
             await Navigator.of(context).pushReplacement(
