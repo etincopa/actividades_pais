@@ -9,7 +9,7 @@ class ClimaField {
 class ClimaModel {
   double? temp;
   double? speed;
-  double? direction;
+  int? direction;
   int? code;
   String? tiempo;
 

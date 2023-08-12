@@ -107,7 +107,10 @@ class _AppBarPaisState extends State<AppBarPais> {
                       final alert = AlertQuestion(
                         title: "Alerta!",
                         message: "¿Está seguro que desea cerrar la sesión?",
-                        onNegativePressed: () {
+                        onNegativePressed: () async {
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
+                          await preferences.clear();
                           Navigator.of(context).pop();
                         },
                         onPostivePressed: () async {

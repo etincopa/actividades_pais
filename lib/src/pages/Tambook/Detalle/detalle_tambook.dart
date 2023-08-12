@@ -123,6 +123,7 @@ class _DetalleTambookState extends State<DetalleTambook>
 
   late ClimaModel clima = ClimaModel.empty();
   bool isLoading = true;
+  bool isLoadingClima = false;
   bool isLoadingTambo = false;
   bool isLoadingActividades = false;
   bool isLoadingRuta = false;
@@ -441,9 +442,9 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Future<void> servicioBasicoTambo(int idTambo) async {
-    isLoadingGuardian = false;
+    //isLoadingGuardian = false;
     aSrvBasico = await mainCtr.servicioBasicoTambo(idTambo.toString());
-    isLoadingGuardian = true;
+    //isLoadingGuardian = true;
     setState(() {});
   }
 
@@ -471,7 +472,9 @@ class _DetalleTambookState extends State<DetalleTambook>
     if (response.statusCode == 200) {
       clima =
           ClimaModel.fromJson(json.decode(response.body)['current_weather']);
+      isLoadingClima = true;
     } else {
+      isLoadingClima = true;
       print("Error con la respuesta");
     }
   }
@@ -998,9 +1001,10 @@ class _DetalleTambookState extends State<DetalleTambook>
             minScale: 0.5,
             maxScale: 2,
             child: ImageUtil.ImageUrl(
-              'https://www.pais.gob.pe/tambook_/FILES/portadas-imagenes/${oTambo.idTambo}/${oTambo.idTambo}.jpg',
-              //fit: BoxFit.fitHeight,
-            ),
+                'https://www.pais.gob.pe/tambook_/FILES/portadas-imagenes/${oTambo.idTambo}/${oTambo.idTambo}.jpg',
+                imgDefault: 'assets/TAMBO_DEFECTO.jpeg'
+                //fit: BoxFit.fitHeight,
+                ),
           ),
         ),
       ),
@@ -1732,7 +1736,9 @@ class _DetalleTambookState extends State<DetalleTambook>
                               child: ImageUtil.ImageUrl(
                                 "https://www.pais.gob.pe/backendsismonitor/public/storage/${oTambo.gestorFotoExtencion ?? ''}",
                                 width: 150,
-                                imgDefault: 'assets/icons/user-male-2.png',
+                                imgDefault: obtenerImagenDefecto(oTambo
+                                    .gestorSexo!
+                                    .toUpperCase()), // 'assets/icons/user-male-2.png',
                               ),
                             ),
                             Container(
@@ -1822,7 +1828,7 @@ class _DetalleTambookState extends State<DetalleTambook>
  */
   Padding cardNuestroMonitor() {
     var heading = 'MONITOR (A)';
-    var subheading = (isLoadingMonitor
+    var subheading = (isLoadingMonitor && oMonitor.isNotEmpty
             ? '${oMonitor[0].nombre ?? ''} ${oMonitor[0].apePaterno ?? ''} ${oMonitor[0].apeMaterno ?? ''}'
             : '')
         .toUpperCase();
@@ -1874,10 +1880,10 @@ class _DetalleTambookState extends State<DetalleTambook>
                 ),
               ),
               children: <Widget>[
+                const Divider(color: colorI),
                 isLoadingMonitor
-                    ? oMonitor[0].nombre!.isNotEmpty
+                    ? oMonitor.isNotEmpty
                         ? Column(children: [
-                            const Divider(color: colorI),
                             SizedBox(
                               height: 150.0,
                               child: ImageUtil.ImageUrl(
@@ -1942,7 +1948,7 @@ class _DetalleTambookState extends State<DetalleTambook>
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 20, 20, 20),
                                 child: const Text(
-                                  'TAMBO SIN GESTOR',
+                                  'TAMBO SIN MONITOR',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -2026,32 +2032,51 @@ class _DetalleTambookState extends State<DetalleTambook>
                   alignment: Alignment.centerLeft,
                   child: Card(
                     elevation: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('DNI'),
-                          subtitle: Text(oGuardia.numeroDocumento ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('SEXO'),
-                          subtitle: Text(oGuardia.sexo!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('TIPO CONTRATO'),
-                          subtitle:
-                              Text(oGuardia.tipoContrato!.toUpperCase() ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA INICIO CONTRATO'),
-                          subtitle: Text(oGuardia.fecInicioContrato ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('FECHA FIN CONTRATO'),
-                          subtitle: Text(oGuardia.fecFinalContrato ?? ''),
-                        ),
-                      ],
-                    ),
+                    child: isLoadingGuardian
+                        ? oGuardia.empleadoNombre != ""
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    title: const Text('DNI'),
+                                    subtitle:
+                                        Text(oGuardia.numeroDocumento ?? ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('SEXO'),
+                                    subtitle: Text(
+                                        oGuardia.sexo!.toUpperCase() ?? ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('TIPO CONTRATO'),
+                                    subtitle: Text(
+                                        oGuardia.tipoContrato!.toUpperCase() ??
+                                            ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('FECHA INICIO CONTRATO'),
+                                    subtitle:
+                                        Text(oGuardia.fecInicioContrato ?? ''),
+                                  ),
+                                  ListTile(
+                                    title: const Text('FECHA FIN CONTRATO'),
+                                    subtitle:
+                                        Text(oGuardia.fecFinalContrato ?? ''),
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 20, 20, 20),
+                                    child: const Text(
+                                      'TAMBO SIN GUARDIÁN',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    )))
+                        : const CircularProgressIndicator(),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -5214,38 +5239,58 @@ class _DetalleTambookState extends State<DetalleTambook>
                   alignment: Alignment.centerLeft,
                   child: Card(
                     elevation: 0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('TEMPERATURA:'),
-                          subtitle: Text(
-                            '${clima.temp} °',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('VELOCIDAD DEL VIENTO:'),
-                          subtitle: Text(
-                            '${clima.speed} km/h',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                        ListTile(
-                          iconColor: const Color.fromARGB(255, 0, 0, 0),
-                          title: const Text('DIRECCIÓN DEL VIENTO:'),
-                          subtitle: Text(
-                            '${clima.direction}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: isLoadingClima
+                        ? clima.temp != null
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    iconColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    title: const Text('TEMPERATURA:'),
+                                    subtitle: Text(
+                                      '${clima.temp} °',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    iconColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    title: const Text('VELOCIDAD DEL VIENTO:'),
+                                    subtitle: Text(
+                                      '${clima.speed} km/h',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    iconColor:
+                                        const Color.fromARGB(255, 0, 0, 0),
+                                    title: const Text('DIRECCIÓN DEL VIENTO:'),
+                                    subtitle: Text(
+                                      '${clima.direction}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 20, 20, 20),
+                                    child: const Text(
+                                      'SIN INFORMACIÓN',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    )))
+                        : const CircularProgressIndicator(),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -5453,6 +5498,13 @@ class _DetalleTambookState extends State<DetalleTambook>
     }
 
     return texto;
+  }
+
+  String obtenerImagenDefecto(String genero) {
+    if (genero == "MASCULINO") {
+      return "assets/masculino.png";
+    }
+    return "assets/femenino.jpg";
   }
 
   String obtenerNombreMes(String mes) {
