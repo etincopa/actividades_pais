@@ -1,0 +1,9 @@
+[{
+        "idLugarPrestacion": 1,
+        "nombreLugarPrestacion": "SEDE CENTRAL"
+    },
+    {
+        "idLugarPrestacion": 2,
+        "nombreLugarPrestacion": "UNIDADES TERRITORIALES"
+    }
+]

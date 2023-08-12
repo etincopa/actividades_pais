@@ -1,0 +1,49 @@
+[
+  {
+    "cod": "1",
+    "descripcion": "SERVICIO MEDICINA"
+  },
+  {
+    "cod": "2",
+    "descripcion": "SERVICIO ODONTOLOGIA"
+  },
+  {
+    "cod": "3",
+    "descripcion": "SERVICIO OBSTETRICIA"
+  },
+  {
+    "cod": "4",
+    "descripcion": "SERVICIO ENFERMERIA"
+  },
+  {
+    "cod": "5",
+    "descripcion": "SERVICIO LABORATORIO"
+  },
+  {
+    "cod": "6",
+    "descripcion": "SERVICIO RENIEC"
+  },
+  {
+    "cod": "7",
+    "descripcion": "SERVICIO JUNTOS"
+  },
+  {
+    "cod": "8",
+    "descripcion": "SERVICIO PENSION 65"
+  },
+  {
+    "cod": "9",
+    "descripcion": "SERVICIO MINCUL"
+  },
+  {
+    "cod": "10",
+    "descripcion": "SERVICIO BANCO DE LA NACIÓN"
+  },
+  {
+    "cod": "11",
+    "descripcion": "SERVICIO MACEXPRESS"
+  }
+]
+
+
+

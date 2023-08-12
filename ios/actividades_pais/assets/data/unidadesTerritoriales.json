@@ -1,0 +1,80 @@
+[{
+        "id_UnidadesTerritoriales": 1,
+        "unidadTerritorial": "AMAZONAS"
+    },
+    {
+        "id_UnidadesTerritoriales": 2,
+        "unidadTerritorial": "ANCASH"
+    },
+    {
+        "id_UnidadesTerritoriales": 3,
+        "unidadTerritorial": "APURIMAC"
+    },
+    {
+        "id_UnidadesTerritoriales": 4,
+        "unidadTerritorial": "AREQUIPA"
+    },
+    {
+        "id_UnidadesTerritoriales": 5,
+        "unidadTerritorial": "AYACUCHO - NORTE"
+    },
+    {
+        "id_UnidadesTerritoriales": 6,
+        "unidadTerritorial": "AYACUCHO - SUR"
+    },
+    {
+        "id_UnidadesTerritoriales": 7,
+        "unidadTerritorial": "CAJAMARCA"
+    },
+    {
+        "id_UnidadesTerritoriales": 8,
+        "unidadTerritorial": "CUSCO"
+    },
+    {
+        "id_UnidadesTerritoriales": 9,
+        "unidadTerritorial": "HUANCAVELICA"
+    },
+    {
+        "id_UnidadesTerritoriales": 10,
+        "unidadTerritorial": "HUANUCO"
+    },
+    {
+        "id_UnidadesTerritoriales": 11,
+        "unidadTerritorial": "JUNIN"
+    },
+    {
+        "id_UnidadesTerritoriales": 12,
+        "unidadTerritorial": "LA LIBERTAD"
+    },
+    {
+        "id_UnidadesTerritoriales": 13,
+        "unidadTerritorial": "LORETO"
+    },
+    {
+        "id_UnidadesTerritoriales": 14,
+        "unidadTerritorial": "PASCO - LIMA"
+    },
+    {
+        "id_UnidadesTerritoriales": 15,
+        "unidadTerritorial": "PUNO"
+    },
+    {
+        "id_UnidadesTerritoriales": 16,
+        "unidadTerritorial": "PIURA"
+    },
+    {
+        "id_UnidadesTerritoriales": 17,
+        "unidadTerritorial": "TACNA-MOQUEGUA"
+    },
+    {
+        "id_UnidadesTerritoriales": 18,
+        "unidadTerritorial": "UCAYALI"
+    },
+    {
+        "id_UnidadesTerritoriales": 19,
+        "unidadTerritorial": "SAN MARTIN"
+    }, {
+        "id_UnidadesTerritoriales": 19,
+        "unidadTerritorial": "MADRE DE DIOS"
+    }
+]
