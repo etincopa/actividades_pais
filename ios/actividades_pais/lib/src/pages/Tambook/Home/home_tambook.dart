@@ -460,37 +460,6 @@ class _HomeTambookState extends State<HomeTambook>
         color: Colors.white,
       ),
     );
-
-    /*aPersonalTambo.add(
-      HomeOptions(
-        code: 'OPT3003',
-        name: 'GESTORES \nTAMBOS',
-        name2: aPersonal[0].git.toString() ?? '0',
-        types: const ['Ver'],
-        image: icon3,
-        color: Colors.white,
-      ),
-    );
-
-    aPersonalTambo.add(
-      HomeOptions(
-          code: 'OPT3004',
-          name: 'GUARDIANES \nTAMBOS',
-          name2: aPersonal[0].gu.toString() ?? '0',
-          types: const ['Ver'],
-          image: icon4,
-          color: Colors.white),
-    );
-
-    aPersonalTambo.add(
-      HomeOptions(
-          code: 'OPT3005',
-          name: 'SOPORTE \n TÉCNICO DE UTI',
-          name2: aPersonal[0].st.toString() ?? '0',
-          types: const ['Ver'],
-          image: icon5,
-          color: Colors.white),
-    );*/
   }
 
   Future<void> buildEquipoInformatico() async {
@@ -776,9 +745,6 @@ class _HomeTambookState extends State<HomeTambook>
 
   @override
   Widget build(BuildContext context) {
-    final Responsive responsive = Responsive.of(context);
-    double wp = responsive.wp(14);
-    double hp65 = responsive.hp(27);
 
     return DefaultTabController(
       length: 8, // cambiar aqui para mas pestañas
@@ -1127,6 +1093,8 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Widget plataforma() {
+    final Responsive responsive = Responsive.of(context);
+
     return Flexible(
       child: SizedBox(
         height: 550.0,
@@ -1182,8 +1150,8 @@ class _HomeTambookState extends State<HomeTambook>
                               child: Image.asset(
                                 homeOption.image!,
                                 fit: BoxFit.contain,
-                                width: 60,
-                                height: 60,
+                                width: responsive.wp(20),
+                                height: responsive.heigth > 1100 ? responsive.hp(20) : responsive.hp(8),
                                 alignment: Alignment.center,
                               ),
                             ),
@@ -1279,70 +1247,17 @@ class _HomeTambookState extends State<HomeTambook>
   }
 
   Column cardPersonalTambo() {
-    //var heading = 'PERSONAL TAMBOS';
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         isLoadingEI ? personalTambo() : const CircularProgressIndicator(),
       ],
     );
-
-    /*return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: colorI,
-            ),
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 5), // changes position of shadow
-              ),
-            ],
-          ),
-          child: ExpansionTile(
-            initiallyExpanded: true,
-            title: ListTile(
-              visualDensity: const VisualDensity(vertical: -4),
-              title: Text(
-                heading,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: color_01,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            children: <Widget>[
-              const Divider(color: colorI),
-              Container(
-                padding: const EdgeInsets.fromLTRB(1, 1, 1, 1),
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    isLoadingEI
-                        ? personalTambo()
-                        : const CircularProgressIndicator(),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );*/
   }
 
   Widget personalTambo() {
+    final Responsive responsive = Responsive.of(context);
+
     return Flexible(
       child: SizedBox(
         height: 550.0,
@@ -1396,8 +1311,8 @@ class _HomeTambookState extends State<HomeTambook>
                           child: Image.asset(
                             homeOption.image!,
                             fit: BoxFit.contain,
-                            width: 100,
-                            height: 100,
+                            width: responsive.wp(20),
+                            height: responsive.heigth > 1100 ? responsive.hp(20) : responsive.hp(8),
                             alignment: Alignment.center,
                           ),
                         ),
@@ -2276,7 +2191,6 @@ class _HomeTambookState extends State<HomeTambook>
                           ],
                           tooltipBehavior: TooltipBehavior(enable: true),
                         ),
-
                         const SizedBox(height: 10),
                         const Text('FUENTE: PNPAIS'),
                         Text(

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
-import 'package:actividades_pais/backend/model/dto/trama_response_api_dto.dart';
 import 'package:actividades_pais/backend/model/tocken_usuarios_model.dart';
 import 'package:actividades_pais/src/datamodels/Clases/Home/Perfiles.dart';
 import 'package:actividades_pais/src/pages/Home/pantallainicio.dart';
@@ -138,12 +137,10 @@ class _HomePagePais extends State<HomePagePais> {
   @override
   Widget build(BuildContext context) {
     final Responsive responsive = Responsive.of(context);
-    double wp = responsive.wp(14);
     double hp65 = responsive.hp(27);
 
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     if (!isPortrait) {
-      wp = responsive.wp(20);
       hp65 = responsive.wp(15);
     }
 
@@ -221,8 +218,8 @@ class _HomePagePais extends State<HomePagePais> {
                                 child: Image.asset(
                                   homeOption.image!,
                                   fit: BoxFit.contain,
-                                  width: 40,
-                                  height: 40,
+                                  width: responsive.wp(20),
+                                  height: responsive.heigth > 1100 ? responsive.hp(20) : responsive.hp(8),
                                   alignment: Alignment.center,
                                   color: Colors.black,
                                 ),
