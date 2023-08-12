@@ -20,6 +20,7 @@ import 'package:actividades_pais/util/Constants.dart';
 import 'package:actividades_pais/backend/controller/main_controller.dart';
 import 'package:actividades_pais/backend/api/pnpais_api.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../datamodels/Provider/PorviderLogin.dart';
 
@@ -238,6 +239,10 @@ class __FormState extends State<_Form> {
               tocken.tocken = onesignalUserId;
               await mainCtr.insertarTockenUsuario(tockens: tocken);
             });
+
+            final prefs = await SharedPreferences.getInstance();
+
+            prefs.setBool("loggIn", true);
 
             BusyIndicator.hide(context);
 

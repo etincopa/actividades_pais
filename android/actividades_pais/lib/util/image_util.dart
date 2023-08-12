@@ -50,10 +50,9 @@ class ImageUtil {
         fit: fit ?? BoxFit.cover,
         alignment: alignment ?? Alignment.center,
         errorBuilder: (context, error, stackTrace) {
-          return Container(
-            alignment: alignment ?? Alignment.center,
-            height: 50.0,
-            child: Image.asset('assets/TAMBO_DEFECTO.jpeg'),
+          return Image.asset(
+            imgDefault!,
+            fit: BoxFit.cover,
           );
         },
       );
