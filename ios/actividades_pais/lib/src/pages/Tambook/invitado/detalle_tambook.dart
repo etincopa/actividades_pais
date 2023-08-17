@@ -40,6 +40,7 @@ import 'package:actividades_pais/util/busy-indicator.dart';
 import 'package:actividades_pais/util/check_connection.dart';
 import 'package:actividades_pais/util/home_options.dart';
 import 'package:actividades_pais/util/image_util.dart';
+import 'package:actividades_pais/util/responsive.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -591,6 +592,8 @@ class _DetalleTambookState extends State<DetalleTambook>
   }
 
   Widget equipoInformatico() {
+    final Responsive responsive = Responsive.of(context);
+
     return Flexible(
       child: SizedBox(
         height: 400.0,
@@ -646,8 +649,8 @@ class _DetalleTambookState extends State<DetalleTambook>
                             child: Image.asset(
                               homeOption.image!,
                               fit: BoxFit.contain,
-                              width: 80,
-                              height: 70,
+                              width: responsive.wp(20),
+                              height: responsive.heigth > 1100 ? responsive.hp(20) : responsive.hp(8),
                               alignment: Alignment.center,
                             ),
                           ),
